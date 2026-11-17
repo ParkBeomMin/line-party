@@ -243,7 +243,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .battle.field .cell{background:none;border:0;overflow:visible;cursor:pointer}
 .cell .tile{position:absolute;left:8%;right:8%;bottom:2px;height:34%;border-radius:50%;background:radial-gradient(ellipse at center,#ffffff30,#ffffff10 60%,#0000 72%);border:1.5px dashed #ffffff40}
 .grid.e .cell .tile{background:radial-gradient(ellipse at center,#ff6b6b30,#ff6b6b10 60%,#0000 72%);border-color:#ff9a9a40}
-.battle.field .cell.valid,.battle.field .cell.target{background:none!important;animation:none!important;border:0!important}
+.battle.field .cell.valid,.battle.field .cell.target{border:0!important}
 .cell.valid .tile{border:2px solid #ffd667;background:radial-gradient(ellipse,#ffd66788,#ffd66722 70%,#0000 75%);animation:glow 1s infinite}
 .cell.target .tile{border:2px solid #ff6b6b;background:radial-gradient(ellipse,#ff6b6b88,#0000 75%)}
 .battle.field .unit{position:absolute;inset:0;border:0;border-radius:0;overflow:visible;pointer-events:none;box-shadow:none!important}
@@ -285,6 +285,34 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 @keyframes strike{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
 .sparkle{position:absolute;width:50px;height:50px;margin:-25px 0 0 -25px;background:radial-gradient(circle,#c9ffd9,#7dffa166 40%,#0000 70%);border-radius:50%;animation:burst .7s ease-out forwards}
 .dust{position:absolute;left:10%;right:10%;bottom:0;height:20px;border-radius:50%;background:radial-gradient(ellipse,#e8d8b8aa,#0000 70%);animation:burst .55s ease-out forwards;pointer-events:none}
+
+/* v0.7 보드 정리 */
+.battle.field .btop{height:32px}
+.battle.field .bmid{top:32px;height:372px;gap:0;padding:0 8px;justify-content:space-between}
+.battle.field .cmdp{width:150px;padding:10px 6px;gap:5px}
+.battle.field .cmdp .pt{width:96px;height:96px}
+.battle.field .board-wrap{display:flex;align-items:center;gap:0}
+.battle.field .grid{grid-template-columns:repeat(2,122px);grid-auto-rows:84px;gap:6px;padding:8px;border-radius:16px;background:linear-gradient(#0a0a1866,#0a0a1899);box-shadow:inset 0 0 0 2px var(--bc),0 6px 18px #0006}
+.battle.field .grid.p{--bc:#7fb4ff88}
+.battle.field .grid.e{--bc:#ff8a7a88}
+.battle.field .lanecol{width:56px;grid-auto-rows:84px;gap:6px;padding:8px 0}
+.battle.field .lanecol span{font-size:12px;opacity:.75;background:#0006;border-radius:50%;width:22px;height:22px;margin:auto}
+.battle.field .cell{border-radius:10px;background:linear-gradient(#e8dcc0 0%,#c9b88f 100%)!important;box-shadow:inset 0 -6px 0 #9a8763,inset 0 0 0 2px #fff6,0 2px 0 #0005;overflow:visible}
+.battle.field .grid.e .cell{background:linear-gradient(#e6d2c6 0%,#c7a596 100%)!important;box-shadow:inset 0 -6px 0 #946a5c,inset 0 0 0 2px #fff6,0 2px 0 #0005}
+.battle.field .cell .tile{display:none}
+.battle.field .cell.valid{background:linear-gradient(#fff3c8,#e8cf86)!important;box-shadow:inset 0 -6px 0 #9a8763,inset 0 0 0 3px #ffd667,0 0 14px #ffd667!important;animation:glowt 1s infinite!important}
+@keyframes glowt{50%{filter:brightness(1.15)}}
+.battle.field .cell.target{box-shadow:inset 0 0 0 3px #ff4b4b,0 0 14px #ff4b4b!important}
+.battle.field .unit .shadow{left:24%;right:24%;bottom:8px;height:10px;background:#0006}
+.battle.field .unit .ubody{width:114px;height:94px;margin-left:-57px;bottom:10px}
+.battle.field .unit .stat{left:3px;right:3px;bottom:3px}
+.battle.field .unit .a,.battle.field .unit .h{min-width:24px;height:22px;line-height:20px;font-size:13px;border:2px solid #000a}
+.battle.field .unit .mid{height:15px}
+.battle.field .unit .ic{bottom:28px;right:3px}
+.battle.field .bbot{height:136px;padding:6px 14px 10px}
+.battle.field .card,.battle.field .reel{width:96px;height:114px}
+.battle.field .desc{height:100%}
+.battle.field:before{background:linear-gradient(#0000 0%,#0000 73%,#0a0814ee 78%,#0a0814 100%)}
 .ver{position:absolute;right:12px;bottom:114px;font-size:10px;opacity:.35}
 </style>
 </head>
@@ -293,7 +321,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v0.6 베타';
+const VERSION='v0.7 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
