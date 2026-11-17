@@ -520,7 +520,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v1.1 베타';
+const VERSION='v1.1.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1617,7 +1617,7 @@ function showSettings(){
   m.querySelector('#stReset').onclick=()=>{if(!confirm('모든 진행 상황이 지워져요. 정말 처음부터 할까요?'))return;save=defaultSave();save.tut={};persist();m.remove();showLobby()};
 }
 /* --- 분석 이벤트 (GA4) --- */
-const GA_ID='';
+const GA_ID='G-J55RLM6YLL';
 function track(name,params){try{if(window.gtag&&GA_ID)window.gtag('event',name,params||{})}catch(e){}}
 (function loadGA(){if(!GA_ID)return;const s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;document.head.appendChild(s);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config',GA_ID)})();
 
