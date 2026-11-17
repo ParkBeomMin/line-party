@@ -289,13 +289,13 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 /* v0.7 보드 정리 */
 .battle.field .btop{height:32px}
 .battle.field .bmid{top:32px;height:372px;gap:0;padding:0 8px;justify-content:space-between}
-.battle.field .cmdp{width:150px;padding:10px 6px;gap:5px}
-.battle.field .cmdp .pt{width:96px;height:96px}
+.battle.field .cmdp{width:132px;padding:10px 4px;gap:5px}
+.battle.field .cmdp .pt{width:86px;height:86px}
 .battle.field .board-wrap{display:flex;align-items:center;gap:0}
-.battle.field .grid{grid-template-columns:repeat(2,122px);grid-auto-rows:84px;gap:6px;padding:8px;border-radius:16px;background:linear-gradient(#0a0a1866,#0a0a1899);box-shadow:inset 0 0 0 2px var(--bc),0 6px 18px #0006}
+.battle.field .grid{grid-template-columns:repeat(3,96px);grid-auto-rows:84px;gap:5px;padding:7px;border-radius:16px;background:linear-gradient(#0a0a1866,#0a0a1899);box-shadow:inset 0 0 0 2px var(--bc),0 6px 18px #0006}
 .battle.field .grid.p{--bc:#7fb4ff88}
 .battle.field .grid.e{--bc:#ff8a7a88}
-.battle.field .lanecol{width:56px;grid-auto-rows:84px;gap:6px;padding:8px 0}
+.battle.field .lanecol{width:34px;grid-auto-rows:84px;gap:6px;padding:8px 0}
 .battle.field .lanecol span{font-size:12px;opacity:.75;background:#0006;border-radius:50%;width:22px;height:22px;margin:auto}
 .battle.field .cell{border-radius:10px;background:linear-gradient(#e8dcc0 0%,#c9b88f 100%)!important;box-shadow:inset 0 -6px 0 #9a8763,inset 0 0 0 2px #fff6,0 2px 0 #0005;overflow:visible}
 .battle.field .grid.e .cell{background:linear-gradient(#e6d2c6 0%,#c7a596 100%)!important;box-shadow:inset 0 -6px 0 #946a5c,inset 0 0 0 2px #fff6,0 2px 0 #0005}
@@ -304,9 +304,9 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 @keyframes glowt{50%{filter:brightness(1.15)}}
 .battle.field .cell.target{box-shadow:inset 0 0 0 3px #ff4b4b,0 0 14px #ff4b4b!important}
 .battle.field .unit .shadow{left:24%;right:24%;bottom:8px;height:10px;background:#0006}
-.battle.field .unit .ubody{width:114px;height:94px;margin-left:-57px;bottom:10px}
+.battle.field .unit .ubody{width:100px;height:92px;margin-left:-50px;bottom:10px}
 .battle.field .unit .stat{left:3px;right:3px;bottom:3px}
-.battle.field .unit .a,.battle.field .unit .h{min-width:24px;height:22px;line-height:20px;font-size:13px;border:2px solid #000a}
+.battle.field .unit .a,.battle.field .unit .h{min-width:22px;height:20px;line-height:18px;font-size:12px;border:2px solid #000a}
 .battle.field .unit .mid{height:15px}
 .battle.field .unit .ic{bottom:28px;right:3px}
 .battle.field .bbot{height:136px;padding:6px 14px 10px}
@@ -321,7 +321,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v0.7 베타';
+const VERSION='v0.8 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -329,7 +329,8 @@ addEventListener('resize',fit);fit();
 function tryLandscape(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}
 
 /* ===================== 데이터 ===================== */
-const LANES=4,COLS=2;
+const LANES=4,COLS=3;
+const laneUnits=(st,side,l)=>{const o=[];for(let r=0;r<COLS;r++){const u=st.board[side][r][l];if(u)o.push(u)}return o};
 const CLS={melee:{n:'근접',bg:'#6b2f35',bg2:'#a2464a'},ranged:{n:'원거리',bg:'#2f5b3a',bg2:'#4f9a5e'},magic:{n:'마법',bg:'#3d2f6b',bg2:'#6e52b8'},support:{n:'지원',bg:'#6b5a2f',bg2:'#b5973f'}};
 const FAC={
   bastion:{n:'성채',c:'#7fb4ff',d:'균형 잡힌 능력치, 지원과 보호',s2:'2기 이상: 내 턴마다 지휘관 체력 1 회복',s4:'4기 이상: 모든 아군이 받는 피해 -1'},
@@ -608,7 +609,7 @@ function facCount(st,side,f){let n=0;eachUnit(st,side,u=>{if(u.hp>0&&V(u.key).fa
 function facLv(st,side,f){const n=facCount(st,side,f);return n>=4?2:n>=2?1:0}
 function canAttack(st,u,r,l){
   const v=V(u.key);if(v.cls==='support')return false;
-  if(v.cls==='melee'&&r===1&&v.skill!=='flying'&&st.board[u.side][0][l])return false;
+  if(v.cls==='melee'&&v.skill!=='flying'){for(let k=0;k<r;k++)if(st.board[u.side][k][l])return false}
   return true;
 }
 function hitCmd(st,side,dmg,fx,src){
@@ -622,7 +623,7 @@ function hitUnit(st,t,dmg,fx){
   if(t.armor&&dmg>0){t.armor=false;fx.push({to:'u'+t.uid,txt:'철갑!',k:'info'});return 0}
   if(v.skill==='block')dmg=Math.max(0,dmg-skillVal(t));
   const pos=findPos(st,t);
-  if(pos&&pos[0]===1){const f=st.board[t.side][0][pos[1]];if(f&&V(f.key).ex==='guard'&&dmg>0){dmg=Math.max(0,dmg-1)}}
+  if(pos&&pos[0]>=1){const f=st.board[t.side][pos[0]-1][pos[1]];if(f&&V(f.key).ex==='guard'&&dmg>0){dmg=Math.max(0,dmg-1)}}
   if(dmg>0&&facLv(st,t.side,'bastion')>=2)dmg=Math.max(0,dmg-1);
   t.hp-=dmg;fx.push({to:'u'+t.uid,dmg,k:'dmg'});
   if(v.skill==='rage'&&t.hp>0&&dmg>0){t.atk+=1;fx.push({to:'u'+t.uid,txt:'분노 +1',k:'info'})}
@@ -649,9 +650,9 @@ function place(st,side,card,r,l){
   else{u=makeUnit(card,side);st.board[side][r][l]=u;if(side==='p'&&st.passive==='venom')u.poison=1;if(V(u.key).fac==='wild'&&facLv(st,side,'wild')>=2){u.max+=3;u.hp+=3;fx.push({to:'u'+u.uid,txt:'들숲의 축복 +3',k:'info'})}}
   if(side==='p'&&FAC_KEYS.some(f=>facCount(st,'p',f)>=4))st.fac4=true;
   const v=V(u.key);
-  if(v.skill==='charge'){const t=st.board[foe][0][l]||st.board[foe][1][l];if(t)hitUnit(st,t,skillVal(u),fx);else hitCmd(st,foe,skillVal(u),fx,u)}
+  if(v.skill==='charge'){const t=laneUnits(st,foe,l)[0];if(t)hitUnit(st,t,skillVal(u),fx);else hitCmd(st,foe,skillVal(u),fx,u)}
   if(v.skill==='chain')eachUnit(st,foe,t=>hitUnit(st,t,skillVal(u),fx));
-  if(v.ex==='breath'){[st.board[foe][0][l],st.board[foe][1][l]].filter(Boolean).forEach(t=>hitUnit(st,t,2,fx));fx.push({to:'u'+u.uid,txt:'화염 숨결!',k:'info'})}
+  if(v.ex==='breath'){laneUnits(st,foe,l).forEach(t=>hitUnit(st,t,2,fx));fx.push({to:'u'+u.uid,txt:'화염 숨결!',k:'info'})}
   cleanup(st,fx);
   return {u,fx,merged};
 }
@@ -677,13 +678,12 @@ function* attackPhase(st,side){
     for(let k=0;k<times;k++){
       if(st.over||u.hp<=0)break;
       const atk=effAtk(st,u);if(atk<=0)break;
-      const front=st.board[foe][0][l],back=st.board[foe][1][l];
-      const enemies=[front,back].filter(Boolean);
+      const enemies=laneUnits(st,foe,l);
       if(v.skill==='pierce'){
         if(enemies.length)enemies.forEach(t=>{hitUnit(st,t,atk,fx);if(v.ex==='burn'&&t.hp>0)t.poison=Math.max(t.poison,1)});else hitCmd(st,foe,atk,fx,u);
         acted=true;
       }else{
-        const order=(v.skill==='snipe'?[back,front]:[front,back]).filter(Boolean);
+        const order=v.skill==='snipe'?enemies.slice().reverse():enemies;
         const meleeGround=v.cls==='melee'&&v.skill!=='flying';
         let t=null;
         if(order.length){t=order.find(x=>!(meleeGround&&V(x.key).skill==='flying'));if(!t){if(!acted)fx.push({to:'u'+u.uid,txt:'닿지 않음',k:'info'});break}}
@@ -693,7 +693,7 @@ function* attackPhase(st,side){
           if(v.skill==='poison'){const tg=v.ex==='plague'?enemies:[t];tg.forEach(x=>{if(x.hp>0)x.poison=Math.max(x.poison,skillVal(u))})}
           if(v.skill==='freeze'){const tg=v.ex==='blizzard'?enemies:[t];tg.forEach(x=>{if(x.hp>0)x.frozen=true})}
           if(V(t.key).skill==='thorns')hitUnit(st,u,skillVal(t),fx);
-          if(v.ex==='volley'){const side2=[l-1,l+1].filter(x=>x>=0&&x<LANES).flatMap(x=>[st.board[foe][0][x],st.board[foe][1][x]]).filter(Boolean);if(side2.length)hitUnit(st,side2[Math.floor(Math.random()*side2.length)],1,fx)}
+          if(v.ex==='volley'){const side2=[l-1,l+1].filter(x=>x>=0&&x<LANES).flatMap(x=>laneUnits(st,foe,x));if(side2.length)hitUnit(st,side2[Math.floor(Math.random()*side2.length)],1,fx)}
         }else{hitCmd(st,foe,v.ex==='crit'?atk*2:atk,fx,u);acted=true}
       }
       cleanup(st,fx);
@@ -720,8 +720,9 @@ function drawHand(deck,lvs){
   const cnt={};reels.forEach(k=>cnt[k]=(cnt[k]||0)+1);
   return {reels,hand:Object.keys(cnt).map(k=>({key:k,star:cnt[k],lv:lvs[k]||1}))};
 }
+function colOk(id,r){const c=V(id).cls;if(c==='melee')return r<=1;if(c==='ranged'||c==='magic')return r>=1;return true}
 function validCells(st,side,card){
-  const out=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(!u||(u.key===card.key&&u.star<3))out.push([r,l])}
+  const out=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u?(u.key===card.key&&u.star<3):colOk(card.key,r))out.push([r,l])}
   return out;
 }
 
@@ -730,7 +731,7 @@ function unitVal(st,u){return effAtk(st,u)*2+u.hp*.8+(u.armor?2:0)+(u.charges?2:
 function threatOn(st,side){
   const foe=foeOf(side);let t=0;
   for(let l=0;l<LANES;l++){
-    if(st.board[side][0][l]||st.board[side][1][l])continue;
+    if(laneUnits(st,side,l).length)continue;
     for(let r=0;r<COLS;r++){const u=st.board[foe][r][l];if(u&&canAttack(st,u,r,l))t+=effAtk(st,u)}
     t+=1.2;
   }
@@ -745,7 +746,7 @@ function evaluate(sim,before,side){
   let mine=0,theirs=0;eachUnit(sim,side,u=>mine+=unitVal(sim,u));eachUnit(sim,foe,u=>theirs+=unitVal(sim,u));
   s+=mine-theirs*(winning?1.1:1.6);
   s-=threatOn(sim,side)*(winning?1.6:2.4);
-  eachUnit(sim,side,(u,r)=>{const c=V(u.key).cls;if(c==='melee'&&r===0)s+=.6;if(c!=='melee'&&r===1)s+=.6});
+  eachUnit(sim,side,(u,r)=>{const c=V(u.key).cls;if(c==='melee'&&r===0)s+=.6;if((c==='ranged'||c==='magic')&&r===2)s+=.5;if(c==='support'&&r===2)s+=.6});
   return s;
 }
 function aiChoose(st,side,hand,noise){
@@ -909,10 +910,10 @@ function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.da
 function showRules(){
   modal(`<h3>규칙</h3><div class="rules">
   <p><b>목표</b>: 적 지휘관 체력을 0으로. ${MAX_ROUND}라운드가 지나면 체력 비율이 높은 쪽이 이겨요.</p>
-  <p><b>보드</b>: 양쪽 4라인 x 2줄. 가운데에 가까운 쪽이 앞줄이에요.</p>
+  <p><b>보드</b>: 양쪽 4줄 x 3열. 가운데에 가까운 열이 앞열이에요. <b>근접</b>은 앞쪽 두 열, <b>원거리·마법</b>은 뒤쪽 두 열, <b>지원</b>은 어느 열이든 놓을 수 있어요.</p>
   <p><b>내 턴</b>: 슬롯 3칸이 돌아 덱에서 카드를 뽑아요. <b>같은 카드 2장이면 ★2, 3장이면 ★3</b>. 카드 1장을 칸에 놓으면 내 유닛 전원이 공격해요.</p>
   <p><b>라인 막기</b>: 유닛은 자기 라인의 적만 때려요. 그 라인에 적 유닛이 없을 때만 적 지휘관을 때려요. 빈 라인은 그대로 뚫려요.</p>
-  <p><b>근접</b>은 앞줄에서 (앞이 비면 뒷줄에서도) 공격. <b>원거리·마법</b>은 어디서든. <b>지원</b>은 공격 대신 효과.</p>
+  <p><b>근접</b>은 같은 줄 앞에 아군이 있으면 공격하지 못해요. <b>원거리·마법</b>은 아군 너머로 공격해요. <b>지원</b>은 공격 대신 효과를 내요.</p>
   <p><b>합체</b>: 같은 영웅 위에 놓으면 별이 오르고 체력이 다 차요 (최대 ★3).</p>
   <p><b>번개 일격</b>: 지휘관 스킬, 적 유닛에 3 피해, 3턴마다.</p>
   <p><b>진영</b>: 모든 영웅은 성채(균형·보호), 들숲(체력·재생), 잿불(공격) 중 하나예요. 보드에 같은 진영이 2기, 4기 이상 있으면 시너지 효과가 켜져요. 전투 중 지휘관 아래 진영 아이콘을 누르면 효과를 볼 수 있어요.</p>
@@ -1104,9 +1105,10 @@ function centerOf(el,yf){const s=scaleS(),a=app.getBoundingClientRect(),r=el.get
 function appPoint(el){return centerOf(el,.35)}
 function buildBattleDOM(){
   let pg='',eg='',lanes='';
+  const cellH=(side,r,l)=>`<div class="cell c${r}" id="cell-${side}-${r}-${l}" data-side="${side}" data-r="${r}" data-l="${l}" style="z-index:${l+1}"><div class="tile"></div></div>`;
   for(let l=0;l<LANES;l++){
-    pg+=`<div class="cell" id="cell-p-1-${l}" data-side="p" data-r="1" data-l="${l}" style="z-index:${l+1}"><div class="tile"></div></div><div class="cell" id="cell-p-0-${l}" data-side="p" data-r="0" data-l="${l}" style="z-index:${l+1}"><div class="tile"></div></div>`;
-    eg+=`<div class="cell" id="cell-e-0-${l}" data-side="e" data-r="0" data-l="${l}" style="z-index:${l+1}"><div class="tile"></div></div><div class="cell" id="cell-e-1-${l}" data-side="e" data-r="1" data-l="${l}" style="z-index:${l+1}"><div class="tile"></div></div>`;
+    pg+=cellH('p',2,l)+cellH('p',1,l)+cellH('p',0,l);
+    eg+=cellH('e',0,l)+cellH('e',1,l)+cellH('e',2,l);
     lanes+=`<span>${l+1}</span>`;
   }
   app.innerHTML=`<div class="screen battle field">
@@ -1186,7 +1188,7 @@ function renderBattle(){
   if(BD.ceH!==ceH){BD.ce.innerHTML=ceH;BD.ceH=ceH}
   reconcileBoard();
   const sel=ui.sel>=0?ui.hand[ui.sel]:null;
-  const descTxt=ui.targeting?'<b>번개 일격</b><br>공격할 적 유닛을 누르세요':(sel?`<b style="color:${RAR[V(sel.key).tier].c}">${V(sel.key).name}</b> ${'★'.repeat(sel.star)} (<span style="color:${FAC[V(sel.key).fac].c}">${FAC[V(sel.key).fac].n}</span> ${CLS[V(sel.key).cls].n})<br>${V(sel.key).desc}${V(sel.key).ex?'<br><span style="color:#ffd667">'+V(sel.key).exd+'</span>':''}<br><span style="opacity:.7">빛나는 자리에 놓으세요. 같은 영웅 위면 합체!</span>`:ui.info||(ui.phase==='choose'?'카드를 고르고 내 쪽 빈 자리에 놓으세요.<br><span style="opacity:.7">영웅을 누르면 정보가 보여요.</span>':ui.phase==='spin'?'소환 중...':''));
+  const descTxt=ui.targeting?'<b>번개 일격</b><br>공격할 적 유닛을 누르세요':(sel?`<b style="color:${RAR[V(sel.key).tier].c}">${V(sel.key).name}</b> ${'★'.repeat(sel.star)} (<span style="color:${FAC[V(sel.key).fac].c}">${FAC[V(sel.key).fac].n}</span> ${CLS[V(sel.key).cls].n})<br>${V(sel.key).desc}${V(sel.key).ex?'<br><span style="color:#ffd667">'+V(sel.key).exd+'</span>':''}<br><span style="opacity:.7">${V(sel.key).cls==='melee'?'근접: 앞쪽 두 열':V(sel.key).cls==='support'?'지원: 어느 열이든':'원거리·마법: 뒤쪽 두 열'} · 같은 영웅 위면 합체!</span>`:ui.info||(ui.phase==='choose'?'카드를 고르고 내 쪽 빈 자리에 놓으세요.<br><span style="opacity:.7">영웅을 누르면 정보가 보여요.</span>':ui.phase==='spin'?'소환 중...':''));
   const noValid=ui.phase==='choose'&&ui.hand.every(c=>validCells(st,'p',c).length===0);
   const sig=JSON.stringify([ui.reels,ui.hand,ui.sel,ui.phase,ui.skillCd,ui.targeting,descTxt,noValid]);
   if(sig!==BD.sig){
