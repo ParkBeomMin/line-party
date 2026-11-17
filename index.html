@@ -63,7 +63,11 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .slot.full{border:2px solid #ffffff33;background:#ffffff0d}
 .slot.ready{border-color:#7dffa1;background:#7dffa11a;animation:glow3 1.2s infinite}
 @keyframes glow3{50%{background:#7dffa133}}
-.slot .cico{width:58px;height:44px}
+.pt{overflow:hidden}
+.pt img{width:100%;height:100%;object-fit:cover;object-position:50% 14%;display:block;pointer-events:none}
+.cico{object-fit:contain;filter:drop-shadow(0 4px 6px #0008)}
+.cico.open{filter:drop-shadow(0 0 18px #fff3a0) brightness(1.15)}
+.slot .cico{width:64px;height:50px}
 .slot .cn{font-weight:800}
 .slot .ct{font-size:11px;opacity:.8}
 .slot .cta{position:absolute;bottom:4px;right:6px;font-size:10px;color:#ffd667}
@@ -96,7 +100,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .deckrow .ds .pt{width:100%;height:100%}
 .shopgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .shopitem{background:#ffffff0c;border:1px solid #ffffff1a;border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
-.shopitem .cico{width:90px;height:68px}
+.shopitem .cico{width:96px;height:76px}
 .shopitem .nm{font-weight:900}
 .shopitem .ds{font-size:11px;opacity:.75;min-height:30px}
 /* battle */
@@ -149,7 +153,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .hand{flex:1;display:flex;gap:12px;justify-content:center;align-items:flex-end;height:100%}
 .card{width:104px;height:122px;border-radius:12px;position:relative;overflow:hidden;border:2px solid #000;transition:transform .15s;flex:none}
 .card .pt{position:absolute;inset:0;width:100%;height:100%}
-.card .nm{position:absolute;top:0;left:0;right:0;font-size:11px;font-weight:800;text-align:center;background:#0008;padding:2px 0}
+.card .nm{position:absolute;top:auto;bottom:24px;left:0;right:0;font-size:11px;font-weight:800;text-align:center;background:#0008;padding:2px 0}
 .card .stat{position:absolute;bottom:3px;left:3px;right:3px;display:flex;justify-content:space-between}
 .card .st{position:absolute;top:18px;left:4px;font-size:12px;color:#ffd667;text-shadow:0 1px 2px #000}
 .card.sel{transform:translateY(-10px);border-color:#ffd667!important;box-shadow:0 0 0 3px #ffd667,0 8px 20px #000}
@@ -176,7 +180,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .got .art .pt{width:100%;height:100%}
 .got .n{font-size:11px;margin-top:2px}
 .got .x{position:absolute;top:2px;right:4px;font-weight:900;font-size:14px;text-shadow:0 1px 3px #000;color:#fff}
-.chestbig{width:150px;height:114px;margin:0 auto;animation:wob .5s ease-in-out infinite}
+.chestbig{width:150px;height:114px;display:flex;justify-content:center;margin:0 auto;animation:wob .5s ease-in-out infinite}
 @keyframes wob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg) scale(1.04)}}
 .toast{position:absolute;left:50%;top:60px;transform:translateX(-50%);background:#000d;border:1px solid #ffc547;border-radius:10px;padding:8px 14px;font-size:13px;z-index:80;animation:fade 1.6s forwards}
 @keyframes fade{0%{opacity:0}10%,80%{opacity:1}100%{opacity:0}}
@@ -188,7 +192,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v0.2 베타';
+const VERSION='v0.3 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -373,15 +377,13 @@ function face(L,bg,bg2){
   }
   return s+'</svg>';
 }
-function portrait(k){const H=HEROES[k];return face(H.look,CLS[H.cls].bg,CLS[H.cls].bg2)}
-function cmdPortrait(id){return face(CMD_LOOK[id]||CMD_LOOK.player,'#2a2145','#4a3a7a')}
-function chestSVG(t,open){
-  const C=CHESTS[t];
-  return `<svg class="cico" viewBox="0 0 80 60"><ellipse cx="40" cy="56" rx="30" ry="4" fill="#000" opacity=".35"/>
-  <rect x="10" y="26" width="60" height="28" rx="4" fill="${C.c1}" stroke="#0006" stroke-width="1.5"/>
-  ${open?`<path d="M10 26 Q40 -2 70 26" fill="${C.c2}" opacity=".9"/><circle cx="40" cy="22" r="10" fill="#fff6c0" opacity=".8"/>`:`<path d="M10 28 Q10 8 40 8 Q70 8 70 28Z" fill="${C.c2}" stroke="#0006" stroke-width="1.5"/>`}
-  <rect x="34" y="8" width="12" height="46" fill="${C.band}" opacity=".85"/><rect x="35" y="30" width="10" height="10" rx="2" fill="#ffe38a" stroke="#7a4a00"/></svg>`;
-}
+const CMD_ART={player:"player",goblin:"goblin",swamp:"swamp",beast:"beast",elf:"elf",flame:"flame",ice:"ice",knightc:"knightc",storm:"storm",grave:"grave",dragonl:"dragonl",boss:"boss",rival1:"rival1",rival2:"rival2",rival3:"rival1",rival4:"rival2"};
+const ASSET_V="3";
+function artImg(src){return `<img src="assets/${src}.webp?v=${ASSET_V}" alt="" draggable="false">`}
+function portrait(k){const H=HEROES[k];return `<div class="pt" style="background:radial-gradient(circle at 50% 30%,${CLS[H.cls].bg2},${CLS[H.cls].bg} 75%)">${artImg("h_"+k)}</div>`}
+function cmdPortrait(id){return `<div class="pt" style="background:radial-gradient(circle at 50% 30%,#4a3a7a,#1f1838 75%)">${artImg("c_"+(CMD_ART[id]||"player"))}</div>`}
+(function preload(){window.__imgs=[];Object.keys(HEROES).forEach(k=>{const i=new Image();i.src="assets/h_"+k+".webp?v="+ASSET_V;__imgs.push(i)});[...new Set(Object.values(CMD_ART))].forEach(k=>{const i=new Image();i.src="assets/c_"+k+".webp?v="+ASSET_V;__imgs.push(i)});["wood","silver","gold","boss"].forEach(k=>{const i=new Image();i.src="assets/x_"+k+".webp?v="+ASSET_V;__imgs.push(i)})})();
+function chestSVG(t,open){return `<img class="cico${open?' open':''}" src="assets/x_${t}.webp?v=${ASSET_V}" alt="" draggable="false">`}
 
 /* ===================== 전투 규칙 ===================== */
 let UID=1;
