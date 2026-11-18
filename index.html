@@ -585,6 +585,38 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .battle.field .grid .cell.target .tile{border:3px solid #ff4b4b!important;background:radial-gradient(ellipse,#ff6b6baa,#0000 72%)!important;box-shadow:0 0 16px #ff4b4b!important}
 .battle.field{background:url(assets/bg_field2.webp?v=16) center top/cover!important}
 .battle.field .cell[data-l="0"] .unit .spr{filter:drop-shadow(0 2px 1px #0008)!important}
+
+/* v1.6 이펙트 */
+.ef{position:absolute;width:0;height:0;pointer-events:none;z-index:35}
+.ef:before,.ef:after{content:"";position:absolute;left:0;top:0;transform:translate(-50%,-50%)}
+.ef i{position:absolute;left:0;top:0;width:8px;height:8px;margin:-4px;border-radius:50%;animation:efp .7s ease-out forwards;transform:rotate(var(--a)) translateX(0)}
+@keyframes efp{to{transform:rotate(var(--a)) translateX(var(--d)) scale(.4);opacity:0}}
+.ef-poison i{background:radial-gradient(circle,#d9ffb0,#5ad13a);box-shadow:0 0 6px #7aff7a}
+.ef-poison:before{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#7aff7a88,#0000 70%);animation:burst .6s ease-out forwards}
+.ef-ice i{width:6px;height:14px;border-radius:2px;background:linear-gradient(#fff,#9fe0ff);box-shadow:0 0 6px #9fe0ff}
+.ef-ice:before{width:60px;height:60px;background:radial-gradient(circle,#ffffffcc,#9fe0ff88 40%,#0000 70%);border-radius:50%;animation:burst .6s ease-out forwards}
+.ef-spike i{width:4px;height:16px;border-radius:2px;background:linear-gradient(#fff,#c9a24a)}
+.ef-shield:before{width:64px;height:64px;border-radius:12px;border:3px solid #9fd8ff;background:#7fc8ff33;box-shadow:0 0 14px #7fc8ff;animation:efsh .55s ease-out forwards;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+@keyframes efsh{0%{transform:translate(-50%,-50%) scale(.5);opacity:1}100%{transform:translate(-50%,-50%) scale(1.25);opacity:0}}
+.ef-curse:before{width:64px;height:64px;border-radius:50%;border:3px dashed #c77dff;box-shadow:0 0 14px #c77dff;animation:efcu .7s ease-out forwards}
+@keyframes efcu{0%{transform:translate(-50%,-50%) rotate(0) scale(.6);opacity:1}100%{transform:translate(-50%,-50%) rotate(220deg) scale(1.2);opacity:0}}
+.ef-rage:before{width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,#ff4b4b66,#0000 70%);box-shadow:0 0 20px #ff4b4b;animation:burst .6s ease-out forwards}
+.ef-dash:before{width:120px;height:40px;background:repeating-linear-gradient(0deg,#fff0 0 6px,#ffffffcc 6px 8px);-webkit-mask:linear-gradient(90deg,#0000,#000 40%,#000 60%,#0000);mask:linear-gradient(90deg,#0000,#000 40%,#000 60%,#0000);animation:efda .45s ease-out forwards}
+@keyframes efda{0%{transform:translate(-90%,-50%);opacity:1}100%{transform:translate(0,-50%);opacity:0}}
+.ef-boom:before{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#fff6b0,#ff8a2a 40%,#ff4a1a88 60%,#0000 72%);animation:burst .6s ease-out forwards}
+.ef-boom:after{width:90px;height:90px;border-radius:50%;border:4px solid #ffb84d;animation:aura .6s ease-out forwards}
+.ef-exec:before,.ef-exec:after{width:80px;height:8px;background:linear-gradient(90deg,#0000,#ff2a2a,#fff,#ff2a2a,#0000);box-shadow:0 0 12px #ff2a2a;animation:efex .5s ease-out forwards}
+.ef-exec:before{rotate:45deg}.ef-exec:after{rotate:-45deg}
+@keyframes efex{0%{scale:.2 1;opacity:1}60%{scale:1.2 1;opacity:1}100%{scale:1.2 1;opacity:0}}
+.ef-inferno:before{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,#ffd65a,#ff5a1a 50%,#0000 72%);animation:burst .7s ease-out forwards}
+.ef-flash{position:absolute;inset:0;background:radial-gradient(circle,#ff9a3a55,#ff5a1a22 60%,#0000);animation:fadeo .5s ease-out forwards}
+@keyframes fadeo{to{opacity:0}}
+.ef-bolt:before{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#fff,#ffe14a 40%,#0000 70%);animation:burst .4s ease-out forwards}
+.pop.big{font-size:32px;color:#ffdf3a;text-shadow:0 3px 0 #a33,0 0 10px #f00}
+.bigshake{animation:bshake .32s}
+@keyframes bshake{20%{transform:translate(-5px,3px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-3px,2px)}80%{transform:translate(2px,-1px)}}
+.autob{display:flex;gap:4px;margin-left:10px}
+.autob .btn{padding:3px 8px;font-size:11px;display:flex;align-items:center;gap:2px}
 </style>
 </head>
 <body>
@@ -592,7 +624,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v1.5.1 베타';
+const VERSION='v1.6 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -611,32 +643,32 @@ const FAC={
 const FAC_KEYS=['bastion','wild','ember'];
 const RAR=[{n:'일반',c:'#c9d0da',w:10,dw:60,m:1},{n:'희귀',c:'#5fb0ff',w:7,dw:28,m:1.3},{n:'영웅',c:'#c77dff',w:5,dw:10,m:1.7},{n:'전설',c:'#ffc04d',w:3,dw:2,m:2.3}];
 const HEROES={
-  shield:{fac:'bastion',name:'토르크',cls:'melee',rar:0,atk:2,hp:7,skill:'block',sv:1,desc:'방패: 받는 피해가 1 줄어든다',look:{skin:'#e8b98a',hair:'#5a3b22',body:'#5b7db1',acc:'shield'}},
-  sword:{fac:'ember',name:'레나',cls:'melee',rar:0,atk:3,hp:5,skill:'charge',sv:2,desc:'돌진: 놓을 때 같은 라인 맨 앞 적에게 2 피해',look:{skin:'#f4c9a0',hair:'#d94f3d',body:'#8a3a3a',acc:'sword'}},
+  shield:{fac:'bastion',name:'토르크',cls:'melee',rar:0,atk:2,hp:8,skill:'block',sv:1,desc:'방패: 받는 피해가 1 줄어든다',look:{skin:'#e8b98a',hair:'#5a3b22',body:'#5b7db1',acc:'shield'}},
+  sword:{fac:'ember',name:'레나',cls:'melee',rar:0,atk:3,hp:4,skill:'charge',sv:2,desc:'돌진: 놓을 때 같은 라인 맨 앞 적에게 2 피해',look:{skin:'#f4c9a0',hair:'#d94f3d',body:'#8a3a3a',acc:'sword'}},
   berserk:{fac:'wild',name:'그롬',cls:'melee',rar:1,atk:3,hp:6,skill:'rage',sv:1,desc:'분노: 맞고 살아남을 때마다 공격 +1',look:{skin:'#9dbf7a',hair:'#2b2b2b',body:'#6b4a2b',acc:'axe',extra:'tusk'}},
   bear:{fac:'wild',name:'바루',cls:'melee',rar:1,atk:2,hp:7,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 2 피해',look:{skin:'#8a5a3a',hair:'#8a5a3a',body:'#5a3b22',acc:'none',extra:'bear'}},
   knight:{fac:'bastion',name:'아델',cls:'melee',rar:2,atk:3,hp:7,skill:'armor',sv:0,desc:'철갑: 처음 받는 피해 1번을 무시',look:{skin:'#e8c4a0',hair:'#c9c9d6',body:'#9aa3b5',acc:'helm'}},
-  dragon:{fac:'ember',name:'이그니르',cls:'melee',rar:3,atk:5,hp:9,skill:'flying',sv:0,desc:'비행: 근접 공격에 맞지 않고, 뒷줄에서도 공격',look:{skin:'#c94a3a',hair:'#ffb347',body:'#8a2a20',acc:'none',extra:'dragon'}},
-  archer:{fac:'bastion',name:'피오',cls:'ranged',rar:0,atk:2,hp:4,skill:'none',sv:0,desc:'명사수: 어느 줄에서든 공격',look:{skin:'#f1d0a8',hair:'#3f6b2f',body:'#3f6b2f',acc:'bow'}},
-  sniper:{fac:'wild',name:'실바',cls:'ranged',rar:1,atk:3,hp:3,skill:'snipe',sv:0,desc:'저격: 적 뒷줄을 먼저 노린다',look:{skin:'#e0b48c',hair:'#e8e8e8',body:'#2f4f4f',acc:'bow',extra:'hood'}},
-  poison:{fac:'wild',name:'니즈',cls:'ranged',rar:0,atk:1,hp:4,skill:'poison',sv:2,desc:'독침: 맞은 적은 2턴 동안 턴마다 1 피해',look:{skin:'#c9e0a0',hair:'#7a3fa0',body:'#4a2f5a',acc:'dart'}},
-  fire:{fac:'ember',name:'이그나',cls:'magic',rar:1,atk:2,hp:3,skill:'pierce',sv:0,desc:'관통: 라인의 적 전부를 공격',look:{skin:'#f6cfa6',hair:'#ff7a2a',body:'#a03a1a',acc:'staff',orb:'#ff8a3a'}},
-  frost:{fac:'wild',name:'프리아',cls:'magic',rar:0,atk:1,hp:5,skill:'freeze',sv:0,desc:'빙결: 맞은 적은 다음 공격을 못 한다',look:{skin:'#f3dccb',hair:'#9fe0ff',body:'#3a6fa0',acc:'staff',orb:'#9fe0ff'}},
-  bolt:{fac:'ember',name:'볼트',cls:'magic',rar:2,atk:1,hp:4,skill:'chain',sv:1,desc:'연쇄 번개: 놓을 때 모든 적 유닛에 1 피해',look:{skin:'#e8c0a0',hair:'#ffe14a',body:'#3a3a7a',acc:'staff',orb:'#ffe14a'}},
-  priest:{fac:'bastion',name:'루미',cls:'support',rar:0,atk:0,hp:5,skill:'heal',sv:2,desc:'치유: 공격 대신 가장 다친 아군을 2 회복',look:{skin:'#f6d6b6',hair:'#ffe9a8',body:'#e8e0c8',acc:'cross'}},
-  drum:{fac:'bastion',name:'둥둥',cls:'support',rar:1,atk:0,hp:5,skill:'drum',sv:1,desc:'북소리: 같은 줄 아군 공격 +1',look:{skin:'#d9a070',hair:'#2b2b2b',body:'#b5573f',acc:'drum'}},
-  necro:{fac:'ember',name:'모르가',cls:'support',rar:2,atk:0,hp:4,skill:'necro',sv:0,desc:'망령 소환: 아군이 쓰러지면 그 자리에 해골(1/2) 소환, 2회',look:{skin:'#b8c0c8',hair:'#1a1a2a',body:'#2a1a3a',acc:'skull'}},
+  dragon:{fac:'ember',name:'이그니르',cls:'melee',rar:3,atk:5,hp:8,skill:'flying',sv:0,desc:'비행: 근접 공격에 맞지 않고, 뒷줄에서도 공격',look:{skin:'#c94a3a',hair:'#ffb347',body:'#8a2a20',acc:'none',extra:'dragon'}},
+  archer:{fac:'bastion',name:'피오',cls:'ranged',rar:0,atk:2,hp:6,skill:'none',sv:0,desc:'명사수: 어느 줄에서든 공격',look:{skin:'#f1d0a8',hair:'#3f6b2f',body:'#3f6b2f',acc:'bow'}},
+  sniper:{fac:'wild',name:'실바',cls:'ranged',rar:1,atk:3,hp:5,skill:'snipe',sv:0,desc:'저격: 적 뒷줄을 먼저 노린다',look:{skin:'#e0b48c',hair:'#e8e8e8',body:'#2f4f4f',acc:'bow',extra:'hood'}},
+  poison:{fac:'wild',name:'니즈',cls:'ranged',rar:0,atk:1,hp:6,skill:'poison',sv:2,desc:'독침: 맞은 적은 2턴 동안 턴마다 1 피해',look:{skin:'#c9e0a0',hair:'#7a3fa0',body:'#4a2f5a',acc:'dart'}},
+  fire:{fac:'ember',name:'이그나',cls:'magic',rar:1,atk:3,hp:4,skill:'pierce',sv:0,desc:'관통: 라인의 적 전부를 공격',look:{skin:'#f6cfa6',hair:'#ff7a2a',body:'#a03a1a',acc:'staff',orb:'#ff8a3a'}},
+  frost:{fac:'wild',name:'프리아',cls:'magic',rar:0,atk:2,hp:5,skill:'freeze',sv:0,desc:'빙결: 맞은 적은 다음 공격을 못 한다',look:{skin:'#f3dccb',hair:'#9fe0ff',body:'#3a6fa0',acc:'staff',orb:'#9fe0ff'}},
+  bolt:{fac:'ember',name:'볼트',cls:'magic',rar:2,atk:2,hp:5,skill:'chain',sv:1,desc:'연쇄 번개: 놓을 때 모든 적 유닛에 1 피해',look:{skin:'#e8c0a0',hair:'#ffe14a',body:'#3a3a7a',acc:'staff',orb:'#ffe14a'}},
+  priest:{fac:'bastion',name:'루미',cls:'support',rar:0,atk:0,hp:6,skill:'heal',sv:3,desc:'치유: 공격 대신 가장 다친 아군을 3 회복',look:{skin:'#f6d6b6',hair:'#ffe9a8',body:'#e8e0c8',acc:'cross'}},
+  drum:{fac:'bastion',name:'둥둥',cls:'support',rar:1,atk:0,hp:7,skill:'drum',sv:1,desc:'북소리: 같은 줄 아군 공격 +1',look:{skin:'#d9a070',hair:'#2b2b2b',body:'#b5573f',acc:'drum'}},
+  necro:{fac:'ember',name:'모르가',cls:'support',rar:2,atk:0,hp:6,skill:'necro',sv:0,desc:'망령 소환: 아군이 쓰러지면 그 자리에 해골(1/2) 소환, 3회',look:{skin:'#b8c0c8',hair:'#1a1a2a',body:'#2a1a3a',acc:'skull'}},
   bron:{fac:'bastion',name:'브론',cls:'melee',rar:1,atk:3,hp:7,skill:'forge',sv:0,desc:'담금질: 놓을 때 같은 줄 아군 모두에게 철갑',look:{}},
   elia:{fac:'bastion',name:'엘리아',cls:'melee',rar:2,atk:4,hp:7,skill:'lance',sv:0,desc:'돌격창: 줄 앞의 적 2명을 함께 공격',look:{}},
   pipi:{fac:'bastion',name:'피피',cls:'magic',rar:1,atk:2,hp:4,skill:'barrier',sv:0,desc:'보호 마법: 내 턴마다 철갑 없는 가장 약한 아군에게 철갑',look:{}},
   solaris:{fac:'bastion',name:'솔라리스',cls:'melee',rar:3,atk:5,hp:10,skill:'radiant',sv:1,desc:'광휘: 공격할 때 위아래 줄 맨 앞 적에게 1 피해',look:{}},
-  toto:{fac:'wild',name:'토토',cls:'support',rar:1,atk:0,hp:6,skill:'spores',sv:1,desc:'포자: 내 턴마다 무작위 적에게 독 1',look:{}},
+  toto:{fac:'wild',name:'토토',cls:'support',rar:1,atk:0,hp:8,skill:'spores',sv:2,desc:'포자: 내 턴마다 무작위 적 2명에게 독 2',look:{}},
   laila:{fac:'wild',name:'라일라',cls:'melee',rar:1,atk:4,hp:5,skill:'hunt',sv:0,desc:'사냥: 줄에서 체력이 가장 낮은 적을 노린다',look:{}},
-  oakwood:{fac:'wild',name:'오크우드',cls:'melee',rar:2,atk:2,hp:11,skill:'root',sv:1,desc:'뿌리: 받는 피해 -1, 내 턴마다 체력 1 회복',look:{}},
+  oakwood:{fac:'wild',name:'오크우드',cls:'melee',rar:2,atk:2,hp:12,skill:'root',sv:1,desc:'뿌리: 받는 피해 -1, 내 턴마다 체력 1 회복',look:{}},
   ciel:{fac:'wild',name:'시엘',cls:'ranged',rar:3,atk:3,hp:7,skill:'gale',sv:0,desc:'돌풍: 자기 줄과 위아래 줄 맨 앞 적을 함께 공격',look:{}},
   volka:{fac:'ember',name:'볼카',cls:'ranged',rar:1,atk:2,hp:4,skill:'bomb',sv:2,desc:'유폭: 쓰러지면 같은 줄 적 전체에 2 피해',look:{}},
   kael:{fac:'ember',name:'카엘',cls:'melee',rar:2,atk:4,hp:6,skill:'execute',sv:0,desc:'처형: 체력이 절반 이하인 적에게 2배 피해',look:{}},
-  raven:{fac:'ember',name:'레이븐',cls:'magic',rar:1,atk:2,hp:4,skill:'hex',sv:1,desc:'저주: 맞은 적의 공격력 영구 -1',look:{}},
+  raven:{fac:'ember',name:'레이븐',cls:'magic',rar:1,atk:2,hp:5,skill:'hex',sv:1,desc:'저주: 맞은 적의 공격력 영구 -1',look:{}},
   caldera:{fac:'ember',name:'칼데라',cls:'magic',rar:3,atk:4,hp:7,skill:'inferno',sv:1,desc:'업화: 공격 후 적 유닛 전체에 1 피해',look:{}},
   skel:{fac:'ember',name:'해골',cls:'melee',rar:0,atk:1,hp:2,skill:'none',sv:0,token:true,desc:'소환된 해골',look:{skin:'#e8e4d8',hair:'#e8e4d8',body:'#6a6458',acc:'none',extra:'skull'}}
 };
@@ -693,6 +725,12 @@ const CMD_LOOK={
   rival2:{skin:'#d9a070',hair:'#1a1a1a',body:'#2a5a3a',acc:'helm'},
   rival3:{skin:'#f6d6b6',hair:'#ffe14a',body:'#7a2a2a',acc:'crown'},
   rival4:{skin:'#c9e0a0',hair:'#3a3a7a',body:'#3a3a3a',acc:'none',extra:'hood'}
+};
+const BOSS_SIG={
+  boss:{n:'망자 소환',d:'적 턴 3번마다 빈 자리에 해골 병사(★2)를 부른다'},
+  boss2:{n:'혹한의 숨결',d:'적 턴마다 내 유닛 하나를 얼린다'},
+  boss3:{n:'태엽 장갑',d:'적 턴마다 철갑 없는 적 유닛 하나에 철갑을 씌운다'},
+  boss4:{n:'세 머리 재생',d:'적 턴마다 보스 체력 2 회복, 내 유닛 하나에 독 2'}
 };
 const BOSS_PASSIVES=[
   {id:'warlord',n:'전쟁 군주',d:'적 턴 3번마다 적 유닛 전체 공격 +1'},
@@ -843,7 +881,7 @@ const VNAMES={
 };
 const EX={
   shield:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -1'},
-  sword:{id:'double',d:'연속 베기: 한 턴에 2번 공격'},
+  sword:{id:'crit',d:'검성의 일격: 지휘관에게 2배 피해'},
   archer:{id:'volley',d:'일제 사격: 옆 라인 적 1명에게도 1 피해'},
   poison:{id:'plague',d:'역병: 같은 라인 적 모두에게 독'},
   frost:{id:'blizzard',d:'눈보라: 같은 라인 적 모두 빙결'},
@@ -855,14 +893,14 @@ const EX={
   drum:{id:'warsong',d:'전쟁의 노래: 앞뒤 줄 모든 아군 공격 +1'},
   knight:{id:'reforge',d:'재무장: 내 턴마다 철갑 회복'},
   bolt:{id:'storm',d:'폭풍: 내 턴마다 무작위 적 유닛에 2 피해'},
-  necro:{id:'legion',d:'망자의 군단: 소환 4회, 해골 ★2'},
+  necro:{id:'legion',d:'망자의 군단: 소환 5회, 해골 ★2'},
   dragon:{id:'breath',d:'화염 숨결: 놓을 때 같은 라인 적 전부 2 피해'},
   bron:{id:'reforge',d:'재무장: 내 턴마다 철갑 회복'},
   elia:{id:'crit',d:'별의 창: 지휘관에게 2배 피해'},
   pipi:{id:'storm',d:'폭풍: 내 턴마다 무작위 적 유닛에 2 피해'},
   solaris:{id:'lifesteal',d:'태양의 은총: 준 피해만큼 체력 회복'},
   toto:{id:'regrow',d:'재생: 내 턴마다 체력 2 회복'},
-  laila:{id:'double',d:'연속 사냥: 한 턴에 2번 공격'},
+  laila:{id:'double',d:'연속 사냥: 한 턴에 2번 공격 (두 번째는 45% 피해)'},
   oakwood:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -1'},
   ciel:{id:'volley',d:'회오리: 옆 라인 적 1명에게도 1 피해'},
   volka:{id:'breath',d:'개시 폭발: 놓을 때 같은 라인 적 전부 2 피해'},
@@ -880,7 +918,7 @@ const tierOf=id=>+id.split('_')[1];
 function V(id){
   if(VC[id])return VC[id];
   const b=baseOf(id),t=tierOf(id),H=HEROES[b],d=Math.max(0,t-H.rar);
-  const sv=H.sv?H.sv+d:0;
+  const sv=H.sv?H.sv+(H.skill==='charge'?Math.floor(d/2):d):0;
   const o={id,base:b,tier:t,fac:H.fac,name:VNAMES[b][t]||H.name,cls:H.cls,skill:H.skill,sv,
     atk:H.atk?H.atk+Math.ceil(H.atk*.4*d):0,hp:H.hp+Math.ceil(H.hp*.45*d),
     ex:t===3&&EX[b]?EX[b].id:null,exd:EX[b]?EX[b].d:'',token:!!H.token,
@@ -903,7 +941,7 @@ function baseStats(id,lv,star){
 function skillVal(u){return V(u.key).sv+(u.star-1)+Math.floor((u.lv-1)/3)}
 function makeUnit(card,side){
   const b=baseStats(card.key,card.lv,card.star);const v=V(card.key);
-  return {uid:UID++,key:card.key,lv:card.lv,star:card.star,side,atk:b.a,hp:b.h,max:b.h,bonus:0,frozen:false,poison:0,armor:v.skill==='armor',charges:v.skill==='necro'?(v.ex==='legion'?4:2):0};
+  return {uid:UID++,key:card.key,lv:card.lv,star:card.star,side,atk:b.a,hp:b.h,max:b.h,bonus:0,frozen:false,poison:0,armor:v.skill==='armor',charges:v.skill==='necro'?(v.ex==='legion'?5:3):0};
 }
 const foeOf=s=>s==='p'?'e':'p';
 function eachUnit(st,side,fn){for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u)fn(u,r,l)}}
@@ -930,14 +968,14 @@ function hitCmd(st,side,dmg,fx,src){
 }
 function hitUnit(st,t,dmg,fx){
   const v=V(t.key);
-  if(t.armor&&dmg>0){t.armor=false;fx.push({to:'u'+t.uid,txt:'철갑!',k:'info'});return 0}
+  if(t.armor&&dmg>0){t.armor=false;fx.push({to:'u'+t.uid,txt:'철갑!',k:'info',fxk:'shield'});return 0}
   if(v.skill==='block')dmg=Math.max(0,dmg-skillVal(t));
   if(v.skill==='root')dmg=Math.max(0,dmg-skillVal(t));
   const pos=findPos(st,t);
   if(pos&&pos[0]>=1){const f=st.board[t.side][pos[0]-1][pos[1]];if(f&&V(f.key).ex==='guard'&&dmg>0){dmg=Math.max(0,dmg-1);fx.push({to:'u'+f.uid,k:'skill',sk:'guard'})}}
   if(dmg>0&&facLv(st,t.side,'bastion')>=2)dmg=Math.max(0,dmg-1);
   t.hp-=dmg;fx.push({to:'u'+t.uid,dmg,k:'dmg'});
-  if(v.skill==='rage'&&t.hp>0&&dmg>0){t.atk+=1;fx.push({to:'u'+t.uid,txt:'분노 +1',k:'info'})}
+  if(v.skill==='rage'&&t.hp>0&&dmg>0){t.atk+=1;fx.push({to:'u'+t.uid,txt:'분노 +1',k:'info',fxk:'rage'})}
   return dmg;
 }
 function cleanup(st,fx){
@@ -955,7 +993,7 @@ function cleanup(st,fx){
     let nec=null;eachUnit(st,d.u.side,o=>{if(!nec&&V(o.key).skill==='necro'&&o.charges>0)nec=o});
     if(nec&&!st.board[d.u.side][d.r][d.l]){nec.charges--;const strong=V(nec.key).ex==='legion';if(strong)fx.push({to:'u'+nec.uid,k:'skill',sk:'legion'});st.board[d.u.side][d.r][d.l]=makeUnit({key:'skel_0',lv:strong?3:1,star:strong?2:1},d.u.side);fx.push({to:'cell-'+d.u.side+'-'+d.r+'-'+d.l,txt:'해골 소환',k:'info'})}
   }
-  if(bombs.length&&!st.bombDepth){st.bombDepth=1;bombs.forEach(d=>{const foe=foeOf(d.u.side);fx.push({to:'cell-'+d.u.side+'-'+d.r+'-'+d.l,txt:'유폭!',k:'info'});laneUnits(st,foe,d.l).forEach(t=>hitUnit(st,t,V(d.u.key).sv+(d.u.star-1),fx))});st.bombDepth=0;cleanup(st,fx);return}
+  if(bombs.length&&!st.bombDepth){st.bombDepth=1;bombs.forEach(d=>{const foe=foeOf(d.u.side);fx.push({to:'cell-'+d.u.side+'-'+d.r+'-'+d.l,txt:'유폭!',k:'info',fxk:'boom'});laneUnits(st,foe,d.l).forEach(t=>hitUnit(st,t,V(d.u.key).sv+(d.u.star-1),fx))});st.bombDepth=0;cleanup(st,fx);return}
   if(st.cmd.p.hp<=0||st.cmd.e.hp<=0)st.over=true;
 }
 function place(st,side,card,r,l){
@@ -965,9 +1003,9 @@ function place(st,side,card,r,l){
   else{u=makeUnit(card,side);st.board[side][r][l]=u;if(side==='p'&&st.passive==='venom')u.poison=1;if(V(u.key).fac==='wild'&&facLv(st,side,'wild')>=2){u.max+=3;u.hp+=3;fx.push({to:'u'+u.uid,txt:'들숲의 축복 +3',k:'info'})}}
   if(side==='p'&&FAC_KEYS.some(f=>facCount(st,'p',f)>=4))st.fac4=true;
   const v=V(u.key);
-  if(v.skill==='charge'){const t=laneUnits(st,foe,l)[0];if(t)hitUnit(st,t,skillVal(u),fx);else hitCmd(st,foe,skillVal(u),fx,u)}
-  if(v.skill==='chain')eachUnit(st,foe,t=>hitUnit(st,t,skillVal(u),fx));
-  if(v.skill==='forge'&&!merged){laneUnits(st,side,l).forEach(o=>{if(o!==u&&!o.armor){o.armor=true;fx.push({to:'u'+o.uid,txt:'담금질',k:'info'})}})}
+  if(v.skill==='charge'){fx.push({to:'u'+u.uid,txt:'돌진!',k:'info',fxk:'dash'});const t=laneUnits(st,foe,l)[0];if(t)hitUnit(st,t,skillVal(u),fx);else hitCmd(st,foe,skillVal(u),fx,u)}
+  if(v.skill==='chain')eachUnit(st,foe,t=>{fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'bolt'});hitUnit(st,t,skillVal(u),fx)});
+  if(v.skill==='forge'&&!merged){laneUnits(st,side,l).forEach(o=>{if(o!==u&&!o.armor){o.armor=true;fx.push({to:'u'+o.uid,txt:'담금질',k:'info',fxk:'shield'})}})}
   if(side==='p'&&!merged){if(st.wl==='asten'&&v.fac==='bastion'){u.max+=1;u.hp+=1}if(st.wl==='orwan'&&v.fac==='wild'){u.max+=2;u.hp+=2}}
   if(v.ex==='breath'){fx.push({to:'u'+u.uid,k:'skill',sk:'breath',wave:'fire',side:foe,lane:l});laneUnits(st,foe,l).forEach(t=>hitUnit(st,t,2,fx))}
   cleanup(st,fx);
@@ -996,7 +1034,7 @@ function* attackPhase(st,side){
     for(let k=0;k<times;k++){
       if(st.over||u.hp<=0)break;
       if(k===1)fx.push({to:'u'+u.uid,k:'skill',sk:'double'});
-      const atk=effAtk(st,u);if(atk<=0)break;
+      let atk=effAtk(st,u);if(k===1)atk=Math.ceil(atk*0.45);if(atk<=0)break;
       const enemies=laneUnits(st,foe,l);
       if(v.skill==='pierce'){
         if(enemies.length){if(v.ex==='burn')fx.push({to:'u'+u.uid,k:'skill',sk:'burn',wave:'fire',side:foe,lane:l});enemies.forEach(t=>{hitUnit(st,t,atk,fx);if(v.ex==='burn'&&t.hp>0)t.poison=Math.max(t.poison,1)})}else hitCmd(st,foe,atk,fx,u);
@@ -1008,21 +1046,21 @@ function* attackPhase(st,side){
         let t=null;
         if(order.length){t=order.find(x=>!(meleeGround&&V(x.key).skill==='flying'));if(!t){if(!acted)fx.push({to:'u'+u.uid,txt:'닿지 않음',k:'info'});break}}
         if(t){
-          const dmgX=(v.skill==='execute'&&t.hp<=t.max/2)?atk*2:atk;if(dmgX>atk)fx.push({to:'u'+u.uid,txt:'처형!',k:'info'});
+          const dmgX=(v.skill==='execute'&&t.hp<=t.max/2)?atk*2:atk;if(dmgX>atk)fx.push({to:'u'+t.uid,txt:'처형!',k:'info',fxk:'exec'});
           const dealt=hitUnit(st,t,dmgX,fx);acted=true;
           if(v.skill==='lance'){const t2=order.filter(x=>x!==t&&x.hp>0)[0];if(t2)hitUnit(st,t2,atk,fx)}
-          if(v.skill==='hex'&&t.hp>0&&t.atk>0){t.atk=Math.max(0,t.atk-skillVal(u));fx.push({to:'u'+t.uid,txt:'저주 -'+skillVal(u),k:'info'})}
+          if(v.skill==='hex'&&t.hp>0&&t.atk>0){t.atk=Math.max(0,t.atk-skillVal(u));fx.push({to:'u'+t.uid,txt:'저주 -'+skillVal(u),k:'info',fxk:'curse'})}
           if(v.ex==='lifesteal'&&dealt>0){const h=Math.min(dealt,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,k:'skill',sk:'lifesteal'});fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}}
           if(v.ex==='plague')fx.push({to:'u'+u.uid,k:'skill',sk:'plague',wave:'poison',side:foe,lane:l});
-          if(v.skill==='poison'){const tg=v.ex==='plague'?enemies:[t];tg.forEach(x=>{if(x.hp>0)x.poison=Math.max(x.poison,skillVal(u))})}
+          if(v.skill==='poison'){const tg=v.ex==='plague'?enemies:[t];tg.forEach(x=>{if(x.hp>0){x.poison=Math.max(x.poison,skillVal(u));fx.push({to:'u'+x.uid,txt:'독',k:'info',fxk:'poison'})}})}
           if(v.ex==='blizzard')fx.push({to:'u'+u.uid,k:'skill',sk:'blizzard',wave:'ice',side:foe,lane:l});
-          if(v.skill==='freeze'){const tg=v.ex==='blizzard'?enemies:[t];tg.forEach(x=>{if(x.hp>0)x.frozen=true})}
-          if(V(t.key).skill==='thorns')hitUnit(st,u,skillVal(t),fx);
+          if(v.skill==='freeze'){const tg=v.ex==='blizzard'?enemies:[t];tg.forEach(x=>{if(x.hp>0){x.frozen=true;fx.push({to:'u'+x.uid,txt:'빙결',k:'info',fxk:'ice'})}})}
+          if(V(t.key).skill==='thorns'){fx.push({to:'u'+t.uid,txt:'가시!',k:'info',fxk:'spike'});hitUnit(st,u,skillVal(t),fx)}
           if(v.skill==='radiant'||v.skill==='gale'){[l-1,l+1].forEach(x=>{if(x<0||x>=LANES)return;const f=laneUnits(st,foe,x)[0];if(f)hitUnit(st,f,v.skill==='gale'?atk:skillVal(u),fx)})}
           if(v.ex==='volley'){fx.push({to:'u'+u.uid,k:'skill',sk:'volley'});const side2=[l-1,l+1].filter(x=>x>=0&&x<LANES).flatMap(x=>laneUnits(st,foe,x));if(side2.length)hitUnit(st,side2[Math.floor(Math.random()*side2.length)],1,fx)}
         }else{if(v.ex==='crit')fx.push({to:'u'+u.uid,k:'skill',sk:'crit'});hitCmd(st,foe,v.ex==='crit'?atk*2:atk,fx,u);acted=true;
           if(v.skill==='gale'){[l-1,l+1].forEach(x=>{if(x<0||x>=LANES)return;const f=laneUnits(st,foe,x)[0];if(f)hitUnit(st,f,atk,fx)})}}
-        if(v.skill==='inferno'&&acted&&k===0){fx.push({to:'u'+u.uid,txt:'업화!',k:'info'});eachUnit(st,foe,e=>{if(e.hp>0)hitUnit(st,e,skillVal(u),fx)})}
+        if(v.skill==='inferno'&&acted&&k===0){fx.push({to:'u'+u.uid,txt:'업화!',k:'info',fxk:'inferno'});eachUnit(st,foe,e=>{if(e.hp>0)hitUnit(st,e,skillVal(u),fx)})}
       }
       cleanup(st,fx);
     }
@@ -1037,13 +1075,19 @@ function startTurnEffects(st,side){
     if(x==='reforge'&&!u.armor){u.armor=true;fx.push({to:'u'+u.uid,k:'skill',sk:'reforge'})}
     const sk=V(u.key).skill;
     if(sk==='root'&&u.hp<u.max){u.hp+=1;fx.push({to:'u'+u.uid,dmg:1,k:'heal'})}
-    if(sk==='spores'){const es=[];eachUnit(st,foe,e=>{if(e.hp>0)es.push(e)});if(es.length){const tg=es[Math.floor(Math.random()*es.length)];tg.poison=Math.max(tg.poison,skillVal(u));fx.push({to:'u'+tg.uid,txt:'포자 독',k:'info'})}}
-    if(sk==='barrier'){let w=null;eachUnit(st,side,o=>{if(o.hp>0&&!o.armor&&(!w||o.hp<w.hp))w=o});if(w){w.armor=true;fx.push({to:'u'+w.uid,txt:'보호 마법',k:'info'})}}
+    if(sk==='spores'){const es=[];eachUnit(st,foe,e=>{if(e.hp>0)es.push(e)});for(let n=0;n<2&&es.length;n++){const tg=es.splice(Math.floor(Math.random()*es.length),1)[0];tg.poison=Math.max(tg.poison,skillVal(u));fx.push({to:'u'+tg.uid,txt:'포자 독',k:'info',fxk:'poison'})}}
+    if(sk==='barrier'){let w=null;eachUnit(st,side,o=>{if(o.hp>0&&!o.armor&&(!w||o.hp<w.hp))w=o});if(w){w.armor=true;fx.push({to:'u'+w.uid,txt:'보호 마법',k:'info',fxk:'shield'})}}
     if(x==='storm'){const es=[];eachUnit(st,foe,e=>{if(e.hp>0)es.push(e)});if(es.length){const tg=es[Math.floor(Math.random()*es.length)];fx.push({to:'u'+u.uid,k:'skill',sk:'storm',strike:'u'+tg.uid});hitUnit(st,tg,2,fx)}}
   });
   if(side==='p'&&st.wl==='maya'){const al=[];eachUnit(st,'p',o=>{if(o.hp>0&&o.hp<o.max)al.push(o)});if(al.length){const o=al[Math.floor(Math.random()*al.length)];o.hp+=1;fx.push({to:'u'+o.uid,dmg:1,k:'heal'})}}
   if(facLv(st,side,'bastion')>=1&&st.cmd[side].hp<st.cmd[side].max){st.cmd[side].hp+=1;fx.push({to:'cmd-'+side,dmg:1,k:'heal'})}
   if(facLv(st,side,'wild')>=1)eachUnit(st,side,u=>{if(u.hp>0&&u.hp<u.max&&V(u.key).fac==='wild'){u.hp+=1;fx.push({to:'u'+u.uid,dmg:1,k:'heal'})}});
+  if(side==='e'&&st.bossSig){st.bTurns=(st.bTurns||0)+1;const sig=st.bossSig;
+    if(sig==='boss'&&st.bTurns%3===0){const empt=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++)if(!st.board.e[r][l])empt.push([r,l]);if(empt.length){const [r,l]=empt[Math.floor(Math.random()*empt.length)];const sk=makeUnit({key:'skel_0',lv:3,star:2},'e');st.board.e[r][l]=sk;fx.push({to:'cmd-e',txt:'망자 소환!',k:'info',fxk:'curse'})}}
+    if(sig==='boss2'){const ps=[];eachUnit(st,'p',u=>{if(u.hp>0&&!u.frozen)ps.push(u)});if(ps.length){const t=ps[Math.floor(Math.random()*ps.length)];t.frozen=true;fx.push({to:'u'+t.uid,txt:'혹한!',k:'info',fxk:'ice'})}}
+    if(sig==='boss3'){const es=[];eachUnit(st,'e',u=>{if(u.hp>0&&!u.armor)es.push(u)});if(es.length){const t=es[Math.floor(Math.random()*es.length)];t.armor=true;fx.push({to:'u'+t.uid,txt:'태엽 장갑',k:'info',fxk:'shield'})}}
+    if(sig==='boss4'){if(st.cmd.e.hp<st.cmd.e.max){st.cmd.e.hp=Math.min(st.cmd.e.max,st.cmd.e.hp+2);fx.push({to:'cmd-e',dmg:2,k:'heal'})}const ps=[];eachUnit(st,'p',u=>{if(u.hp>0)ps.push(u)});if(ps.length){const t=ps[Math.floor(Math.random()*ps.length)];t.poison=Math.max(t.poison,2);fx.push({to:'u'+t.uid,txt:'독',k:'info',fxk:'poison'})}}
+  }
   if(side==='e'&&st.passive==='warlord'){st.eTurns=(st.eTurns||0)+1;if(st.eTurns%3===0)eachUnit(st,'e',u=>{u.bonus+=1;fx.push({to:'u'+u.uid,txt:'공격 +1',k:'info'})})}
   cleanup(st,fx);
   return fx;
@@ -1297,9 +1341,9 @@ function startDaily(){
   const nm=['검은 뿔','잿빛 왕관','붉은 눈','폭풍 송곳니','심연의 문지기','서리 턱 왕','태엽 여왕','늪의 세 머리'][Math.floor(R()*8)];const bossLook=['boss','boss2','boss3','boss4'][Math.floor(R()*4)];
   const left=bossLeft();
   const m=modal(`<h3>오늘의 보스</h3><div style="display:flex;gap:16px;align-items:center;text-align:left"><div style="width:96px;height:96px;flex:none;border-radius:50%;overflow:hidden;border:3px solid #ff3a6a">${cmdPortrait(bossLook)}</div>
-  <div class="rw"><b>${nm}</b> · 체력 ${30+lv*2} · 적 Lv${lv}<br>주력 진영 <b style="color:${FAC[bf].c}">${FAC[bf].n}</b><br>특성 <b style="color:#ff8aa8">${P.n}</b>: ${P.d}<br>${left>0?`승리 보상: <b style="color:#ffd667">보스 상자</b> (남은 보상 ${left}회)`:'오늘 보상은 다 받았어요 (승리 시 30골드)'}</div></div>
+  <div class="rw"><b>${nm}</b> · 체력 ${30+lv*2} · 적 Lv${lv}<br>주력 진영 <b style="color:${FAC[bf].c}">${FAC[bf].n}</b><br>특성 <b style="color:#ff8aa8">${P.n}</b>: ${P.d}<br>고유 패턴 <b style="color:#ffb86b">${BOSS_SIG[bossLook].n}</b>: ${BOSS_SIG[bossLook].d}<br>${left>0?`승리 보상: <b style="color:#ffd667">보스 상자</b> (남은 보상 ${left}회)`:'오늘 보상은 다 받았어요 (승리 시 30골드)'}</div></div>
   <div class="btns"><button class="btn" id="dGo">도전</button><button class="btn sub" data-close>닫기</button></div>`);
-  m.querySelector('#dGo').onclick=()=>{sfx('tick');m.remove();startBattle({mode:'daily',pHp:WL().hp,eName:nm,eLook:bossLook,eHp:30+lv*2,eDeck:vdeck,eLvs:elv,noise:0,passive:P.id,passiveName:P.n})};
+  m.querySelector('#dGo').onclick=()=>{sfx('tick');m.remove();startBattle({mode:'daily',pHp:WL().hp,bossSig:bossLook,eName:nm,eLook:bossLook,eHp:30+lv*2,eDeck:vdeck,eLvs:elv,noise:0,passive:P.id,passiveName:P.n})};
 }
 function startArena(){
   ensureDeck();
@@ -1316,6 +1360,17 @@ function startArena(){
 
 /* ===================== 영웅 / 상점 ===================== */
 let heroFilter='all';
+function autoDeck(fac){
+  const own=Object.keys(save.owned).filter(id=>!fac||V(id).fac===fac);
+  const best={};own.forEach(id=>{const b=baseOf(id),sc=tierOf(id)*10+save.owned[id].lv;if(!best[b]||sc>best[b].sc)best[b]={id,sc}});
+  let list=Object.values(best).sort((a,b)=>b.sc-a.sc).map(x=>x.id);
+  const mel=list.filter(id=>V(id).cls==='melee'),rng=list.filter(id=>V(id).cls!=='melee');
+  const deck=[];mel.slice(0,4).forEach(id=>deck.push(id));rng.slice(0,4).forEach(id=>deck.push(id));
+  list.forEach(id=>{if(deck.length<8&&!deck.includes(id))deck.push(id)});
+  let i=0;while(deck.length<8&&list.length&&i<20){const id=list[i%list.length];if(deck.filter(x=>x===id).length<2)deck.push(id);i++}
+  if(deck.length<8){Object.keys(save.owned).forEach(id=>{if(deck.length<8&&!deck.includes(id))deck.push(id)})}
+  return deck.slice(0,8);
+}
 function showHeroes(){
   screen='heroes';ensureDeck();
   const ub=unlockedBases();
@@ -1337,10 +1392,11 @@ function showHeroes(){
   <div class="body">
     <div class="deckrow"><span style="font-size:12px;font-weight:800;margin-right:4px">덱 ${save.deck.length}/8</span>${Array.from({length:8},(_,i)=>{const id=save.deck[i];return `<div class="ds ${id?'t'+tierOf(id):''}" ${id?`data-id="${id}"`:''}>${id?portrait(id):''}</div>`}).join('')}
     <span style="font-size:11px;opacity:.65;margin-left:6px">영웅을 누르면 강화, 진화, 덱 편성을 할 수 있어요.<br>${save.bestLeague>=EVO_LEAGUE?'진화: 같은 영웅 카드를 모아 상위 등급 카드로 바꿔요.':'진화는 '+LEAGUES[EVO_LEAGUE].n+' 리그부터 열려요.'}</span></div>
-    <div class="ftabs">${['all',...FAC_KEYS].map(f=>`<button class="ftab ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'전체':facIcon(f,'ci')+FAC[f].n}</button>`).join('')}<span class="dsyn">덱 진영 ${FAC_KEYS.map(f=>{const n=save.deck.filter(id=>V(id).fac===f).length;return `<span style="color:${FAC[f].c}">${FAC[f].n} ${n}</span>`}).join(' · ')}</span></div>
+    <div class="ftabs">${['all',...FAC_KEYS].map(f=>`<button class="ftab ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'전체':facIcon(f,'ci')+FAC[f].n}</button>`).join('')}<span class="autob"><button class="btn sm sub" data-auto="">추천 덱</button>${FAC_KEYS.map(f=>`<button class="btn sm sub" data-auto="${f}" style="--fc:${FAC[f].c}">${facIcon(f,'ci')}${FAC[f].n}</button>`).join('')}</span><span class="dsyn">덱 진영 ${FAC_KEYS.map(f=>{const n=save.deck.filter(id=>V(id).fac===f).length;return `<span style="color:${FAC[f].c}">${FAC[f].n} ${n}</span>`}).join(' · ')}</span></div>
     <div class="herogrid">${cards}</div></div></div>`;
   bind('#bk',showLobby);
   app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{sfx('tick');heroFilter=b.dataset.f;showHeroes()});
+  app.querySelectorAll('[data-auto]').forEach(b=>b.onclick=()=>{const f=b.dataset.auto||null;const d=autoDeck(f);if(f&&d.filter(id=>V(id).fac===f).length<4){toast(FAC[f].n+' 영웅이 아직 적어서 다른 진영도 섞었어요')}save.deck=d;persist();sfx('merge');toast('덱을 자동으로 짰어요');showHeroes()});
   app.querySelectorAll('[data-id]').forEach(h=>h.onclick=()=>{sfx('tick');heroDetail(h.dataset.id)});
 }
 function heroDetail(id){
@@ -1397,7 +1453,7 @@ function showShop(){
 
 /* ===================== 전투 진행 ===================== */
 let st=null,cfg=null,ui=null;
-function newState(c){return {wl:save.warlord||'asten',board:{p:emptyBoard(),e:emptyBoard()},cmd:{p:{hp:c.pHp||22,max:c.pHp||22},e:{hp:c.eHp,max:c.eHp}},round:1,over:false,passive:c.passive||null,eTurns:0,kills:0}}
+function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',board:{p:emptyBoard(),e:emptyBoard()},cmd:{p:{hp:c.pHp||22,max:c.pHp||22},e:{hp:c.eHp,max:c.eHp}},round:1,over:false,passive:c.passive||null,eTurns:0,kills:0}}
 async function startBattle(c){
   screen='battle';tryLandscape();track('battle_start',{mode:c.mode,stage:c.idx??-1});
   cfg=c;st=newState(c);BD=null;
@@ -1618,21 +1674,25 @@ async function runPhase(side){
 }
 async function doFx(fx,quick,noRender){
   if(!fx||!fx.length){if(!noRender)renderBattle();return}
-  let hit=false;
+  let hit=false,big=false;
   for(const f of fx){
     const el=document.getElementById(f.to);if(!el)continue;
+    if(f.fxk)efx(el,f.fxk);
+    if(f.k==='info'&&!f.txt)continue;
     if(f.k==='skill'){skillCall(el,SKILL_FX[f.sk]||f.sk);if(f.wave)laneWave(f.side,f.lane,f.wave);if(f.strike){const se=document.getElementById(f.strike);if(se)strikeFx(se)}sfx('merge');continue}
     const p=document.createElement('div');p.className='pop'+(f.k==='heal'?' heal':f.k==='info'?' info':'');
     p.textContent=f.k==='info'?f.txt:(f.k==='heal'?'+':'-')+f.dmg;
+    if(f.k==='dmg'&&f.dmg>=5)p.classList.add('big');
     const pt=appPoint(el);p.style.left=pt.x+'px';p.style.top=pt.y+'px';
     app.appendChild(p);setTimeout(()=>p.remove(),850);
     if(f.k==='dmg'){
-      hit=true;
+      hit=true;if(f.dmg>=5||(f.to.startsWith('cmd')&&f.dmg>=4))big=true;
       if(f.to.startsWith('cmd')){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');sfx('cmd');setTimeout(()=>el.classList.remove('shake'),400)}
       else{const b=el.querySelector('.ubody');const dir=el.classList.contains('p')?-1:1;if(b)b.animate([{transform:'translateX(0)',filter:'brightness(1)'},{transform:`translateX(${dir*9}px)`,filter:'brightness(3) saturate(0)',offset:.25},{transform:'translateX(0)',filter:'brightness(1)'}],{duration:320/SPEED})}
     }
   }
   if(hit)sfx('hit');
+  if(big){const bm=app.querySelector('.bmid');if(bm){bm.classList.remove('bigshake');void bm.offsetWidth;bm.classList.add('bigshake')}sfx('cmd');await sleep(110)}
   if(!noRender)renderBattle();
   await sleep(quick?260:300);
 }
@@ -1724,6 +1784,7 @@ function toggleMute(){save.mute=!save.mute;persist();if(save.mute)bgmStop();else
 
 /* ===================== v1.1: 스킬 연출, 광고 자리, 백업, 분석 ===================== */
 const SKILL_FX={guard:'수호',double:'연속 베기',volley:'일제 사격',plague:'역병',blizzard:'눈보라',sanctuary:'성역',lifesteal:'피의 갈증',regrow:'재생',crit:'별의 화살',burn:'화상',reforge:'재무장',storm:'폭풍',legion:'망자의 군단',breath:'화염 숨결'};
+function efx(el,k){const c=centerOf(el,.5);const d=document.createElement('div');d.className='ef ef-'+k;d.style.left=c.x+'px';d.style.top=c.y+'px';if(k==='poison'||k==='ice'||k==='spike'){for(let i=0;i<6;i++){const p=document.createElement('i');p.style.setProperty('--a',(i*60+Math.random()*20)+'deg');p.style.setProperty('--d',(22+Math.random()*16)+'px');d.appendChild(p)}}(BD?BD.fxl:app).appendChild(d);if(k==='bolt')strikeFx(el);if(k==='inferno'){const f=document.createElement('div');f.className='ef-flash';(BD?BD.fxl:app).appendChild(f);setTimeout(()=>f.remove(),500)}setTimeout(()=>d.remove(),800)}
 function skillCall(el,txt){const c=centerOf(el,0);const d=document.createElement('div');d.className='skillcall';d.textContent=txt;d.style.left=c.x+'px';d.style.top=(c.y-6)+'px';(BD?BD.fxl:app).appendChild(d);setTimeout(()=>d.remove(),1200);const a=document.createElement('div');a.className='aura';const c2=centerOf(el,.55);a.style.left=c2.x+'px';a.style.top=c2.y+'px';(BD?BD.fxl:app).appendChild(a);setTimeout(()=>a.remove(),700)}
 function laneWave(side,l,kind){const c0=document.getElementById(`cell-${side}-0-${l}`),c2=document.getElementById(`cell-${side}-2-${l}`);if(!c0||!c2)return;const a=centerOf(c0,.55),b=centerOf(c2,.55);const d=document.createElement('div');d.className='wave '+kind;d.style.left=Math.min(a.x,b.x)-56+'px';d.style.top=a.y-34+'px';d.style.width=Math.abs(b.x-a.x)+112+'px';(BD?BD.fxl:app).appendChild(d);setTimeout(()=>d.remove(),800)}
 /* --- 보상형 광고 (연동 전에는 3초 자리표시) --- */
