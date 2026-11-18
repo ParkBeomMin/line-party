@@ -667,6 +667,10 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .unit.e .rigc{transform:scaleX(-1)}
 .cbody .rigc{left:0;right:0;bottom:6px;margin:auto;animation:none!important}
 .cmdp.e .cbody .rigc{transform:scaleX(-1)}
+.ftabs{flex-wrap:wrap;row-gap:4px}
+.flab{font-size:11px;opacity:.6;margin:0 2px 0 6px}
+.flab:first-child{margin-left:0}
+.ftab{padding:3px 9px!important;font-size:11.5px!important}
 </style>
 </head>
 <body>
@@ -674,7 +678,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v2.0 베타';
+const VERSION='v2.0.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1466,7 +1470,7 @@ function startArena(){
 }
 
 /* ===================== 영웅 / 상점 ===================== */
-let heroFilter='all';
+let heroFilter='all',heroTier='all',heroOwned=false,heroCls='all';
 function autoDeck(fac){
   const own=Object.keys(save.owned).filter(id=>!fac||V(id).fac===fac);
   const best={};own.forEach(id=>{const b=baseOf(id),sc=tierOf(id)*10+save.owned[id].lv;if(!best[b]||sc>best[b].sc)best[b]={id,sc}});
@@ -1483,9 +1487,9 @@ function showHeroes(){
   const ub=unlockedBases();
   const bases=Object.keys(HEROES).filter(b=>!HEROES[b].token).sort((a,b)=>(ub.includes(a)?0:1)-(ub.includes(b)?0:1)||HEROES[a].rar-HEROES[b].rar);
   let cards='';
-  bases.filter(b=>heroFilter==='all'||HEROES[b].fac===heroFilter).forEach(b=>{
-    if(!ub.includes(b)){const L=LEAGUES.find(L=>L.un.includes(b));cards+=`<div class="hcard locked"><div class="art" style="filter:brightness(0)">${portrait(vid(b,HEROES[b].rar))}</div><div class="inf"><div class="nm">???</div><div style="font-size:10px">${L?L.n+' 리그 도달 시 합류':''}</div></div></div>`;return}
-    versionsOf(b).forEach(id=>{
+  bases.filter(b=>(heroFilter==='all'||HEROES[b].fac===heroFilter)&&(heroCls==='all'||HEROES[b].cls===heroCls)).forEach(b=>{
+    if(!ub.includes(b)){if(heroOwned||(heroTier!=='all'&&!versionsOf(b).some(id=>tierOf(id)===+heroTier)))return;const L=LEAGUES.find(L=>L.un.includes(b));cards+=`<div class="hcard locked"><div class="art" style="filter:brightness(0)">${portrait(vid(b,HEROES[b].rar))}</div><div class="inf"><div class="nm">???</div><div style="font-size:10px">${L?L.n+' 리그 도달 시 합류':''}</div></div></div>`;return}
+    versionsOf(b).filter(id=>(heroTier==='all'||tierOf(id)===+heroTier)&&(!heroOwned||save.owned[id])).forEach(id=>{
       const v=V(id),o=save.owned[id],t=tierOf(id);
       if(!o){cards+=`<div class="hcard unk t${t}" data-id="${id}"><div class="art" style="filter:brightness(.15) saturate(0)">${portrait(id)}</div><div class="inf"><div class="nm" style="color:${RAR[t].c}">${RAR[t].n}</div><div style="font-size:10px;opacity:.7">미발견 · 상자에서 획득</div></div></div>`;return}
       const inD=save.deck.filter(x=>x===id).length;const max=o.lv>=MAX_LV;const need=max?1:lvNeed(id);
@@ -1499,11 +1503,15 @@ function showHeroes(){
   <div class="body">
     <div class="deckrow"><span style="font-size:12px;font-weight:800;margin-right:4px">덱 ${save.deck.length}/8</span>${Array.from({length:8},(_,i)=>{const id=save.deck[i];return `<div class="ds ${id?'t'+tierOf(id):''}" ${id?`data-id="${id}"`:''}>${id?portrait(id):''}</div>`}).join('')}
     <span style="font-size:11px;opacity:.65;margin-left:6px">영웅을 누르면 강화, 진화, 덱 편성을 할 수 있어요.<br>${save.bestLeague>=EVO_LEAGUE?'진화: 같은 영웅 카드를 모아 상위 등급 카드로 바꿔요.':'진화는 '+LEAGUES[EVO_LEAGUE].n+' 리그부터 열려요.'}</span></div>
-    <div class="ftabs">${['all',...FAC_KEYS].map(f=>`<button class="ftab ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'전체':facIcon(f,'ci')+FAC[f].n}</button>`).join('')}<span class="autob"><button class="btn sm sub" data-auto="">추천 덱</button>${FAC_KEYS.map(f=>`<button class="btn sm sub" data-auto="${f}" style="--fc:${FAC[f].c}">${facIcon(f,'ci')}${FAC[f].n}</button>`).join('')}</span><span class="dsyn">덱 진영 ${FAC_KEYS.map(f=>{const n=save.deck.filter(id=>V(id).fac===f).length;return `<span style="color:${FAC[f].c}">${FAC[f].n} ${n}</span>`}).join(' · ')}</span></div>
-    <div class="herogrid">${cards}</div></div></div>`;
+    <div class="ftabs"><span class="flab">등급</span>${['all',0,1,2,3].map(t=>`<button class="ftab ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'전체':RAR[t].n}</button>`).join('')}<span class="flab">유형</span>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="ftab ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'전체':CLS[c].n}</button>`).join('')}<button class="ftab ${heroOwned?'on':''}" id="fOwn">보유만</button></div>
+    <div class="ftabs"><span class="flab">진영</span>${['all',...FAC_KEYS].map(f=>`<button class="ftab ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'전체':facIcon(f,'ci')+FAC[f].n}</button>`).join('')}<span class="autob"><button class="btn sm sub" data-auto="">추천 덱</button>${FAC_KEYS.map(f=>`<button class="btn sm sub" data-auto="${f}" style="--fc:${FAC[f].c}">${facIcon(f,'ci')}${FAC[f].n}</button>`).join('')}</span><span class="dsyn">덱 진영 ${FAC_KEYS.map(f=>{const n=save.deck.filter(id=>V(id).fac===f).length;return `<span style="color:${FAC[f].c}">${FAC[f].n} ${n}</span>`}).join(' · ')}</span></div>
+    <div class="herogrid">${cards||'<div style="grid-column:1/-1;text-align:center;opacity:.6;padding:30px">조건에 맞는 영웅이 없어요</div>'}</div></div></div>`;
   if(save.bestLeague>=EVO_LEAGUE)tutTip('evo','<b>진화</b>같은 버전 카드를 모아 상위 등급 카드로 바꿀 수 있어요. 영웅을 눌러 진화 버튼을 확인하세요.');
   bind('#bk',showLobby);
   app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{sfx('tick');heroFilter=b.dataset.f;showHeroes()});
+  app.querySelectorAll('[data-tier]').forEach(b=>b.onclick=()=>{sfx('tick');heroTier=b.dataset.tier;showHeroes()});
+  app.querySelectorAll('[data-cls]').forEach(b=>b.onclick=()=>{sfx('tick');heroCls=b.dataset.cls;showHeroes()});
+  bind('#fOwn',()=>{heroOwned=!heroOwned;showHeroes()});
   app.querySelectorAll('[data-auto]').forEach(b=>b.onclick=()=>{const f=b.dataset.auto||null;const d=autoDeck(f);if(f&&d.filter(id=>V(id).fac===f).length<4){toast(FAC[f].n+' 영웅이 아직 적어서 다른 진영도 섞었어요')}save.deck=d;persist();sfx('merge');toast('덱을 자동으로 짰어요');showHeroes()});
   app.querySelectorAll('[data-id]').forEach(h=>h.onclick=()=>{sfx('tick');heroDetail(h.dataset.id)});
 }
