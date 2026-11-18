@@ -661,6 +661,12 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .cutin .cdesc{font-size:15px;color:#ffe9a8;max-width:380px;text-shadow:0 2px 2px #000}
 .cutin.out{animation:cout .28s ease-in forwards}
 @keyframes cout{to{opacity:0;transform:translateX(40px)}}
+
+.rigc{position:absolute;left:50%;bottom:0;transform-origin:50% 100%}
+.unit .ubody .rigc{left:0;top:0;bottom:auto}
+.unit.e .rigc{transform:scaleX(-1)}
+.cbody .rigc{left:0;right:0;bottom:6px;margin:auto;animation:none!important}
+.cmdp.e .cbody .rigc{transform:scaleX(-1)}
 </style>
 </head>
 <body>
@@ -668,7 +674,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v1.9 베타';
+const VERSION='v2.0 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1728,6 +1734,7 @@ function lastTarget(e){const fs=(e.fx||[]).filter(f=>f.k==='dmg'&&f.to!=='u'+e.f
 async function animAttack(e){
   const el=document.getElementById('u'+e.from);if(!el)return;
   const v=V(e.key);const body=el.querySelector('.ubody');
+  const mo=motionFor(v);if(mo)rigPlay(unitImg(el),mo,v.cls==='melee'?640:560);
   const tgt=(v.skill==='pierce'?lastTarget(e):firstTarget(e))||firstTarget(e);
   const s=scaleS();
   if(v.cls==='melee'){
@@ -1762,7 +1769,7 @@ function projectile(kind,a,b){
 function burstFx(tgt,kind){const c=centerOf(tgt,.5);const d=document.createElement('div');d.className='burst '+(kind||'');d.style.left=c.x+'px';d.style.top=c.y+'px';BD.fxl.appendChild(d);setTimeout(()=>d.remove(),450)}
 function slashFx(tgt,side){const c=centerOf(tgt,.45);const d=document.createElement('div');d.className='slash '+(side==='p'?'r':'l');d.style.left=c.x+'px';d.style.top=c.y+'px';BD.fxl.appendChild(d);setTimeout(()=>d.remove(),380)}
 function strikeFx(el){const c=centerOf(el,.5);const d=document.createElement('div');d.className='strike';d.style.left=c.x+'px';d.style.top=c.y+'px';BD.fxl.appendChild(d);setTimeout(()=>d.remove(),500)}
-async function animHeal(e){sfx('heal');
+async function animHeal(e){sfx('heal');{const he=document.getElementById('u'+e.from);if(he)rigPlay(unitImg(he),'support',520)}
   const el=document.getElementById('u'+e.from);if(el)el.querySelector('.ubody').animate([{filter:'brightness(1)'},{filter:'brightness(1.8) drop-shadow(0 0 10px #fff3a0)'},{filter:'brightness(1)'}],{duration:450/SPEED});
   sfx('heal');
   (e.fx||[]).forEach(f=>{if(f.k!=='heal')return;const t=document.getElementById(f.to);if(!t)return;const c=centerOf(t,.5);const d=document.createElement('div');d.className='sparkle';d.style.left=c.x+'px';d.style.top=c.y+'px';BD.fxl.appendChild(d);setTimeout(()=>d.remove(),700)});
@@ -1794,7 +1801,7 @@ async function doFx(fx,quick,noRender){
     if(f.k==='dmg'){
       hit=true;if(f.dmg>=5||(f.to.startsWith('cmd')&&f.dmg>=4))big=true;
       if(f.to.startsWith('cmd')){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');sfx('cmd');setTimeout(()=>el.classList.remove('shake'),400)}
-      else{const b=el.querySelector('.ubody');const dir=el.classList.contains('p')?-1:1;if(b)b.animate([{transform:'translateX(0)',filter:'brightness(1)'},{transform:`translateX(${dir*9}px)`,filter:'brightness(3) saturate(0)',offset:.25},{transform:'translateX(0)',filter:'brightness(1)'}],{duration:320/SPEED})}
+      else{if(!el.classList.contains('cls-building'))rigPlay(unitImg(el),'hit',360);const b=el.querySelector('.ubody');const dir=el.classList.contains('p')?-1:1;if(b)b.animate([{transform:'translateX(0)',filter:'brightness(1)'},{transform:`translateX(${dir*9}px)`,filter:'brightness(3) saturate(0)',offset:.25},{transform:'translateX(0)',filter:'brightness(1)'}],{duration:320/SPEED})}
     }
   }
   if(hit)sfx('hit');
@@ -1912,9 +1919,11 @@ function showSettings(){
   <div class="setrow"><span>소리</span><button class="btn sm ${save.mute?'sub':'grn'}" id="stMute">${save.mute?'꺼짐':'켜짐'}</button></div>
   <div class="setrow col"><span>저장 코드 (다른 기기로 옮기거나 백업할 때)</span><textarea id="stCode" readonly>${encodeSave()}</textarea><button class="btn sm" id="stCopy">코드 복사</button></div>
   <div class="setrow col"><span>코드 불러오기</span><textarea id="stIn" placeholder="저장 코드를 붙여넣으세요"></textarea><button class="btn sm sub" id="stLoad">불러오기</button></div>
+  <div class="setrow"><span>캐릭터 관절 애니메이션 <small style="opacity:.6">(느린 기기면 끄기)</small></span><button class="btn sm ${save.noRig?'sub':'grn'}" id="stRig">${save.noRig?'꺼짐':'켜짐'}</button></div>
   <div class="setrow"><span style="opacity:.7">처음부터 다시 하기</span><button class="btn sm sub" id="stReset">초기화</button></div>
   <div class="btns"><button class="btn sub sm" data-close>닫기</button></div>`,showLobby);
   m.querySelector('.box').classList.add('wide');
+  m.querySelector('#stRig').onclick=()=>{save.noRig=!save.noRig;persist();m.remove();showSettings()};
   m.querySelector('#stMute').onclick=()=>{toggleMute();m.remove();showSettings()};
   m.querySelector('#stCopy').onclick=async()=>{const t=m.querySelector('#stCode');t.select();try{await navigator.clipboard.writeText(t.value);toast('저장 코드를 복사했어요')}catch(e){document.execCommand('copy');toast('저장 코드를 복사했어요')}};
   m.querySelector('#stLoad').onclick=()=>{try{const o=decodeSave(m.querySelector('#stIn').value);if(!confirm('지금 진행 상황을 이 코드로 덮어쓸까요?'))return;save=o;if(save.v===2){localStorage.setItem(SAVE_KEY,JSON.stringify(save));save=loadSave()}persist();toast('불러왔어요');m.remove();showLobby()}catch(e){toast('코드가 올바르지 않아요')}};
@@ -1968,9 +1977,74 @@ async function useWarlordSkill(target){
   else if(st.wl==='seraphine'){eachUnit(st,'p',u=>{const h=Math.min(2+wlPow(st.wl),u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}});const c=document.getElementById('cmd-p');if(c)burstFx(c,'')}
   else if(st.wl==='maya'){eachUnit(st,'p',u=>{const a=1+(wlLv(st.wl)>=7?1:0);u.atk+=a;fx.push({to:'u'+u.uid,txt:'공격 +'+a,k:'info',fxk:'rage'})})}
   ui.skillCd=wlCd(st.wl);ui.targeting=false;cleanup(st,fx);qp('skill');track('warlord_skill',{id:st.wl});sfx('cmd');
-  const cp=document.getElementById('cmd-p');if(cp){skillCall(cp,W.act.n);const b=cp.querySelector('.cbody img');if(b)b.animate([{filter:'brightness(1)',transform:'scale(1)'},{filter:'brightness(2.2) drop-shadow(0 0 16px #ffd667)',transform:'scale(1.12) translateY(-6px)'},{filter:'brightness(1)',transform:'scale(1)'}],{duration:700})}
+  const cp=document.getElementById('cmd-p');if(cp){rigPlay(cp.querySelector('.cbody img'),'cast',700);skillCall(cp,W.act.n);const b=cp.querySelector('.cbody img');if(b)b.animate([{filter:'brightness(1)',transform:'scale(1)'},{filter:'brightness(2.2) drop-shadow(0 0 16px #ffd667)',transform:'scale(1.12) translateY(-6px)'},{filter:'brightness(1)',transform:'scale(1)'}],{duration:700})}
   doFx(fx).then(()=>{ui.casting=false;renderBattle();if(st.over&&ui.resolve)ui.resolve({type:'pass'})});
 }
+
+/* ===================== 뼈대(메시) 애니메이션 ===================== */
+const RIG={cols:9,rows:11,hip:[.5,.68],neck:[.5,.33],shoulder:[.55,.42]};
+const sstep=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t)};
+const RIG_V=(()=>{const vs=[];for(let j=0;j<=RIG.rows;j++)for(let i=0;i<=RIG.cols;i++){const u=i/RIG.cols,v=j/RIG.rows;
+  const legs=sstep(.64,.80,v);const head=1-sstep(.24,.36,v);let arm=sstep(.55,.70,u)*sstep(.14,.28,v)*(1-sstep(.70,.84,v));arm*=(1-head*.8);
+  let torso=Math.max(0,1-legs-head-arm);const sum=legs+head+arm+torso;vs.push({u,v,w:[legs/sum,torso/sum,head/sum,arm/sum]})}return vs})();
+function rot(px,py,cx,cy,a){const c=Math.cos(a),s=Math.sin(a);const dx=px-cx,dy=py-cy;return [cx+dx*c-dy*s,cy+dx*s+dy*c]}
+function rigPose(u,v,W,H,p){
+  // 기준 좌표 (픽셀)
+  const x=u*W,y=v*H;const hip=[RIG.hip[0]*W,RIG.hip[1]*H],neck=[RIG.neck[0]*W,RIG.neck[1]*H],sh=[RIG.shoulder[0]*W,RIG.shoulder[1]*H];
+  const T=(pt)=>rot(pt[0],pt[1],hip[0],hip[1],p.torso||0);
+  const legs=[x,y];
+  const torso=T([x,y]);
+  const headL=rot(x,y,neck[0],neck[1],p.head||0);const head=T(headL);
+  const armL=rot(x,y,sh[0],sh[1],p.arm||0);const arm=T(armL);
+  return [legs,torso,head,arm];
+}
+function drawTri(ctx,img,x0,y0,x1,y1,x2,y2,u0,v0,u1,v1,u2,v2){
+  const cx=(x0+x1+x2)/3,cy=(y0+y1+y2)/3,ex=.7;const g=(x,y)=>{const dx=x-cx,dy=y-cy,l=Math.hypot(dx,dy)||1;return [x+dx/l*ex,y+dy/l*ex]};
+  [x0,y0]=g(x0,y0);[x1,y1]=g(x1,y1);[x2,y2]=g(x2,y2);
+  ctx.save();ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.lineTo(x2,y2);ctx.closePath();ctx.clip();
+  const d=u0*(v1-v2)+u1*(v2-v0)+u2*(v0-v1);if(!d){ctx.restore();return}
+  const a=(x0*(v1-v2)+x1*(v2-v0)+x2*(v0-v1))/d,b=(x0*(u2-u1)+x1*(u0-u2)+x2*(u1-u0))/d,c=(x0*(u1*v2-u2*v1)+x1*(u2*v0-u0*v2)+x2*(u0*v1-u1*v0))/d;
+  const dd=(y0*(v1-v2)+y1*(v2-v0)+y2*(v0-v1))/d,e=(y0*(u2-u1)+y1*(u0-u2)+y2*(u1-u0))/d,f=(y0*(u1*v2-u2*v1)+y1*(u2*v0-u0*v2)+y2*(u0*v1-u1*v0))/d;
+  ctx.transform(a,dd,b,e,c,f);ctx.drawImage(img,0,0);ctx.restore();
+}
+function rigDraw(ctx,img,box,p){
+  const iw=img.naturalWidth,ih=img.naturalHeight;if(!iw)return;
+  const W=iw,H=ih;const pts=RIG_V.map(vt=>{const P=rigPose(vt.u,vt.v,W,H,p);let x=0,y=0;for(let k=0;k<4;k++){x+=P[k][0]*vt.w[k];y+=P[k][1]*vt.w[k]}return [x,y]});
+  const s=Math.min(box.w/iw,box.h/ih),ox=(box.w-iw*s)/2,oy=box.h-ih*s;
+  ctx.setTransform(box.dpr,0,0,box.dpr,0,0);ctx.clearRect(0,0,box.w,box.h);ctx.translate(ox,oy);ctx.scale(s,s);
+  const C=RIG.cols+1;
+  for(let j=0;j<RIG.rows;j++)for(let i=0;i<RIG.cols;i++){
+    const a=j*C+i,b=a+1,c=a+C,d=c+1;const A=RIG_V[a],B=RIG_V[b],Cc=RIG_V[c],D=RIG_V[d];
+    drawTri(ctx,img,pts[a][0],pts[a][1],pts[b][0],pts[b][1],pts[c][0],pts[c][1],A.u*W,A.v*H,B.u*W,B.v*H,Cc.u*W,Cc.v*H);
+    drawTri(ctx,img,pts[b][0],pts[b][1],pts[d][0],pts[d][1],pts[c][0],pts[c][1],B.u*W,B.v*H,D.u*W,D.v*H,Cc.u*W,Cc.v*H);
+  }
+}
+const DEG=Math.PI/180;
+// 키프레임: [t, {torso, head, arm}]
+const MOTIONS={
+  melee:[[0,{}],[.32,{arm:-62*DEG,torso:-9*DEG,head:-6*DEG}],[.5,{arm:48*DEG,torso:11*DEG,head:5*DEG}],[.62,{arm:40*DEG,torso:9*DEG}],[1,{}]],
+  ranged:[[0,{}],[.38,{arm:-14*DEG,torso:-7*DEG,head:-3*DEG}],[.48,{arm:8*DEG,torso:4*DEG}],[1,{}]],
+  magic:[[0,{}],[.38,{arm:-72*DEG,torso:-6*DEG,head:-9*DEG}],[.56,{arm:22*DEG,torso:9*DEG,head:4*DEG}],[1,{}]],
+  support:[[0,{}],[.4,{arm:-45*DEG,torso:-4*DEG,head:-6*DEG}],[.7,{arm:-30*DEG,head:3*DEG}],[1,{}]],
+  hit:[[0,{}],[.25,{torso:-13*DEG,head:-11*DEG,arm:-10*DEG}],[1,{}]],
+  cast:[[0,{}],[.35,{arm:-70*DEG,torso:-5*DEG,head:-8*DEG}],[.6,{arm:-55*DEG,torso:-3*DEG}],[1,{}]]
+};
+function poseAt(m,t){const K=MOTIONS[m];for(let i=0;i<K.length-1;i++){const [t0,p0]=K[i],[t1,p1]=K[i+1];if(t>=t0&&t<=t1){const k=(t-t0)/(t1-t0);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;const o={};['torso','head','arm'].forEach(n=>o[n]=(p0[n]||0)+((p1[n]||0)-(p0[n]||0))*e);return o}}return {}}
+function rigPlay(img,motion,ms){
+  return new Promise(res=>{
+    if(!img||!img.naturalWidth||save.noRig){res();return}
+    const r=img.getBoundingClientRect();const sc=scaleS();const w=Math.round(r.width/sc),h=Math.round(r.height/sc);if(!w||!h){res();return}
+    const dpr=Math.min(2,(window.devicePixelRatio||1)*sc);
+    const cv=document.createElement('canvas');cv.className=img.className+' rigc';cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.width=w+'px';cv.style.height=h+'px';
+    const ctx=cv.getContext('2d');const box={w,h,dpr};
+    img.parentNode.insertBefore(cv,img);img.style.visibility='hidden';
+    const t0=performance.now(),dur=(ms||600)/SPEED;
+    const step=now=>{const t=Math.min(1,(now-t0)/dur);rigDraw(ctx,img,box,poseAt(motion,t));if(t<1&&cv.isConnected)requestAnimationFrame(step);else{cv.remove();img.style.visibility='';res()}};
+    requestAnimationFrame(step);
+  });
+}
+function unitImg(el){return el?el.querySelector('.spr'):null}
+function motionFor(v){if(v.cls==='melee')return 'melee';if(v.cls==='ranged')return 'ranged';if(v.cls==='magic')return 'magic';if(v.cls==='support')return 'support';return null}
 
 function synChips(side){return `<div class="syn">${FAC_KEYS.map(f=>{const n=facCount(st,side,f),lv=n>=4?2:n>=2?1:0;return `<div class="chip lv${lv}" data-fac="${f}" style="--fc:${FAC[f].c}">${facIcon(f,'ci')}<b>${n}</b></div>`}).join('')}</div>`}
 function infoText(u){const H=V(u.key);return `<b style="color:${RAR[H.tier].c}">${H.name}</b> ${'★'.repeat(u.star)} Lv${u.lv} (<span style="color:${FAC[H.fac].c}">${FAC[H.fac].n}</span> ${CLS[H.cls].n})<br>공격 ${effAtk(st,u)} · 체력 ${u.hp}/${u.max}<br>${H.desc}${H.ex?'<br><span style="color:#ffd667">'+H.exd+'</span>':''}`}
