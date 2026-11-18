@@ -529,6 +529,23 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .wbtn .lk{font-size:11px;opacity:.75}
 .prof{cursor:pointer}
 .pname small{font-size:10px}
+
+/* v1.3 전신 지휘관 */
+.battle.field .cmdp{background:none!important;border:0!important;box-shadow:none!important;justify-content:flex-end;padding:0 0 4px!important;gap:0!important;height:100%!important}
+.cbody{position:relative;width:132px;height:196px;flex:none;margin-bottom:-14px;z-index:1;pointer-events:none}
+.cbody img{position:absolute;left:0;right:0;bottom:6px;width:100%;height:100%;object-fit:contain;object-position:50% 100%;transform-origin:50% 100%;animation:cidle 2.2s ease-in-out infinite;filter:drop-shadow(0 3px 2px #000a)}
+.cmdp.e .cbody img{transform:scaleX(-1);animation:cidleE 2.2s ease-in-out infinite}
+@keyframes cidle{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.975) translateY(1px)}}
+@keyframes cidleE{0%,100%{transform:scaleX(-1) scaleY(1)}50%{transform:scaleX(-1) scaleY(.975) translateY(1px)}}
+.cshadow{position:absolute;left:20%;right:20%;bottom:2px;height:14px;border-radius:50%;background:#000a;filter:blur(3px)}
+.cplate{position:relative;z-index:2;width:136px;background:linear-gradient(#2b2350f2,#16122af2);border:2px solid #ffd66788;border-radius:12px;padding:5px 4px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:0 4px 12px #000a}
+.cmdp.e .cplate{border-color:#ff8a7a99}
+.cplate .nm{font-size:13px;text-align:center;line-height:1.1;max-width:128px}
+.cplate .sub{font-size:10px;color:#ff8aa8}
+.cplate .hpbar{width:122px!important}
+.cmdp.shake .cbody img{filter:brightness(2.5) saturate(0) drop-shadow(0 0 6px #fff)}
+.wart{width:100px!important;height:140px!important;background:radial-gradient(circle at 50% 70%,color-mix(in srgb,var(--fc) 40%,#1f1838),#1f1838 75%);display:flex;align-items:flex-end;justify-content:center}
+.wart img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}
 </style>
 </head>
 <body>
@@ -536,7 +553,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v1.2 베타';
+const VERSION='v1.3 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -746,7 +763,7 @@ function face(L,bg,bg2){
 }
 const CMD_ART={player:"player",goblin:"goblin",swamp:"swamp",beast:"beast",elf:"elf",flame:"flame",ice:"ice",knightc:"knightc",storm:"storm",grave:"grave",dragonl:"dragonl",boss:"boss",boss2:"boss2",boss3:"boss3",boss4:"boss4",rival1:"rival1",rival2:"rival2",rival3:"rival1",rival4:"rival2"};
 const RIVAL_ART=["c_rival1","c_rival2","w_seraphine","w_orwan","w_maya","w_kardum","w_nox"];
-const ASSET_V="12";
+const ASSET_V="13";
 function artImg(src){return `<img src="assets/${src}.webp?v=${ASSET_V}" alt="" draggable="false">`}
 function portrait(id){if(!id.includes("_"))id=id+"_"+HEROES[id].rar;const H=HEROES[baseOf(id)];return `<div class="pt" style="background:radial-gradient(circle at 50% 30%,${CLS[H.cls].bg2},${CLS[H.cls].bg} 75%)">${artImg(artOf(id))}</div>`}
 function cmdPortrait(id){const f=id&&id.startsWith("art:")?id.slice(4):"c_"+(CMD_ART[id]||"player");return `<div class="pt" style="background:radial-gradient(circle at 50% 30%,#4a3a7a,#1f1838 75%)">${artImg(f)}</div>`}
@@ -1464,10 +1481,13 @@ function spawnFx(el,cell){
   el.querySelector('.ubody').animate([{transform:'translateY(-70px)',opacity:0},{transform:'translateY(4px)',opacity:1,offset:.7},{transform:'translateY(0)'}],{duration:380/SPEED,easing:'ease-in'});
   const d=document.createElement('div');d.className='dust';cell.appendChild(d);setTimeout(()=>d.remove(),600);
 }
+function lookArt(look){if(!look)return 'c_player';if(look.startsWith('art:'))return look.slice(4);return 'c_'+(CMD_ART[look]||'player')}
+function cmdBody(art){return `<div class="cbody"><div class="cshadow"></div><img src="assets/k_${art}.webp?v=${ASSET_V}" alt="" draggable="false"></div>`}
 function cmdPanelHTML(side){
   const c=st.cmd[side];
-  if(side==='p')return `<div class="pt">${wlArt(st.wl in WARLORDS?st.wl:'asten')}</div><div class="nm">${(WARLORDS[st.wl]||WARLORDS.asten).n}</div><div class="hpbar"><i style="width:${c.hp/c.max*100}%"></i><b>${c.hp} / ${c.max}</b></div>${synChips('p')}`;
-  return `<div class="pt">${cmdPortrait(cfg.eLook)}</div><div class="nm">${esc(cfg.eName)}</div>${cfg.passiveName?`<div class="sub">${cfg.passiveName}</div>`:''}<div class="hpbar"><i style="width:${c.hp/c.max*100}%"></i><b>${c.hp} / ${c.max}</b></div>${synChips('e')}`;
+  const hp=`<div class="hpbar"><i style="width:${c.hp/c.max*100}%"></i><b>${c.hp} / ${c.max}</b></div>`;
+  if(side==='p'){const W=WARLORDS[st.wl]||WARLORDS.asten;return `${cmdBody(W.art)}<div class="cplate"><div class="nm">${W.n}</div>${hp}${synChips('p')}</div>`}
+  return `${cmdBody(lookArt(cfg.eLook))}<div class="cplate"><div class="nm">${esc(cfg.eName)}</div>${cfg.passiveName?`<div class="sub">${cfg.passiveName}</div>`:''}${hp}${synChips('e')}</div>`;
 }
 function renderBattle(){
   if(!st||screen!=='battle')return;
@@ -1712,7 +1732,7 @@ function showWarlords(){
   screen='warlords';
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">지휘관</span>${resBar()}</div>
   <div class="body"><div class="wlgrid">${Object.entries(WARLORDS).map(([id,W])=>{const un=wlUnlocked(id),cur=save.warlord===id;
-    return `<div class="wlcard ${cur?'cur':''} ${un?'':'lock'}" style="--fc:${FAC[W.fac].c}"><div class="wart">${wlArt(id)}</div><div class="winfo">
+    return `<div class="wlcard ${cur?'cur':''} ${un?'':'lock'}" style="--fc:${FAC[W.fac].c}"><div class="wart"><img src="assets/k_${W.art}.webp?v=${ASSET_V}" alt=""></div><div class="winfo">
     <div class="wname">${W.n} ${facIcon(W.fac,'ci')}<span style="color:${FAC[W.fac].c};font-size:12px">${FAC[W.fac].n}</span></div>
     <div class="wl">체력 ${W.hp}</div><div class="wl"><b>패시브</b> ${W.pas}</div><div class="wl"><b style="color:#ffd667">${W.act.n}</b> (${W.act.cd}턴) ${W.act.d}</div>
     <div class="wbtn">${cur?'<span class="done">사용 중</span>':un?`<button class="btn sm grn" data-pick="${id}">선택</button>`:W.unlock.t==='gems'?`<button class="btn sm" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} 영입</button>`:`<span class="lk">🔒 ${W.unlock.d}</span>`}</div></div></div>`}).join('')}</div></div></div>`;
@@ -1729,7 +1749,7 @@ function useWarlordSkill(target){
   else if(st.wl==='seraphine'){eachUnit(st,'p',u=>{const h=Math.min(2,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}});const c=document.getElementById('cmd-p');if(c)burstFx(c,'')}
   else if(st.wl==='maya'){eachUnit(st,'p',u=>{u.atk+=1;fx.push({to:'u'+u.uid,txt:'공격 +1',k:'info'})})}
   ui.skillCd=W.act.cd;ui.targeting=false;cleanup(st,fx);qp('skill');track('warlord_skill',{id:st.wl});sfx('cmd');
-  const cp=document.getElementById('cmd-p');if(cp)skillCall(cp,W.act.n);
+  const cp=document.getElementById('cmd-p');if(cp){skillCall(cp,W.act.n);const b=cp.querySelector('.cbody img');if(b)b.animate([{filter:'brightness(1)',transform:'scale(1)'},{filter:'brightness(2.2) drop-shadow(0 0 16px #ffd667)',transform:'scale(1.12) translateY(-6px)'},{filter:'brightness(1)',transform:'scale(1)'}],{duration:700})}
   doFx(fx).then(()=>{renderBattle();if(st.over&&ui.resolve)ui.resolve({type:'pass'})});
 }
 
@@ -1808,7 +1828,7 @@ window.__simulate=function(n,stageIdx,eNoise){
 };
 save=loadSave();if(!save.warlord)save.warlord='asten';if(!save.wl)save.wl={};checkLeagueUnlock();if(save.tut===undefined)save.tut=(save.stats.w+save.stats.l===0)?{}:null;persist();
 addEventListener('pointerdown',()=>{if(!BGM.on&&!save.mute)bgmStart(screen==='battle'?'battle':'lobby')},{once:true});
-(function preload(){window.__imgs=[];Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/"+artOf(id)+".webp?v="+ASSET_V;__imgs.push(i)}));[...new Set(Object.values(CMD_ART))].forEach(k=>{const i=new Image();i.src="assets/c_"+k+".webp?v="+ASSET_V;__imgs.push(i)});["wood","silver","gold","boss"].forEach(k=>{const i=new Image();i.src="assets/x_"+k+".webp?v="+ASSET_V;__imgs.push(i)});FAC_KEYS.forEach(k=>{const i=new Image();i.src="assets/f_"+k+".webp?v="+ASSET_V;__imgs.push(i)});Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/s_"+id+".webp?v="+ASSET_V;__imgs.push(i)}));{const i=new Image();i.src="assets/bg_field.webp?v="+ASSET_V;__imgs.push(i)}["bg_lobby","bg_map","w_seraphine","w_orwan","w_maya","w_kardum","w_nox","c_boss2","c_boss3","c_boss4","i_battle","i_map","i_boss","i_hero","i_shop","i_quest","i_gift","i_trophy","i_gem","i_coin","i_bolt","i_crate"].forEach(n=>{const i=new Image();i.src="assets/"+n+".webp?v="+ASSET_V;__imgs.push(i)});})();
+(function preload(){window.__imgs=[];Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/"+artOf(id)+".webp?v="+ASSET_V;__imgs.push(i)}));[...new Set(Object.values(CMD_ART))].forEach(k=>{const i=new Image();i.src="assets/c_"+k+".webp?v="+ASSET_V;__imgs.push(i)});["wood","silver","gold","boss"].forEach(k=>{const i=new Image();i.src="assets/x_"+k+".webp?v="+ASSET_V;__imgs.push(i)});FAC_KEYS.forEach(k=>{const i=new Image();i.src="assets/f_"+k+".webp?v="+ASSET_V;__imgs.push(i)});Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/s_"+id+".webp?v="+ASSET_V;__imgs.push(i)}));{const i=new Image();i.src="assets/bg_field.webp?v="+ASSET_V;__imgs.push(i)}["bg_lobby","bg_map","k_c_player","k_w_seraphine","k_w_orwan","k_w_maya","k_w_kardum","k_w_nox","k_c_rival1","k_c_rival2","k_c_goblin","k_c_swamp","k_c_beast","k_c_elf","k_c_flame","k_c_ice","k_c_knightc","k_c_storm","k_c_grave","k_c_dragonl","k_c_boss","k_c_boss2","k_c_boss3","k_c_boss4","w_seraphine","w_orwan","w_maya","w_kardum","w_nox","c_boss2","c_boss3","c_boss4","i_battle","i_map","i_boss","i_hero","i_shop","i_quest","i_gift","i_trophy","i_gem","i_coin","i_bolt","i_crate"].forEach(n=>{const i=new Image();i.src="assets/"+n+".webp?v="+ASSET_V;__imgs.push(i)});})();
 ensureDaily();showLobby();
 </script>
 </body>
