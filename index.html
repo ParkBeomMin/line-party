@@ -546,6 +546,15 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .cmdp.shake .cbody img{filter:brightness(2.5) saturate(0) drop-shadow(0 0 6px #fff)}
 .wart{width:100px!important;height:140px!important;background:radial-gradient(circle at 50% 70%,color-mix(in srgb,var(--fc) 40%,#1f1838),#1f1838 75%);display:flex;align-items:flex-end;justify-content:center}
 .wart img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+
+/* v1.4 손패 */
+.card.deal{animation:deal .45s ease-out both}
+@keyframes deal{0%{transform:translate(140px,10px) rotate(12deg) scale(.6);opacity:0}70%{transform:translate(-4px,-6px) rotate(-2deg) scale(1.04);opacity:1}100%{transform:none}}
+.pilec{position:relative;width:62px;height:82px;flex:none;margin-left:4px;align-self:center}
+.pileb{position:absolute;width:56px;height:74px;border-radius:9px;background:repeating-linear-gradient(45deg,#3b3168,#3b3168 6px,#2b2350 6px,#2b2350 12px);border:2px solid #ffd667;box-shadow:0 2px 6px #000a}
+.pileb:nth-child(1){left:6px;top:0}.pileb:nth-child(2){left:3px;top:3px}.pileb:nth-child(3){left:0;top:6px;display:flex;align-items:center;justify-content:center}
+.pileb b{font-size:22px;color:#ffe9a8;text-shadow:0 2px 0 #000}
+.pilec small{position:absolute;left:0;right:0;bottom:-14px;text-align:center;font-size:10px;opacity:.75}
 </style>
 </head>
 <body>
@@ -553,7 +562,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v1.3 베타';
+const VERSION='v1.4 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1015,6 +1024,8 @@ function drawHand(deck,lvs){
   return {reels,hand:Object.keys(cnt).map(k=>({key:k,star:cnt[k],lv:lvs[k]||1}))};
 }
 function colOk(id,r){const c=V(id).cls;if(c==='melee')return r<=1;if(c==='ranged'||c==='magic')return r>=1;return true}
+function makePile(deck){const p=deck.slice();for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}return p}
+function refill(hand,pile,lvs){const added=[];while(hand.length<3&&pile.length){const k=pile.shift();const c={key:k,star:1,lv:lvs[k]||1};hand.push(c);added.push(c)}return added}
 function validCells(st,side,card){
   const out=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u?(u.key===card.key&&u.star<3):colOk(card.key,r))out.push([r,l])}
   return out;
@@ -1220,7 +1231,7 @@ function showRules(){
   modal(`<h3>규칙</h3><div class="rules">
   <p><b>목표</b>: 적 지휘관 체력을 0으로. ${MAX_ROUND}라운드가 지나면 체력 비율이 높은 쪽이 이겨요.</p>
   <p><b>보드</b>: 양쪽 4줄 x 3열. 가운데에 가까운 열이 앞열이에요. <b>근접</b>은 앞쪽 두 열, <b>원거리·마법</b>은 뒤쪽 두 열, <b>지원</b>은 어느 열이든 놓을 수 있어요.</p>
-  <p><b>내 턴</b>: 슬롯 3칸이 돌아 덱에서 카드를 뽑아요. <b>같은 카드 2장이면 ★2, 3장이면 ★3</b>. 카드 1장을 칸에 놓으면 내 유닛 전원이 공격해요.</p>
+  <p><b>내 턴</b>: 덱 8장을 섞어 손에 3장을 들어요. 카드 1장을 칸에 놓으면 내 유닛 전원이 공격하고, 덱에서 1장을 새로 뽑아요. 낸 카드는 덱 맨 아래로 돌아가요.</p>
   <p><b>라인 막기</b>: 유닛은 자기 라인의 적만 때려요. 그 라인에 적 유닛이 없을 때만 적 지휘관을 때려요. 빈 라인은 그대로 뚫려요.</p>
   <p><b>근접</b>은 같은 줄 앞에 아군이 있으면 공격하지 못해요. <b>원거리·마법</b>은 아군 너머로 공격해요. <b>지원</b>은 공격 대신 효과를 내요.</p>
   <p><b>합체</b>: 같은 영웅 위에 놓으면 별이 오르고 체력이 다 차요 (최대 ★3).</p>
@@ -1363,26 +1374,26 @@ async function startBattle(c){
   ui={hand:[],sel:-1,phase:'wait',reels:null,skillCd:1,targeting:false,resolve:null,log:'',newUid:null,info:''};
   renderBattle();
   const b0=c.mode==='daily'?'보스전 시작!':c.mode==='arena'?'아레나 전투!':'전투 시작!';banner(b0);bgmStart('battle');await sleep(900);
-  const pDeck=save.deck.slice(),pLvs=playerLvs();
+  const pDeck=save.deck.slice(),pLvs=playerLvs();const pPile=makePile(pDeck);const eHand=[],ePile=makePile(c.eDeck);ui.hand=[];ui.pile=pPile;
   while(!st.over){
     ui.log='내 턴';if(st.round===1||st.round%5===0)turnBanner(st.round+' 라운드','rnd');else turnBanner('내 턴','me');await sleep(350);await doFx(startTurnEffects(st,'p'));if(st.over)break;
     if(ui.skillCd>0)ui.skillCd--;
-    await spinReels(drawHand(pDeck,pLvs));
+    {const added=refill(ui.hand,pPile,pLvs);added.forEach(a=>a.fresh=1);ui.sel=ui.hand.length===1?0:-1;BD&&(BD.sig='');renderBattle();if(added.length)sfx('tick');await sleep(added.length?350:0);ui.hand.forEach(h=>delete h.fresh)}
     ui.phase='choose';renderBattle();
-    tutTip('pick','<b>1. 카드 고르기</b>아래 카드 중 하나를 누르세요. 같은 카드가 2~3장 나오면 ★로 합쳐져서 더 강해요.');
+    tutTip('pick','<b>1. 카드 고르기</b>아래 카드 중 하나를 누르세요. 덱에서 3장씩 들고, 1장을 내면 1장을 새로 뽑아요. 같은 영웅 위에 놓으면 ★로 합체해서 더 강해져요.');
     const act=await new Promise(r=>ui.resolve=r);tutClear();
     ui.phase='wait';
     if(st.over)break;
-    if(act.type==='place'){const card=ui.hand[act.hi];ui.hand=[];ui.sel=-1;const res=place(st,'p',card,act.r,act.l);qp('place');if(res.merged)qp('merge');ui.newUid=res.u.uid;sfx('place');renderBattle();await doFx(res.fx,true)}
-    else{ui.hand=[];renderBattle()}
+    if(act.type==='place'){const card=ui.hand.splice(act.hi,1)[0];pPile.push(card.key);ui.sel=-1;const res=place(st,'p',card,act.r,act.l);qp('place');if(res.merged)qp('merge');ui.newUid=res.u.uid;sfx('place');renderBattle();await doFx(res.fx,true)}
+    else{ui.sel=-1;renderBattle()}
     if(st.over)break;
     await runPhase('p');if(st.over)break;
     if(save.tut&&!save.tut.lane&&st.round===1)tutTip('lane','<b>2. 라인 막기</b>영웅은 자기 줄의 적만 공격해요. 그 줄에 적이 없으면 적 지휘관을 바로 때려요. 내 줄이 비어 있으면 나도 맞아요!');
     ui.log='적 턴';turnBanner('적 턴','en');renderBattle();await sleep(500);
     await doFx(startTurnEffects(st,'e'));if(st.over)break;
-    const eh=drawHand(c.eDeck,c.eLvs);
-    const pick=aiChoose(st,'e',eh.hand,c.noise);
-    if(pick){const card=eh.hand[pick.hi];ui.log=`적이 ${V(card.key).name}${card.star>1?' ★'+card.star:''}을(를) 놓음`;const res=place(st,'e',card,pick.r,pick.l);ui.newUid=res.u.uid;sfx('place');renderBattle();await sleep(250);await doFx(res.fx,true)}
+    refill(eHand,ePile,c.eLvs);
+    const pick=aiChoose(st,'e',eHand,c.noise);
+    if(pick){const card=eHand.splice(pick.hi,1)[0];ePile.push(card.key);ui.log=`적이 ${V(card.key).name}${card.star>1?' ★'+card.star:''}을(를) 놓음`;const res=place(st,'e',card,pick.r,pick.l);ui.newUid=res.u.uid;sfx('place');renderBattle();await sleep(250);await doFx(res.fx,true)}
     if(st.over)break;
     await runPhase('e');if(st.over)break;
     st.round++;
@@ -1500,14 +1511,14 @@ function renderBattle(){
   const sel=ui.sel>=0?ui.hand[ui.sel]:null;
   const descTxt=ui.targeting?`<b style="color:#ffd667">${(WARLORDS[st.wl]||WARLORDS.asten).act.n}</b><br>${(WARLORDS[st.wl]||WARLORDS.asten).act.d}<br><span style="opacity:.7">${(WARLORDS[st.wl]||WARLORDS.asten).act.target==='lane'?'적 줄 하나를 누르세요':'적 유닛을 누르세요'}</span>`:(sel?`<b style="color:${RAR[V(sel.key).tier].c}">${V(sel.key).name}</b> ${'★'.repeat(sel.star)} (<span style="color:${FAC[V(sel.key).fac].c}">${FAC[V(sel.key).fac].n}</span> ${CLS[V(sel.key).cls].n})<br>${V(sel.key).desc}${V(sel.key).ex?'<br><span style="color:#ffd667">'+V(sel.key).exd+'</span>':''}<br><span style="opacity:.7">${V(sel.key).cls==='melee'?'근접: 앞쪽 두 열':V(sel.key).cls==='support'?'지원: 어느 열이든':'원거리·마법: 뒤쪽 두 열'} · 같은 영웅 위면 합체!</span>`:ui.info||(ui.phase==='choose'?'카드를 고르고 내 쪽 빈 자리에 놓으세요.<br><span style="opacity:.7">영웅을 누르면 정보가 보여요.</span>':ui.phase==='spin'?'소환 중...':''));
   const noValid=ui.phase==='choose'&&ui.hand.every(c=>validCells(st,'p',c).length===0);
-  const sig=JSON.stringify([ui.reels,ui.hand,ui.sel,ui.phase,ui.skillCd,ui.targeting,descTxt,noValid]);
+  const sig=JSON.stringify([(ui.pile||[]).length,ui.reels,ui.hand,ui.sel,ui.phase,ui.skillCd,ui.targeting,descTxt,noValid]);
   if(sig!==BD.sig){
     BD.sig=sig;
     let handArea;
     if(ui.reels)handArea=[0,1,2].map(()=>`<div class="reel spin">${portrait(save.deck[0])}</div>`).join('');
-    else handArea=ui.hand.map((c,i)=>{const H=V(c.key);const b=baseStats(c.key,c.lv,c.star);return `<div class="card t${H.tier} ${i===ui.sel?'sel':''} ${c.star>1&&!ui.handShown?'merged':''}" data-hi="${i}">${portrait(c.key)}${facIcon(H.fac)}<div class="nm">${H.name}</div><div class="st">${'★'.repeat(c.star)}</div><div class="stat"><span class="a">${H.cls==='support'?'-':b.a}</span><span class="h">${b.h}</span></div></div>`}).join('');
+    else handArea=ui.hand.map((c,i)=>{const H=V(c.key);const b=baseStats(c.key,c.lv,c.star);return `<div class="card t${H.tier} ${i===ui.sel?'sel':''} ${c.fresh?'deal':''}" data-hi="${i}">${portrait(c.key)}${facIcon(H.fac)}<div class="nm">${H.name}</div><div class="st">${'★'.repeat(c.star)}</div><div class="stat"><span class="a">${H.cls==='support'?'-':b.a}</span><span class="h">${b.h}</span></div></div>`}).join('');
     if(!ui.reels&&ui.hand.length)ui.handShown=true;
-    BD.bot.innerHTML=`<div class="desc">${descTxt}</div><div class="hand">${handArea}</div>
+    BD.bot.innerHTML=`<div class="desc">${descTxt}</div><div class="hand">${handArea}</div><div class="pilec" title="남은 덱"><div class="pileb"></div><div class="pileb"></div><div class="pileb"><b>${(ui.pile||[]).length}</b></div><small>덱</small></div>
      <div class="bside"><button class="btn sub skillbtn" id="bSkill" ${ui.phase!=='choose'||ui.skillCd>0?'disabled':''}>${(WARLORDS[st.wl]||WARLORDS.asten).act.n}<small>${ui.skillCd>0?ui.skillCd+'턴 후':'사용 가능'}</small></button>
      ${noValid?'<button class="btn sm sub" id="bPass">넘기기</button>':''}</div>`;
     BD.bot.querySelectorAll('.card').forEach(c=>c.onclick=()=>{if(ui.phase!=='choose')return;ui.targeting=false;const i=+c.dataset.hi;ui.sel=ui.sel===i?-1:i;sfx('tick');renderBattle();if(ui.sel>=0&&save.tut&&save.tut.pick!==2){save.tut.pick=1;tutTip('place','<b>노란 칸에 놓기</b>근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열에 놓을 수 있어요.')}});
@@ -1811,13 +1822,13 @@ window.__simulate=function(n,stageIdx,eNoise){
   const S=STAGES[stageIdx||0];const eD=S.deck.map(b=>toVid(b,S.t||0));const elv={};eD.forEach(k=>elv[k]=S.lv);let pw=0,ew=0,rounds=0,errs=0;
   const plv=playerLvs();
   for(let g=0;g<n;g++){try{
-    const s=newState({eHp:S.hp});
+    const s=newState({eHp:S.hp});const pH=[],pP=makePile(save.deck),eH=[],eP=makePile(eD);
     while(!s.over){
       startTurnEffects(s,'p');if(s.over)break;
-      let h=drawHand(save.deck,plv),p=aiChoose(s,'p',h.hand,2);if(p)place(s,'p',h.hand[p.hi],p.r,p.l);
+      refill(pH,pP,plv);let p=aiChoose(s,'p',pH,2);if(p){const cc=pH.splice(p.hi,1)[0];pP.push(cc.key);place(s,'p',cc,p.r,p.l)}
       if(!s.over)for(const _ of attackPhase(s,'p')){}if(s.over)break;
       startTurnEffects(s,'e');if(s.over)break;
-      h=drawHand(eD,elv);p=aiChoose(s,'e',h.hand,eNoise??2);if(p)place(s,'e',h.hand[p.hi],p.r,p.l);
+      refill(eH,eP,elv);p=aiChoose(s,'e',eH,eNoise??2);if(p){const cc=eH.splice(p.hi,1)[0];eP.push(cc.key);place(s,'e',cc,p.r,p.l)}
       if(!s.over)for(const _ of attackPhase(s,'e')){}if(s.over)break;
       s.round++;if(s.round>MAX_ROUND){s.over=true;s.timeout=true}
     }
