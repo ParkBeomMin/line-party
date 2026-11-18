@@ -568,9 +568,6 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .battle.field .cell.valid .tile{border:2.5px solid #ffd667!important;background:radial-gradient(ellipse,#fff3b0aa,#ffd66755 55%,#0000 72%)!important;box-shadow:0 0 14px #ffd667;animation:tglow 1s ease-in-out infinite}
 @keyframes tglow{50%{box-shadow:0 0 24px #ffd667;transform:scale(1.06)}}
 .battle.field .cell.target .tile{border:2.5px solid #ff4b4b!important;background:radial-gradient(ellipse,#ff6b6b99,#0000 72%)!important;box-shadow:0 0 14px #ff4b4b}
-.battle.field .cell[data-l="0"] .unit .ubody{transform:scale(.88);transform-origin:50% 100%}
-.battle.field .cell[data-l="1"] .unit .ubody{transform:scale(.93);transform-origin:50% 100%}
-.battle.field .cell[data-l="2"] .unit .ubody{transform:scale(.97);transform-origin:50% 100%}
 .battle.field .cell[data-l="0"] .unit .spr{filter:drop-shadow(0 2px 1px #0008) brightness(.93) saturate(.92)}
 .battle.field .cell[data-l="0"] .tile{transform:scale(.88)}
 .battle.field .cell[data-l="1"] .tile{transform:scale(.93)}
@@ -715,6 +712,71 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .rrow span{white-space:nowrap}
 .rrows{flex-wrap:wrap}
 .resbox{width:500px!important}
+
+/* v2.3 원근 보드 */
+.b2{background:url(assets/bg_field2.webp?v=16) center 30%/cover!important}
+.b2:before{background:linear-gradient(#0006 0%,#0000 14%,#0000 70%,#0a0814aa 86%,#0a0814ee 100%)!important}
+.b2 .bsvg{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.b2 .gp{fill:#ffffff08;stroke:#ffffffa8;stroke-width:1.6;cursor:pointer;transition:fill .15s}
+.b2 .gp.e{fill:#ff6b6b08;stroke:#ffe0d8a8}
+.b2 .gp.occ{fill:#00000014}
+.b2 .gp.valid{fill:#ffd66766;stroke:#ffd667;stroke-width:3;animation:gpv 1s ease-in-out infinite}
+@keyframes gpv{50%{fill:#ffd667a8}}
+.b2 .gp.target{fill:#ff4b4b55;stroke:#ff6b6b;stroke-width:3}
+.b2 .midl{stroke:#ffd667;stroke-width:2.5;stroke-dasharray:6 5;opacity:.7}
+.b2 .cell{position:absolute!important;background:none!important;border:0!important;box-shadow:none!important;pointer-events:none;overflow:visible}
+.b2 .cell .tile{display:none!important}
+.b2 .unit{position:absolute;inset:0;scale:var(--sc);transform-origin:50% 82%}
+.b2 .unit .ubody{width:104px!important;height:96px!important;margin-left:-52px!important;bottom:16%!important}
+.b2 .unit .shadow{bottom:calc(16% - 5px)!important;left:26%;right:26%;height:11px}
+.b2 .unit .stat{top:auto!important;bottom:calc(16% + 96px)!important;left:50%!important;right:auto!important;transform:translateX(-50%);gap:3px;justify-content:center}
+.b2 .unit .stat .a,.b2 .unit .stat .h{min-width:24px;height:20px;line-height:17px;font-size:13px}
+.b2 .unit .stat .a:before{content:"⚔";font-size:9px;margin-right:1px}
+.b2 .unit .stat .h:before{content:"♥";font-size:9px;margin-right:1px}
+.b2 .unit .mid{height:14px}
+.b2 .unit .ic{bottom:calc(16% - 18px)!important;right:auto!important;left:50%;transform:translateX(-50%);flex-direction:row!important}
+.b2 .cmdx{position:absolute;bottom:126px;width:140px;display:flex;flex-direction:column;align-items:center;z-index:7}
+.b2 .cmdx.p{left:6px}.b2 .cmdx.e{right:6px}
+.b2 .cmdx .cbody{width:140px;height:200px;margin:0}
+.b2 .cmdx.e .cbody img{transform:scaleX(-1);animation:cidleE 2.2s ease-in-out infinite}
+.b2 .cmdx.shake .cbody img{filter:brightness(2.5) saturate(0)}
+.b2 .chp{font-size:30px;color:#fff;text-shadow:0 2px 0 #7a0a1a,0 0 8px #000;display:flex;align-items:baseline;gap:2px;margin-bottom:-6px;z-index:2;position:relative}
+.b2 .chp .hrt{color:#ff3b4b;font-size:26px;text-shadow:0 2px 0 #5a0010}
+.b2 .chp small{font-size:12px;opacity:.75}
+.b2 .chp.low{animation:lowhp .8s ease-in-out infinite}
+@keyframes lowhp{50%{transform:scale(1.12);color:#ffd0d0}}
+.b2 .cmdx .syn{margin-top:-6px;background:#000a;border-radius:10px;padding:2px 4px}
+.b2 .btop2{position:absolute;top:0;left:0;right:0;height:52px;display:flex;align-items:flex-start;justify-content:space-between;z-index:8;background:linear-gradient(#0b0918e6,#0b091800)}
+.b2 .tname{display:flex;align-items:center;gap:6px;padding:8px 14px;font-size:16px}
+.b2 .tname small{font-size:11px;opacity:.8}
+.b2 .tname.e{flex-direction:row-reverse;text-align:right}
+.b2 .tname.e b{color:#ffc9c0}
+.b2 .tturn{position:absolute;left:50%;top:0;transform:translateX(-50%);min-width:150px;text-align:center;background:linear-gradient(#2b2350,#16122a);border:2px solid #ffd66788;border-top:0;border-radius:0 0 18px 18px;padding:2px 18px 4px;clip-path:polygon(0 0,100% 0,92% 100%,8% 100%)}
+.b2 .tt{font-size:26px;color:#ffd667;text-shadow:0 2px 0 #5a2a00;line-height:1.1}
+.b2 .tt small{font-size:12px;opacity:.7}
+.b2 .ts{font-size:11px}.b2 .ts.me{color:#9fd8ff}.b2 .ts.en{color:#ff9a8a}
+.b2 .bctrl{position:absolute;right:8px;top:56px;display:flex;flex-direction:column;gap:5px;z-index:9}
+.b2 .bctrl .speed{min-width:58px;padding:5px 8px;font-size:12px;background:#000a;border:1.5px solid #ffffff40}
+.b2 .bctrl .speed.on{background:#23a650;border-color:#7dffa1}
+.b2 .bbot2{position:absolute;left:0;right:0;bottom:0;height:130px;z-index:9;pointer-events:none}
+.b2 .bbot2>*{pointer-events:auto}
+.b2 .bbot2 .hand{position:absolute;left:12px;bottom:8px;display:flex;gap:8px;align-items:flex-end;height:auto}
+.b2 .bbot2 .card{width:104px!important;height:126px!important}
+.b2 .bbot2 .card .stat{top:3px!important;bottom:auto!important}
+.b2 .bbot2 .card .nm{bottom:4px!important}
+.b2 .bbot2 .card .st{top:auto!important;bottom:22px;left:0;right:0;text-align:center}
+.b2 .bbot2 .card .fe{top:auto!important;bottom:22px;right:4px}
+.b2 .bbot2 .pilec{position:absolute;left:350px;bottom:22px}
+.b2 .bbot2 .bside{position:absolute;right:12px;bottom:10px;display:flex;flex-direction:column;align-items:flex-end;gap:6px;width:auto;height:auto}
+.b2 .bbot2 .skillbtn{width:96px;height:96px}
+.b2 .tip2{position:absolute;left:12px;bottom:140px;max-width:340px;background:linear-gradient(#2b2350f2,#16122af2);border:2px solid #ffd66788;border-radius:12px;padding:7px 10px;font-size:12px;line-height:1.45;box-shadow:0 6px 16px #000a}
+.b2 .lanecol{display:none}
+.battle.field.b2 .cell,.battle.field.b2 .cell.valid,.battle.field.b2 .cell.target,.battle.field.b2 .grid .cell.valid{background:none!important;border:0!important;box-shadow:none!important;outline:0!important;animation:none!important}
+.b2 .cell:before,.b2 .cell:after{display:none!important}
+.b2 .bbot2 .card{width:92px!important;height:112px!important}
+.b2 .bbot2 .pilec{left:320px;bottom:16px}
+.b2 .tip2{left:auto;right:124px;bottom:10px;width:330px;max-width:none}
+.b2 .cmdx.e .cbody .rigc{transform:scaleX(-1)}
 </style>
 </head>
 <body>
@@ -722,7 +784,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v2.2 베타';
+const VERSION='v2.3 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1627,7 +1689,7 @@ function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',bo
 async function startBattle(c){
   screen='battle';tryLandscape();track('battle_start',{mode:c.mode,stage:c.idx??-1});
   cfg=c;st=newState(c);BD=null;
-  ui={hand:[],sel:-1,phase:'wait',reels:null,skillCd:1,targeting:false,resolve:null,log:'',newUid:null,info:''};
+  ui={auto:!!save.autoOn,hand:[],sel:-1,phase:'wait',reels:null,skillCd:1,targeting:false,resolve:null,log:'',newUid:null,info:''};
   renderBattle();
   const b0=c.mode==='daily'?'보스전 시작!':c.mode==='arena'?'아레나 전투!':'전투 시작!';banner(b0);bgmStart('battle');await sleep(900);
   const pDeck=save.deck.slice(),pLvs=playerLvs();const pPile=makePile(pDeck);const eHand=[],ePile=makePile(c.eDeck);ui.hand=[];ui.pile=pPile;
@@ -1635,7 +1697,7 @@ async function startBattle(c){
     ui.log='내 턴';if(st.round===1||st.round%5===0)turnBanner(st.round+' 라운드','rnd');else turnBanner('내 턴','me');await sleep(350);await doFx(startTurnEffects(st,'p'));if(st.over)break;
     if(ui.skillCd>0)ui.skillCd--;
     {const added=refill(ui.hand,pPile,pLvs);added.forEach(a=>a.fresh=1);ui.sel=ui.hand.length===1?0:-1;BD&&(BD.sig='');renderBattle();if(added.length)sfx('tick');await sleep(added.length?350:0);ui.hand.forEach(h=>delete h.fresh)}
-    ui.phase='choose';renderBattle();
+    ui.phase='choose';renderBattle();if(ui.auto)autoPlay();
     if(ui.hand.some(h=>V(h.key).cls==='building'))tutTip('bld','<b>건물 카드</b>건물은 어느 열에든 놓을 수 있어요. 공격은 안 하지만 줄을 막고 매 턴 효과를 내요.');
     if(ui.skillCd===0&&st.round>=2)tutTip('wlskill','<b>지휘관 스킬</b>오른쪽 아래 둥근 버튼이 빛나면 지휘관 스킬을 쓸 수 있어요. 지휘관마다 스킬이 달라요.');
     tutTip('pick','<b>1. 카드 고르기</b>아래 카드 중 하나를 누르세요. 덱에서 3장씩 들고, 1장을 내면 1장을 새로 뽑아요. 같은 영웅 위에 놓으면 ★로 합체해서 더 강해져요.');
@@ -1681,35 +1743,54 @@ function sprImg(id){return `<img class="spr" src="assets/s_${id}.webp?v=${ASSET_
 function scaleS(){return +app.dataset.s||1}
 function centerOf(el,yf){const s=scaleS(),a=app.getBoundingClientRect(),r=el.getBoundingClientRect();return {x:(r.left-a.left+r.width/2)/s,y:(r.top-a.top+r.height*(yf==null?.5:yf))/s}}
 function appPoint(el){return centerOf(el,.35)}
+const BGEO={y0:100,y1:404,wTop:480,wBot:660,cx:480,ts:[0,.225,.47,.73,1]};
+function bgW(t){return BGEO.wTop+(BGEO.wBot-BGEO.wTop)*t}
+function bgPt(c,t){return [BGEO.cx+(c/6-.5)*bgW(t),BGEO.y0+(BGEO.y1-BGEO.y0)*t]}
+function colOf(side,r){return side==='p'?2-r:3+r}
 function buildBattleDOM(){
-  let pg='',eg='',lanes='';
-  const cellH=(side,r,l)=>`<div class="cell c${r}" id="cell-${side}-${r}-${l}" data-side="${side}" data-r="${r}" data-l="${l}" style="z-index:${l+1}"><div class="tile"></div></div>`;
-  for(let l=0;l<LANES;l++){
-    pg+=cellH('p',2,l)+cellH('p',1,l)+cellH('p',0,l);
-    eg+=cellH('e',0,l)+cellH('e',1,l)+cellH('e',2,l);
-    lanes+=`<span>${l+1}</span>`;
+  let cells='',polys='';
+  for(const side of ['p','e'])for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){
+    const c=colOf(side,r),t0=BGEO.ts[l],t1=BGEO.ts[l+1];
+    const A=bgPt(c,t0),B=bgPt(c+1,t0),C=bgPt(c+1,t1),D=bgPt(c,t1);
+    const left=Math.min(A[0],D[0]),right=Math.max(B[0],C[0]),top=A[1],bot=D[1];
+    const sc=(.74+.34*((t0+t1)/2)).toFixed(3);
+    cells+=`<div class="cell" id="cell-${side}-${r}-${l}" data-side="${side}" data-r="${r}" data-l="${l}" style="left:${left.toFixed(1)}px;top:${top.toFixed(1)}px;width:${(right-left).toFixed(1)}px;height:${(bot-top).toFixed(1)}px;z-index:${l+2};--sc:${sc}"></div>`;
+    polys+=`<polygon id="pg-${side}-${r}-${l}" class="gp ${side}" data-side="${side}" data-r="${r}" data-l="${l}" points="${[A,B,C,D].map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}"/>`;
   }
-  app.innerHTML=`<div class="screen battle field">
-   <div class="btop" id="bTop"></div>
-   <div class="bmid">
-     <div class="cmdp p" id="cmd-p"></div>
-     <div class="grid p" id="gP">${pg}</div>
-     <div class="lanecol">${lanes}</div>
-     <div class="grid e" id="gE">${eg}</div>
-     <div class="cmdp e" id="cmd-e"></div>
-   </div>
-   <div class="bbot" id="bBot"></div>
+  const mid=bgPt(3,0),midB=bgPt(3,1);
+  app.innerHTML=`<div class="screen battle field b2">
+   <svg class="bsvg" viewBox="0 0 960 540"><g>${polys}</g><line x1="${mid[0]}" y1="${mid[1]}" x2="${midB[0]}" y2="${midB[1]}" class="midl"/></svg>
+   ${cells}
+   <div class="cmdx p" id="cmd-p"></div>
+   <div class="cmdx e" id="cmd-e"></div>
+   <div class="btop2" id="bTop"></div>
+   <div class="bctrl"><button class="speed" id="bSpeed"></button><button class="speed" id="bAuto"></button><button class="speed" id="bGive">포기</button></div>
+   <div class="bbot2" id="bBot"></div>
    <div class="fxl" id="fxl"></div>
   </div>`;
   BD={sig:'',top:app.querySelector('#bTop'),cp:app.querySelector('#cmd-p'),ce:app.querySelector('#cmd-e'),bot:app.querySelector('#bBot'),fxl:app.querySelector('#fxl')};
-  app.querySelector('#gP').onclick=e=>{const c=e.target.closest('.cell');if(!c)return;const r=+c.dataset.r,l=+c.dataset.l;
-    const sel=ui.sel>=0?ui.hand[ui.sel]:null;
-    if(ui.phase==='choose'&&sel&&validCells(st,'p',sel).some(x=>x[0]===r&&x[1]===l)){ui.resolve({type:'place',hi:ui.sel,r,l});return}
-    const u=st.board.p[r][l];if(u){ui.info=infoText(u);renderBattle()}};
-  app.querySelector('#gE').onclick=e=>{const c=e.target.closest('.cell');if(!c)return;const r=+c.dataset.r,l=+c.dataset.l;const u=st.board.e[r][l];
+  app.querySelector('.bsvg').onclick=e=>{const g=e.target.closest('polygon');if(!g)return;const side=g.dataset.side,r=+g.dataset.r,l=+g.dataset.l;
+    if(side==='p'){const sel=ui.sel>=0?ui.hand[ui.sel]:null;
+      if(ui.phase==='choose'&&sel&&validCells(st,'p',sel).some(x=>x[0]===r&&x[1]===l)){ui.resolve({type:'place',hi:ui.sel,r,l});return}
+      const u=st.board.p[r][l];if(u){ui.info=infoText(u);renderBattle()}return}
+    const u=st.board.e[r][l];
     if(ui.targeting){const A=(WARLORDS[st.wl]||WARLORDS.asten).act;if(A.target==='lane'){if(!laneUnits(st,'e',l).length)return toast('적이 있는 줄을 고르세요');useWarlordSkill(l);return}if(u){useWarlordSkill(u);return}}
     if(u){ui.info=infoText(u);renderBattle()}};
 }
+function cmdPanelHTML(side){
+  const c=st.cmd[side];
+  const art=side==='p'?(WARLORDS[st.wl]||WARLORDS.asten).art:lookArt(cfg.eLook);
+  return `<div class="chp ${c.hp<=c.max*.3?'low':''}"><span class="hrt">♥</span>${c.hp}<small>/${c.max}</small></div>${cmdBody(art)}${synChips(side)}`;
+}
+function autoPlay(){setTimeout(()=>{if(!ui.auto||ui.phase!=='choose'||!ui.resolve)return;const p=aiChoose(st,'p',ui.hand,1);if(p)ui.resolve({type:'place',hi:p.hi,r:p.r,l:p.l});else ui.resolve({type:'pass'})},450/SPEED)}
+function topBarHTML(){
+  const W=WARLORDS[st.wl]||WARLORDS.asten;const li=leagueIdx(save.trophies);
+  const myTurn=ui.log==='내 턴'||ui.phase==='choose';
+  return `<div class="tname p"><span class="lgb" style="--lc:${LEAGUES[li].c}">${li+1}</span><b>${W.n}</b><small>Lv${wlLv(st.wl)}</small></div>
+  <div class="tturn"><div class="tt">턴 ${st.round}<small>/${MAX_ROUND}</small></div><div class="ts ${myTurn?'me':'en'}">${myTurn?'내 차례':'적 차례'}</div></div>
+  <div class="tname e"><b>${esc(cfg.eName.replace('AI 도전자 · ',''))}</b>${cfg.passiveName?`<small style="color:#ff8aa8">${cfg.passiveName}</small>`:`<small>${cfg.mode==='arena'?'AI 도전자':cfg.mode==='daily'?'오늘의 보스':'모험'}</small>`}</div>`;
+}
+
 function unitEl(u){
   const d=document.createElement('div');d.id='u'+u.uid;d.dataset.uid=u.uid;
   const H=V(u.key);
@@ -1736,6 +1817,7 @@ function reconcileBoard(){
     cell.classList.toggle('valid',side==='p'&&valid.includes(r+','+l));
     const u=st.board[side][r][l];
     cell.classList.toggle('target',side==='e'&&!!ui.targeting&&(!!u||((WARLORDS[st.wl]||{act:{}}).act.target==='lane'&&laneUnits(st,'e',l).length>0)));
+    {const pg=document.getElementById(`pg-${side}-${r}-${l}`);if(pg){pg.classList.toggle('valid',cell.classList.contains('valid'));pg.classList.toggle('target',cell.classList.contains('target'));pg.classList.toggle('occ',!!u)}}
     [...cell.querySelectorAll('.unit:not(.dying)')].forEach(el=>{
       if(u&&el.dataset.uid===String(u.uid))return;
       if(!alive.has(el.dataset.uid))dieFx(el);else el.remove();
@@ -1754,22 +1836,17 @@ function spawnFx(el,cell){sfx('land');
 }
 function lookArt(look){if(!look)return 'c_player';if(look.startsWith('art:'))return look.slice(4);return 'c_'+(CMD_ART[look]||'player')}
 function cmdBody(art){return `<div class="cbody"><div class="cshadow"></div><img src="assets/k_${art}.webp?v=${ASSET_V}" alt="" draggable="false"></div>`}
-function cmdPanelHTML(side){
-  const c=st.cmd[side];
-  const hp=`<div class="hpbar"><i style="width:${c.hp/c.max*100}%"></i><b>${c.hp} / ${c.max}</b></div>`;
-  if(side==='p'){const W=WARLORDS[st.wl]||WARLORDS.asten;return `${cmdBody(W.art)}<div class="cplate"><div class="nm">${W.n} <small style="color:#ffd667">Lv${wlLv(st.wl)}</small></div>${hp}${synChips('p')}</div>`}
-  return `${cmdBody(lookArt(cfg.eLook))}<div class="cplate"><div class="nm">${esc(cfg.eName)}</div>${cfg.passiveName?`<div class="sub">${cfg.passiveName}</div>`:''}${hp}${synChips('e')}</div>`;
-}
 function renderBattle(){
   if(!st||screen!=='battle')return;
-  if(!BD||!document.getElementById('gP'))buildBattleDOM();
-  BD.top.innerHTML=`<span>${st.round}/${MAX_ROUND} 라운드</span><span class="log">${esc(ui.log)}</span><span><button class="speed" id="bSpeed">x${SPEED}</button><button class="speed" id="bGive">포기</button></span>`;
+  if(!BD||!document.querySelector('.bsvg'))buildBattleDOM();
+  {const th=topBarHTML();if(BD.th!==th){BD.top.innerHTML=th;BD.th=th}}
+  {const sb=document.getElementById('bSpeed');if(sb)sb.textContent='x'+SPEED;const ab=document.getElementById('bAuto');if(ab){ab.textContent=ui.auto?'자동 ON':'자동';ab.classList.toggle('on',!!ui.auto)}}
   const cpH=cmdPanelHTML('p'),ceH=cmdPanelHTML('e');
   if(BD.cpH!==cpH){BD.cp.innerHTML=cpH;BD.cpH=cpH}
   if(BD.ceH!==ceH){BD.ce.innerHTML=ceH;BD.ceH=ceH}
   reconcileBoard();
   const sel=ui.sel>=0?ui.hand[ui.sel]:null;
-  const descTxt=ui.targeting?`<b style="color:#ffd667">${(WARLORDS[st.wl]||WARLORDS.asten).act.n}</b><br>${(WARLORDS[st.wl]||WARLORDS.asten).act.d}<br><span style="opacity:.7">${(WARLORDS[st.wl]||WARLORDS.asten).act.target==='lane'?'적 줄 하나를 누르세요':'적 유닛을 누르세요'}</span>`:(sel?`<b style="color:${RAR[V(sel.key).tier].c}">${V(sel.key).name}</b> ${'★'.repeat(sel.star)} (<span style="color:${FAC[V(sel.key).fac].c}">${FAC[V(sel.key).fac].n}</span> ${CLS[V(sel.key).cls].n})<br>${V(sel.key).desc}${V(sel.key).ex?'<br><span style="color:#ffd667">'+V(sel.key).exd+'</span>':''}<br><span style="opacity:.7">${V(sel.key).cls==='melee'?'근접: 앞쪽 두 열':V(sel.key).cls==='support'?'지원: 어느 열이든':V(sel.key).cls==='building'?'건물: 어느 열이든, 공격하지 않고 줄을 막아요':'원거리·마법: 뒤쪽 두 열'} · 같은 영웅 위면 합체!</span>`:ui.info||(ui.phase==='choose'?'카드를 고르고 내 쪽 빈 자리에 놓으세요.<br><span style="opacity:.7">영웅을 누르면 정보가 보여요.</span>':ui.phase==='spin'?'소환 중...':''));
+  const descTxt=ui.targeting?`<b style="color:#ffd667">${(WARLORDS[st.wl]||WARLORDS.asten).act.n}</b><br>${(WARLORDS[st.wl]||WARLORDS.asten).act.d}<br><span style="opacity:.7">${(WARLORDS[st.wl]||WARLORDS.asten).act.target==='lane'?'적 줄 하나를 누르세요':'적 유닛을 누르세요'}</span>`:(sel?`<b style="color:${RAR[V(sel.key).tier].c}">${V(sel.key).name}</b> ${'★'.repeat(sel.star)} (<span style="color:${FAC[V(sel.key).fac].c}">${FAC[V(sel.key).fac].n}</span> ${CLS[V(sel.key).cls].n})<br>${V(sel.key).desc}${V(sel.key).ex?'<br><span style="color:#ffd667">'+V(sel.key).exd+'</span>':''}<br><span style="opacity:.7">${V(sel.key).cls==='melee'?'근접: 앞쪽 두 열':V(sel.key).cls==='support'?'지원: 어느 열이든':V(sel.key).cls==='building'?'건물: 어느 열이든, 공격하지 않고 줄을 막아요':'원거리·마법: 뒤쪽 두 열'} · 같은 영웅 위면 합체!</span>`:ui.info||'');
   const noValid=ui.phase==='choose'&&ui.hand.every(c=>validCells(st,'p',c).length===0);
   const sig=JSON.stringify([(ui.pile||[]).length,ui.reels,ui.hand,ui.sel,ui.phase,ui.skillCd,ui.targeting,descTxt,noValid]);
   if(sig!==BD.sig){
@@ -1778,7 +1855,7 @@ function renderBattle(){
     if(ui.reels)handArea=[0,1,2].map(()=>`<div class="reel spin">${portrait(save.deck[0])}</div>`).join('');
     else handArea=ui.hand.map((c,i)=>{const H=V(c.key);const b=baseStats(c.key,c.lv,c.star);return `<div class="card t${H.tier} ${i===ui.sel?'sel':''} ${c.fresh?'deal':''}" data-hi="${i}">${portrait(c.key)}${facIcon(H.fac)}<div class="nm">${H.name}</div><div class="st">${'★'.repeat(c.star)}</div><div class="stat"><span class="a">${H.cls==='support'||H.cls==='building'?'-':b.a}</span><span class="h">${b.h}</span></div></div>`}).join('');
     if(!ui.reels&&ui.hand.length)ui.handShown=true;
-    BD.bot.innerHTML=`<div class="desc">${descTxt}</div><div class="hand">${handArea}</div><div class="pilec" title="남은 덱"><div class="pileb"></div><div class="pileb"></div><div class="pileb"><b>${(ui.pile||[]).length}</b></div><small>덱</small></div>
+    BD.bot.innerHTML=`${descTxt?`<div class="tip2">${descTxt}</div>`:''}<div class="hand">${handArea}</div><div class="pilec" title="남은 덱"><div class="pileb"></div><div class="pileb"></div><div class="pileb"><b>${(ui.pile||[]).length}</b></div><small>덱</small></div>
      <div class="bside"><button class="btn sub skillbtn" id="bSkill" ${ui.phase!=='choose'||ui.skillCd>0?'disabled':''}>${(WARLORDS[st.wl]||WARLORDS.asten).act.n}<small>${ui.skillCd>0?ui.skillCd+'턴 후':'사용 가능'}</small></button>
      ${noValid?'<button class="btn sm sub" id="bPass">넘기기</button>':''}</div>`;
     BD.bot.querySelectorAll('.card').forEach(c=>c.onclick=()=>{if(ui.phase!=='choose')return;ui.targeting=false;const i=+c.dataset.hi;ui.sel=ui.sel===i?-1:i;sfx('tick');renderBattle();if(ui.sel>=0&&save.tut&&save.tut.pick!==2){save.tut.pick=1;tutTip('place','<b>노란 칸에 놓기</b>근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열에 놓을 수 있어요.')}});
@@ -1787,6 +1864,7 @@ function renderBattle(){
   }
   app.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const F=FAC[c.dataset.fac];ui.info=`<b style="color:${F.c}">${F.n}</b> 진영 시너지<br>${F.s2}<br>${F.s4}`;renderBattle()});
   bind('#bSpeed',()=>{SPEED=SPEED>=3?1:SPEED+1;save.speed=SPEED;persist();renderBattle()});
+  bind('#bAuto',()=>{ui.auto=!ui.auto;save.autoOn=ui.auto;persist();renderBattle();if(ui.auto)autoPlay()});
   bind('#bGive',()=>{const m=modal(`<h3>포기할까요?</h3><div class="rw">${cfg.mode==='arena'?'아레나는 패배로 처리돼요':''}</div><div class="btns"><button class="btn" id="gy">포기</button><button class="btn sub" data-close>계속</button></div>`);m.querySelector('#gy').onclick=()=>{st.over=true;st.gaveUp=true;st.cmd.p.hp=0;m.remove();if(ui.resolve)ui.resolve({type:'pass'})}});
 }
 /* --- 공격 연출 --- */
@@ -2097,7 +2175,7 @@ function poseAt(m,t){const K=MOTIONS[m];for(let i=0;i<K.length-1;i++){const [t0,
 function rigPlay(img,motion,ms){
   return new Promise(res=>{
     if(!img||!img.naturalWidth||save.noRig){res();return}
-    const r=img.getBoundingClientRect();const sc=scaleS();const w=Math.round(r.width/sc),h=Math.round(r.height/sc);if(!w||!h){res();return}
+    const r=img.getBoundingClientRect();const sc=scaleS();const w=img.offsetWidth||Math.round(r.width/sc),h=img.offsetHeight||Math.round(r.height/sc);if(!w||!h){res();return}
     const dpr=Math.min(2,(window.devicePixelRatio||1)*sc);
     const cv=document.createElement('canvas');cv.className=img.className+' rigc';cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.width=w+'px';cv.style.height=h+'px';
     const ctx=cv.getContext('2d');const box={w,h,dpr};
