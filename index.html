@@ -555,6 +555,34 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .pileb:nth-child(1){left:6px;top:0}.pileb:nth-child(2){left:3px;top:3px}.pileb:nth-child(3){left:0;top:6px;display:flex;align-items:center;justify-content:center}
 .pileb b{font-size:22px;color:#ffe9a8;text-shadow:0 2px 0 #000}
 .pilec small{position:absolute;left:0;right:0;bottom:-14px;text-align:center;font-size:10px;opacity:.75}
+
+/* v1.5 대지 배치 */
+.battle.field .grid{background:none!important;box-shadow:none!important;padding:7px 4px!important;position:relative}
+.battle.field .grid:before{content:"";position:absolute;inset:-6px -10px;border-radius:50%/40%;pointer-events:none;z-index:0}
+.battle.field .grid.p:before{background:radial-gradient(ellipse at 50% 55%,#7fb4ff26,#7fb4ff10 55%,#0000 72%)}
+.battle.field .grid.e:before{background:radial-gradient(ellipse at 50% 55%,#ff8a7a26,#ff8a7a10 55%,#0000 72%)}
+.battle.field .cell,.battle.field .grid.e .cell{background:none!important;box-shadow:none!important;border:0!important;animation:none!important;filter:none!important}
+.battle.field .cell .tile{display:block!important;position:absolute;left:14%;right:14%;bottom:3px;height:26px;border-radius:50%;background:radial-gradient(ellipse,#ffffff22,#ffffff08 60%,#0000 70%);border:1.5px dashed #ffffff55;box-shadow:none}
+.battle.field .grid.e .cell .tile{border-color:#ffd0c855;background:radial-gradient(ellipse,#ff8a7a22,#0000 70%)}
+.battle.field .cell:has(.unit:not(.dying)) .tile{border-color:#0000;background:none}
+.battle.field .cell.valid .tile{border:2.5px solid #ffd667!important;background:radial-gradient(ellipse,#fff3b0aa,#ffd66755 55%,#0000 72%)!important;box-shadow:0 0 14px #ffd667;animation:tglow 1s ease-in-out infinite}
+@keyframes tglow{50%{box-shadow:0 0 24px #ffd667;transform:scale(1.06)}}
+.battle.field .cell.target .tile{border:2.5px solid #ff4b4b!important;background:radial-gradient(ellipse,#ff6b6b99,#0000 72%)!important;box-shadow:0 0 14px #ff4b4b}
+.battle.field .cell[data-l="0"] .unit .ubody{transform:scale(.88);transform-origin:50% 100%}
+.battle.field .cell[data-l="1"] .unit .ubody{transform:scale(.93);transform-origin:50% 100%}
+.battle.field .cell[data-l="2"] .unit .ubody{transform:scale(.97);transform-origin:50% 100%}
+.battle.field .cell[data-l="0"] .unit .spr{filter:drop-shadow(0 2px 1px #0008) brightness(.93) saturate(.92)}
+.battle.field .cell[data-l="0"] .tile{transform:scale(.88)}
+.battle.field .cell[data-l="1"] .tile{transform:scale(.93)}
+.battle.field .lanecol span{background:none!important;opacity:.35!important}
+.battle.field .unit .shadow{bottom:5px;height:12px;background:#000c}
+
+.battle.field .grid .cell.valid,.battle.field .grid .cell.target,.battle.field .grid.e .cell.target{background:none!important;box-shadow:none!important;animation:none!important;filter:none!important}
+.battle.field .grid .cell .tile{border:2px dashed #ffffffa0!important;background:radial-gradient(ellipse,#ffffff3a,#ffffff12 60%,#0000 72%)!important}
+.battle.field .grid.e .cell .tile{border-color:#ffd6cca0!important;background:radial-gradient(ellipse,#ff8a7a3a,#ff8a7a10 60%,#0000 72%)!important}
+.battle.field .grid .cell:has(.unit:not(.dying)) .tile{border-color:#0000!important;background:none!important}
+.battle.field .grid .cell.valid .tile{border:3px solid #ffd667!important;background:radial-gradient(ellipse,#fff3b0cc,#ffd66766 55%,#0000 72%)!important;box-shadow:0 0 16px #ffd667!important}
+.battle.field .grid .cell.target .tile{border:3px solid #ff4b4b!important;background:radial-gradient(ellipse,#ff6b6baa,#0000 72%)!important;box-shadow:0 0 16px #ff4b4b!important}
 </style>
 </head>
 <body>
@@ -562,7 +590,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v1.4 베타';
+const VERSION='v1.5 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
