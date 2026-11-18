@@ -583,6 +583,8 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .battle.field .grid .cell:has(.unit:not(.dying)) .tile{border-color:#0000!important;background:none!important}
 .battle.field .grid .cell.valid .tile{border:3px solid #ffd667!important;background:radial-gradient(ellipse,#fff3b0cc,#ffd66766 55%,#0000 72%)!important;box-shadow:0 0 16px #ffd667!important}
 .battle.field .grid .cell.target .tile{border:3px solid #ff4b4b!important;background:radial-gradient(ellipse,#ff6b6baa,#0000 72%)!important;box-shadow:0 0 16px #ff4b4b!important}
+.battle.field{background:url(assets/bg_field2.webp?v=16) center top/cover!important}
+.battle.field .cell[data-l="0"] .unit .spr{filter:drop-shadow(0 2px 1px #0008)!important}
 </style>
 </head>
 <body>
@@ -590,7 +592,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v1.5 베타';
+const VERSION='v1.5.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1867,7 +1869,7 @@ window.__simulate=function(n,stageIdx,eNoise){
 };
 save=loadSave();if(!save.warlord)save.warlord='asten';if(!save.wl)save.wl={};checkLeagueUnlock();if(save.tut===undefined)save.tut=(save.stats.w+save.stats.l===0)?{}:null;persist();
 addEventListener('pointerdown',()=>{if(!BGM.on&&!save.mute)bgmStart(screen==='battle'?'battle':'lobby')},{once:true});
-(function preload(){window.__imgs=[];Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/"+artOf(id)+".webp?v="+ASSET_V;__imgs.push(i)}));[...new Set(Object.values(CMD_ART))].forEach(k=>{const i=new Image();i.src="assets/c_"+k+".webp?v="+ASSET_V;__imgs.push(i)});["wood","silver","gold","boss"].forEach(k=>{const i=new Image();i.src="assets/x_"+k+".webp?v="+ASSET_V;__imgs.push(i)});FAC_KEYS.forEach(k=>{const i=new Image();i.src="assets/f_"+k+".webp?v="+ASSET_V;__imgs.push(i)});Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/s_"+id+".webp?v="+ASSET_V;__imgs.push(i)}));{const i=new Image();i.src="assets/bg_field.webp?v="+ASSET_V;__imgs.push(i)}["bg_lobby","bg_map","k_c_player","k_w_seraphine","k_w_orwan","k_w_maya","k_w_kardum","k_w_nox","k_c_rival1","k_c_rival2","k_c_goblin","k_c_swamp","k_c_beast","k_c_elf","k_c_flame","k_c_ice","k_c_knightc","k_c_storm","k_c_grave","k_c_dragonl","k_c_boss","k_c_boss2","k_c_boss3","k_c_boss4","w_seraphine","w_orwan","w_maya","w_kardum","w_nox","c_boss2","c_boss3","c_boss4","i_battle","i_map","i_boss","i_hero","i_shop","i_quest","i_gift","i_trophy","i_gem","i_coin","i_bolt","i_crate"].forEach(n=>{const i=new Image();i.src="assets/"+n+".webp?v="+ASSET_V;__imgs.push(i)});})();
+(function preload(){window.__imgs=[];Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/"+artOf(id)+".webp?v="+ASSET_V;__imgs.push(i)}));[...new Set(Object.values(CMD_ART))].forEach(k=>{const i=new Image();i.src="assets/c_"+k+".webp?v="+ASSET_V;__imgs.push(i)});["wood","silver","gold","boss"].forEach(k=>{const i=new Image();i.src="assets/x_"+k+".webp?v="+ASSET_V;__imgs.push(i)});FAC_KEYS.forEach(k=>{const i=new Image();i.src="assets/f_"+k+".webp?v="+ASSET_V;__imgs.push(i)});Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/s_"+id+".webp?v="+ASSET_V;__imgs.push(i)}));{const i=new Image();i.src="assets/bg_field2.webp?v=16";__imgs.push(i)}["bg_lobby","bg_map","k_c_player","k_w_seraphine","k_w_orwan","k_w_maya","k_w_kardum","k_w_nox","k_c_rival1","k_c_rival2","k_c_goblin","k_c_swamp","k_c_beast","k_c_elf","k_c_flame","k_c_ice","k_c_knightc","k_c_storm","k_c_grave","k_c_dragonl","k_c_boss","k_c_boss2","k_c_boss3","k_c_boss4","w_seraphine","w_orwan","w_maya","w_kardum","w_nox","c_boss2","c_boss3","c_boss4","i_battle","i_map","i_boss","i_hero","i_shop","i_quest","i_gift","i_trophy","i_gem","i_coin","i_bolt","i_crate"].forEach(n=>{const i=new Image();i.src="assets/"+n+".webp?v="+ASSET_V;__imgs.push(i)});})();
 ensureDaily();showLobby();
 </script>
 </body>
