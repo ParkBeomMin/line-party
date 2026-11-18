@@ -671,6 +671,26 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .flab{font-size:11px;opacity:.6;margin:0 2px 0 6px}
 .flab:first-child{margin-left:0}
 .ftab{padding:3px 9px!important;font-size:11.5px!important}
+
+/* v2.1 원정 */
+.expscr{background:linear-gradient(#0d0b16cc,#0d0b16ee),url(assets/bg_map.webp?v=10) center/cover}
+.expdest{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.edest{background:#0007;border:1px solid #ffd66744;border-radius:12px;padding:7px 10px;font-size:12px;line-height:1.45}
+.edest b{font-size:15px;color:#ffe9a8}
+.edest .erw{font-size:11px;color:#9fd8ff}
+.expgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.expcard{display:flex;gap:10px;background:linear-gradient(#3b3168cc,#221b42cc);border:2px solid #ffffff22;border-radius:16px;padding:8px 10px}
+.expcard.cur{opacity:.6}
+.expcard.done{border-color:#7dffa1;box-shadow:0 0 14px #7dffa155}
+.eart{width:78px;height:100px;flex:none;border-radius:12px;background:radial-gradient(circle at 50% 70%,color-mix(in srgb,var(--fc,#888) 40%,#1f1838),#1f1838 75%);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.eart img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+.einfo{flex:1;display:flex;flex-direction:column;gap:4px;font-size:12px}
+.espec{font-size:11.5px;color:#9fd8ff}
+.expbtns{display:flex;gap:5px;flex-wrap:wrap}
+.expbtns .btn{display:flex;flex-direction:column;align-items:center;line-height:1.1;padding:4px 9px}
+.expbtns .btn small{font-size:9.5px;opacity:.75}
+.expprog .bar{height:9px}
+.expprog small{font-size:11px;opacity:.75}
 </style>
 </head>
 <body>
@@ -678,7 +698,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v2.0.1 베타';
+const VERSION='v2.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -815,7 +835,8 @@ const QUEST_POOL=[
   {id:'chest',n:'상자 2개 열기',goal:2,gold:50,gems:2},
   {id:'upgrade',n:'영웅 1번 강화',goal:1,gold:40,gems:2},
   {id:'kill',n:'적 유닛 15기 쓰러뜨리기',goal:15,gold:60,gems:2},
-  {id:'fac4',n:'한 판에 같은 진영 4기 모으기',goal:1,gold:60,gems:3}
+  {id:'fac4',n:'한 판에 같은 진영 4기 모으기',goal:1,gold:60,gems:3},
+  {id:'exped',n:'지휘관 원정 1번 보내기',goal:1,gold:50,gems:2}
 ];
 const MAX_ROUND=15;
 
@@ -1365,6 +1386,7 @@ function showLobby(){
     <div class="lside right2">
       <button class="sbtn" id="bIdle">${ico('crate')}<span id="idleAmt">${idleAmount()}</span><small>보급 창고</small></button>
       <button class="sbtn" id="bShop">${ico('shop')}<span>상점</span>${!save.shop.free?'<i class="dot"></i>':''}</button>
+      <button class="sbtn" id="bExp">${ico('map')}<span>원정</span>${anyExpDone()?'<i class="dot"></i>':''}</button>
       <button class="sbtn" id="bBoss">${ico('boss')}<span>오늘의 보스</span>${bossLeft()>0?'<i class="dot"></i>':''}</button>
     </div>
     <div class="stage3">
@@ -1380,7 +1402,7 @@ function showLobby(){
     </div>
     <div class="ver2">${VERSION} · ${save.stats.w}승 ${save.stats.l}패</div>
   </div>`;
-  bind('#bFight',startArena);bind('#bAdv',showStages);bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
+  bind('#bFight',startArena);bind('#bAdv',showStages);bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bExp',showExpeditions);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
   app.querySelectorAll('[data-shop]').forEach(b=>b.onclick=()=>{sfx('tick');showShop()});
   bind('#bIdle',()=>{const a=idleAmount();if(a<1)return toast(`분당 ${idleRate().toFixed(1)}골드씩 쌓여요 (최대 8시간)`);save.gold+=a;save.idle.last=Date.now();persist();sfx('coin');toast(`보급 ${a}골드를 받았어요`);showLobby()});
   bindChests();
@@ -1420,6 +1442,7 @@ function showRules(){
   <p><b>근접</b>은 같은 줄 앞에 아군이 있으면 공격하지 못해요. <b>원거리·마법</b>은 아군 너머로 공격해요. <b>지원</b>은 공격 대신 효과를 내요.</p>
   <p><b>합체</b>: 같은 영웅 위에 놓으면 별이 오르고 체력이 다 차요 (최대 ★3).</p>
   <p><b>번개 일격</b>: 지휘관 스킬, 적 유닛에 3 피해, 3턴마다.</p>
+  <p><b>원정</b>: 지휘관이 2명 이상이면, 전투에 쓰지 않는 지휘관을 원정 보내 영웅 카드, 골드, 보석을 얻어 와요. 지휘관마다 원정 특기가 달라서 가져오는 보상도 달라요.</p>
   <p><b>건물</b>: 감시탑, 치유의 샘 같은 건물은 어느 열에든 놓을 수 있어요. 공격은 하지 않지만 줄을 막아 지휘관을 지키고, 매 턴 고유 효과를 내요. 독과 빙결에 걸리지 않고, 진화 없이 레벨업만 해요.</p>
   <p><b>지휘관</b>: 로비 왼쪽 위 프로필을 눌러 지휘관을 고를 수 있어요. 지휘관마다 체력, 패시브, 전투 스킬이 달라요. 리그, 모험 진행, 보석으로 새 지휘관을 해금해요.</p>
   <p><b>진영</b>: 모든 영웅은 성채(균형·보호), 들숲(체력·재생), 잿불(공격) 중 하나예요. 보드에 같은 진영이 2기, 4기 이상 있으면 시너지 효과가 켜져요. 전투 중 지휘관 아래 진영 아이콘을 누르면 효과를 볼 수 있어요.</p>
@@ -1969,7 +1992,7 @@ function showWarlords(){
     return `<div class="wlcard ${cur?'cur':''} ${un?'':'lock'}" style="--fc:${FAC[W.fac].c}"><div class="wart"><img src="assets/k_${W.art}.webp?v=${ASSET_V}" alt=""></div><div class="winfo">
     <div class="wname">${W.n} ${facIcon(W.fac,'ci')}<span style="color:${FAC[W.fac].c};font-size:12px">${FAC[W.fac].n}</span></div>
     <div class="wl">Lv ${wlLv(id)}/${WL_MAX} · 체력 ${wlHp(id)}${un&&wlLv(id)<WL_MAX?`<div class="bar q" style="height:6px;margin-top:2px"><i style="width:${wlXp(id)/wlNeed(wlLv(id))*100}%"></i></div><small style="opacity:.65">경험치 ${wlXp(id)}/${wlNeed(wlLv(id))} · 3레벨마다 스킬 강화, 10레벨에 쿨타임 -1</small>`:''}</div><div class="wl"><b>패시브</b> ${W.pas}</div><div class="wl"><b style="color:#ffd667">${W.act.n}</b> (${W.act.cd}턴) ${W.act.d}</div>
-    <div class="wbtn">${cur?'<span class="done">사용 중</span>':un?`<button class="btn sm grn" data-pick="${id}">선택</button>`:W.unlock.t==='gems'?`<button class="btn sm" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} 영입</button>`:`<span class="lk">🔒 ${W.unlock.d}</span>`}</div></div></div>`}).join('')}</div></div></div>`;
+    <div class="wbtn">${cur?'<span class="done">사용 중</span>':(un&&expOf(id))?'<span class="lk">원정 중</span>':un?`<button class="btn sm grn" data-pick="${id}">선택</button>`:W.unlock.t==='gems'?`<button class="btn sm" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} 영입</button>`:`<span class="lk">🔒 ${W.unlock.d}</span>`}</div></div></div>`}).join('')}</div></div></div>`;
   bind('#bk',showLobby);
   app.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{sfx('merge');save.warlord=b.dataset.pick;persist();track('warlord_pick',{id:save.warlord});showWarlords()});
   app.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const id=b.dataset.buy,W=WARLORDS[id];if(save.gems<W.unlock.v)return;save.gems-=W.unlock.v;save.wl=save.wl||{};save.wl[id]=true;save.warlord=id;persist();sfx('win');toast(W.n+' 영입!');showWarlords()});
@@ -2053,6 +2076,78 @@ function rigPlay(img,motion,ms){
 }
 function unitImg(el){return el?el.querySelector('.spr'):null}
 function motionFor(v){if(v.cls==='melee')return 'melee';if(v.cls==='ranged')return 'ranged';if(v.cls==='magic')return 'magic';if(v.cls==='support')return 'support';return null}
+
+/* ===================== 지휘관 원정 ===================== */
+const EXP_DEST=[
+  {id:'forest',n:'속삭이는 숲',min:30,cards:8,gold:[40,70],gems:[0,0],tierBoost:0,xp:20,d:'가까운 숲을 정찰해요'},
+  {id:'ruins',n:'잊힌 유적',min:120,cards:20,gold:[100,160],gems:[1,3],tierBoost:.5,xp:50,d:'오래된 유적에서 보물을 찾아요'},
+  {id:'peaks',n:'용의 산맥',min:360,cards:45,gold:[220,320],gems:[4,8],tierBoost:1.2,xp:110,d:'위험하지만 보상이 큰 산맥 원정'}
+];
+const EXP_SPEC={
+  asten:{d:'성채 영웅 카드 위주 · 골드 +20%',fac:'bastion',gold:1.2},
+  seraphine:{d:'보석 +3~5 · 골드 +40%',gold:1.4,gems:[3,5]},
+  orwan:{d:'들숲 영웅 카드 위주 · 상위 등급 확률 상승',fac:'wild',tier:.6},
+  maya:{d:'카드 양 1.5배 (진영 무작위)',cards:1.5},
+  kardum:{d:'잿불 영웅 카드 위주 · 골드 +60%',fac:'ember',gold:1.6},
+  nox:{d:'희귀 이상 카드 확률 크게 상승 · 가끔 보석',tier:1.4,gems:[0,2]}
+};
+function expMins(dest){return Math.round(dest.min*(ev('chestfest')?.5:1))}
+function wlCount(){return Object.keys(WARLORDS).filter(id=>wlUnlocked(id)).length}
+function expOf(id){save.exp=save.exp||{};return save.exp[id]}
+function expDone(id){const e=expOf(id);return e&&Date.now()>=e.end}
+function anyExpDone(){save.exp=save.exp||{};return Object.keys(save.exp).some(expDone)}
+function expRoll(wid,destId){
+  const D=EXP_DEST.find(x=>x.id===destId),S=EXP_SPEC[wid]||{},lvm=1+(wlLv(wid)-1)*.1;
+  const pool=[];unlockedBases().forEach(b=>versionsOf(b).forEach(id=>pool.push(id)));
+  const TW=tierWeights().map((w,t)=>w*(t>0?1+(D.tierBoost+(S.tier||0))*t*.5:1));
+  const pick=(facPref)=>{let cand=pool;if(facPref&&Math.random()<.7){const f=pool.filter(id=>V(id).fac===facPref);if(f.length)cand=f}const ws=cand.map(id=>TW[tierOf(id)]);const tot=ws.reduce((a,b)=>a+b,0);let x=Math.random()*tot;for(let i=0;i<cand.length;i++){x-=ws[i];if(x<=0)return cand[i]}return cand[0]};
+  let n=Math.round(D.cards*lvm*(S.cards||1));
+  const got={};const kinds=rr(3,6);const parts=[];for(let i=0;i<kinds;i++)parts.push(pick(S.fac));
+  const PW=[1,.55,.3,.15];const pw=parts.map(id=>PW[tierOf(id)]);const ptot=pw.reduce((a,b)=>a+b,0);
+  parts.forEach((id,i)=>got[id]=(got[id]||0)+Math.max(1,Math.round(n*pw[i]/ptot)));
+  const gold=Math.round(rr(D.gold[0],D.gold[1])*lvm*(S.gold||1));
+  let gems=rr(D.gems[0],D.gems[1]);if(S.gems)gems+=rr(S.gems[0],S.gems[1]);
+  const found=[];Object.entries(got).forEach(([id,c])=>{if(!save.owned[id]){save.owned[id]={lv:1,cards:0};found.push(id)}save.owned[id].cards+=c});
+  save.gold+=gold;save.gems+=gems;
+  // 지휘관 경험치
+  save.wlx=save.wlx||{};const o=save.wlx[wid]||(save.wlx[wid]={lv:1,xp:0});let up=0;if(o.lv<WL_MAX){o.xp+=D.xp;while(o.lv<WL_MAX&&o.xp>=wlNeed(o.lv)){o.xp-=wlNeed(o.lv);o.lv++;up++}}
+  persist();
+  return {got,gold,gems,found,xp:D.xp,up};
+}
+function showExpeditions(){
+  screen='exped';save.exp=save.exp||{};
+  if(wlCount()<2){
+    app.innerHTML=`<div class="screen expscr"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">지휘관 원정</span>${resBar()}</div>
+    <div class="body" style="display:flex;align-items:center;justify-content:center"><div class="panel" style="max-width:460px;text-align:center;padding:20px;font-size:15px;line-height:1.6">지휘관을 <b>2명 이상</b> 보유하면 원정을 보낼 수 있어요.<br>전투에 쓰지 않는 지휘관을 원정 보내서 영웅 카드, 골드, 보석을 얻어 오세요.<br><span style="opacity:.7;font-size:13px">세라핀은 청동 리그에서 합류해요.</span></div></div></div>`;
+    bind('#bk',showLobby);return;
+  }
+  const ids=Object.keys(WARLORDS).filter(id=>wlUnlocked(id));
+  const card=id=>{const W=WARLORDS[id],S=EXP_SPEC[id],e=expOf(id);const cur=save.warlord===id;
+    let st='';
+    if(cur)st=`<span class="lk">전투 지휘관이라 원정 불가</span>`;
+    else if(e){const D=EXP_DEST.find(x=>x.id===e.dest);const left=e.end-Date.now();
+      st=left<=0?`<button class="btn sm grn" data-claim="${id}">보상 받기</button>`:`<div class="expprog"><div class="bar q"><i style="width:${Math.min(100,(Date.now()-e.start)/(e.end-e.start)*100)}%"></i></div><small>${D.n} · ${fmtT(left/1000)} 남음</small></div><div class="expbtns"><button class="btn sm" data-rush="${id}">${ico('gem','mi')} ${Math.max(1,Math.ceil(left/60000/10))} 즉시 귀환</button><button class="btn sm grn" data-ad="${id}" ${adLeft('chest')>0?'':'disabled'}>광고 -30분</button></div>`}
+    else st=`<div class="expbtns">${EXP_DEST.map(D=>`<button class="btn sm sub" data-send="${id}" data-dest="${D.id}">${D.n}<small>${fmtT(expMins(D)*60)}</small></button>`).join('')}</div>`;
+    return `<div class="expcard ${cur?'cur':''} ${e&&expDone(id)?'done':''}" style="--fc:${FAC[W.fac].c}"><div class="eart"><img src="assets/k_${W.art}.webp?v=${ASSET_V}"></div><div class="einfo"><div class="wname">${W.n} <small style="color:#ffd667">Lv${wlLv(id)}</small> ${facIcon(W.fac,'ci')}</div><div class="espec">원정 특기 · ${S.d}</div>${st}</div></div>`};
+  app.innerHTML=`<div class="screen expscr"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">지휘관 원정</span>${resBar()}</div>
+  <div class="body"><div class="expdest">${EXP_DEST.map(D=>`<div class="edest"><b>${D.n}</b> <small>${fmtT(expMins(D)*60)}</small><div>${D.d}</div><div class="erw">카드 약 ${D.cards}장 · 골드 ${D.gold[0]}~${D.gold[1]}${D.gems[1]?` · 보석 ${D.gems[0]}~${D.gems[1]}`:''} · 지휘관 경험치 ${D.xp}</div></div>`).join('')}</div>
+  <div class="expgrid">${ids.map(card).join('')}</div>
+  <div style="font-size:11px;opacity:.6;text-align:center;margin-top:8px">지휘관 레벨이 1 오를 때마다 원정 보상 +10%. 원정 중인 지휘관은 전투 지휘관으로 고를 수 없어요.</div></div></div>`;
+  bind('#bk',showLobby);
+  app.querySelectorAll('[data-send]').forEach(b=>b.onclick=()=>{const id=b.dataset.send,D=EXP_DEST.find(x=>x.id===b.dataset.dest);save.exp[id]={dest:D.id,start:Date.now(),end:Date.now()+expMins(D)*60000};persist();qp('exped');track('expedition_send',{wl:id,dest:D.id});sfx('whoosh');toast(WARLORDS[id].n+' 출발! '+D.n);showExpeditions()});
+  app.querySelectorAll('[data-claim]').forEach(b=>b.onclick=()=>{const id=b.dataset.claim,e=expOf(id);if(!e||!expDone(id))return;const res=expRoll(id,e.dest);delete save.exp[id];persist();track('expedition_claim',{wl:id,dest:e.dest});expRewardModal(id,e.dest,res)});
+  app.querySelectorAll('[data-rush]').forEach(b=>b.onclick=()=>{const id=b.dataset.rush,e=expOf(id);const cost=Math.max(1,Math.ceil((e.end-Date.now())/60000/10));if(save.gems<cost)return toast('보석이 부족해요');save.gems-=cost;e.end=Date.now();persist();sfx('coin');showExpeditions()});
+  app.querySelectorAll('[data-ad]').forEach(b=>b.onclick=()=>{const id=b.dataset.ad;showRewardAd('chest','원정 시간을 30분 줄여드려요',()=>{const e=expOf(id);if(e){e.end-=30*60000;persist()}showExpeditions()})});
+  clearInterval(window.__expT);window.__expT=setInterval(()=>{if(screen!=='exped'){clearInterval(window.__expT);return}if(!app.querySelector('.modal'))showExpeditions()},5000);
+}
+function expRewardModal(id,dest,res){
+  const W=WARLORDS[id],D=EXP_DEST.find(x=>x.id===dest);sfx('fanfare');
+  const m=modal(`<div class="ribbon">원정 귀환</div><div class="dwrap" style="align-items:center"><div class="eart" style="width:110px;height:140px"><img src="assets/k_${W.art}.webp?v=${ASSET_V}"></div><div class="dinfo"><div class="dname">${W.n}</div><div style="font-size:13px">${D.n}에서 돌아왔어요!</div>
+  <div class="gotgrid" style="justify-content:flex-start">${Object.entries(res.got).sort((a,b)=>tierOf(b[0])-tierOf(a[0])).map(([k,c],i)=>`<div class="got" style="animation-delay:${i*.08}s"><div class="art t${tierOf(k)}">${portrait(k)}</div><div class="x">x${c}</div>${res.found.includes(k)?'<div class="newb">NEW</div>':''}<div class="n" style="color:${RAR[tierOf(k)].c}">${V(k).name}</div></div>`).join('')}</div>
+  <div class="rw2">${ico('coin','mi')} ${res.gold}${res.gems?` &nbsp; ${ico('gem','mi')} ${res.gems}`:''} &nbsp; ⚔ 경험치 ${res.xp}${res.up?` <b style="color:#ffd667">레벨 업!</b>`:''}</div></div></div>
+  <div class="btns"><button class="btn" data-close>확인</button></div>`,showExpeditions);
+  m.querySelector('.box').classList.add('wide');
+}
 
 function synChips(side){return `<div class="syn">${FAC_KEYS.map(f=>{const n=facCount(st,side,f),lv=n>=4?2:n>=2?1:0;return `<div class="chip lv${lv}" data-fac="${f}" style="--fc:${FAC[f].c}">${facIcon(f,'ci')}<b>${n}</b></div>`}).join('')}</div>`}
 function infoText(u){const H=V(u.key);return `<b style="color:${RAR[H.tier].c}">${H.name}</b> ${'★'.repeat(u.star)} Lv${u.lv} (<span style="color:${FAC[H.fac].c}">${FAC[H.fac].n}</span> ${CLS[H.cls].n})<br>공격 ${effAtk(st,u)} · 체력 ${u.hp}/${u.max}<br>${H.desc}${H.ex?'<br><span style="color:#ffd667">'+H.exd+'</span>':''}`}
