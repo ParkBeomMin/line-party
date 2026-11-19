@@ -1003,6 +1003,28 @@ a.btn{display:inline-block;text-decoration:none}
 .sb.psn{color:#9dff9d}.sb.bld{color:#ff8a8a}.sb.tox{color:#c8ff6a}.sb.inv{color:#ffe48a}.sb.imm{color:#9fd8ff}.sb.eva{color:#d8fff0}
 .mgline{font-size:12.5px;color:#9fd8ff;margin:2px 0 3px}
 .b2 .unit .ubody{transition:bottom .45s ease-in}
+
+/* v3.8 wide screens */
+.b2 .bsvg{left:var(--bx,0px)!important;width:960px!important}
+.b2 .cell{margin-left:var(--bx,0px)}
+.b2 .cmdx.p{margin-left:calc(var(--bx,0px)*.5)}.b2 .cmdx.e{margin-right:calc(var(--bx,0px)*.5)}
+.mapscr .mnode{margin-left:calc(var(--bx,0px) - 29px)}
+.mapscr{background:#120e1e!important;isolation:isolate}
+.mapscr::after{content:"";position:absolute;top:0;bottom:0;left:var(--bx,0px);width:960px;background:url(assets/bg_map.webp?v=10) center/cover;z-index:-1;box-shadow:0 0 40px 20px #0008}
+.mapscr::before{content:"";position:absolute;inset:0;background:url(assets/bg_map.webp?v=10) center/cover;filter:blur(14px) brightness(.55);z-index:-1}
+/* v3.8 chest text */
+.chestrow{bottom:80px!important}.chestrow .chests2{height:74px!important}
+.chestrow .slot{height:74px!important;gap:0!important;line-height:1.2;justify-content:center}
+.chestrow .slot .cico{width:40px!important;height:28px!important;flex:none}
+.pwi{width:13px!important;height:13px!important;vertical-align:-2px;margin-right:2px}
+/* v3.8 power */
+.hc2pw{position:absolute;left:50%;transform:translateX(-50%);bottom:47px;z-index:2;background:#000b;border:1px solid #ffd66788;color:#ffd667;font-size:11.5px;font-weight:900;border-radius:8px;padding:0 6px;white-space:nowrap;line-height:17px}
+.hs2pw{display:block;text-align:center;color:#ffd667;font-weight:900;font-size:13px;margin-bottom:4px;white-space:nowrap}
+.hs2pw small{display:block;font-size:10.5px;opacity:.7;color:#fff;font-weight:700}
+/* v3.8 drag */
+.b2 .hand .card{touch-action:none}
+.dragghost{position:absolute!important;z-index:300;pointer-events:none;transform:translate(-50%,-70%) scale(1.08)!important;opacity:.92;filter:drop-shadow(0 8px 10px #000a);margin:0!important}
+.b2 .gp.dhov{fill:#7dffa1aa!important;stroke:#fff!important;stroke-width:3!important}
 </style>
 </head>
 <body>
@@ -1010,10 +1032,10 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.7.2 베타';
+const VERSION='v3.8 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
-function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
+function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
 addEventListener('resize',fit);fit();
 function tryLandscape(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}
 
@@ -1396,6 +1418,8 @@ const LV_STAR=[0,1,1,2,2,3,3,3,4];function starOf(lv){return LV_STAR[Math.max(1,
 function rbStars(id,rb){rb=rb|0;const mx=RB_MAX[tierOf(id)];return `<span class="lvst">${'★'.repeat(rb)}<i>${'★'.repeat(Math.max(0,mx-rb))}</i></span>`}
 const RB_LEAGUE=3,RB_MAX=[3,3,4,5],AW_LV=5,ROM=['','Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ'];
 const AWD={guard:'수호 피해 감소 -1 → -2',crit:'지휘관 피해 배율 +0.5',volley:'추가 피해 1 → 2',plague:'역병 독 +1',blizzard:'얼린 적에게 1 피해 추가',sanctuary:'추가 회복 1 → 2',lifesteal:'흡혈할 때 지휘관도 1 회복',regrow:'재생 2 → 4',burn:'화상 독 1 → 2',warsong:'전쟁의 노래 공격 +1 추가',reforge:'재무장할 때 체력 1 회복',storm:'폭풍이 적 2명을 노림',legion:'해골 소환 5회 → 7회',breath:'놓을 때 피해 2 → 4',double:'두 번째 공격 35% → 50%',pierceshot:'줄의 적 전부를 꿰뚫음',rally:'고무 대상 2명 → 3명',moonlight:'달빛 회복 1 → 2',spring:'봄의 축복 회복 3 → 5',bloodpact:'제물 피해 2배 → 3배',phoenix:'부활 체력 절반 → 전부',charge3:'충전 3번째 → 2번째 공격마다',immaura:'정화 범위 같은 줄 → 유지',fortress:'감시탑 체력 +5 → +10',lightbless:'회복 1 → 2',thornsplash:'독 1 → 2',stealatk:'강탈 1 → 2',cleansex:'정화할 때 체력 1 회복',toxin:'독소 2회 → 3회',swap:'두 번째 적까지',curselink:'저주 피해 1 → 2',setatk:'전설에게도 통함'};
+function heroPower(id,o){o=o||save.owned[id]||{lv:1};const v=V(id),b=baseStats(id,o.lv||1,1,o.rb|0,o.sb|0);return Math.round(b.a*10+b.h*5+(v.sv||0)*8+v.tier*20+(v.cls==='support'?25:v.cls==='building'?15:0)+(isAwake(id,o.lv,o.rb)?20:0))}
+function deckPower(){return (save.deck||[]).reduce((n,id)=>n+(save.owned[id]?heroPower(id):0),0)}
 function isAwake(id,lv,rb){return tierOf(id)===3&&!!EX[baseOf(id)]&&!HEROES[baseOf(id)].token&&(rb|0)>=1}
 function rbMax(id){return RB_MAX[tierOf(id)]}
 const VC={};
@@ -2286,7 +2310,7 @@ function showHeroes(){
   });
   own.sort((a,b)=>(save.deck.includes(b)?1:0)-(save.deck.includes(a)?1:0)||tierOf(b)-tierOf(a)||save.owned[b].lv-save.owned[a].lv);
   const card=id=>{const v=V(id),o=save.owned[id],t=tierOf(id);const inD=save.deck.filter(x=>x===id).length;const max=o.lv>=MAX_LV;const need=max?1:lvNeed(id);const up=canLevel(id),ev=evoInfo(id).ok;
-    return `<div class="hc2 t${t} ${inD?'indeck':''}" data-id="${id}"><div class="hc2art">${portrait(id)}</div>${facIcon(v.fac,'hc2fac')}<span class="hc2lv">${o.lv}</span>${isAwake(id,o.lv,o.rb)?'<span class="hc2aw">각성</span>':''}${inD?`<span class="hc2dk">덱${inD>1?'×'+inD:''}</span>`:''}${up||ev?`<span class="hc2up">${ev?'진화':'강화'}</span>`:''}
+    return `<div class="hc2 t${t} ${inD?'indeck':''}" data-id="${id}"><div class="hc2art">${portrait(id)}</div>${facIcon(v.fac,'hc2fac')}<span class="hc2lv">${o.lv}</span><span class="hc2pw">${ico('bolt','pwi')}${heroPower(id,o)}</span>${isAwake(id,o.lv,o.rb)?'<span class="hc2aw">각성</span>':''}${inD?`<span class="hc2dk">덱${inD>1?'×'+inD:''}</span>`:''}${up||ev?`<span class="hc2up">${ev?'진화':'강화'}</span>`:''}
       <div class="hc2nm">${v.name}</div><div class="hc2rb">${rbStars(id,o.rb)}</div><div class="hc2bar ${up?'ok':''}"><i style="width:${max?100:Math.min(100,o.cards/need*100)}%"></i><b>${max?'MAX':o.cards+'/'+need}</b></div></div>`};
   const unkCard=x=>{if(x.startsWith('L:')){const b=x.slice(2);const L=LEAGUES.find(L=>L.un.includes(b));return `<div class="hc2 lock"><div class="hc2art" style="filter:brightness(0) opacity(.6)">${portrait(vid(b,HEROES[b].rar))}</div><div class="hc2nm">???</div><div class="hc2sub">${L?L.n+' 리그':''}</div></div>`}
     const t=tierOf(x);return `<div class="hc2 unk t${t}" data-id="${x}"><div class="hc2art" style="filter:brightness(.18) saturate(0)">${portrait(x)}</div><div class="hc2nm" style="color:${RAR[t].c}">${RAR[t].n}</div><div class="hc2sub">미발견</div></div>`};
@@ -2295,7 +2319,7 @@ function showHeroes(){
   <div class="hs2top">
     <button class="hs2wl" id="hWl" style="--fc:${FAC[W.fac].c}"><img src="assets/k_${W.art}.webp?v=${ASSET_V}" alt=""><b>${W.n}</b><small>Lv${wlLv()} · 지휘관</small></button>
     <div class="hs2deck">${Array.from({length:8},(_,i)=>{const id=save.deck[i];if(!id)return '<div class="hs2slot empty">+</div>';const o=save.owned[id]||{lv:1};return `<div class="hs2slot t${tierOf(id)}" data-id="${id}">${portrait(id)}<span>${o.lv}</span></div>`}).join('')}</div>
-    <div class="hs2side"><div class="hs2syn">${FAC_KEYS.map(f=>`<span style="color:${FAC[f].c}">${facIcon(f,'ci')}${fc(f)}</span>`).join('')}</div><button class="btn sm" data-auto="">추천 덱</button></div>
+    <div class="hs2side"><div class="hs2pw">${ico('bolt','pwi')}${deckPower()}<small>파티 전투력</small></div><div class="hs2syn">${FAC_KEYS.map(f=>`<span style="color:${FAC[f].c}">${facIcon(f,'ci')}${fc(f)}</span>`).join('')}</div><button class="btn sm" data-auto="">추천 덱</button></div>
   </div>
   <div class="sqrow"><span>파티</span>${Object.keys(WARLORDS).filter(k=>wlUnlocked(k)).map(k=>{const K=WARLORDS[k];const busy=expOf(k);return `<button class="sqtab ${k===save.warlord?'on':''} ${busy?'busy':''}" data-sq="${k}" style="--fc:${FAC[K.fac].c}"><img src="assets/k_${K.art}.webp?v=${ASSET_V}">${K.n}${busy?' · 원정':''}</button>`}).join('')}<small>지휘관마다 파티가 따로 저장돼요</small></div>
   <div class="hs2filter">${['all',...FAC_KEYS].map(f=>`<button class="fchip ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'전체':facIcon(f,'ci')}</button>`).join('')}<i class="fsep"></i>${['all',0,1,2,3].map(t=>`<button class="fchip ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'등급':RAR[t].n}</button>`).join('')}<i class="fsep"></i>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="fchip ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'유형':CLS[c].n}</button>`).join('')}<button class="fchip wide ${heroOwned?'':'on'}" id="fOwn">${heroOwned?'미발견도 보기':'보유만 보기'}</button></div>
@@ -2478,6 +2502,22 @@ function buildBattleDOM(){
     if(ui.targeting){const A=curWsk();if(A.target==='lane'){if(!laneUnits(st,'e',l).length)return toast('적이 있는 줄을 고르세요');useWarlordSkill(l);return}if(u){useWarlordSkill(u);return}}
     if(u){ui.info=infoText(u);renderBattle()}};
 }
+function cardDrag(e,c){
+  if(ui.phase!=='choose'||ui.reels||(e.button!=null&&e.button>0))return;const i=+c.dataset.hi;const card=ui.hand[i];if(!card)return;
+  const sx=e.clientX,sy=e.clientY,valid=validCells(st,'p',card);let ghost=null,moved=false,hov=null;
+  const mv=ev=>{if(!moved&&Math.hypot(ev.clientX-sx,ev.clientY-sy)<10)return;
+    const s2=scaleS(),a=app.getBoundingClientRect();
+    if(!moved){moved=true;ui.targeting=false;const w=c.offsetWidth,h=c.offsetHeight;ghost=c.cloneNode(true);ghost.classList.add('dragghost');ghost.style.width=w+'px';ghost.style.height=h+'px';if(ui.sel!==i){ui.sel=i;renderBattle()}app.appendChild(ghost);sfx('tick')}
+    ghost.style.left=((ev.clientX-a.left)/s2)+'px';ghost.style.top=((ev.clientY-a.top)/s2)+'px';
+    const el=document.elementFromPoint(ev.clientX,ev.clientY);const g=el&&el.closest?el.closest('polygon.gp'):null;let nh=null;
+    if(g&&g.dataset.side==='p'&&valid.some(v=>v[0]===+g.dataset.r&&v[1]===+g.dataset.l))nh=g;
+    if(hov!==nh){if(hov)hov.classList.remove('dhov');if(nh)nh.classList.add('dhov');hov=nh}};
+  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
+    if(ghost)ghost.remove();if(hov)hov.classList.remove('dhov');
+    if(moved){c._noClick=true;setTimeout(()=>{c._noClick=false},60);
+      if(hov&&ui.phase==='choose'&&ui.resolve){ui.resolve({type:'place',hi:i,r:+hov.dataset.r,l:+hov.dataset.l})}}};
+  addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up);
+}
 function cmdPanelHTML(side){
   const c=st.cmd[side];
   const art=side==='p'?(WARLORDS[st.wl]||WARLORDS.asten).art:lookArt(cfg.eLook);
@@ -2562,7 +2602,8 @@ function renderBattle(){
     BD.bot.innerHTML=`${descTxt?`<div class="tip2">${descTxt}</div>`:''}<div class="hand">${handArea}</div><div class="pilec" title="남은 덱"><div class="pileb"></div><div class="pileb"></div><div class="pileb"><b>${(ui.pile||[]).length}</b></div><small>덱</small></div>
      <div class="bside"><div class="wskrow">${wskButtons()}</div>
      ${noValid?'<button class="btn sm sub" id="bPass">넘기기</button>':''}</div>`;
-    BD.bot.querySelectorAll('.card').forEach(c=>c.onclick=()=>{if(ui.phase!=='choose')return;ui.targeting=false;const i=+c.dataset.hi;ui.sel=ui.sel===i?-1:i;sfx('tick');renderBattle();if(ui.sel>=0&&save.tut&&save.tut.pick!==2){save.tut.pick=1;tutTip('place','<b>노란 칸에 놓기</b>근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열에 놓을 수 있어요.')}});
+    BD.bot.querySelectorAll('.card').forEach(c=>c.onpointerdown=e=>cardDrag(e,c));
+    BD.bot.querySelectorAll('.card').forEach(c=>c.onclick=()=>{if(c._noClick||ui.phase!=='choose')return;ui.targeting=false;const i=+c.dataset.hi;ui.sel=ui.sel===i?-1:i;sfx('tick');renderBattle();if(ui.sel>=0&&save.tut&&save.tut.pick!==2){save.tut.pick=1;tutTip('place','<b>노란 칸에 놓기</b>카드를 끌어다 놓거나, 눌러서 고른 뒤 칸을 눌러요. 근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열에 놓을 수 있어요.')}});
     BD.bot.querySelectorAll('[data-wsk]').forEach(b=>b.onclick=()=>{const i=+b.dataset.wsk,S=wskAt(i),stt=wskState(i);if(stt!=='ready'||ui.phase!=='choose'){ui.info=`<b style="color:#ffd667">${i===3?'':'스킬 '+(i+1)+' · '}${S.n}</b><br>${S.d}<br><span style="opacity:.7">${stt==='used'?'이번 판에 이미 썼어요':stt==='lock'?'지휘관 Lv'+WSK_LV[i]+'에 열려요':stt==='queue'?'앞 스킬을 먼저 써야 해요':stt==='wait'?(i===3?'다음 내 턴에 1개 쌓여요':wskTurn(i)+'턴부터 쓸 수 있어요'):'내 차례에 쓸 수 있어요'}${i===3?'<br>쌓인 일격 '+wsOf('p').ch+'개 · 지금 쓰면 1개당 '+strikeDmg()+' 피해':''}</span>`;renderBattle();return}
       const A=S;if(A.target==='none'){useWarlordSkill(null);return}let any=false;eachUnit(st,'e',()=>any=true);if(!any)return toast('대상이 될 적 유닛이 없어요');ui.targeting=!ui.targeting;ui.sel=-1;renderBattle()});
     bind('#bSkillX',()=>{const A=curWsk();if(A.target==='none'){useWarlordSkill(null);return}let any=false;eachUnit(st,'e',()=>any=true);if(!any)return toast('대상이 될 적 유닛이 없어요');ui.targeting=!ui.targeting;ui.sel=-1;renderBattle()});
@@ -3085,7 +3126,7 @@ function endBattle(){setTimeout(cloudAuto,800);
   unlocks.forEach(k=>extra+=`<div style="display:flex;align-items:center;justify-content:center;gap:8px"><div style="width:52px;height:58px;border-radius:9px;overflow:hidden">${portrait(k)}</div><b style="color:#ffd667">${V(k).name}</b> 합류!</div>`);
   const stars=win?battleStars():0;const trB=save.trophies-dT;
   const mvp=st.mvp?Object.values(st.mvp).sort((a,b)=>b.d-a.d)[0]:null;
-  const m=modal(`${win?'<div class="rays on"></div>':''}<div class="resban ${win?'win':'lose'}">${win?'승리!':'패배'}</div>${win?`<div class="rstars">${[1,2,3].map(k=>`<span class="${k<=stars?'on':''}" style="animation-delay:${.25+k*.22}s">★</span>`).join('')}</div>`:''}
+  const m=modal(`${win?'<div class="rays on"></div>':''}<div class="resban ${win?'win':'lose'}">${win?'승리!':'패배'}</div>${win&&cfg.mode==='stage'?`<div class="rstars">${[1,2,3].map(k=>`<span class="${k<=stars?'on':''}" style="animation-delay:${.25+k*.22}s">★</span>`).join('')}</div>`:''}
   <div style="font-size:13px;opacity:.75">${st.timeout?'라운드 제한 · 체력 비율로 판정':win?`남은 지휘관 체력 ${st.cmd.p.hp}/${st.cmd.p.max}`:''}</div>
   ${mvp?`<div class="mvp"><div class="mart t${tierOf(mvp.key)}">${portrait(mvp.key)}</div><div><div class="mtag">MVP</div><b style="color:${RAR[tierOf(mvp.key)].c}">${V(mvp.key).name}</b><div style="font-size:12.5px;opacity:.8">총 피해 ${mvp.d}</div></div></div>`:''}
   <div class="rrows">${dT?`<div class="rrow">${ico('trophy','qi')}<span>트로피</span><b class="cnt" data-v="${dT}">0</b></div>`:''}<div class="rrow">${ico('coin','qi')}<span>골드</span><b class="cnt" data-v="${gold}">0</b></div><div class="rrow"><span style="font-size:16px">⚔</span><span>${WL().n} 경험치</span><b class="cnt" data-v="${wxp}">0</b></div>${gems?`<div class="rrow">${ico('gem','qi')}<span>보석</span><b class="cnt" data-v="${gems}">0</b></div>`:''}${dustG?`<div class="rrow"><span class="dusti" style="font-size:20px">✦</span><span>별가루</span><b class="cnt" data-v="${dustG}">0</b></div>`:''}</div>
