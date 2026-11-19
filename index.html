@@ -1010,7 +1010,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.7 베타';
+const VERSION='v3.7.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1030,13 +1030,13 @@ const FAC_KEYS=['bastion','wild','ember'];
 const RAR=[{n:'일반',c:'#c9d0da',w:10,dw:60,m:1},{n:'희귀',c:'#5fb0ff',w:7,dw:28,m:1.3},{n:'영웅',c:'#c77dff',w:5,dw:10,m:1.7},{n:'전설',c:'#ffc04d',w:3,dw:2,m:2.3}];
 const HEROES={
   shield:{fac:'bastion',name:'토르크',cls:'melee',rar:0,atk:2,hp:8,skill:'block',sv:1,desc:'방패: 받는 피해가 1 줄어든다',look:{skin:'#e8b98a',hair:'#5a3b22',body:'#5b7db1',acc:'shield'}},
-  sword:{fac:'ember',name:'레나',cls:'melee',rar:0,mp:{a:1.35,h:1.35},atk:3,hp:4,skill:'charge',sv:2,desc:'돌진: 놓을 때 같은 라인 맨 앞 적에게 2 피해',look:{skin:'#f4c9a0',hair:'#d94f3d',body:'#8a3a3a',acc:'sword'}},
+  sword:{fac:'ember',name:'레나',cls:'melee',rar:0,ga:.3,mp:{a:1.35,h:1.35},atk:3,hp:4,skill:'charge',sv:1,desc:'돌진: 놓을 때 같은 라인 맨 앞 적에게 1 피해',look:{skin:'#f4c9a0',hair:'#d94f3d',body:'#8a3a3a',acc:'sword'}},
   berserk:{fac:'wild',name:'그롬',cls:'melee',rar:1,atk:3,hp:6,skill:'rage',sv:1,desc:'분노: 맞고 살아남을 때마다 공격 +1',look:{skin:'#9dbf7a',hair:'#2b2b2b',body:'#6b4a2b',acc:'axe',extra:'tusk'}},
   bear:{fac:'wild',name:'바루',cls:'melee',rar:1,atk:2,hp:7,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 2 피해',look:{skin:'#8a5a3a',hair:'#8a5a3a',body:'#5a3b22',acc:'none',extra:'bear'}},
   knight:{fac:'bastion',name:'아델',cls:'melee',rar:2,atk:3,hp:7,skill:'armor',sv:0,desc:'철갑: 처음 받는 피해 1번을 무시',look:{skin:'#e8c4a0',hair:'#c9c9d6',body:'#9aa3b5',acc:'helm'}},
   dragon:{fac:'ember',name:'이그니르',cls:'melee',rar:3,atk:5,hp:8,skill:'flying',sv:0,desc:'비행: 근접 공격에 맞지 않고, 뒷줄에서도 공격',look:{skin:'#c94a3a',hair:'#ffb347',body:'#8a2a20',acc:'none',extra:'dragon'}},
   archer:{fac:'bastion',name:'피오',cls:'ranged',rar:0,atk:2,hp:6,skill:'none',sv:0,desc:'명사수: 어느 줄에서든 공격',look:{skin:'#f1d0a8',hair:'#3f6b2f',body:'#3f6b2f',acc:'bow'}},
-  sniper:{fac:'wild',name:'실바',cls:'ranged',rar:1,atk:3,hp:5,skill:'snipe',sv:0,desc:'저격: 적 뒷줄을 먼저 노린다',look:{skin:'#e0b48c',hair:'#e8e8e8',body:'#2f4f4f',acc:'bow',extra:'hood'}},
+  sniper:{fac:'wild',name:'실바',cls:'ranged',rar:1,atk:3,hp:4,skill:'snipe',sv:0,desc:'저격: 적 뒷줄을 먼저 노린다',look:{skin:'#e0b48c',hair:'#e8e8e8',body:'#2f4f4f',acc:'bow',extra:'hood'}},
   poison:{fac:'wild',name:'니즈',cls:'ranged',rar:0,atk:1,hp:6,skill:'poison',sv:2,desc:'독침: 맞은 적은 2턴 동안 턴마다 1 피해',look:{skin:'#c9e0a0',hair:'#7a3fa0',body:'#4a2f5a',acc:'dart'}},
   fire:{fac:'ember',name:'이그나',cls:'magic',rar:1,atk:3,hp:4,skill:'pierce',sv:0,desc:'관통: 라인의 적 전부를 공격',look:{skin:'#f6cfa6',hair:'#ff7a2a',body:'#a03a1a',acc:'staff',orb:'#ff8a3a'}},
   frost:{fac:'wild',name:'프리아',cls:'magic',rar:0,atk:2,hp:5,skill:'freeze',sv:0,desc:'빙결: 맞은 적은 다음 공격을 못 한다',look:{skin:'#f3dccb',hair:'#9fe0ff',body:'#3a6fa0',acc:'staff',orb:'#9fe0ff'}},
@@ -1045,7 +1045,7 @@ const HEROES={
   drum:{fac:'bastion',name:'둥둥',cls:'support',rar:1,atk:0,hp:7,skill:'drum',sv:1,desc:'북소리: 같은 줄 아군 공격 +1',look:{skin:'#d9a070',hair:'#2b2b2b',body:'#b5573f',acc:'drum'}},
   necro:{fac:'ember',name:'모르가',cls:'support',rar:2,atk:0,hp:6,skill:'necro',sv:0,desc:'망령 소환: 아군이 쓰러지면 그 자리에 해골(1/2) 소환, 3회',look:{skin:'#b8c0c8',hair:'#1a1a2a',body:'#2a1a3a',acc:'skull'}},
   bron:{fac:'bastion',name:'브론',cls:'melee',rar:1,atk:3,hp:7,skill:'forge',sv:0,desc:'담금질: 놓을 때 같은 줄 아군 모두에게 철갑',look:{}},
-  elia:{fac:'bastion',name:'엘리아',cls:'melee',rar:2,atk:4,hp:7,skill:'lance',sv:0,desc:'돌격창: 줄 앞의 적 2명을 함께 공격',look:{}},
+  elia:{fac:'bastion',name:'엘리아',cls:'melee',rar:2,atk:4,hp:6,skill:'lance',sv:0,desc:'돌격창: 줄 앞의 적 2명을 함께 공격 (두 번째는 60% 피해)',look:{}},
   pipi:{fac:'bastion',name:'피피',cls:'magic',rar:1,atk:2,hp:4,skill:'barrier',sv:0,desc:'보호 마법: 내 턴마다 철갑 없는 가장 약한 아군에게 철갑',look:{}},
   solaris:{fac:'bastion',name:'솔라리스',cls:'melee',rar:3,atk:5,hp:10,skill:'radiant',sv:1,desc:'광휘: 공격할 때 위아래 줄 맨 앞 적에게 1 피해',look:{}},
   toto:{fac:'wild',name:'토토',cls:'support',rar:1,atk:0,hp:8,skill:'spores',sv:2,desc:'포자: 내 턴마다 무작위 적 2명에게 독 2',look:{}},
@@ -1091,18 +1091,18 @@ const HEROES={
   gor:{fac:'ember',name:'고르',cls:'support',rar:1,atk:0,hp:9,skill:'warcry',sv:1,desc:'전쟁 함성: 놓을 때 아군 모두 공격 +1, 아군이 쓰러질 때마다 무작위 아군 공격 +1',look:{}},
   frog:{fac:'wild',name:'개구리',cls:'melee',rar:0,atk:0,hp:3,skill:'none',sv:0,token:true,fixed:true,desc:'변이된 개구리 (공격하지 못함)',look:{}},
 
-  watchtower:{fac:'bastion',name:'감시탑',cls:'building',fixed:true,rar:1,atk:0,hp:9,skill:'tower',sv:2,desc:'감시탑: 내 턴마다 같은 줄 맨 앞 적에게 2 피해',look:{}},
-  fountain:{fac:'bastion',name:'치유의 샘',cls:'building',fixed:true,rar:0,atk:0,hp:8,skill:'fountain',sv:1,desc:'치유의 샘: 내 턴마다 같은 줄 아군 모두 1 회복',look:{}},
-  bush:{fac:'wild',name:'가시 덤불',cls:'building',fixed:true,rar:0,atk:0,hp:11,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 2 피해',look:{}},
-  lifetree:{fac:'wild',name:'생명의 나무',cls:'building',fixed:true,rar:2,atk:0,hp:12,skill:'lifetree',sv:2,desc:'생명의 나무: 내 턴마다 가장 다친 아군 2 회복, 지휘관 1 회복',look:{}},
-  altar:{fac:'ember',name:'화염 제단',cls:'building',fixed:true,rar:1,atk:0,hp:8,skill:'altar',sv:1,desc:'화염 제단: 같은 줄 아군 공격 +1',look:{}},
-  powder:{fac:'ember',name:'화약고',cls:'building',fixed:true,rar:0,atk:0,hp:6,skill:'bomb',sv:3,desc:'화약고: 무너지면 같은 줄 적 전체에 3 피해',look:{}},
-  wall:{fac:'bastion',name:'성벽',cls:'building',fixed:true,rar:0,atk:0,hp:15,skill:'block',sv:1,desc:'성벽: 받는 피해가 1 줄어든다',look:{}},
-  catapult:{fac:'bastion',name:'투석기',cls:'building',fixed:true,rar:1,atk:0,hp:12,skill:'catapult',sv:1,desc:'투석: 내 턴마다 적 지휘관에게 1 피해',look:{}},
-  shroom:{fac:'wild',name:'버섯 고리',cls:'building',fixed:true,rar:1,atk:0,hp:10,skill:'shroom',sv:2,desc:'포자 고리: 내 턴마다 같은 줄 적 모두 독 2',look:{}},
-  vinewall:{fac:'wild',name:'덩굴 벽',cls:'building',fixed:true,rar:0,atk:0,hp:14,skill:'snare',sv:0,desc:'휘감기: 나를 때린 근접 적은 다음 공격을 못 한다',look:{}},
-  lavapit:{fac:'ember',name:'용암 구덩이',cls:'building',fixed:true,rar:1,atk:0,hp:9,skill:'lavapit',sv:1,desc:'용암: 내 턴마다 같은 줄 적 모두 1 피해',look:{}},
-  totem:{fac:'ember',name:'저주 토템',cls:'building',fixed:true,rar:2,atk:0,hp:11,skill:'totem',sv:1,desc:'저주 토템: 내 턴마다 같은 줄 맨 앞 적 공격 -1 (1 아래로는 안 내려감)',look:{}},
+  watchtower:{fac:'bastion',name:'감시탑',cls:'building',fixed:true,rar:1,atk:0,hp:11,skill:'tower',sv:2,desc:'감시탑: 내 턴마다 같은 줄 맨 앞 적에게 2 피해',look:{}},
+  fountain:{fac:'bastion',name:'치유의 샘',cls:'building',fixed:true,rar:0,atk:0,hp:10,skill:'fountain',sv:1,desc:'치유의 샘: 내 턴마다 같은 줄 아군 모두 1 회복',look:{}},
+  bush:{fac:'wild',name:'가시 덤불',cls:'building',fixed:true,rar:0,atk:0,hp:13,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 2 피해',look:{}},
+  lifetree:{fac:'wild',name:'생명의 나무',cls:'building',fixed:true,rar:2,atk:0,hp:14,skill:'lifetree',sv:2,desc:'생명의 나무: 내 턴마다 가장 다친 아군 2 회복, 지휘관 1 회복',look:{}},
+  altar:{fac:'ember',name:'화염 제단',cls:'building',fixed:true,rar:1,atk:0,hp:10,skill:'altar',sv:1,desc:'화염 제단: 같은 줄 아군 공격 +1',look:{}},
+  powder:{fac:'ember',name:'화약고',cls:'building',fixed:true,rar:0,atk:0,hp:8,skill:'bomb',sv:3,desc:'화약고: 무너지면 같은 줄 적 전체에 3 피해',look:{}},
+  wall:{fac:'bastion',name:'성벽',cls:'building',fixed:true,rar:0,atk:0,hp:17,skill:'block',sv:1,desc:'성벽: 받는 피해가 1 줄어든다',look:{}},
+  catapult:{fac:'bastion',name:'투석기',cls:'building',fixed:true,rar:1,atk:0,hp:14,skill:'catapult',sv:1,desc:'투석: 내 턴마다 적 지휘관에게 1 피해',look:{}},
+  shroom:{fac:'wild',name:'버섯 고리',cls:'building',fixed:true,rar:1,atk:0,hp:12,skill:'shroom',sv:2,desc:'포자 고리: 내 턴마다 같은 줄 적 모두 독 2',look:{}},
+  vinewall:{fac:'wild',name:'덩굴 벽',cls:'building',fixed:true,rar:0,atk:0,hp:16,skill:'snare',sv:0,desc:'휘감기: 나를 때린 근접 적은 다음 공격을 못 한다',look:{}},
+  lavapit:{fac:'ember',name:'용암 구덩이',cls:'building',fixed:true,rar:1,atk:0,hp:11,skill:'lavapit',sv:1,desc:'용암: 내 턴마다 같은 줄 적 모두 1 피해',look:{}},
+  totem:{fac:'ember',name:'저주 토템',cls:'building',fixed:true,rar:2,atk:0,hp:13,skill:'totem',sv:1,desc:'저주 토템: 내 턴마다 같은 줄 맨 앞 적 공격 -1 (1 아래로는 안 내려감)',look:{}},
   skel:{fac:'ember',name:'해골',cls:'melee',rar:0,atk:1,hp:2,skill:'none',sv:0,token:true,desc:'소환된 해골',look:{skin:'#e8e4d8',hair:'#e8e4d8',body:'#6a6458',acc:'none',extra:'skull'}}
 };
 const START_OWNED=['shield','sword','archer','poison','frost','priest','berserk','fire'];
@@ -1407,7 +1407,7 @@ function V(id){
   const b=baseOf(id),t=tierOf(id),H=HEROES[b],d=Math.max(0,t-H.rar);
   const sv=H.sv?H.sv+(H.skill==='charge'?Math.floor(d/2):d):0;
   const o={id,base:b,tier:t,fac:H.fac,name:VNAMES[b][t]||H.name,cls:H.cls,skill:H.skill,sv,
-    atk:H.atk?H.atk+Math.ceil(H.atk*.4*d):0,hp:H.hp+Math.ceil(H.hp*.45*d),
+    atk:H.atk?H.atk+Math.ceil(H.atk*(H.ga||.4)*d):0,hp:H.hp+Math.ceil(H.hp*.45*d),
     ex:t===3&&EX[b]?EX[b].id:null,exd:EX[b]?EX[b].d:'',token:!!H.token,
     desc:H.sv&&d?H.desc.replace(String(H.sv),String(sv)):H.desc};
   return VC[id]=o;
@@ -1555,7 +1555,7 @@ function* attackPhase(st,side){
           if(v.skill==='bloodlust'&&t.hp<=0){u.atk+=skillVal(u);const h=Math.min(skillVal(u),u.max-u.hp);fx.push({to:'u'+u.uid,txt:'피의 사냥 +'+skillVal(u),k:'info',fxk:'rage'});if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}}
           if(v.skill==='cmdshot'&&!st.over){fx.push({to:'u'+u.uid,txt:'지휘관 저격',k:'info',fxk:'dash'});hitCmd(st,foe,Math.min(2,skillVal(u)),fx,u)}
           if(v.skill==='firebomb'){const nx=order.filter(x=>x!==t&&x.hp>0)[0];fx.push({to:'u'+t.uid,txt:'화염병',k:'info',fxk:'boom'});if(nx)hitUnit(st,nx,skillVal(u),fx);[t,nx].forEach(x=>{if(x&&x.hp>0&&canAffect(x))x.poison=Math.max(x.poison,1)})}
-          if(v.skill==='lance'||v.ex==='pierceshot'){const rest=order.filter(x=>x!==t&&x.hp>0);const ts=(v.ex==='pierceshot'&&u.aw)?rest:rest.slice(0,1);if(ts.length&&v.ex==='pierceshot')fx.push({to:'u'+u.uid,k:'skill',sk:'pierceshot'});ts.forEach(t2=>hitUnit(st,t2,atk,fx))}
+          if(v.skill==='lance'||v.ex==='pierceshot'){const rest=order.filter(x=>x!==t&&x.hp>0);const ts=(v.ex==='pierceshot'&&u.aw)?rest:rest.slice(0,1);if(ts.length&&v.ex==='pierceshot')fx.push({to:'u'+u.uid,k:'skill',sk:'pierceshot'});ts.forEach(t2=>hitUnit(st,t2,v.skill==='lance'?Math.ceil(atk*.6):atk,fx))}
           if(v.skill==='boomer'){const t3=order.filter(x=>x!==t&&x.hp>0).slice(-1)[0];if(t3){fx.push({to:'u'+t3.uid,txt:'부메랑',k:'info',fxk:'dash'});hitUnit(st,t3,atk,fx)}}
           if(v.skill==='mark'&&t.hp>0){t.mark=Math.max(t.mark||0,skillVal(u));fx.push({to:'u'+t.uid,txt:'표식',k:'info',fxk:'curse'})}
           if(v.skill==='ignite'&&t.hp>0){t.poison=Math.max(t.poison,skillVal(u));fx.push({to:'u'+t.uid,txt:'독',k:'info',fxk:'poison'})}
