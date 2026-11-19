@@ -1038,6 +1038,21 @@ a.btn{display:inline-block;text-decoration:none}
 .pmh{width:76px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px}
 .pmart{width:70px;height:78px;border-radius:10px;overflow:hidden;border:2px solid #ffd667}
 .pmh b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:76px}
+
+.lvprev{font-size:12.5px;background:#0005;border-radius:8px;padding:3px 8px;margin:-2px 0 4px}
+.lvprev .a,.lvtbl .a{color:#ffb15a}.lvprev .h,.lvtbl .h{color:#7dffa1}
+.lvtbl{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin:0 0 6px}
+.lvtbl>div{background:#0004;border-radius:6px;padding:2px 0;display:flex;flex-direction:column;align-items:center;font-size:11px;line-height:1.25;font-weight:800}
+.lvtbl>div small{font-size:9.5px;opacity:.65;font-weight:700}
+.lvtbl>div.past{opacity:.45}.lvtbl>div.cur{background:#ffd66733;outline:1.5px solid #ffd667}
+.pop.big{color:#ffdf3a;text-shadow:0 3px 0 #a33,0 0 10px #f00}
+.pop.huge{color:#fff3b0;text-shadow:0 3px 0 #b3261e,0 0 14px #ff4b00,0 0 26px #ff9a00;animation:pophuge .9s forwards}
+.pop.cmdhit{color:#ff8f6b}
+@keyframes pophuge{0%{transform:translate(-50%,0) scale(.4);opacity:0}15%{transform:translate(-50%,-18px) scale(1.45) rotate(-4deg);opacity:1}30%{transform:translate(-50%,-20px) scale(1.1) rotate(2deg)}100%{transform:translate(-50%,-52px) scale(1);opacity:0}}
+
+.oddst{display:grid;gap:3px;font-size:13px}.oddst>div{display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:4px;align-items:center;background:#0004;border-radius:7px;padding:4px 8px}
+.oddst .oh{background:none}.oddst i{font-style:normal;font-weight:800;text-align:center}.oddst b{text-align:center}.oddst span{text-align:left;font-weight:800}
+.pityl{font-size:12px;opacity:.85;margin:-2px 0 6px}.pityl a,.oddsl{color:#9fd8ff;text-decoration:underline}.oddsl{font-size:12px;margin-left:8px;font-weight:700}
 </style>
 </head>
 <body>
@@ -1045,7 +1060,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.8.1 베타';
+const VERSION='v3.9 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1057,87 +1072,87 @@ const LANES=4,COLS=3;
 const laneUnits=(st,side,l)=>{const o=[];for(let r=0;r<COLS;r++){const u=st.board[side][r][l];if(u)o.push(u)}return o};
 const CLS={building:{n:'건물',bg:'#4a4a5a',bg2:'#8a8a9a'},melee:{n:'근접',bg:'#6b2f35',bg2:'#a2464a'},ranged:{n:'원거리',bg:'#2f5b3a',bg2:'#4f9a5e'},magic:{n:'마법',bg:'#3d2f6b',bg2:'#6e52b8'},support:{n:'지원',bg:'#6b5a2f',bg2:'#b5973f'}};
 const FAC={
-  bastion:{n:'성채',c:'#7fb4ff',d:'균형 잡힌 능력치, 지원과 보호',s2:'2기 이상: 내 턴마다 지휘관 체력 1 회복',s4:'4기 이상: 모든 아군이 받는 피해 -1'},
-  wild:{n:'들숲',c:'#6fdc7a',d:'높은 체력, 재생과 상태이상',s2:'2기 이상: 들숲 유닛이 내 턴마다 체력 1 회복',s4:'4기 이상: 새로 놓는 들숲 유닛 체력 +3'},
-  ember:{n:'잿불',c:'#ff8a4a',d:'높은 공격력, 폭발적인 피해',s2:'2기 이상: 잿불 유닛 공격 +1',s4:'4기 이상: 잿불 유닛이 지휘관에게 주는 피해 +2'}
+  bastion:{n:'성채',c:'#7fb4ff',d:'균형 잡힌 능력치, 지원과 보호',s2:'2기 이상: 내 턴마다 지휘관 체력 10 회복',s4:'4기 이상: 모든 아군이 받는 피해 -10'},
+  wild:{n:'들숲',c:'#6fdc7a',d:'높은 체력, 재생과 상태이상',s2:'2기 이상: 들숲 유닛이 내 턴마다 체력 10 회복',s4:'4기 이상: 새로 놓는 들숲 유닛 체력 +30'},
+  ember:{n:'잿불',c:'#ff8a4a',d:'높은 공격력, 폭발적인 피해',s2:'2기 이상: 잿불 유닛 공격 +10',s4:'4기 이상: 잿불 유닛이 지휘관에게 주는 피해 +20'}
 };
 const FAC_KEYS=['bastion','wild','ember'];
 const RAR=[{n:'일반',c:'#c9d0da',w:10,dw:60,m:1},{n:'희귀',c:'#5fb0ff',w:7,dw:28,m:1.3},{n:'영웅',c:'#c77dff',w:5,dw:10,m:1.7},{n:'전설',c:'#ffc04d',w:3,dw:2,m:2.3}];
 const HEROES={
-  shield:{fac:'bastion',name:'토르크',cls:'melee',rar:0,atk:2,hp:8,skill:'block',sv:1,desc:'방패: 받는 피해가 1 줄어든다',look:{skin:'#e8b98a',hair:'#5a3b22',body:'#5b7db1',acc:'shield'}},
-  sword:{fac:'ember',name:'레나',cls:'melee',rar:0,ga:.3,mp:{a:1.35,h:1.35},atk:3,hp:4,skill:'charge',sv:1,desc:'돌진: 놓을 때 같은 라인 맨 앞 적에게 1 피해',look:{skin:'#f4c9a0',hair:'#d94f3d',body:'#8a3a3a',acc:'sword'}},
-  berserk:{fac:'wild',name:'그롬',cls:'melee',rar:1,atk:3,hp:6,skill:'rage',sv:1,desc:'분노: 맞고 살아남을 때마다 공격 +1',look:{skin:'#9dbf7a',hair:'#2b2b2b',body:'#6b4a2b',acc:'axe',extra:'tusk'}},
-  bear:{fac:'wild',name:'바루',cls:'melee',rar:1,atk:2,hp:7,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 2 피해',look:{skin:'#8a5a3a',hair:'#8a5a3a',body:'#5a3b22',acc:'none',extra:'bear'}},
+  shield:{fac:'bastion',name:'토르크',cls:'melee',rar:0,atk:2,hp:8,skill:'block',sv:1,desc:'방패: 받는 피해가 10 줄어든다',look:{skin:'#e8b98a',hair:'#5a3b22',body:'#5b7db1',acc:'shield'}},
+  sword:{fac:'ember',name:'레나',cls:'melee',rar:0,ga:.3,gh:.3,mp:{a:1.35,h:1.35},atk:3,hp:4,skill:'charge',sv:1,desc:'돌진: 놓을 때 같은 라인 맨 앞 적에게 10 피해',look:{skin:'#f4c9a0',hair:'#d94f3d',body:'#8a3a3a',acc:'sword'}},
+  berserk:{fac:'wild',name:'그롬',cls:'melee',rar:1,atk:3,hp:6,skill:'rage',sv:1,desc:'분노: 맞고 살아남을 때마다 공격 +10',look:{skin:'#9dbf7a',hair:'#2b2b2b',body:'#6b4a2b',acc:'axe',extra:'tusk'}},
+  bear:{fac:'wild',name:'바루',cls:'melee',rar:1,atk:2,hp:7,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 20 피해',look:{skin:'#8a5a3a',hair:'#8a5a3a',body:'#5a3b22',acc:'none',extra:'bear'}},
   knight:{fac:'bastion',name:'아델',cls:'melee',rar:2,atk:3,hp:7,skill:'armor',sv:0,desc:'철갑: 처음 받는 피해 1번을 무시',look:{skin:'#e8c4a0',hair:'#c9c9d6',body:'#9aa3b5',acc:'helm'}},
   dragon:{fac:'ember',name:'이그니르',cls:'melee',rar:3,atk:5,hp:8,skill:'flying',sv:0,desc:'비행: 근접 공격에 맞지 않고, 뒷줄에서도 공격',look:{skin:'#c94a3a',hair:'#ffb347',body:'#8a2a20',acc:'none',extra:'dragon'}},
   archer:{fac:'bastion',name:'피오',cls:'ranged',rar:0,atk:2,hp:6,skill:'none',sv:0,desc:'명사수: 어느 줄에서든 공격',look:{skin:'#f1d0a8',hair:'#3f6b2f',body:'#3f6b2f',acc:'bow'}},
   sniper:{fac:'wild',name:'실바',cls:'ranged',rar:1,ga:0.3,atk:3,hp:4,skill:'snipe',sv:0,desc:'저격: 적 뒷줄을 먼저 노린다',look:{skin:'#e0b48c',hair:'#e8e8e8',body:'#2f4f4f',acc:'bow',extra:'hood'}},
-  poison:{fac:'wild',name:'니즈',cls:'ranged',rar:0,atk:1,hp:6,skill:'poison',sv:2,desc:'독침: 맞은 적은 2턴 동안 턴마다 1 피해',look:{skin:'#c9e0a0',hair:'#7a3fa0',body:'#4a2f5a',acc:'dart'}},
+  poison:{fac:'wild',name:'니즈',cls:'ranged',rar:0,atk:1,hp:6,skill:'poison',sv:2,desc:'독침: 맞은 적은 2턴 동안 턴마다 10 피해',look:{skin:'#c9e0a0',hair:'#7a3fa0',body:'#4a2f5a',acc:'dart'}},
   fire:{fac:'ember',name:'이그나',cls:'magic',rar:1,atk:3,hp:4,skill:'pierce',sv:0,desc:'관통: 라인의 적 전부를 공격',look:{skin:'#f6cfa6',hair:'#ff7a2a',body:'#a03a1a',acc:'staff',orb:'#ff8a3a'}},
   frost:{fac:'wild',name:'프리아',cls:'magic',rar:0,atk:2,hp:5,skill:'freeze',sv:0,desc:'빙결: 맞은 적은 다음 공격을 못 한다',look:{skin:'#f3dccb',hair:'#9fe0ff',body:'#3a6fa0',acc:'staff',orb:'#9fe0ff'}},
-  bolt:{fac:'ember',name:'볼트',cls:'magic',rar:2,atk:2,hp:5,skill:'chain',sv:1,desc:'연쇄 번개: 놓을 때 모든 적 유닛에 1 피해',look:{skin:'#e8c0a0',hair:'#ffe14a',body:'#3a3a7a',acc:'staff',orb:'#ffe14a'}},
-  priest:{fac:'bastion',name:'루미',cls:'support',rar:0,atk:0,hp:6,skill:'heal',sv:3,desc:'치유: 공격 대신 가장 다친 아군을 3 회복',look:{skin:'#f6d6b6',hair:'#ffe9a8',body:'#e8e0c8',acc:'cross'}},
-  drum:{fac:'bastion',name:'둥둥',cls:'support',rar:1,atk:0,hp:7,skill:'drum',sv:1,desc:'북소리: 같은 줄 아군 공격 +1',look:{skin:'#d9a070',hair:'#2b2b2b',body:'#b5573f',acc:'drum'}},
-  necro:{fac:'ember',name:'모르가',cls:'support',rar:2,atk:0,hp:6,skill:'necro',sv:0,desc:'망령 소환: 아군이 쓰러지면 그 자리에 해골(1/2) 소환, 3회',look:{skin:'#b8c0c8',hair:'#1a1a2a',body:'#2a1a3a',acc:'skull'}},
+  bolt:{fac:'ember',name:'볼트',cls:'magic',rar:2,atk:2,hp:5,skill:'chain',sv:1,desc:'연쇄 번개: 놓을 때 모든 적 유닛에 10 피해',look:{skin:'#e8c0a0',hair:'#ffe14a',body:'#3a3a7a',acc:'staff',orb:'#ffe14a'}},
+  priest:{fac:'bastion',name:'루미',cls:'support',rar:0,atk:0,hp:6,skill:'heal',sv:3,desc:'치유: 공격 대신 가장 다친 아군을 30 회복',look:{skin:'#f6d6b6',hair:'#ffe9a8',body:'#e8e0c8',acc:'cross'}},
+  drum:{fac:'bastion',name:'둥둥',cls:'support',rar:1,atk:0,hp:7,skill:'drum',sv:1,desc:'북소리: 같은 줄 아군 공격 +10',look:{skin:'#d9a070',hair:'#2b2b2b',body:'#b5573f',acc:'drum'}},
+  necro:{fac:'ember',name:'모르가',cls:'support',rar:2,atk:0,hp:6,skill:'necro',sv:0,desc:'망령 소환: 아군이 쓰러지면 그 자리에 해골(10/20) 소환, 3회',look:{skin:'#b8c0c8',hair:'#1a1a2a',body:'#2a1a3a',acc:'skull'}},
   bron:{fac:'bastion',name:'브론',cls:'melee',rar:1,atk:3,hp:7,skill:'forge',sv:0,desc:'담금질: 놓을 때 같은 줄 아군 모두에게 철갑',look:{}},
   elia:{fac:'bastion',name:'엘리아',cls:'melee',rar:2,ga:0.2,atk:4,hp:6,skill:'lance',sv:0,desc:'돌격창: 줄 앞의 적 2명을 함께 공격 (두 번째는 60% 피해)',look:{}},
   pipi:{fac:'bastion',name:'피피',cls:'magic',rar:1,atk:2,hp:4,skill:'barrier',sv:0,desc:'보호 마법: 내 턴마다 철갑 없는 가장 약한 아군에게 철갑',look:{}},
-  solaris:{fac:'bastion',name:'솔라리스',cls:'melee',rar:3,atk:5,hp:10,skill:'radiant',sv:1,desc:'광휘: 공격할 때 위아래 줄 맨 앞 적에게 1 피해',look:{}},
+  solaris:{fac:'bastion',name:'솔라리스',cls:'melee',rar:3,atk:5,hp:10,skill:'radiant',sv:1,desc:'광휘: 공격할 때 위아래 줄 맨 앞 적에게 10 피해',look:{}},
   toto:{fac:'wild',name:'토토',cls:'support',rar:1,atk:0,hp:8,skill:'spores',sv:2,desc:'포자: 내 턴마다 무작위 적 2명에게 독 2',look:{}},
   laila:{fac:'wild',name:'라일라',cls:'melee',rar:1,ga:0.3,mp:{a:1.35,h:1.35},atk:3,hp:6,skill:'hunt',sv:0,desc:'사냥: 줄에서 체력이 가장 낮은 적을 노린다',look:{}},
-  oakwood:{fac:'wild',name:'오크우드',cls:'melee',rar:2,atk:2,hp:12,skill:'root',sv:1,desc:'뿌리: 받는 피해 -1, 내 턴마다 체력 1 회복',look:{}},
+  oakwood:{fac:'wild',name:'오크우드',cls:'melee',rar:2,atk:2,hp:12,skill:'root',sv:1,desc:'뿌리: 받는 피해 -10, 내 턴마다 체력 10 회복',look:{}},
   ciel:{fac:'wild',name:'시엘',cls:'ranged',rar:3,atk:3,hp:7,skill:'gale',fly:true,sv:0,desc:'돌풍: 자기 줄과 위아래 줄 맨 앞 적을 함께 공격 · 비행',look:{}},
-  volka:{fac:'ember',name:'볼카',cls:'ranged',rar:1,atk:2,hp:4,skill:'bomb',sv:2,desc:'유폭: 쓰러지면 같은 줄 적 전체에 2 피해',look:{}},
+  volka:{fac:'ember',name:'볼카',cls:'ranged',rar:1,atk:2,hp:4,skill:'bomb',sv:2,desc:'유폭: 쓰러지면 같은 줄 적 전체에 20 피해',look:{}},
   kael:{fac:'ember',name:'카엘',cls:'melee',rar:2,atk:4,hp:6,skill:'execute',sv:0,desc:'처형: 체력이 절반 이하인 적에게 2배 피해',look:{}},
   raven:{fac:'ember',name:'레이븐',cls:'magic',rar:1,atk:2,hp:5,skill:'hex',sv:1,desc:'저주: 맞은 적의 공격력 영구 -1',look:{}},
-  caldera:{fac:'ember',name:'칼데라',cls:'magic',rar:3,atk:4,hp:7,skill:'inferno',sv:1,desc:'업화: 공격 후 적 유닛 전체에 1 피해',look:{}},
-  hart:{fac:'bastion',name:'하르트',cls:'ranged',rar:1,atk:3,hp:5,skill:'mark',sv:1,desc:'표식: 맞은 적은 다음에 받는 피해 +1',look:{}},
-  cecil:{fac:'bastion',name:'세실',cls:'support',rar:2,atk:0,hp:7,skill:'inspire',sv:1,desc:'고무: 내 턴마다 공격 +1, 무작위 아군 한 명에게 (영구)',look:{}},
+  caldera:{fac:'ember',name:'칼데라',cls:'magic',rar:3,atk:4,hp:7,skill:'inferno',sv:1,desc:'업화: 공격 후 적 유닛 전체에 10 피해',look:{}},
+  hart:{fac:'bastion',name:'하르트',cls:'ranged',rar:1,atk:3,hp:5,skill:'mark',sv:1,desc:'표식: 맞은 적은 다음에 받는 피해 +10',look:{}},
+  cecil:{fac:'bastion',name:'세실',cls:'support',rar:2,atk:0,hp:7,skill:'inspire',sv:1,desc:'고무: 내 턴마다 공격 +10, 무작위 아군 한 명에게 (영구)',look:{}},
   valen:{fac:'bastion',name:'발렌',cls:'melee',rar:3,atk:5,hp:11,skill:'bulwark',sv:0,desc:'방벽: 놓을 때 나와 모든 아군에게 철갑',look:{}},
   koko:{fac:'wild',name:'코코',cls:'ranged',rar:1,atk:2,hp:5,skill:'boomer',sv:0,desc:'부메랑: 줄의 맨 앞과 맨 뒤 적을 함께 공격',look:{}},
   luna:{fac:'wild',name:'루나',cls:'magic',rar:2,atk:3,hp:6,skill:'drain',sv:0,desc:'흡수: 준 피해만큼 가장 다친 아군을 회복',look:{}},
-  eila:{fac:'wild',name:'에일라',cls:'magic',rar:3,atk:4,hp:8,skill:'bloom',sv:1,desc:'번성: 공격할 때마다 모든 아군 체력 1 회복',look:{}},
-  mog:{fac:'ember',name:'모그',cls:'support',rar:1,atk:0,hp:6,skill:'sacrifice',sv:1,desc:'제물: 아군이 쓰러질 때마다 적 지휘관에게 1 피해',look:{}},
-  berk:{fac:'ember',name:'베르크',cls:'ranged',rar:2,ga:0.2,atk:3,hp:5,skill:'scatter',sv:1,desc:'산탄: 공격할 때 옆 줄 맨 앞 적에게도 1 피해',look:{}},
+  eila:{fac:'wild',name:'에일라',cls:'magic',rar:3,atk:4,hp:8,skill:'bloom',sv:1,desc:'번성: 공격할 때마다 모든 아군 체력 10 회복',look:{}},
+  mog:{fac:'ember',name:'모그',cls:'support',rar:1,atk:0,hp:6,skill:'sacrifice',sv:1,desc:'제물: 아군이 쓰러질 때마다 적 지휘관에게 10 피해',look:{}},
+  berk:{fac:'ember',name:'베르크',cls:'ranged',rar:2,ga:0.2,atk:3,hp:5,skill:'scatter',sv:1,desc:'산탄: 공격할 때 옆 줄 맨 앞 적에게도 10 피해',look:{}},
   azra:{fac:'ember',name:'아즈라',cls:'ranged',rar:3,atk:4,hp:7,skill:'ignite',fly:true,sv:2,desc:'점화: 독에 걸린 적에게 2배 피해, 맞은 적에게 독 · 비행',look:{}},
   leon:{fac:'bastion',name:'레온',cls:'melee',rar:1,atk:3,hp:7,skill:'counter',sv:0,desc:'반격: 근접 공격을 받으면 한 번 되받아친다',look:{}},
-  miel:{fac:'bastion',name:'미엘',cls:'support',rar:1,atk:0,hp:7,skill:'cleanse',sv:1,desc:'정화: 내 턴마다 아군의 나쁜 효과를 지우고 체력 1 회복',look:{}},
+  miel:{fac:'bastion',name:'미엘',cls:'support',rar:1,atk:0,hp:7,skill:'cleanse',sv:1,desc:'정화: 내 턴마다 아군의 나쁜 효과를 지우고 체력 10 회복',look:{}},
   godwin:{fac:'bastion',name:'고드윈',cls:'melee',rar:2,atk:4,hp:9,skill:'siege',sv:0,desc:'공성 변신: 2번 공격하면 감시탑으로 변신한다',look:{}},
   aurora:{fac:'bastion',name:'아우로라',cls:'magic',rar:3,atk:3,hp:8,skill:'invul',imm:true,fly:true,sv:0,desc:'성스러운 장막: 내 턴마다 가장 위태로운 아군이 다음 적 턴 동안 무적 · 면역 · 비행',look:{}},
   pin:{fac:'wild',name:'핀',cls:'ranged',rar:1,atk:3,hp:5,skill:'evade',acc:true,sv:2,desc:'회피: 원거리·마법 공격을 2번 피한다 · 정확',look:{}},
-  nora:{fac:'wild',name:'노라',cls:'magic',rar:1,atk:2,hp:5,skill:'splash',sv:1,desc:'범위: 맞은 적 주변의 적에게 1 피해',look:{}},
-  graul:{fac:'wild',name:'그라울',cls:'melee',rar:2,atk:4,hp:8,skill:'bleed',sv:2,desc:'출혈: 맞은 적은 공격할 때마다 1 피해 (2회)',look:{}},
-  sylphia:{fac:'wild',name:'실피아',cls:'support',rar:3,atk:0,hp:10,skill:'buffhp',imm:true,sv:1,desc:'생명의 노래: 내 턴마다 모든 아군 체력 +1 (최대치를 넘어 3번까지) · 면역',look:{}},
+  nora:{fac:'wild',name:'노라',cls:'magic',rar:1,atk:2,hp:5,skill:'splash',sv:1,desc:'범위: 맞은 적 주변의 적에게 10 피해',look:{}},
+  graul:{fac:'wild',name:'그라울',cls:'melee',rar:2,atk:4,hp:8,skill:'bleed',sv:2,desc:'출혈: 맞은 적은 공격할 때마다 10 피해 (2회)',look:{}},
+  sylphia:{fac:'wild',name:'실피아',cls:'support',rar:3,atk:0,hp:10,skill:'buffhp',imm:true,sv:1,desc:'생명의 노래: 내 턴마다 모든 아군 체력 +10 (최대치를 넘어 3번까지) · 면역',look:{}},
   zak:{fac:'ember',name:'자크',cls:'melee',rar:1,atk:3,hp:5,skill:'assassin',acc:true,sv:3,desc:'즉사: 체력 3 이하인 적을 즉시 쓰러뜨린다 · 그림자 일격(가시·반격 무시) · 정확',look:{}},
   mei:{fac:'ember',name:'메이',cls:'magic',rar:1,atk:2,hp:5,skill:'dazzle',sv:0,desc:'현혹: 맞은 적의 다음 공격이 빗나간다',look:{}},
   obel:{fac:'ember',name:'오벨',cls:'magic',rar:2,atk:3,hp:6,skill:'silence',sv:0,desc:'침묵: 맞은 적의 스킬과 강화를 영원히 지운다',look:{}},
   velze:{fac:'ember',name:'벨제',cls:'magic',rar:3,atk:4,hp:8,skill:'polymorph',sv:0,desc:'변이: 2턴마다 맞은 적(전설 제외)을 개구리로 바꾼다',look:{}},
-  theo:{fac:'bastion',name:'테오',cls:'melee',rar:1,atk:3,hp:7,skill:'shatter',sv:2,desc:'파쇄: 철갑·무적을 깨뜨리고, 깨뜨리면 피해 +2',look:{}},
-  lucia:{fac:'bastion',name:'루시아',cls:'magic',rar:1,atk:3,hp:5,skill:'sunheal',sv:1,desc:'햇살: 공격할 때마다 같은 줄 아군 모두 1 회복',look:{}},
-  bas:{fac:'bastion',name:'바스',cls:'ranged',rar:1,atk:3,hp:4,skill:'cmdshot',sv:1,desc:'지휘관 저격: 적 유닛을 맞힐 때 적 지휘관에게도 1 피해',look:{}},
-  emma:{fac:'bastion',name:'엠마',cls:'support',rar:1,atk:0,hp:9,skill:'aegis',sv:1,desc:'등불의 가호: 같은 줄 다른 아군이 받는 피해 -1 (합체하면 -2)',look:{}},
-  toma:{fac:'wild',name:'밤톨',cls:'melee',rar:1,atk:3,hp:8,skill:'grow',sv:1,desc:'성장: 내 턴마다 최대 체력과 체력 +1 (5번까지)',look:{}},
+  theo:{fac:'bastion',name:'테오',cls:'melee',rar:1,atk:3,hp:7,skill:'shatter',sv:2,desc:'파쇄: 철갑·무적을 깨뜨리고, 깨뜨리면 피해 +20',look:{}},
+  lucia:{fac:'bastion',name:'루시아',cls:'magic',rar:1,atk:3,hp:5,skill:'sunheal',sv:1,desc:'햇살: 공격할 때마다 같은 줄 아군 모두 10 회복',look:{}},
+  bas:{fac:'bastion',name:'바스',cls:'ranged',rar:1,atk:3,hp:4,skill:'cmdshot',sv:1,desc:'지휘관 저격: 적 유닛을 맞힐 때 적 지휘관에게도 10 피해',look:{}},
+  emma:{fac:'bastion',name:'엠마',cls:'support',rar:1,atk:0,hp:10,skill:'aegis',sv:1,desc:'등불의 가호: 같은 줄 다른 아군이 받는 피해 -10 (합체하면 -20)',look:{}},
+  toma:{fac:'wild',name:'밤톨',cls:'melee',rar:1,atk:3,hp:8,skill:'grow',sv:1,desc:'성장: 내 턴마다 최대 체력과 체력 +10 (5번까지)',look:{}},
   ria:{fac:'wild',name:'리아',cls:'ranged',rar:1,atk:3,hp:5,skill:'viper',sv:2,desc:'독사 사냥: 독이 없는 적을 먼저 노리고 독 2를 건다',look:{}},
-  urk:{fac:'wild',name:'우르',cls:'melee',rar:1,atk:3,hp:6,skill:'bloodlust',sv:2,desc:'피의 사냥: 적을 쓰러뜨리면 공격 +2, 체력 2 회복',look:{}},
+  urk:{fac:'wild',name:'우르',cls:'melee',rar:1,atk:3,hp:6,skill:'bloodlust',sv:2,desc:'피의 사냥: 적을 쓰러뜨리면 공격 +20, 체력 20 회복',look:{}},
   miru:{fac:'wild',name:'미루',cls:'magic',rar:1,atk:2,hp:6,skill:'frostnova',sv:0,desc:'서리 폭발: 놓을 때 같은 줄 적 모두 빙결',look:{}},
-  rag:{fac:'ember',name:'라그',cls:'melee',rar:1,ga:0.3,atk:3,hp:5,skill:'reckless',sv:1,desc:'무모: 공격 피해 +1 (합체 ◆마다 +1), 공격할 때마다 자신도 1 피해',look:{}},
-  rio:{fac:'ember',name:'리오',cls:'ranged',rar:1,atk:2,hp:5,skill:'firebomb',sv:2,desc:'화염병: 맞은 적 뒤의 적에게도 2 피해, 둘 다 독 1',look:{}},
-  kaya:{fac:'ember',name:'카야',cls:'magic',rar:1,atk:3,hp:4,skill:'overheat',sv:1,desc:'과열: 공격할 때마다 공격 +1 (3번까지)',look:{}},
-  gor:{fac:'ember',name:'고르',cls:'support',rar:1,atk:0,hp:9,skill:'warcry',sv:1,desc:'전쟁 함성: 놓을 때 아군 모두 공격 +1, 아군이 쓰러질 때마다 무작위 아군 공격 +1',look:{}},
+  rag:{fac:'ember',name:'라그',cls:'melee',rar:1,ga:0.3,gh:.3,atk:3,hp:5,skill:'reckless',sv:1,desc:'무모: 공격 피해 +10 (합체 ◆마다 +1), 공격할 때마다 자신도 10 피해',look:{}},
+  rio:{fac:'ember',name:'리오',cls:'ranged',rar:1,atk:2,hp:5,skill:'firebomb',sv:2,desc:'화염병: 맞은 적 뒤의 적에게도 20 피해, 둘 다 독 1',look:{}},
+  kaya:{fac:'ember',name:'카야',cls:'magic',rar:1,atk:3,hp:4,skill:'overheat',sv:1,desc:'과열: 공격할 때마다 공격 +10 (3번까지)',look:{}},
+  gor:{fac:'ember',name:'고르',cls:'support',rar:1,atk:0,hp:9,skill:'warcry',sv:1,desc:'전쟁 함성: 놓을 때 아군 모두 공격 +10, 아군이 쓰러질 때마다 무작위 아군 공격 +10',look:{}},
   frog:{fac:'wild',name:'개구리',cls:'melee',rar:0,atk:0,hp:3,skill:'none',sv:0,token:true,fixed:true,desc:'변이된 개구리 (공격하지 못함)',look:{}},
 
-  watchtower:{fac:'bastion',name:'감시탑',cls:'building',fixed:true,rar:1,atk:0,hp:11,skill:'tower',sv:2,desc:'감시탑: 내 턴마다 같은 줄 맨 앞 적에게 2 피해',look:{}},
-  fountain:{fac:'bastion',name:'치유의 샘',cls:'building',fixed:true,rar:0,atk:0,hp:10,skill:'fountain',sv:1,desc:'치유의 샘: 내 턴마다 같은 줄 아군 모두 1 회복',look:{}},
-  bush:{fac:'wild',name:'가시 덤불',cls:'building',fixed:true,rar:0,atk:0,hp:13,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 2 피해',look:{}},
-  lifetree:{fac:'wild',name:'생명의 나무',cls:'building',fixed:true,rar:2,atk:0,hp:14,skill:'lifetree',sv:2,desc:'생명의 나무: 내 턴마다 가장 다친 아군 2 회복, 지휘관 1 회복',look:{}},
-  altar:{fac:'ember',name:'화염 제단',cls:'building',fixed:true,rar:1,atk:0,hp:10,skill:'altar',sv:1,desc:'화염 제단: 같은 줄 아군 공격 +1',look:{}},
-  powder:{fac:'ember',name:'화약고',cls:'building',fixed:true,rar:0,atk:0,hp:8,skill:'bomb',sv:3,desc:'화약고: 무너지면 같은 줄 적 전체에 3 피해',look:{}},
-  wall:{fac:'bastion',name:'성벽',cls:'building',fixed:true,rar:0,atk:0,hp:17,skill:'block',sv:1,desc:'성벽: 받는 피해가 1 줄어든다',look:{}},
-  catapult:{fac:'bastion',name:'투석기',cls:'building',fixed:true,rar:1,atk:0,hp:14,skill:'catapult',sv:1,desc:'투석: 내 턴마다 적 지휘관에게 1 피해',look:{}},
+  watchtower:{fac:'bastion',name:'감시탑',cls:'building',fixed:true,rar:1,atk:0,hp:11,skill:'tower',sv:2,desc:'감시탑: 내 턴마다 같은 줄 맨 앞 적에게 20 피해',look:{}},
+  fountain:{fac:'bastion',name:'치유의 샘',cls:'building',fixed:true,rar:0,atk:0,hp:10,skill:'fountain',sv:1,desc:'치유의 샘: 내 턴마다 같은 줄 아군 모두 10 회복',look:{}},
+  bush:{fac:'wild',name:'가시 덤불',cls:'building',fixed:true,rar:0,atk:0,hp:13,skill:'thorns',sv:2,desc:'가시: 나를 때린 적에게 20 피해',look:{}},
+  lifetree:{fac:'wild',name:'생명의 나무',cls:'building',fixed:true,rar:2,atk:0,hp:14,skill:'lifetree',sv:2,desc:'생명의 나무: 내 턴마다 가장 다친 아군 20 회복, 지휘관 10 회복',look:{}},
+  altar:{fac:'ember',name:'화염 제단',cls:'building',fixed:true,rar:1,atk:0,hp:10,skill:'altar',sv:1,desc:'화염 제단: 같은 줄 아군 공격 +10',look:{}},
+  powder:{fac:'ember',name:'화약고',cls:'building',fixed:true,rar:0,atk:0,hp:8,skill:'bomb',sv:3,desc:'화약고: 무너지면 같은 줄 적 전체에 30 피해',look:{}},
+  wall:{fac:'bastion',name:'성벽',cls:'building',fixed:true,rar:0,atk:0,hp:17,skill:'block',sv:1,desc:'성벽: 받는 피해가 10 줄어든다',look:{}},
+  catapult:{fac:'bastion',name:'투석기',cls:'building',fixed:true,rar:1,atk:0,hp:16,skill:'catapult',sv:1,desc:'투석: 내 턴마다 적 지휘관에게 10 피해',look:{}},
   shroom:{fac:'wild',name:'버섯 고리',cls:'building',fixed:true,rar:1,atk:0,hp:12,skill:'shroom',sv:2,desc:'포자 고리: 내 턴마다 같은 줄 적 모두 독 2',look:{}},
   vinewall:{fac:'wild',name:'덩굴 벽',cls:'building',fixed:true,rar:0,atk:0,hp:16,skill:'snare',sv:0,desc:'휘감기: 나를 때린 근접 적은 다음 공격을 못 한다',look:{}},
-  lavapit:{fac:'ember',name:'용암 구덩이',cls:'building',fixed:true,rar:1,atk:0,hp:11,skill:'lavapit',sv:1,desc:'용암: 내 턴마다 같은 줄 적 모두 1 피해',look:{}},
-  totem:{fac:'ember',name:'저주 토템',cls:'building',fixed:true,rar:2,atk:0,hp:13,skill:'totem',sv:1,desc:'저주 토템: 내 턴마다 같은 줄 맨 앞 적 공격 -1 (1 아래로는 안 내려감)',look:{}},
+  lavapit:{fac:'ember',name:'용암 구덩이',cls:'building',fixed:true,rar:1,atk:0,hp:13,skill:'lavapit',sv:1,desc:'용암: 내 턴마다 같은 줄 적 모두 10 피해',look:{}},
+  totem:{fac:'ember',name:'저주 토템',cls:'building',fixed:true,rar:2,atk:0,hp:13,skill:'totem',sv:1,desc:'저주 토템: 내 턴마다 같은 줄 맨 앞 적 공격 -10 (10 아래로는 안 내려감)',look:{}},
   skel:{fac:'ember',name:'해골',cls:'melee',rar:0,atk:1,hp:2,skill:'none',sv:0,token:true,desc:'소환된 해골',look:{skin:'#e8e4d8',hair:'#e8e4d8',body:'#6a6458',acc:'none',extra:'skull'}}
 };
 const START_OWNED=['shield','sword','archer','poison','frost','priest','berserk','fire'];
@@ -1198,12 +1213,12 @@ const BOSS_SIG={
   boss:{n:'망자 소환',d:'적 턴 3번마다 빈 자리에 해골 병사(★2)를 부른다'},
   boss2:{n:'혹한의 숨결',d:'적 턴마다 내 유닛 하나를 얼린다'},
   boss3:{n:'태엽 장갑',d:'적 턴마다 철갑 없는 적 유닛 하나에 철갑을 씌운다'},
-  boss4:{n:'세 머리 재생',d:'적 턴마다 보스 체력 2 회복, 내 유닛 하나에 독 2'}
+  boss4:{n:'세 머리 재생',d:'적 턴마다 보스 체력 20 회복, 내 유닛 하나에 독 2'}
 };
 const BOSS_PASSIVES=[
-  {id:'warlord',n:'전쟁 군주',d:'적 턴 3번마다 적 유닛 전체 공격 +1'},
+  {id:'warlord',n:'전쟁 군주',d:'적 턴 3번마다 적 유닛 전체 공격 +10'},
   {id:'venom',n:'독기의 왕',d:'내가 놓는 유닛은 독 1을 안고 시작'},
-  {id:'iron',n:'강철 군주',d:'적 지휘관이 받는 피해 -1'}
+  {id:'iron',n:'강철 군주',d:'적 지휘관이 받는 피해 -10'}
 ];
 // 요일 이벤트 (0=일 ~ 6=토). 코드 배포 없이 이 표만 바꾸면 일정이 바뀐다.
 const EVENTS=[
@@ -1387,42 +1402,42 @@ const VNAMES={
   skel:['해골']
 };
 const EX={
-  shield:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -1'},
-  sword:{id:'crit',d:'검성의 일격: 지휘관에게 1.5배 피해'},
-  archer:{id:'volley',d:'일제 사격: 옆 라인 적 1명에게도 1 피해'},
+  shield:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -10'},
+  sword:{id:'crit',d:'검성의 일격: 지휘관에게 1.3배 피해'},
+  archer:{id:'volley',d:'일제 사격: 옆 라인 적 1명에게도 10 피해'},
   poison:{id:'plague',d:'역병: 같은 라인 적 모두에게 독'},
   frost:{id:'blizzard',d:'눈보라: 같은 라인 적 모두 빙결'},
   priest:{id:'sanctuary',d:'성역: 치유할 때 모든 아군 1 추가 회복'},
   berserk:{id:'lifesteal',d:'피의 갈증: 준 피해만큼 체력 회복'},
-  bear:{id:'regrow',d:'재생: 내 턴마다 체력 2 회복'},
+  bear:{id:'regrow',d:'재생: 내 턴마다 체력 20 회복'},
   sniper:{id:'crit',d:'별의 화살: 지휘관에게 2배 피해'},
   fire:{id:'burn',d:'화상: 맞은 적 모두 독 1'},
-  drum:{id:'warsong',d:'전쟁의 노래: 앞뒤 줄 모든 아군 공격 +1'},
+  drum:{id:'warsong',d:'전쟁의 노래: 앞뒤 줄 모든 아군 공격 +10'},
   knight:{id:'reforge',d:'재무장: 내 턴마다 철갑 회복'},
-  bolt:{id:'storm',d:'폭풍: 내 턴마다 무작위 적 유닛에 2 피해'},
+  bolt:{id:'storm',d:'폭풍: 내 턴마다 무작위 적 유닛에 20 피해'},
   necro:{id:'legion',d:'망자의 군단: 소환 5회, 해골 ★2'},
-  dragon:{id:'breath',d:'화염 숨결: 놓을 때 같은 라인 적 전부 2 피해'},
+  dragon:{id:'breath',d:'화염 숨결: 놓을 때 같은 라인 적 전부 20 피해'},
   bron:{id:'reforge',d:'재무장: 내 턴마다 철갑 회복'},
   elia:{id:'crit',d:'별의 창: 지휘관에게 2배 피해'},
-  pipi:{id:'storm',d:'폭풍: 내 턴마다 무작위 적 유닛에 2 피해'},
+  pipi:{id:'storm',d:'폭풍: 내 턴마다 무작위 적 유닛에 20 피해'},
   solaris:{id:'lifesteal',d:'태양의 은총: 준 피해만큼 체력 회복'},
-  toto:{id:'regrow',d:'재생: 내 턴마다 체력 2 회복'},
+  toto:{id:'regrow',d:'재생: 내 턴마다 체력 20 회복'},
   laila:{id:'double',d:'연속 사냥: 한 턴에 2번 공격 (두 번째는 35% 피해)'},
-  oakwood:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -1'},
-  ciel:{id:'volley',d:'회오리: 옆 라인 적 1명에게도 1 피해'},
-  volka:{id:'breath',d:'개시 폭발: 놓을 때 같은 라인 적 전부 2 피해'},
+  oakwood:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -10'},
+  ciel:{id:'volley',d:'회오리: 옆 라인 적 1명에게도 10 피해'},
+  volka:{id:'breath',d:'개시 폭발: 놓을 때 같은 라인 적 전부 20 피해'},
   kael:{id:'lifesteal',d:'피의 맹세: 준 피해만큼 체력 회복'},
-  raven:{id:'storm',d:'까마귀 폭풍: 내 턴마다 무작위 적 유닛에 2 피해'},
-  caldera:{id:'breath',d:'분화: 놓을 때 같은 라인 적 전부 2 피해'},
-  hart:{id:'pierceshot',d:'관통 볼트: 줄의 두 번째 적도 함께 맞힌다'},cecil:{id:'rally',d:'승전가: 고무 대상이 2명으로 늘어난다'},valen:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -1'},
-  koko:{id:'volley',d:'회오리 부메랑: 옆 라인 적 1명에게도 1 피해'},luna:{id:'moonlight',d:'달빛: 내 턴마다 모든 아군 체력 1 회복'},eila:{id:'spring',d:'봄의 축복: 놓을 때 모든 아군 체력 3 회복'},
+  raven:{id:'storm',d:'까마귀 폭풍: 내 턴마다 무작위 적 유닛에 20 피해'},
+  caldera:{id:'breath',d:'분화: 놓을 때 같은 라인 적 전부 20 피해'},
+  hart:{id:'pierceshot',d:'관통 볼트: 줄의 두 번째 적도 함께 맞힌다'},cecil:{id:'rally',d:'승전가: 고무 대상이 2명으로 늘어난다'},valen:{id:'guard',d:'수호: 같은 라인 뒷줄 아군이 받는 피해 -10'},
+  koko:{id:'volley',d:'회오리 부메랑: 옆 라인 적 1명에게도 10 피해'},luna:{id:'moonlight',d:'달빛: 내 턴마다 모든 아군 체력 10 회복'},eila:{id:'spring',d:'봄의 축복: 놓을 때 모든 아군 체력 30 회복'},
   mog:{id:'bloodpact',d:'피의 계약: 제물 피해 2배'},berk:{id:'crit',d:'용포: 지휘관에게 2배 피해'},azra:{id:'phoenix',d:'불사조: 처음 쓰러지면 체력 절반으로 되살아난다'},
-  leon:{id:'charge3',d:'충전: 3번째 공격마다 2배 피해'},miel:{id:'immaura',d:'정화의 빛: 정화한 같은 줄 아군은 이번 판 면역'},godwin:{id:'fortress',d:'요새: 변신한 감시탑 체력 +5'},aurora:{id:'lightbless',d:'빛의 축복: 내 턴마다 모든 아군 체력 1 회복'},
-  pin:{id:'volley',d:'회오리 탄: 옆 라인 적 1명에게도 1 피해'},nora:{id:'thornsplash',d:'가시 폭발: 범위 피해를 받은 적에게 독 1'},graul:{id:'stealatk',d:'강탈: 맞은 적 공격 -1, 내 공격 +1'},sylphia:{id:'cleansex',d:'정화의 바람: 내 턴마다 모든 아군의 나쁜 효과 제거'},
-  zak:{id:'toxin',d:'독소: 맞은 적은 공격할 때마다 공격 -1 (2회)'},mei:{id:'swap',d:'뒤바꿈: 놓을 때 같은 줄 맨 앞 적의 공격과 체력을 맞바꾼다'},obel:{id:'curselink',d:'저주 연결: 맞은 적들은 서로 맞을 때 1 피해를 나눠 받는다'},velze:{id:'setatk',d:'쇠약: 맞은 적(전설 제외)의 공격력을 1로 만든다'},
-  theo:{id:'reforge',d:'천공의 갑주: 내 턴마다 철갑 회복'},lucia:{id:'storm',d:'태양 광선: 내 턴마다 무작위 적 유닛에 2 피해'},bas:{id:'pierceshot',d:'관통 화살: 줄의 두 번째 적도 함께 맞힌다'},emma:{id:'moonlight',d:'성녀의 등불: 내 턴마다 모든 아군 체력 1 회복'},
-  toma:{id:'regrow',d:'고목의 재생: 내 턴마다 체력 2 회복'},ria:{id:'plague',d:'독사의 둥지: 같은 라인 적 모두에게 독'},urk:{id:'lifesteal',d:'멧돼지 왕의 포식: 준 피해만큼 체력 회복'},miru:{id:'volley',d:'얼음 파편: 옆 라인 적 1명에게도 1 피해'},
-  rag:{id:'crit',d:'집행: 지휘관에게 2배 피해'},rio:{id:'breath',d:'대폭발: 놓을 때 같은 라인 적 전부 2 피해'},kaya:{id:'charge3',d:'분화: 3번째 공격마다 2배 피해'},gor:{id:'lightbless',d:'혼불: 내 턴마다 모든 아군 체력 1 회복'}
+  leon:{id:'charge3',d:'충전: 3번째 공격마다 2배 피해'},miel:{id:'immaura',d:'정화의 빛: 정화한 같은 줄 아군은 이번 판 면역'},godwin:{id:'fortress',d:'요새: 변신한 감시탑 체력 +50'},aurora:{id:'lightbless',d:'빛의 축복: 내 턴마다 모든 아군 체력 10 회복'},
+  pin:{id:'volley',d:'회오리 탄: 옆 라인 적 1명에게도 10 피해'},nora:{id:'thornsplash',d:'가시 폭발: 범위 피해를 받은 적에게 독 1'},graul:{id:'stealatk',d:'강탈: 맞은 적 공격 -10, 내 공격 +10'},sylphia:{id:'cleansex',d:'정화의 바람: 내 턴마다 모든 아군의 나쁜 효과 제거'},
+  zak:{id:'toxin',d:'독소: 맞은 적은 공격할 때마다 공격 -10 (2회)'},mei:{id:'swap',d:'뒤바꿈: 놓을 때 같은 줄 맨 앞 적의 공격과 체력을 맞바꾼다'},obel:{id:'curselink',d:'저주 연결: 맞은 적들은 서로 맞을 때 10 피해를 나눠 받는다'},velze:{id:'setatk',d:'쇠약: 맞은 적(전설 제외)의 공격력을 10으로 만든다'},
+  theo:{id:'reforge',d:'천공의 갑주: 내 턴마다 철갑 회복'},lucia:{id:'storm',d:'태양 광선: 내 턴마다 무작위 적 유닛에 20 피해'},bas:{id:'pierceshot',d:'관통 화살: 줄의 두 번째 적도 함께 맞힌다'},emma:{id:'moonlight',d:'성녀의 등불: 내 턴마다 모든 아군 체력 10 회복'},
+  toma:{id:'regrow',d:'고목의 재생: 내 턴마다 체력 20 회복'},ria:{id:'plague',d:'독사의 둥지: 같은 라인 적 모두에게 독'},urk:{id:'lifesteal',d:'멧돼지 왕의 포식: 준 피해만큼 체력 회복'},miru:{id:'volley',d:'얼음 파편: 옆 라인 적 1명에게도 10 피해'},
+  rag:{id:'crit',d:'집행: 지휘관에게 2배 피해'},rio:{id:'breath',d:'대폭발: 놓을 때 같은 라인 적 전부 20 피해'},kaya:{id:'charge3',d:'분화: 3번째 공격마다 2배 피해'},gor:{id:'lightbless',d:'혼불: 내 턴마다 모든 아군 체력 10 회복'}
 };
 const TIER_CARD_M=[1,.7,.45,.3],TIER_GOLD_M=[1,1.5,2.2,3.2];
 const EVO=[{need:20,get:3,gold:100},{need:24,get:2,gold:300},{need:12,get:1,gold:800}];
@@ -1430,8 +1445,8 @@ const EVO_LEAGUE=1; // 청동 리그부터 진화 가능
 const LV_STAR=[0,1,1,2,2,3,3,3,4];function starOf(lv){return LV_STAR[Math.max(1,Math.min(8,lv|0))]}
 function rbStars(id,rb){rb=rb|0;const mx=RB_MAX[tierOf(id)];return `<span class="lvst">${'★'.repeat(rb)}<i>${'★'.repeat(Math.max(0,mx-rb))}</i></span>`}
 const RB_LEAGUE=3,RB_MAX=[3,3,4,5],AW_LV=5,ROM=['','Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ'];
-const AWD={guard:'수호 피해 감소 -1 → -2',crit:'지휘관 피해 배율 +0.5',volley:'추가 피해 1 → 2',plague:'역병 독 +1',blizzard:'얼린 적에게 1 피해 추가',sanctuary:'추가 회복 1 → 2',lifesteal:'흡혈할 때 지휘관도 1 회복',regrow:'재생 2 → 4',burn:'화상 독 1 → 2',warsong:'전쟁의 노래 공격 +1 추가',reforge:'재무장할 때 체력 1 회복',storm:'폭풍이 적 2명을 노림',legion:'해골 소환 5회 → 7회',breath:'놓을 때 피해 2 → 4',double:'두 번째 공격 35% → 50%',pierceshot:'줄의 적 전부를 꿰뚫음',rally:'고무 대상 2명 → 3명',moonlight:'달빛 회복 1 → 2',spring:'봄의 축복 회복 3 → 5',bloodpact:'제물 피해 2배 → 3배',phoenix:'부활 체력 절반 → 전부',charge3:'충전 3번째 → 2번째 공격마다',immaura:'정화 범위 같은 줄 → 유지',fortress:'감시탑 체력 +5 → +10',lightbless:'회복 1 → 2',thornsplash:'독 1 → 2',stealatk:'강탈 1 → 2',cleansex:'정화할 때 체력 1 회복',toxin:'독소 2회 → 3회',swap:'두 번째 적까지',curselink:'저주 피해 1 → 2',setatk:'전설에게도 통함'};
-function heroPower(id,o){o=o||save.owned[id]||{lv:1};const v=V(id),b=baseStats(id,o.lv||1,1,o.rb|0,o.sb|0);return Math.round(b.a*10+b.h*5+(v.sv||0)*8+v.tier*20+(v.cls==='support'?25:v.cls==='building'?15:0)+(isAwake(id,o.lv,o.rb)?20:0))}
+const AWD={guard:'수호 피해 감소 -10 → -20',crit:'지휘관 피해 배율 +0.5',volley:'추가 피해 10 → 20',plague:'역병 독 +1',blizzard:'얼린 적에게 10 피해 추가',sanctuary:'추가 회복 10 → 20',lifesteal:'흡혈할 때 지휘관도 10 회복',regrow:'재생 20 → 40',burn:'화상 독 1 → 2',warsong:'전쟁의 노래 공격 +10 추가',reforge:'재무장할 때 체력 10 회복',storm:'폭풍이 적 2명을 노림',legion:'해골 소환 5회 → 7회',breath:'놓을 때 피해 20 → 40',double:'두 번째 공격 35% → 50%',pierceshot:'줄의 적 전부를 꿰뚫음',rally:'고무 대상 2명 → 3명',moonlight:'달빛 회복 10 → 20',spring:'봄의 축복 회복 30 → 50',bloodpact:'제물 피해 2배 → 3배',phoenix:'부활 체력 절반 → 전부',charge3:'충전 3번째 → 2번째 공격마다',immaura:'정화 범위 같은 줄 → 유지',fortress:'감시탑 체력 +50 → +100',lightbless:'회복 10 → 20',thornsplash:'독 1 → 2',stealatk:'강탈 10 → 20',cleansex:'정화할 때 체력 10 회복',toxin:'독소 2회 → 3회',swap:'두 번째 적까지',curselink:'저주 피해 10 → 20',setatk:'전설에게도 통함'};
+function heroPower(id,o){o=o||save.owned[id]||{lv:1};const v=V(id),b=baseStats(id,o.lv||1,1,o.rb|0,o.sb|0);return Math.round(b.a*10+b.h*5+DS*((v.sv||0)*8+v.tier*20+(v.cls==='support'?25:v.cls==='building'?15:0)+(isAwake(id,o.lv,o.rb)?20:0)))}
 function deckPower(){return (save.deck||[]).reduce((n,id)=>n+(save.owned[id]?heroPower(id):0),0)}
 function isAwake(id,lv,rb){return tierOf(id)===3&&!!EX[baseOf(id)]&&!HEROES[baseOf(id)].token&&(rb|0)>=1}
 function rbMax(id){return RB_MAX[tierOf(id)]}
@@ -1444,9 +1459,9 @@ function V(id){
   const b=baseOf(id),t=tierOf(id),H=HEROES[b],d=Math.max(0,t-H.rar);
   const sv=H.sv?H.sv+(H.skill==='charge'?Math.floor(d/2):d):0;
   const o={id,base:b,tier:t,fac:H.fac,name:VNAMES[b][t]||H.name,cls:H.cls,skill:H.skill,sv,
-    atk:H.atk?H.atk+Math.ceil(H.atk*(H.ga||.4)*d):0,hp:H.hp+Math.ceil(H.hp*.45*d),
+    atk:H.atk?H.atk+Math.ceil(H.atk*(H.ga||.4)*d):0,hp:H.hp+Math.ceil(H.hp*(H.gh||.45)*d),
     ex:t===3&&EX[b]?EX[b].id:null,exd:EX[b]?EX[b].d:'',token:!!H.token,
-    desc:H.sv&&d?H.desc.replace(String(H.sv),String(sv)):H.desc};
+    desc:H.sv&&d?(H.desc.includes(String(H.sv*DS))?H.desc.replace(String(H.sv*DS),String(sv*DS)):H.desc.replace(String(H.sv),String(sv))):H.desc};
   return VC[id]=o;
 }
 function versionsOf(b){if(HEROES[b].fixed)return [vid(b,HEROES[b].rar)];const out=[];for(let t=HEROES[b].rar;t<=3;t++)out.push(vid(b,t));return out}
@@ -1457,10 +1472,12 @@ function toVid(b,t){if(HEROES[b].fixed)return vid(b,HEROES[b].rar);return vid(b,
 let UID=1;
 const emptyBoard=()=>Array.from({length:COLS},()=>Array(LANES).fill(null));
 function baseStats(id,lv,star,rb,sb){
-  const v=V(id);rb=rb|0;sb=sb|0;let a=v.atk?v.atk+Math.floor((lv-1)/2)+rb+Math.floor(sb/2):0,h=v.hp+(lv-1)+2*rb+2*sb;
+  const v=V(id);rb=rb|0;sb=sb|0;let a=v.atk?v.atk*(1+GR.lv*(lv-1)+GR.rb*rb+GR.sbA*sb):0,h=v.hp*(1+GR.lv*(lv-1)+GR.rb*rb+GR.sbH*sb);
+  a=Math.round(a*DS);h=Math.round(h*DS);
   if(star>=2){const P=mergeProf(id);const ma=star>=3?1+(P.a-1)*2:P.a,mh=star>=3?1+(P.h-1)*2:P.h;a=Math.round(a*ma);h=Math.round(h*mh)}
   return {a,h};
 }
+const DS=10,GR={lv:.12,rb:.3,sbA:.06,sbH:.1};function sAmt(u){return Math.round(DS*(V(u.key).sv+(u.star-1)+(u.lv-1)/3+(u.rb|0)/2))}
 function skillVal(u){return V(u.key).sv+(u.star-1)+Math.floor((u.lv-1)/3)+Math.floor((u.rb|0)/2)}
 function makeUnit(card,side){
   const b=baseStats(card.key,card.lv,card.star,card.rb,card.sb);const v=V(card.key);const aw=isAwake(card.key,card.lv,card.rb);
@@ -1471,9 +1488,9 @@ function eachUnit(st,side,fn){for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){co
 function findPos(st,u){for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++)if(st.board[u.side][r][l]===u)return [r,l];return null}
 function effAtk(st,u){
   let a=u.atk+u.bonus;const pos=findPos(st,u);if(!pos)return a;
-  eachUnit(st,u.side,(o,r)=>{if(o===u)return;const ov=VU(o);if(ov.skill!=='drum')return;if(ov.ex==='warsong'||r===pos[0])a+=skillVal(o)+(o.aw&&ov.ex==='warsong'?1:0)});
-  if(V(u.key).fac==='ember'&&facLv(st,u.side,'ember')>=1)a+=1;
-  laneUnits(st,u.side,pos[1]).forEach(o=>{if(o!==u&&VU(o).skill==='altar')a+=skillVal(o)});
+  eachUnit(st,u.side,(o,r)=>{if(o===u)return;const ov=VU(o);if(ov.skill!=='drum')return;if(ov.ex==='warsong'||r===pos[0])a+=sAmt(o)+(o.aw&&ov.ex==='warsong'?DS:0)});
+  if(V(u.key).fac==='ember'&&facLv(st,u.side,'ember')>=1)a+=DS;
+  laneUnits(st,u.side,pos[1]).forEach(o=>{if(o!==u&&VU(o).skill==='altar')a+=sAmt(o)});
   return a;
 }
 function facCount(st,side,f){let n=0;eachUnit(st,side,u=>{if(u.hp>0&&V(u.key).fac===f)n++});return n}
@@ -1484,9 +1501,9 @@ function canAttack(st,u,r,l){
   return true;
 }
 function hitCmd(st,side,dmg,fx,src){
-  if(src&&V(src.key).fac==='ember'&&facLv(st,src.side,'ember')>=2)dmg+=2;
-  if(src&&src.side==='p'&&st.wl==='kardum'&&V(src.key).fac==='ember')dmg+=1;
-  if(st.passive==='iron'&&side==='e')dmg=Math.max(0,dmg-1);
+  if(src&&V(src.key).fac==='ember'&&facLv(st,src.side,'ember')>=2)dmg+=2*DS;
+  if(src&&src.side==='p'&&st.wl==='kardum'&&V(src.key).fac==='ember')dmg+=DS;
+  if(st.passive==='iron'&&side==='e')dmg=Math.max(0,dmg-DS);
   st.cmd[side].hp=Math.max(0,st.cmd[side].hp-dmg);fx.push({to:'cmd-'+side,dmg,k:'dmg'});
   return dmg;
 }
@@ -1495,15 +1512,15 @@ function hitUnit(st,t,dmg,fx){
   if(t.inv>0&&dmg>0){fx.push({to:'u'+t.uid,txt:'무적',k:'info',fxk:'shield'});return 0}
   if(t.armor&&dmg>0){t.armor=false;fx.push({to:'u'+t.uid,txt:'철갑!',k:'info',fxk:'shield'});return 0}
   if(t.mark&&dmg>0){dmg+=t.mark;t.mark=0}
-  if(v.skill==='block')dmg=Math.max(0,dmg-skillVal(t));
-  if(v.skill==='root')dmg=Math.max(0,dmg-skillVal(t));
+  if(v.skill==='block')dmg=Math.max(0,dmg-sAmt(t));
+  if(v.skill==='root')dmg=Math.max(0,dmg-sAmt(t));
   const pos=findPos(st,t);
-  if(pos&&dmg>0&&v.cls!=='building'){let ag=0,ao=null;laneUnits(st,t.side,pos[1]).forEach(o=>{if(o!==t&&o.hp>0&&VU(o).skill==='aegis'&&Math.min(2,o.star)>ag){ag=Math.min(2,o.star);ao=o}});if(ag){dmg=Math.max(0,dmg-ag);fx.push({to:'u'+ao.uid,txt:'가호',k:'info',fxk:'shield'})}}
-  if(pos&&pos[0]>=1){const f=st.board[t.side][pos[0]-1][pos[1]];if(f&&VU(f).ex==='guard'&&dmg>0){dmg=Math.max(0,dmg-(f.aw?2:1));fx.push({to:'u'+f.uid,k:'skill',sk:'guard'})}}
-  if(dmg>0&&facLv(st,t.side,'bastion')>=2)dmg=Math.max(0,dmg-1);
+  if(pos&&dmg>0&&v.cls!=='building'){let ag=0,ao=null;laneUnits(st,t.side,pos[1]).forEach(o=>{if(o!==t&&o.hp>0&&VU(o).skill==='aegis'&&Math.min(2,o.star)>ag){ag=Math.min(2,o.star);ao=o}});if(ag){dmg=Math.max(0,dmg-ag*DS);fx.push({to:'u'+ao.uid,txt:'가호',k:'info',fxk:'shield'})}}
+  if(pos&&pos[0]>=1){const f=st.board[t.side][pos[0]-1][pos[1]];if(f&&VU(f).ex==='guard'&&dmg>0){dmg=Math.max(0,dmg-(f.aw?2:1)*DS);fx.push({to:'u'+f.uid,k:'skill',sk:'guard'})}}
+  if(dmg>0&&facLv(st,t.side,'bastion')>=2)dmg=Math.max(0,dmg-DS);
   t.hp-=dmg;fx.push({to:'u'+t.uid,dmg,k:'dmg'});
-  if(t.cursed&&dmg>0&&!st._cl){st._cl=1;eachUnit(st,t.side,o=>{if(o!==t&&o.cursed&&o.hp>0){o.hp-=1;fx.push({to:'u'+o.uid,dmg:1,k:'dmg'})}});st._cl=0}
-  if(v.skill==='rage'&&t.hp>0&&dmg>0){t.atk+=1;fx.push({to:'u'+t.uid,txt:'분노 +1',k:'info',fxk:'rage'})}
+  if(t.cursed&&dmg>0&&!st._cl){st._cl=1;eachUnit(st,t.side,o=>{if(o!==t&&o.cursed&&o.hp>0){o.hp-=DS;fx.push({to:'u'+o.uid,dmg:DS,k:'dmg'})}});st._cl=0}
+  if(v.skill==='rage'&&t.hp>0&&dmg>0){t.atk+=DS;fx.push({to:'u'+t.uid,txt:'분노 +'+DS,k:'info',fxk:'rage'})}
   return dmg;
 }
 function cleanup(st,fx){
@@ -1514,35 +1531,35 @@ function cleanup(st,fx){
   let bombs=[];
   for(const d of dead){
     if(d.u.side==='e')st.kills=(st.kills||0)+1;
-    if(d.u.side==='e'&&st.wl==='nox'&&st.cmd.p.hp>0&&st.cmd.p.hp<st.cmd.p.max){st.cmd.p.hp+=1;fx.push({to:'cmd-p',dmg:1,k:'heal'})}
+    if(d.u.side==='e'&&st.wl==='nox'&&st.cmd.p.hp>0&&st.cmd.p.hp<st.cmd.p.max){const nh=Math.min(DS,st.cmd.p.max-st.cmd.p.hp);st.cmd.p.hp+=nh;fx.push({to:'cmd-p',dmg:nh,k:'heal'})}
     if(VU(d.u).skill==='bomb')bombs.push(d);
-    if(!st.over)eachUnit(st,d.u.side,o=>{if(o.hp>0&&VU(o).skill==='warcry'){const al=[];eachUnit(st,d.u.side,x=>{if(x.hp>0&&['melee','ranged','magic'].includes(V(x.key).cls))al.push(x)});if(al.length){const x=al[Math.floor(Math.random()*al.length)];x.atk+=1;fx.push({to:'u'+x.uid,txt:'함성 +1',k:'info',fxk:'rage'})}}});
-    eachUnit(st,d.u.side,o=>{const ov=VU(o);if(ov.skill==='sacrifice'&&o.hp>0&&!st.over){fx.push({to:'u'+o.uid,txt:'제물',k:'info',fxk:'curse'});hitCmd(st,foeOf(d.u.side),skillVal(o)*(ov.ex==='bloodpact'?(o.aw?3:2):1),fx,null)}});
+    if(!st.over)eachUnit(st,d.u.side,o=>{if(o.hp>0&&VU(o).skill==='warcry'){const al=[];eachUnit(st,d.u.side,x=>{if(x.hp>0&&['melee','ranged','magic'].includes(V(x.key).cls))al.push(x)});if(al.length){const x=al[Math.floor(Math.random()*al.length)];x.atk+=DS;fx.push({to:'u'+x.uid,txt:'함성 +'+DS,k:'info',fxk:'rage'})}}});
+    eachUnit(st,d.u.side,o=>{const ov=VU(o);if(ov.skill==='sacrifice'&&o.hp>0&&!st.over){fx.push({to:'u'+o.uid,txt:'제물',k:'info',fxk:'curse'});hitCmd(st,foeOf(d.u.side),sAmt(o)*(ov.ex==='bloodpact'?(o.aw?3:2):1),fx,null)}});
     fx.push({to:'cell-'+d.u.side+'-'+d.r+'-'+d.l,txt:'쓰러짐',k:'info'});
     if(baseOf(d.u.key)==='skel')continue;
     let nec=null;eachUnit(st,d.u.side,o=>{if(!nec&&VU(o).skill==='necro'&&o.charges>0)nec=o});
     if(nec&&!st.board[d.u.side][d.r][d.l]){nec.charges--;const strong=V(nec.key).ex==='legion';if(strong)fx.push({to:'u'+nec.uid,k:'skill',sk:'legion'});st.board[d.u.side][d.r][d.l]=makeUnit({key:'skel_0',lv:strong?3:1,star:strong?2:1},d.u.side);fx.push({to:'cell-'+d.u.side+'-'+d.r+'-'+d.l,txt:'해골 소환',k:'info'})}
   }
-  if(bombs.length&&!st.bombDepth){st.bombDepth=1;bombs.forEach(d=>{const foe=foeOf(d.u.side);fx.push({to:'cell-'+d.u.side+'-'+d.r+'-'+d.l,txt:'유폭!',k:'info',fxk:'boom'});laneUnits(st,foe,d.l).forEach(t=>hitUnit(st,t,V(d.u.key).sv+(d.u.star-1),fx))});st.bombDepth=0;cleanup(st,fx);return}
+  if(bombs.length&&!st.bombDepth){st.bombDepth=1;bombs.forEach(d=>{const foe=foeOf(d.u.side);fx.push({to:'cell-'+d.u.side+'-'+d.r+'-'+d.l,txt:'유폭!',k:'info',fxk:'boom'});laneUnits(st,foe,d.l).forEach(t=>hitUnit(st,t,(V(d.u.key).sv+(d.u.star-1))*DS,fx))});st.bombDepth=0;cleanup(st,fx);return}
   if(st.cmd.p.hp<=0||st.cmd.e.hp<=0)st.over=true;
 }
 function place(st,side,card,r,l){
   const fx=[];const foe=foeOf(side);
   let u=st.board[side][r][l],merged=false;
   if(u){u.star=Math.min(3,u.star+card.star);const b=baseStats(u.key,u.lv,u.star,u.rb,u.sb);u.atk=b.a;u.max=b.h;u.hp=Math.min(b.h,Math.max(0,u.hp)+Math.ceil(b.h/2));clearNeg(u);u.sil=false;u._sv=null;merged=true;fx.push({to:'u'+u.uid,txt:'합체! ◆'+u.star,k:'info'});mergeEffect(st,side,u,l,fx)}
-  else{u=makeUnit(card,side);st.board[side][r][l]=u;if(side==='p'&&st.passive==='venom')u.poison=1;if(V(u.key).fac==='wild'&&facLv(st,side,'wild')>=2){u.max+=3;u.hp+=3;fx.push({to:'u'+u.uid,txt:'들숲의 축복 +3',k:'info'})}}
+  else{u=makeUnit(card,side);st.board[side][r][l]=u;if(side==='p'&&st.passive==='venom')u.poison=1;if(V(u.key).fac==='wild'&&facLv(st,side,'wild')>=2){u.max+=3*DS;u.hp+=3*DS;fx.push({to:'u'+u.uid,txt:'들숲의 축복 +'+3*DS,k:'info'})}}
   if(side==='p'&&FAC_KEYS.some(f=>facCount(st,'p',f)>=4))st.fac4=true;
   const v=V(u.key);
-  if(v.skill==='charge'){fx.push({to:'u'+u.uid,txt:'돌진!',k:'info',fxk:'dash'});const t=laneUnits(st,foe,l)[0];if(t)hitUnit(st,t,skillVal(u),fx);else hitCmd(st,foe,skillVal(u),fx,u)}
+  if(v.skill==='charge'){fx.push({to:'u'+u.uid,txt:'돌진!',k:'info',fxk:'dash'});const t=laneUnits(st,foe,l)[0];if(t)hitUnit(st,t,sAmt(u),fx);else hitCmd(st,foe,sAmt(u),fx,u)}
   if(v.skill==='frostnova'&&!merged){fx.push({to:'u'+u.uid,txt:'서리 폭발!',k:'info',fxk:'ice'});laneUnits(st,foe,l).forEach(t=>{if(canAffect(t)){t.frozen=true;fx.push({to:'u'+t.uid,txt:'빙결',k:'info',fxk:'ice'})}})}
-  if(v.skill==='warcry'&&!merged){fx.push({to:'u'+u.uid,txt:'전쟁 함성!',k:'info',fxk:'rage'});const wv=Math.min(2,skillVal(u));eachUnit(st,side,o=>{if(o!==u&&o.hp>0&&['melee','ranged','magic'].includes(V(o.key).cls)){o.atk+=wv;fx.push({to:'u'+o.uid,txt:'공격 +'+wv,k:'info',fxk:'rage'})}})}
-  if(v.skill==='chain')eachUnit(st,foe,t=>{fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'bolt'});hitUnit(st,t,skillVal(u),fx)});
+  if(v.skill==='warcry'&&!merged){fx.push({to:'u'+u.uid,txt:'전쟁 함성!',k:'info',fxk:'rage'});const wv=Math.min(2,skillVal(u))*DS;eachUnit(st,side,o=>{if(o!==u&&o.hp>0&&['melee','ranged','magic'].includes(V(o.key).cls)){o.atk+=wv;fx.push({to:'u'+o.uid,txt:'공격 +'+wv,k:'info',fxk:'rage'})}})}
+  if(v.skill==='chain')eachUnit(st,foe,t=>{fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'bolt'});hitUnit(st,t,sAmt(u),fx)});
   if(v.skill==='forge'&&!merged){laneUnits(st,side,l).forEach(o=>{if(o!==u&&!o.armor){o.armor=true;fx.push({to:'u'+o.uid,txt:'담금질',k:'info',fxk:'shield'})}})}
-  if(side==='p'&&!merged){if(st.wl==='asten'&&v.fac==='bastion'){u.max+=1;u.hp+=1}if(st.wl==='orwan'&&v.fac==='wild'){u.max+=2;u.hp+=2}}
+  if(side==='p'&&!merged){if(st.wl==='asten'&&v.fac==='bastion'){u.max+=DS;u.hp+=DS}if(st.wl==='orwan'&&v.fac==='wild'){u.max+=2*DS;u.hp+=2*DS}}
   if(v.ex==='swap'&&!merged){laneUnits(st,foe,l).slice(0,u.aw?2:1).forEach(t=>{if(canAffect(t)&&t.atk>0){const a=t.atk,h=t.hp;t.atk=Math.max(0,h);t.hp=Math.max(1,a);t.max=Math.max(t.max,t.hp);fx.push({to:'u'+t.uid,k:'skill',sk:'swap'})}})}
   if(v.skill==='bulwark'&&!merged){eachUnit(st,side,o=>{if(!o.armor){o.armor=true;fx.push({to:'u'+o.uid,txt:'방벽',k:'info',fxk:'shield'})}})}
-  if(v.ex==='spring'&&!merged){fx.push({to:'u'+u.uid,k:'skill',sk:'spring'});eachUnit(st,side,o=>{if(o!==u&&o.hp>0&&o.hp<o.max){const h=Math.min(u.aw?5:3,o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
-  if(v.ex==='breath'){fx.push({to:'u'+u.uid,k:'skill',sk:'breath',wave:'fire',side:foe,lane:l});laneUnits(st,foe,l).forEach(t=>hitUnit(st,t,u.aw?4:2,fx))}
+  if(v.ex==='spring'&&!merged){fx.push({to:'u'+u.uid,k:'skill',sk:'spring'});eachUnit(st,side,o=>{if(o!==u&&o.hp>0&&o.hp<o.max){const h=Math.min((u.aw?5:3)*DS,o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
+  if(v.ex==='breath'){fx.push({to:'u'+u.uid,k:'skill',sk:'breath',wave:'fire',side:foe,lane:l});laneUnits(st,foe,l).forEach(t=>hitUnit(st,t,(u.aw?4:2)*DS,fx))}
   cleanup(st,fx);
   return {u,fx,merged};
 }
@@ -1555,11 +1572,11 @@ function* attackPhase(st,side){
     if(u.frozen){u.frozen=false;fx.push({to:'u'+u.uid,txt:'얼어붙음',k:'info'});yield {t:'skip',from:u.uid,fx};continue}
     if(v.skill==='heal'){
       let best=null,bd=0;eachUnit(st,side,o=>{const d=o.max-o.hp;if(d>bd){bd=d;best=o}});
-      const hv=skillVal(u);
+      const hv=sAmt(u);
       if(best){const h=Math.min(hv,best.max-best.hp);best.hp+=h;fx.push({to:'u'+best.uid,dmg:h,k:'heal'})}
-      else if(st.cmd[side].hp<st.cmd[side].max){st.cmd[side].hp=Math.min(st.cmd[side].max,st.cmd[side].hp+1);fx.push({to:'cmd-'+side,dmg:1,k:'heal'})}
+      else if(st.cmd[side].hp<st.cmd[side].max){const ch2=Math.min(DS,st.cmd[side].max-st.cmd[side].hp);st.cmd[side].hp+=ch2;fx.push({to:'cmd-'+side,dmg:ch2,k:'heal'})}
       if(v.ex==='sanctuary'){fx.push({to:'u'+u.uid,k:'skill',sk:'sanctuary'})}
-      if(v.ex==='sanctuary')eachUnit(st,side,o=>{if(o.hp<o.max&&o!==best){const h2=Math.min(u.aw?2:1,o.max-o.hp);o.hp+=h2;fx.push({to:'u'+o.uid,dmg:h2,k:'heal'})}});
+      if(v.ex==='sanctuary')eachUnit(st,side,o=>{if(o.hp<o.max&&o!==best){const h2=Math.min((u.aw?2:1)*DS,o.max-o.hp);o.hp+=h2;fx.push({to:'u'+o.uid,dmg:h2,k:'heal'})}});
       if(fx.length)yield {t:'heal',from:u.uid,key:u.key,side,fx};
       continue;
     }
@@ -1569,7 +1586,7 @@ function* attackPhase(st,side){
     for(let k=0;k<times;k++){
       if(st.over||u.hp<=0)break;
       if(k===1)fx.push({to:'u'+u.uid,k:'skill',sk:'double'});
-      let atk=effAtk(st,u);if(v.skill==='reckless')atk+=u.star;if(k===1)atk=Math.ceil(atk*(u.aw?0.5:0.35));if(atk<=0)break;
+      let atk=effAtk(st,u);if(v.skill==='reckless')atk+=u.star*DS;if(k===1)atk=Math.ceil(atk*(u.aw?0.5:0.35));if(atk<=0)break;
       if(u.miss>0&&!hasAcc(u)){u.miss--;fx.push({to:'u'+u.uid,txt:'빗나감',k:'info'});acted=true;break}
       const enemies=laneUnits(st,foe,l);
       if(v.skill==='pierce'){
@@ -1584,17 +1601,17 @@ function* attackPhase(st,side){
         if(order.length){t=order.find(x=>!(meleeGround&&isFlyU(x)));if(!t){if(!acted)fx.push({to:'u'+u.uid,txt:'닿지 않음',k:'info'});break}}
         if(t){
           if(t.eva>0&&(v.cls==='ranged'||v.cls==='magic')&&!hasAcc(u)){t.eva--;fx.push({to:'u'+t.uid,txt:'회피!',k:'info',fxk:'dash'});acted=true;cleanup(st,fx);continue}
-          if(v.skill==='assassin'&&t.hp<=skillVal(u)&&tierOf(t.key)<3&&V(t.key).cls!=='building'){t.hp=0;fx.push({to:'u'+t.uid,txt:'즉사!',k:'info',fxk:'exec'});acted=true;cleanup(st,fx);continue}
+          if(v.skill==='assassin'&&t.hp<=sAmt(u)&&tierOf(t.key)<3&&V(t.key).cls!=='building'){t.hp=0;fx.push({to:'u'+t.uid,txt:'즉사!',k:'info',fxk:'exec'});acted=true;cleanup(st,fx);continue}
           const ign=v.skill==='ignite'&&t.poison>0;const dmgX=((v.skill==='execute'&&t.hp<=t.max/2)||ign)?atk*2:atk;if(dmgX>atk)fx.push({to:'u'+t.uid,txt:ign?'점화!':'처형!',k:'info',fxk:ign?'inferno':'exec'});
           let dmgY=dmgX;if(v.ex==='charge3'){u.chg=(u.chg|0)+1;if(u.chg%(u.aw?2:3)===0){dmgY*=2;fx.push({to:'u'+u.uid,k:'skill',sk:'charge3'})}}
-          if(v.skill==='shatter'&&(t.armor||t.inv>0)&&canAffect(t)){t.armor=false;t.inv=0;dmgY+=skillVal(u);fx.push({to:'u'+t.uid,txt:'파쇄!',k:'info',fxk:'exec'})}
+          if(v.skill==='shatter'&&(t.armor||t.inv>0)&&canAffect(t)){t.armor=false;t.inv=0;dmgY+=sAmt(u);fx.push({to:'u'+t.uid,txt:'파쇄!',k:'info',fxk:'exec'})}
           const dealt=hitUnit(st,t,dmgY,fx);acted=true;
-          if(v.skill==='bloodlust'&&t.hp<=0){u.atk+=skillVal(u);const h=Math.min(skillVal(u),u.max-u.hp);fx.push({to:'u'+u.uid,txt:'피의 사냥 +'+skillVal(u),k:'info',fxk:'rage'});if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}}
-          if(v.skill==='cmdshot'&&!st.over){fx.push({to:'u'+u.uid,txt:'지휘관 저격',k:'info',fxk:'dash'});hitCmd(st,foe,Math.min(2,skillVal(u)),fx,u)}
-          if(v.skill==='firebomb'){const nx=order.filter(x=>x!==t&&x.hp>0)[0];fx.push({to:'u'+t.uid,txt:'화염병',k:'info',fxk:'boom'});if(nx)hitUnit(st,nx,skillVal(u),fx);[t,nx].forEach(x=>{if(x&&x.hp>0&&canAffect(x))x.poison=Math.max(x.poison,1)})}
+          if(v.skill==='bloodlust'&&t.hp<=0){u.atk+=sAmt(u);const h=Math.min(sAmt(u),u.max-u.hp);fx.push({to:'u'+u.uid,txt:'피의 사냥 +'+sAmt(u),k:'info',fxk:'rage'});if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}}
+          if(v.skill==='cmdshot'&&!st.over){fx.push({to:'u'+u.uid,txt:'지휘관 저격',k:'info',fxk:'dash'});hitCmd(st,foe,Math.min(2,skillVal(u))*DS,fx,u)}
+          if(v.skill==='firebomb'){const nx=order.filter(x=>x!==t&&x.hp>0)[0];fx.push({to:'u'+t.uid,txt:'화염병',k:'info',fxk:'boom'});if(nx)hitUnit(st,nx,sAmt(u),fx);[t,nx].forEach(x=>{if(x&&x.hp>0&&canAffect(x))x.poison=Math.max(x.poison,1)})}
           if(v.skill==='lance'||v.ex==='pierceshot'){const rest=order.filter(x=>x!==t&&x.hp>0);const ts=(v.ex==='pierceshot'&&u.aw)?rest:rest.slice(0,1);if(ts.length&&v.ex==='pierceshot')fx.push({to:'u'+u.uid,k:'skill',sk:'pierceshot'});ts.forEach(t2=>hitUnit(st,t2,v.skill==='lance'?Math.ceil(atk*.6):atk,fx))}
           if(v.skill==='boomer'){const t3=order.filter(x=>x!==t&&x.hp>0).slice(-1)[0];if(t3){fx.push({to:'u'+t3.uid,txt:'부메랑',k:'info',fxk:'dash'});hitUnit(st,t3,atk,fx)}}
-          if(v.skill==='mark'&&t.hp>0){t.mark=Math.max(t.mark||0,skillVal(u));fx.push({to:'u'+t.uid,txt:'표식',k:'info',fxk:'curse'})}
+          if(v.skill==='mark'&&t.hp>0){t.mark=Math.max(t.mark||0,sAmt(u));fx.push({to:'u'+t.uid,txt:'표식',k:'info',fxk:'curse'})}
           if(v.skill==='ignite'&&t.hp>0){t.poison=Math.max(t.poison,skillVal(u));fx.push({to:'u'+t.uid,txt:'독',k:'info',fxk:'poison'})}
           if(v.skill==='drain'&&dealt>0){let w=null;eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max&&(!w||o.max-o.hp>w.max-w.hp))w=o});if(w){const h=Math.min(dealt,w.max-w.hp);w.hp+=h;fx.push({to:'u'+w.uid,dmg:h,k:'heal'})}}
           if(t.hp>0&&findPos(st,t)&&canAffect(t)){
@@ -1603,73 +1620,73 @@ function* attackPhase(st,side){
             if(v.skill==='silence'&&!t.sil){t.sil=true;t.armor=false;t.bonus=0;t._sv=null;t.eva=0;fx.push({to:'u'+t.uid,txt:'침묵',k:'info',fxk:'curse'})}
             if(v.ex==='curselink'){t.cursed=true;fx.push({to:'u'+t.uid,txt:'저주 연결',k:'info',fxk:'curse'})}
             if(v.ex==='toxin'){t.toxin=Math.max(t.toxin|0,u.aw?3:2);fx.push({to:'u'+t.uid,txt:'독소',k:'info',fxk:'poison'})}
-            if(v.ex==='setatk'&&(tierOf(t.key)<3||u.aw)&&t.atk>1){t.atk=1;t.bonus=0;fx.push({to:'u'+u.uid,k:'skill',sk:'setatk'})}
+            if(v.ex==='setatk'&&(tierOf(t.key)<3||u.aw)&&t.atk>DS){t.atk=DS;t.bonus=0;fx.push({to:'u'+u.uid,k:'skill',sk:'setatk'})}
             if(v.skill==='polymorph'&&!(u.polyT>0)&&tierOf(t.key)<3){if(polymorph(st,t,fx))u.polyT=2}
           }
-          if(v.ex==='stealatk'&&t.hp>0&&t.atk>0){const s2=Math.min(t.atk,u.aw?2:1);t.atk-=s2;u.atk+=s2;fx.push({to:'u'+u.uid,k:'skill',sk:'stealatk'})}
-          if(v.skill==='splash'){splashTargets(st,foe,t).forEach(n=>{hitUnit(st,n,skillVal(u),fx);if(v.ex==='thornsplash'&&n.hp>0&&canAffect(n))n.poison=Math.max(n.poison,u.aw?2:1)})}
-          if(v.skill==='hex'&&t.hp>0&&t.atk>0){t.atk=Math.max(0,t.atk-skillVal(u));fx.push({to:'u'+t.uid,txt:'저주 -'+skillVal(u),k:'info',fxk:'curse'})}
-          if(v.ex==='lifesteal'&&dealt>0){const h=Math.min(dealt,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,k:'skill',sk:'lifesteal'});fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}if(u.aw&&st.cmd[side].hp<st.cmd[side].max){st.cmd[side].hp+=1;fx.push({to:'cmd-'+side,dmg:1,k:'heal'})}}
+          if(v.ex==='stealatk'&&t.hp>0&&t.atk>0){const s2=Math.min(t.atk,(u.aw?2:1)*DS);t.atk-=s2;u.atk+=s2;fx.push({to:'u'+u.uid,k:'skill',sk:'stealatk'})}
+          if(v.skill==='splash'){splashTargets(st,foe,t).forEach(n=>{hitUnit(st,n,sAmt(u),fx);if(v.ex==='thornsplash'&&n.hp>0&&canAffect(n))n.poison=Math.max(n.poison,u.aw?2:1)})}
+          if(v.skill==='hex'&&t.hp>0&&t.atk>0){t.atk=Math.max(0,t.atk-sAmt(u));fx.push({to:'u'+t.uid,txt:'저주 -'+sAmt(u),k:'info',fxk:'curse'})}
+          if(v.ex==='lifesteal'&&dealt>0){const h=Math.min(dealt,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,k:'skill',sk:'lifesteal'});fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}if(u.aw&&st.cmd[side].hp<st.cmd[side].max){const lh=Math.min(DS,st.cmd[side].max-st.cmd[side].hp);st.cmd[side].hp+=lh;fx.push({to:'cmd-'+side,dmg:lh,k:'heal'})}}
           if(v.ex==='plague')fx.push({to:'u'+u.uid,k:'skill',sk:'plague',wave:'poison',side:foe,lane:l});
           if(v.skill==='poison'||v.skill==='viper'){const tg=v.ex==='plague'?enemies:[t];tg.forEach(x=>{if(x.hp>0){x.poison=Math.max(x.poison,skillVal(u)+(u.aw&&v.ex==='plague'?1:0));fx.push({to:'u'+x.uid,txt:'독',k:'info',fxk:'poison'})}})}
           if(v.ex==='blizzard')fx.push({to:'u'+u.uid,k:'skill',sk:'blizzard',wave:'ice',side:foe,lane:l});
-          if(v.skill==='freeze'){const tg=v.ex==='blizzard'?enemies:[t];tg.forEach(x=>{if(x.hp>0){x.frozen=true;fx.push({to:'u'+x.uid,txt:'빙결',k:'info',fxk:'ice'});if(u.aw&&v.ex==='blizzard'&&x!==t)hitUnit(st,x,1,fx)}})}
-          if(VU(t).skill==='thorns'&&v.skill!=='assassin'){fx.push({to:'u'+t.uid,txt:'가시!',k:'info',fxk:'spike'});hitUnit(st,u,skillVal(t),fx)}
+          if(v.skill==='freeze'){const tg=v.ex==='blizzard'?enemies:[t];tg.forEach(x=>{if(x.hp>0){x.frozen=true;fx.push({to:'u'+x.uid,txt:'빙결',k:'info',fxk:'ice'});if(u.aw&&v.ex==='blizzard'&&x!==t)hitUnit(st,x,DS,fx)}})}
+          if(VU(t).skill==='thorns'&&v.skill!=='assassin'){fx.push({to:'u'+t.uid,txt:'가시!',k:'info',fxk:'spike'});hitUnit(st,u,sAmt(t),fx)}
           if(VU(t).skill==='snare'&&v.cls==='melee'&&u.hp>0&&canAffect(u)&&!u.frozen){u.frozen=true;fx.push({to:'u'+u.uid,txt:'휘감김',k:'info',fxk:'ice'})}
           if(VU(t).skill==='counter'&&t.hp>0&&!t.ctrUsed&&v.cls==='melee'&&v.skill!=='assassin'&&findPos(st,t)){t.ctrUsed=true;fx.push({to:'u'+t.uid,txt:'반격!',k:'info',fxk:'dash'});hitUnit(st,u,effAtk(st,t),fx)}
-          if(v.skill==='radiant'||v.skill==='gale'||v.skill==='scatter'){[l-1,l+1].forEach(x=>{if(x<0||x>=LANES)return;const f=laneUnits(st,foe,x)[0];if(f)hitUnit(st,f,v.skill==='gale'?atk:skillVal(u),fx)})}
-          if(v.ex==='volley'){fx.push({to:'u'+u.uid,k:'skill',sk:'volley'});const side2=[l-1,l+1].filter(x=>x>=0&&x<LANES).flatMap(x=>laneUnits(st,foe,x));if(side2.length)hitUnit(st,side2[Math.floor(Math.random()*side2.length)],u.aw?2:1,fx)}
-        }else{if(v.ex==='crit')fx.push({to:'u'+u.uid,k:'skill',sk:'crit'});hitCmd(st,foe,v.ex==='crit'?Math.ceil(atk*((v.base==='sword'?1.5:2)+(u.aw?.5:0))):atk,fx,u);acted=true;
+          if(v.skill==='radiant'||v.skill==='gale'||v.skill==='scatter'){[l-1,l+1].forEach(x=>{if(x<0||x>=LANES)return;const f=laneUnits(st,foe,x)[0];if(f)hitUnit(st,f,v.skill==='gale'?atk:sAmt(u),fx)})}
+          if(v.ex==='volley'){fx.push({to:'u'+u.uid,k:'skill',sk:'volley'});const side2=[l-1,l+1].filter(x=>x>=0&&x<LANES).flatMap(x=>laneUnits(st,foe,x));if(side2.length)hitUnit(st,side2[Math.floor(Math.random()*side2.length)],(u.aw?2:1)*DS,fx)}
+        }else{if(v.ex==='crit')fx.push({to:'u'+u.uid,k:'skill',sk:'crit'});hitCmd(st,foe,v.ex==='crit'?Math.ceil(atk*((v.base==='sword'?1.3:2)+(u.aw?.5:0))):atk,fx,u);acted=true;
           if(v.skill==='gale'){[l-1,l+1].forEach(x=>{if(x<0||x>=LANES)return;const f=laneUnits(st,foe,x)[0];if(f)hitUnit(st,f,atk,fx)})}}
-        if(v.skill==='sunheal'&&acted&&k===0){const lp=findPos(st,u);if(lp)laneUnits(st,side,lp[1]).forEach(o=>{if(o.hp>0&&o.hp<o.max&&V(o.key).cls!=='building'){const h=Math.min(skillVal(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
-        if(v.skill==='bloom'&&acted&&k===0){eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max){const h=Math.min(skillVal(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
-        if(v.skill==='inferno'&&acted&&k===0){fx.push({to:'u'+u.uid,txt:'업화!',k:'info',fxk:'inferno'});eachUnit(st,foe,e=>{if(e.hp>0)hitUnit(st,e,skillVal(u),fx)})}
+        if(v.skill==='sunheal'&&acted&&k===0){const lp=findPos(st,u);if(lp)laneUnits(st,side,lp[1]).forEach(o=>{if(o.hp>0&&o.hp<o.max&&V(o.key).cls!=='building'){const h=Math.min(sAmt(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
+        if(v.skill==='bloom'&&acted&&k===0){eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max){const h=Math.min(sAmt(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
+        if(v.skill==='inferno'&&acted&&k===0){fx.push({to:'u'+u.uid,txt:'업화!',k:'info',fxk:'inferno'});eachUnit(st,foe,e=>{if(e.hp>0)hitUnit(st,e,sAmt(u),fx)})}
       }
       cleanup(st,fx);
     }
-    if(acted&&u.hp>0&&findPos(st,u)){if(u.bleed>0){u.bleed--;fx.push({to:'u'+u.uid,txt:'출혈',k:'info',fxk:'spike'});hitUnit(st,u,1,fx)}if(u.toxin>0){u.toxin--;u.atk=Math.max(0,u.atk-1);fx.push({to:'u'+u.uid,txt:'독소 -1',k:'info',fxk:'poison'})}if(v.skill==='siege'){u.atkN=(u.atkN|0)+1;if(u.atkN>=2)siegeTransform(st,u,fx)}if(v.skill==='reckless'){u.hp-=1;fx.push({to:'u'+u.uid,dmg:1,k:'dmg'})}if(v.skill==='overheat'&&(u.ohN|0)<3){u.ohN=(u.ohN|0)+1;u.atk+=1;fx.push({to:'u'+u.uid,txt:'과열 +1',k:'info',fxk:'inferno'})}cleanup(st,fx)}
+    if(acted&&u.hp>0&&findPos(st,u)){if(u.bleed>0){u.bleed--;fx.push({to:'u'+u.uid,txt:'출혈',k:'info',fxk:'spike'});hitUnit(st,u,DS,fx)}if(u.toxin>0){u.toxin--;u.atk=Math.max(0,u.atk-DS);fx.push({to:'u'+u.uid,txt:'독소 -'+DS,k:'info',fxk:'poison'})}if(v.skill==='siege'){u.atkN=(u.atkN|0)+1;if(u.atkN>=2)siegeTransform(st,u,fx)}if(v.skill==='reckless'){u.hp-=DS;fx.push({to:'u'+u.uid,dmg:DS,k:'dmg'})}if(v.skill==='overheat'&&(u.ohN|0)<3){u.ohN=(u.ohN|0)+1;u.atk+=DS;fx.push({to:'u'+u.uid,txt:'과열 +'+DS,k:'info',fxk:'inferno'})}cleanup(st,fx)}
     if(acted||fx.length)yield {t:acted?'atk':'skip',from:u.uid,key:u.key,side,fx};
   }
 }
 function startTurnEffects(st,side){
   const fx=[];const foe=foeOf(side);
   eachUnit(st,side,u=>{u.ctrUsed=false;if(u.inv>0)u.inv--;if(u.polyT>0)u.polyT--;if(isImm(u))clearNeg(u)});
-  eachUnit(st,side,u=>{if(V(u.key).cls==='building'){u.poison=0;u.frozen=false;return}if(u.poison>0){u.poison--;u.hp-=1;fx.push({to:'u'+u.uid,dmg:1,k:'dmg'})}});
+  eachUnit(st,side,u=>{if(V(u.key).cls==='building'){u.poison=0;u.frozen=false;return}if(u.poison>0){u.poison--;u.hp-=DS;fx.push({to:'u'+u.uid,dmg:DS,k:'dmg'})}});
   eachUnit(st,side,u=>{if(u.hp<=0)return;const x=VU(u).ex;
-    if(x==='regrow'&&u.hp<u.max){const h=Math.min(u.aw?4:2,u.max-u.hp);u.hp+=h;fx.push({to:'u'+u.uid,k:'skill',sk:'regrow'});fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}
-    if(x==='reforge'&&!u.armor){u.armor=true;fx.push({to:'u'+u.uid,k:'skill',sk:'reforge'});if(u.aw&&u.hp<u.max){u.hp+=1;fx.push({to:'u'+u.uid,dmg:1,k:'heal'})}}
+    if(x==='regrow'&&u.hp<u.max){const h=Math.min((u.aw?4:2)*DS,u.max-u.hp);u.hp+=h;fx.push({to:'u'+u.uid,k:'skill',sk:'regrow'});fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}
+    if(x==='reforge'&&!u.armor){u.armor=true;fx.push({to:'u'+u.uid,k:'skill',sk:'reforge'});if(u.aw&&u.hp<u.max){const rh=Math.min(DS,u.max-u.hp);u.hp+=rh;fx.push({to:'u'+u.uid,dmg:rh,k:'heal'})}}
     const sk=VU(u).skill;
-    if(sk==='tower'){const t=laneUnits(st,foe,(findPos(st,u)||[0,0])[1])[0];if(t){fx.push({to:'u'+u.uid,txt:'',k:'info',fxk:'spike'});hitUnit(st,t,skillVal(u),fx)}}
-    if(sk==='grow'&&(u.grw|0)<5){u.grw=(u.grw|0)+1;u.max+=1;u.hp+=1;fx.push({to:'u'+u.uid,txt:'성장',k:'info',fxk:'rage'})}
-    if(sk==='catapult'&&!st.over){fx.push({to:'u'+u.uid,txt:'투석!',k:'info',fxk:'boom'});hitCmd(st,foe,skillVal(u),fx,null)}
+    if(sk==='tower'){const t=laneUnits(st,foe,(findPos(st,u)||[0,0])[1])[0];if(t){fx.push({to:'u'+u.uid,txt:'',k:'info',fxk:'spike'});hitUnit(st,t,sAmt(u),fx)}}
+    if(sk==='grow'&&(u.grw|0)<5){u.grw=(u.grw|0)+1;u.max+=DS;u.hp+=DS;fx.push({to:'u'+u.uid,txt:'성장',k:'info',fxk:'rage'})}
+    if(sk==='catapult'&&!st.over){fx.push({to:'u'+u.uid,txt:'투석!',k:'info',fxk:'boom'});hitCmd(st,foe,sAmt(u),fx,null)}
     if(sk==='shroom'||sk==='lavapit'||sk==='totem'){const p=findPos(st,u);if(p){const ls=laneUnits(st,foe,p[1]);
       if(sk==='shroom')ls.forEach(t=>{if(t.hp>0&&canAffect(t)){t.poison=Math.max(t.poison,skillVal(u));fx.push({to:'u'+t.uid,txt:'포자 독',k:'info',fxk:'poison'})}});
-      if(sk==='lavapit'&&ls.length){fx.push({to:'u'+u.uid,txt:'용암!',k:'info',fxk:'inferno'});ls.forEach(t=>hitUnit(st,t,skillVal(u),fx))}
-      if(sk==='totem'){const t=ls[0];if(t&&canAffect(t)&&t.atk>1){t.atk-=1;fx.push({to:'u'+t.uid,txt:'저주 -1',k:'info',fxk:'curse'})}}}}
-    if(sk==='fountain'){const p=findPos(st,u);if(p)laneUnits(st,side,p[1]).forEach(o=>{if(o!==u&&o.hp>0&&o.hp<o.max){const h=Math.min(skillVal(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
-    if(sk==='lifetree'){let w=null;eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max&&(!w||o.max-o.hp>w.max-w.hp))w=o});if(w){const h=Math.min(skillVal(u),w.max-w.hp);w.hp+=h;fx.push({to:'u'+w.uid,dmg:h,k:'heal'})}if(st.cmd[side].hp<st.cmd[side].max){st.cmd[side].hp+=1;fx.push({to:'cmd-'+side,dmg:1,k:'heal'})}}
-    if(sk==='root'&&u.hp<u.max){u.hp+=1;fx.push({to:'u'+u.uid,dmg:1,k:'heal'})}
-    if(sk==='cleanse'){const up=findPos(st,u);eachUnit(st,side,o=>{if(o.hp<=0)return;const bad=o.poison||o.frozen||o.bleed||o.toxin||o.miss||o.mark||o.cursed;clearNeg(o);const op=findPos(st,o);if(x==='immaura'&&up&&op&&op[1]===up[1])o.imm2=true;if(bad)fx.push({to:'u'+o.uid,txt:'정화',k:'info',fxk:'shield'});if(o.hp<o.max&&V(o.key).cls!=='building'){const h=Math.min(skillVal(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
+      if(sk==='lavapit'&&ls.length){fx.push({to:'u'+u.uid,txt:'용암!',k:'info',fxk:'inferno'});ls.forEach(t=>hitUnit(st,t,sAmt(u),fx))}
+      if(sk==='totem'){const t=ls[0];if(t&&canAffect(t)&&t.atk>DS){t.atk-=DS;fx.push({to:'u'+t.uid,txt:'저주 -'+DS,k:'info',fxk:'curse'})}}}}
+    if(sk==='fountain'){const p=findPos(st,u);if(p)laneUnits(st,side,p[1]).forEach(o=>{if(o!==u&&o.hp>0&&o.hp<o.max){const h=Math.min(sAmt(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
+    if(sk==='lifetree'){let w=null;eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max&&(!w||o.max-o.hp>w.max-w.hp))w=o});if(w){const h=Math.min(sAmt(u),w.max-w.hp);w.hp+=h;fx.push({to:'u'+w.uid,dmg:h,k:'heal'})}if(st.cmd[side].hp<st.cmd[side].max){const th=Math.min(DS,st.cmd[side].max-st.cmd[side].hp);st.cmd[side].hp+=th;fx.push({to:'cmd-'+side,dmg:th,k:'heal'})}}
+    if(sk==='root'&&u.hp<u.max){const oh=Math.min(DS,u.max-u.hp);u.hp+=oh;fx.push({to:'u'+u.uid,dmg:oh,k:'heal'})}
+    if(sk==='cleanse'){const up=findPos(st,u);eachUnit(st,side,o=>{if(o.hp<=0)return;const bad=o.poison||o.frozen||o.bleed||o.toxin||o.miss||o.mark||o.cursed;clearNeg(o);const op=findPos(st,o);if(x==='immaura'&&up&&op&&op[1]===up[1])o.imm2=true;if(bad)fx.push({to:'u'+o.uid,txt:'정화',k:'info',fxk:'shield'});if(o.hp<o.max&&V(o.key).cls!=='building'){const h=Math.min(sAmt(u),o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}})}
     if(sk==='invul'){let w=null;eachUnit(st,side,o=>{if(o.hp>0&&V(o.key).cls!=='building'&&(!w||o.hp/o.max<w.hp/w.max))w=o});if(w){w.inv=1;fx.push({to:'u'+w.uid,txt:'무적!',k:'info',fxk:'shield'})}}
-    if(x==='lightbless'){const hl=[];eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max)hl.push(o)});if(hl.length){fx.push({to:'u'+u.uid,k:'skill',sk:'lightbless'});hl.forEach(o=>{const h=Math.min(u.aw?2:1,o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})})}}
-    if(sk==='buffhp'){eachUnit(st,side,o=>{if(o.hp>0&&(o.bhp|0)<3&&V(o.key).cls!=='building'){o.bhp=(o.bhp|0)+1;o.max+=skillVal(u);o.hp+=skillVal(u);fx.push({to:'u'+o.uid,txt:'체력 +'+skillVal(u),k:'info',fxk:'rage'})}})}
-    if(x==='cleansex'){fx.push({to:'u'+u.uid,k:'skill',sk:'cleansex'});eachUnit(st,side,o=>{if(o.hp>0){clearNeg(o);if(u.aw&&o.hp<o.max)o.hp+=1}})}
-    if(sk==='inspire'){const al=[];eachUnit(st,side,o=>{if(o.hp>0&&o!==u&&['melee','ranged','magic'].includes(V(o.key).cls))al.push(o)});if(x==='rally'&&al.length)fx.push({to:'u'+u.uid,k:'skill',sk:'rally'});for(let i=0;i<(x==='rally'?(u.aw?3:2):1)&&al.length;i++){const o=al.splice(Math.floor(Math.random()*al.length),1)[0];o.atk+=skillVal(u);fx.push({to:'u'+o.uid,txt:'고무 +'+skillVal(u),k:'info',fxk:'rage'})}}
-    if(x==='moonlight'){const hurt=[];eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max)hurt.push(o)});if(hurt.length){fx.push({to:'u'+u.uid,k:'skill',sk:'moonlight'});hurt.forEach(o=>{const h3=Math.min(u.aw?2:1,o.max-o.hp);o.hp+=h3;fx.push({to:'u'+o.uid,dmg:h3,k:'heal'})})}}
+    if(x==='lightbless'){const hl=[];eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max)hl.push(o)});if(hl.length){fx.push({to:'u'+u.uid,k:'skill',sk:'lightbless'});hl.forEach(o=>{const h=Math.min((u.aw?2:1)*DS,o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})})}}
+    if(sk==='buffhp'){eachUnit(st,side,o=>{if(o.hp>0&&(o.bhp|0)<3&&V(o.key).cls!=='building'){o.bhp=(o.bhp|0)+1;o.max+=sAmt(u);o.hp+=sAmt(u);fx.push({to:'u'+o.uid,txt:'체력 +'+sAmt(u),k:'info',fxk:'rage'})}})}
+    if(x==='cleansex'){fx.push({to:'u'+u.uid,k:'skill',sk:'cleansex'});eachUnit(st,side,o=>{if(o.hp>0){clearNeg(o);if(u.aw&&o.hp<o.max)o.hp=Math.min(o.max,o.hp+DS)}})}
+    if(sk==='inspire'){const al=[];eachUnit(st,side,o=>{if(o.hp>0&&o!==u&&['melee','ranged','magic'].includes(V(o.key).cls))al.push(o)});if(x==='rally'&&al.length)fx.push({to:'u'+u.uid,k:'skill',sk:'rally'});for(let i=0;i<(x==='rally'?(u.aw?3:2):1)&&al.length;i++){const o=al.splice(Math.floor(Math.random()*al.length),1)[0];o.atk+=sAmt(u);fx.push({to:'u'+o.uid,txt:'고무 +'+sAmt(u),k:'info',fxk:'rage'})}}
+    if(x==='moonlight'){const hurt=[];eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max)hurt.push(o)});if(hurt.length){fx.push({to:'u'+u.uid,k:'skill',sk:'moonlight'});hurt.forEach(o=>{const h3=Math.min((u.aw?2:1)*DS,o.max-o.hp);o.hp+=h3;fx.push({to:'u'+o.uid,dmg:h3,k:'heal'})})}}
     if(sk==='spores'){const es=[];eachUnit(st,foe,e=>{if(e.hp>0)es.push(e)});for(let n=0;n<2&&es.length;n++){const tg=es.splice(Math.floor(Math.random()*es.length),1)[0];tg.poison=Math.max(tg.poison,skillVal(u));fx.push({to:'u'+tg.uid,txt:'포자 독',k:'info',fxk:'poison'})}}
     if(sk==='barrier'){let w=null;eachUnit(st,side,o=>{if(o.hp>0&&!o.armor&&(!w||o.hp<w.hp))w=o});if(w){w.armor=true;fx.push({to:'u'+w.uid,txt:'보호 마법',k:'info',fxk:'shield'})}}
-    if(x==='storm'){const es=[];eachUnit(st,foe,e=>{if(e.hp>0)es.push(e)});for(let n=0;n<(u.aw?2:1)&&es.length;n++){const tg=es.splice(Math.floor(Math.random()*es.length),1)[0];fx.push({to:'u'+u.uid,k:'skill',sk:'storm',strike:'u'+tg.uid});hitUnit(st,tg,2,fx)}}
+    if(x==='storm'){const es=[];eachUnit(st,foe,e=>{if(e.hp>0)es.push(e)});for(let n=0;n<(u.aw?2:1)&&es.length;n++){const tg=es.splice(Math.floor(Math.random()*es.length),1)[0];fx.push({to:'u'+u.uid,k:'skill',sk:'storm',strike:'u'+tg.uid});hitUnit(st,tg,2*DS,fx)}}
   });
-  if(side==='p'&&st.wl==='maya'){const al=[];eachUnit(st,'p',o=>{if(o.hp>0&&o.hp<o.max)al.push(o)});if(al.length){const o=al[Math.floor(Math.random()*al.length)];o.hp+=1;fx.push({to:'u'+o.uid,dmg:1,k:'heal'})}}
-  if(facLv(st,side,'bastion')>=1&&st.cmd[side].hp<st.cmd[side].max){st.cmd[side].hp+=1;fx.push({to:'cmd-'+side,dmg:1,k:'heal'})}
-  if(facLv(st,side,'wild')>=1)eachUnit(st,side,u=>{if(u.hp>0&&u.hp<u.max&&V(u.key).fac==='wild'){u.hp+=1;fx.push({to:'u'+u.uid,dmg:1,k:'heal'})}});
+  if(side==='p'&&st.wl==='maya'){const al=[];eachUnit(st,'p',o=>{if(o.hp>0&&o.hp<o.max)al.push(o)});if(al.length){const o=al[Math.floor(Math.random()*al.length)];const mh=Math.min(DS,o.max-o.hp);o.hp+=mh;fx.push({to:'u'+o.uid,dmg:mh,k:'heal'})}}
+  if(facLv(st,side,'bastion')>=1&&st.cmd[side].hp<st.cmd[side].max){const bh=Math.min(DS,st.cmd[side].max-st.cmd[side].hp);st.cmd[side].hp+=bh;fx.push({to:'cmd-'+side,dmg:bh,k:'heal'})}
+  if(facLv(st,side,'wild')>=1)eachUnit(st,side,u=>{if(u.hp>0&&u.hp<u.max&&V(u.key).fac==='wild'){const wh=Math.min(DS,u.max-u.hp);u.hp+=wh;fx.push({to:'u'+u.uid,dmg:wh,k:'heal'})}});
   if(side==='e'&&st.bossSig){st.bTurns=(st.bTurns||0)+1;const sig=st.bossSig;
     if(sig==='boss'&&st.bTurns%3===0){const empt=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++)if(!st.board.e[r][l])empt.push([r,l]);if(empt.length){const [r,l]=empt[Math.floor(Math.random()*empt.length)];const sk=makeUnit({key:'skel_0',lv:3,star:2},'e');st.board.e[r][l]=sk;fx.push({to:'cmd-e',txt:'망자 소환!',k:'info',fxk:'curse'})}}
     if(sig==='boss2'){const ps=[];eachUnit(st,'p',u=>{if(u.hp>0&&!u.frozen)ps.push(u)});if(ps.length){const t=ps[Math.floor(Math.random()*ps.length)];t.frozen=true;fx.push({to:'u'+t.uid,txt:'혹한!',k:'info',fxk:'ice'})}}
     if(sig==='boss3'){const es=[];eachUnit(st,'e',u=>{if(u.hp>0&&!u.armor)es.push(u)});if(es.length){const t=es[Math.floor(Math.random()*es.length)];t.armor=true;fx.push({to:'u'+t.uid,txt:'태엽 장갑',k:'info',fxk:'shield'})}}
-    if(sig==='boss4'){if(st.cmd.e.hp<st.cmd.e.max){st.cmd.e.hp=Math.min(st.cmd.e.max,st.cmd.e.hp+2);fx.push({to:'cmd-e',dmg:2,k:'heal'})}const ps=[];eachUnit(st,'p',u=>{if(u.hp>0)ps.push(u)});if(ps.length){const t=ps[Math.floor(Math.random()*ps.length)];t.poison=Math.max(t.poison,2);fx.push({to:'u'+t.uid,txt:'독',k:'info',fxk:'poison'})}}
+    if(sig==='boss4'){if(st.cmd.e.hp<st.cmd.e.max){st.cmd.e.hp=Math.min(st.cmd.e.max,st.cmd.e.hp+2*DS);fx.push({to:'cmd-e',dmg:2*DS,k:'heal'})}const ps=[];eachUnit(st,'p',u=>{if(u.hp>0)ps.push(u)});if(ps.length){const t=ps[Math.floor(Math.random()*ps.length)];t.poison=Math.max(t.poison,2);fx.push({to:'u'+t.uid,txt:'독',k:'info',fxk:'poison'})}}
   }
-  if(side==='e'&&st.passive==='warlord'){st.eTurns=(st.eTurns||0)+1;if(st.eTurns%3===0)eachUnit(st,'e',u=>{u.bonus+=1;fx.push({to:'u'+u.uid,txt:'공격 +1',k:'info'})})}
+  if(side==='e'&&st.passive==='warlord'){st.eTurns=(st.eTurns||0)+1;if(st.eTurns%3===0)eachUnit(st,'e',u=>{u.bonus+=DS;fx.push({to:'u'+u.uid,txt:'공격 +10',k:'info'})})}
   cleanup(st,fx);
   return fx;
 }
@@ -1687,13 +1704,13 @@ function validCells(st,side,card){
 }
 
 /* ===================== AI ===================== */
-function unitVal(st,u){return effAtk(st,u)*2+u.hp*.8+(u.armor?2:0)+(u.charges?2:0)-u.poison}
+function unitVal(st,u){return effAtk(st,u)*2+u.hp*.8+(u.armor?2*DS:0)+(u.charges?2*DS:0)-u.poison*DS}
 function threatOn(st,side){
   const foe=foeOf(side);let t=0;
   for(let l=0;l<LANES;l++){
     if(laneUnits(st,side,l).length)continue;
     for(let r=0;r<COLS;r++){const u=st.board[foe][r][l];if(u&&canAttack(st,u,r,l))t+=effAtk(st,u)}
-    t+=1.2;
+    t+=1.2*DS;
   }
   return t;
 }
@@ -1706,7 +1723,7 @@ function evaluate(sim,before,side){
   let mine=0,theirs=0;eachUnit(sim,side,u=>mine+=unitVal(sim,u));eachUnit(sim,foe,u=>theirs+=unitVal(sim,u));
   s+=mine-theirs*(winning?1.1:1.6);
   s-=threatOn(sim,side)*(winning?1.6:2.4);
-  eachUnit(sim,side,(u,r)=>{const c=V(u.key).cls;if(c==='melee'&&r===0)s+=.6;if((c==='ranged'||c==='magic')&&r===2)s+=.5;if(c==='support'&&r===2)s+=.6;if(c==='building'&&r===0)s+=.4});
+  eachUnit(sim,side,(u,r)=>{const c=V(u.key).cls;if(c==='melee'&&r===0)s+=.6*DS;if((c==='ranged'||c==='magic')&&r===2)s+=.5*DS;if(c==='support'&&r===2)s+=.6*DS;if(c==='building'&&r===0)s+=.4*DS});
   return s;
 }
 function aiChoose(st,side,hand,noise){
@@ -1756,22 +1773,33 @@ function tickChests(){let ch=false;const now=Date.now();let last=0;
   if(ch)persist();return ch}
 function gemCost(c){if(c.st==='locked')return Math.max(1,Math.ceil(chestSec(c.t)/60/6));return Math.max(1,Math.ceil((c.readyAt-Date.now())/60000/6))}
 function unlockedBases(){const s=new Set(START_OWNED);for(let i=0;i<=save.bestLeague;i++)LEAGUES[i].un.forEach(b=>s.add(b));return [...s]}
-function tierWeights(){const li=save.bestLeague;return [60,28+li*2,10+li*1.5,2+li*.6]}
+// 상자 확률 (카드 종류 1개마다, 등급을 먼저 정한 뒤 그 등급 안에서 고르게 뽑음)
+const CHEST_ODDS={wood:[70,25,4.5,.5],silver:[55,33,10,2],gold:[40,42,15,3],boss:[30,45,22,3]};
+const PITY_N=40;
+function tierWeights(t){return CHEST_ODDS[t]||CHEST_ODDS.wood}
+function pityLeft(){return Math.max(1,PITY_N-(save.pity|0))}
+function oddsHTML(){const RN=['일반','희귀','영웅','전설'];return `<div class="oddst"><div class="oh"><span></span>${RN.map((n,i)=>`<b style="color:${RAR[i].c}">${n}</b>`).join('')}</div>${['wood','silver','gold','boss'].map(t=>`<div><span>${CHESTS[t].n}</span>${CHEST_ODDS[t].map(p=>`<i>${p}%</i>`).join('')}</div>`).join('')}</div>
+<div class="rw" style="font-size:12.5px;line-height:1.6">상자에 든 카드 종류마다 위 확률로 등급을 정하고, 그 등급의 열린 영웅 중에서 고르게 뽑아요. 황금 상자는 희귀 이상, 보스 상자는 영웅 이상 1종이 확정이에요.<br><b style="color:#ffb84d">전설 천장</b> · 상자 ${PITY_N}개 안에 전설이 안 나오면 ${PITY_N}번째 상자에 전설 1종 확정 (지금 ${pityLeft()}개 남음)</div>`}
+function showOdds(){const m=modal(`<div class="ribbon">상자 확률</div>${oddsHTML()}<div class="btns"><button class="btn" id="odOk">확인</button></div>`);m.querySelector('#odOk').onclick=()=>m.remove()}
 function rollChest(t){
   const C=CHESTS[t];const pool=[];unlockedBases().forEach(b=>versionsOf(b).forEach(id=>pool.push(id)));
   let n=Math.round(C.cards*(ev('cards')?1.5:1));
-  const TW=tierWeights();
-  const pick=(minT)=>{const cand=pool.filter(id=>tierOf(id)>=(minT||0));const ws=cand.map(id=>TW[tierOf(id)]);const tot=ws.reduce((a,b)=>a+b,0);let x=Math.random()*tot;for(let i=0;i<cand.length;i++){x-=ws[i];if(x<=0)return cand[i]}return cand[0]};
+  const TW=tierWeights(t);
+  const byT=[0,1,2,3].map(k=>pool.filter(id=>tierOf(id)===k));
+  const pick=(minT,forceT)=>{let tr;if(forceT!=null)tr=forceT;else{const ok=[0,1,2,3].filter(k=>k>=(minT||0)&&byT[k].length);const tot=ok.reduce((a,k)=>a+TW[k],0);let x=Math.random()*tot;tr=ok[ok.length-1];for(const k of ok){x-=TW[k];if(x<=0){tr=k;break}}}
+    while(tr>0&&!byT[tr].length)tr--;const L=byT[tr];return L[Math.floor(Math.random()*L.length)]};
+  save.pity=(save.pity|0)+1;const forceLeg=save.pity>=PITY_N&&byT[3].length;
   const got={};const add=(id,c)=>got[id]=(got[id]||0)+c;
   if(C.minRar){const id=pick(C.minRar);add(id,Math.max(1,Math.round(n*.15/(tierOf(id)+1))+1));}
-  const kinds=rr(3,5);const parts=[];for(let i=0;i<kinds;i++)parts.push(pick());
+  const kinds=rr(3,5);const parts=[];for(let i=0;i<kinds;i++)parts.push(i===0&&forceLeg?pick(0,3):pick());
+  let pityHit=false;if(Object.keys(got).concat(parts).some(id=>tierOf(id)===3)){pityHit=!!forceLeg;save.pity=0}
   const PW=[1,.55,.3,.15];const pw=parts.map(id=>PW[tierOf(id)]);const ptot=pw.reduce((a,b)=>a+b,0);
   parts.forEach((id,i)=>add(id,Math.max(1,Math.round(n*pw[i]/ptot))));
   const gold=rr(C.gold[0],C.gold[1]),gems=rr(C.gems[0],C.gems[1]);
   const found=[];
   Object.entries(got).forEach(([id,c])=>{if(!save.owned[id]){save.owned[id]={lv:1,cards:0};found.push(id)}save.owned[id].cards+=c});
   save.gold+=gold;save.gems+=gems;persist();qp('chest');
-  return {got,gold,gems,found};
+  return {got,gold,gems,found,pityHit};
 }
 function lvNeed(id){const o=save.owned[id];return Math.ceil(LV_CARDS[o.lv]*TIER_CARD_M[tierOf(id)])}
 function lvGold(id){return Math.round(LV_GOLD[save.owned[id].lv]*TIER_GOLD_M[tierOf(id)])}
@@ -1918,7 +1946,7 @@ function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.da
 const RULE_TABS=[
  {n:'전투',p:[['목표','적 지휘관 체력을 0으로 만들면 이겨요. '+MAX_ROUND+'턴이 지나면 체력 비율이 높은 쪽이 이겨요.'],['보드','양쪽 4줄 × 3열. 가운데에 가까운 열이 앞열이에요. 근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열, 지원과 건물은 어디든 놓을 수 있어요.'],['내 턴','덱 8장 중 손에 4장을 들어요. 카드 1장을 놓으면 내 유닛 전원이 공격하고 1장을 새로 뽑아요.'],['라인 막기','유닛은 자기 줄의 적만 때려요. 그 줄에 적이 없으면 적 지휘관을 바로 때려요. 내 줄이 비면 나도 맞아요.'],['합체 ◆','같은 영웅 카드가 다시 손에 오면 그 영웅 위에 겹쳐 놓아 합체할 수 있어요. 영웅마다 오르는 능력치와 합체 효과가 달라요 (최대 ◆3). 덱에는 같은 영웅을 1장만 넣을 수 있어요.'],['진영','성채(보호), 들숲(재생), 잿불(공격). 같은 진영이 2기, 4기 모이면 시너지가 켜져요.'],['건물','공격하지 않지만 줄을 막고 매 턴 효과를 내요. 독과 빙결에 걸리지 않아요.']]},
  {n:'지휘관',p:[['지휘관 스킬','지휘관마다 고유 스킬 3개를 1턴, 3턴, 6턴부터 순서대로 한 번씩 써요. 2번은 지휘관 Lv3, 3번은 Lv6에 열려요.'],['지휘관 일격','스킬을 다 쓰면 매 턴 1개씩 쌓여요. 늦게 쓸수록 1개당 피해가 커서 모아 뒀다 한 번에 써도 돼요.'],['상대 지휘관','상대도 자기 지휘관 스킬과 일격을 써요.'],['원정','전투에 안 쓰는 지휘관을 원정 보내 카드, 골드, 보석을 얻어요. 지휘관마다 특기가 달라요.']]},
- {n:'성장',p:[['레벨','같은 카드를 모으고 골드를 내면 레벨업 (최대 Lv8).'],['진화','같은 버전 카드를 모아 상위 등급 버전으로 바꿔요. 청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 해요.'],['전설 각성','전설 버전 영웅이 처음 초월하면 전설 스킬이 한 단계 강해지고 전투에서 금빛으로 빛나요.'],['초월','황금 리그부터, Lv8 영웅을 초월시키면 Lv1로 돌아가는 대신 별이 하나 채워지고 공격 +1, 체력 +2를 영구로 받아요.'],['인연 맺기','은빛 리그부터. 다른 영웅 2명을 정해진 레벨까지 키우고 별가루를 쓰면, 그 영웅의 모든 버전이 영구로 강해져요 (최대 4번).']]},
+ {n:'성장',p:[['레벨','같은 카드를 모으고 골드를 내면 레벨업 (최대 Lv8). 레벨마다 공격·체력이 기본 수치의 12%씩, 스킬 피해·회복도 조금씩 올라요.'],['진화','같은 버전 카드를 모아 상위 등급 버전으로 바꿔요. 청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 해요.'],['전설 각성','전설 버전 영웅이 처음 초월하면 전설 스킬이 한 단계 강해지고 전투에서 금빛으로 빛나요.'],['초월','황금 리그부터, Lv8 영웅을 초월시키면 Lv1로 돌아가는 대신 별이 하나 채워지고 공격·체력 +30%(기본 수치 기준)와 스킬 수치 +5를 영구로 받아요.'],['인연 맺기','은빛 리그부터. 다른 영웅 2명을 정해진 레벨까지 키우고 별가루를 쓰면, 그 영웅의 모든 버전이 영구로 강해져요 (최대 4번).']]},
  {n:'대전·운영',p:[['아레나','비슷한 트로피의 실제 유저 덱과 붙어요. 상대 덱은 AI가 조종해요 (마이티파티와 같은 방식). 상대가 없으면 AI 도전자와 붙어요.'],['방어 기록','다른 유저가 내 덱과 싸우면 기록이 남고, 방어에 성공하면 골드를 받아요.'],['계정','설정에서 구글 계정을 연동하면 자동으로 저장되고 다른 기기에서도 이어서 해요.'],['시즌','14일마다 시즌이 바뀌어요. 시즌 최고 리그에 따라 보상을 받고, 700을 넘는 트로피는 절반이 줄어요. 전체 랭킹도 볼 수 있어요.'],['파티','지휘관마다 덱이 따로 저장돼요. 파티 화면 위에서 바꿔요.'],['친선전·모의전','친선전는 져도 트로피를 잃지 않는 대전 (하루 보상 5번). 모의전은 내 파티끼리 붙여 보는 모드예요.'],['주간 균열','매주 바뀌어요. 하늘 계단(층 오르기), 거신 토벌(피해 누적), 연승 결투장(체력이 이어지는 연전).'],['매일','일일 퀘스트, 일일 특가, 요일 이벤트, 오늘의 보스, 출석, 보급 창고.']]}
 ];
 RULE_TABS.splice(1,0,{n:'스킬',p:[['비행','근접 공격(비행 아님)에 맞지 않아요.'],['철갑·무적','철갑은 피해 1번 무시, 무적은 한 턴 동안 모든 피해 무시.'],['면역','독, 빙결, 출혈 같은 나쁜 효과에 걸리지 않아요.'],['회피·정확','회피는 원거리·마법 공격을 피해요. 정확이 있으면 회피와 현혹을 무시해요.'],['반격·가시','반격은 근접 공격을 되받아치고, 가시는 때린 적에게 피해를 줘요.'],['출혈·독소','출혈은 공격할 때마다 피해, 독소는 공격할 때마다 공격력이 줄어요.'],['침묵','스킬과 강화가 영원히 사라져요.'],['현혹','다음 공격이 빗나가요.'],['변신·변이','공성 기사는 감시탑으로 변신하고, 변이는 적을 개구리로 만들어요.'],['범위·관통','범위는 대상 주변, 관통은 같은 줄 적 전부를 때려요.'],['즉사','체력이 낮은 적을 바로 쓰러뜨려요.'],['저주 연결','연결된 적끼리 피해를 나눠 받아요.'],['파쇄','철갑과 무적을 깨뜨리고 피해를 더 줘요.'],['성장·과열','성장은 체력이, 과열은 공격력이 턴마다 올라요.'],['휘감기','덩굴 벽을 때린 근접 적은 다음 공격을 못 해요.'],['투석','투석기는 적 지휘관을 직접 때려요.']]});
@@ -1941,7 +1969,7 @@ function playerRbs(){const o={};Object.keys(save.owned).forEach(id=>o[id]=save.o
 function startStage(i){
   ensureDeck();const S=STAGES[i];const elv={};S.deck.forEach(k=>elv[k]=S.lv);
   const eDeck=S.deck.map(b=>toVid(b,S.t||0));const elv2={};eDeck.forEach(id=>elv2[id]=S.lv);
-  startBattle({mode:'stage',idx:i,pHp:wlHp(),eName:S.n,eLook:S.cmd,eHp:S.hp,eDeck,eLvs:elv2,noise:Math.max(1,16-i*1.6)});
+  startBattle({mode:'stage',idx:i,pHp:wlHp(),eName:S.n,eLook:S.cmd,eHp:S.hp*DS,eDeck,eLvs:elv2,noise:Math.max(1,16-i*1.6)});
 }
 function startDaily(){
   ensureDeck();ensureDaily();
@@ -1956,7 +1984,7 @@ function startDaily(){
   const m=modal(`<h3>오늘의 보스</h3><div style="display:flex;gap:16px;align-items:center;text-align:left"><div style="width:96px;height:96px;flex:none;border-radius:50%;overflow:hidden;border:3px solid #ff3a6a">${cmdPortrait(bossLook)}</div>
   <div class="rw"><b>${nm}</b> · 체력 ${30+lv*2} · 적 Lv${lv}<br>주력 진영 <b style="color:${FAC[bf].c}">${FAC[bf].n}</b><br>특성 <b style="color:#ff8aa8">${P.n}</b>: ${P.d}<br>고유 패턴 <b style="color:#ffb86b">${BOSS_SIG[bossLook].n}</b>: ${BOSS_SIG[bossLook].d}<br>${left>0?`승리 보상: <b style="color:#ffd667">보스 상자</b> (남은 보상 ${left}회)`:'오늘 보상은 다 받았어요 (승리 시 30골드)'}</div></div>
   <div class="btns"><button class="btn" id="dGo">도전</button><button class="btn sub" data-close>닫기</button></div>`);
-  m.querySelector('#dGo').onclick=()=>{sfx('tick');m.remove();startBattle({mode:'daily',pHp:wlHp(),bossSig:bossLook,eName:nm,eLook:bossLook,eHp:30+lv*2,eDeck:vdeck,eLvs:elv,noise:0,passive:P.id,passiveName:P.n})};
+  m.querySelector('#dGo').onclick=()=>{sfx('tick');m.remove();startBattle({mode:'daily',pHp:wlHp(),bossSig:bossLook,eName:nm,eLook:bossLook,eHp:(30+lv*2)*DS,eDeck:vdeck,eLvs:elv,noise:0,passive:P.id,passiveName:P.n})};
 }
 /* ===================== 온라인 대전 (마이티파티 방식: 실제 유저 덱 + AI 조종) ===================== */
 const FB={k:'AIzaSyB_hRwh6kvM4GCoVCgSS9wWc03FmnPYLNg',p:'line-party-9a4ca'};
@@ -2159,8 +2187,8 @@ async function startBrawl(){ensureDeck();const li=leagueIdx(save.trophies);const
   const opp=await findOpponentT(3000);let c;const en=mm.querySelector('.vside.en');en.classList.remove('searching');
   if(opp){const OW=WARLORDS[opp.wl];const elv={},erb={},esb={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv[k]=raw%10||1;erb[k]=Math.floor(raw/10)%10;esb[k]=Math.floor(raw/100)});
     en.innerHTML=`<img src="assets/k_${OW.art}.webp?v=${ASSET_V}"><b>${esc(opp.name)}</b><small><span class="ubadge">유저 덱</span> ${OW.n}</small>`;
-    c={mode:'brawl',online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:OW.hp+((opp.wlLv|0||1)-1)+leagueIdx(opp.trophies||0)*2,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2}}
-  else{const d=aiDeck(Math.min(3,Math.floor(li/2)));en.innerHTML=`<img src="assets/k_c_rival2.webp?v=${ASSET_V}"><b>친선전 상대</b><small>AI</small>`;c={mode:'brawl',eName:'친선전 상대',eLook:'art:c_rival2',eHp:20+li*2,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())),noise:3,pHp:wlHp()+li*2}}
+    c={mode:'brawl',online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:(OW.hp+((opp.wlLv|0||1)-1)+leagueIdx(opp.trophies||0)*2)*DS,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2*DS}}
+  else{const d=aiDeck(Math.min(3,Math.floor(li/2)));en.innerHTML=`<img src="assets/k_c_rival2.webp?v=${ASSET_V}"><b>친선전 상대</b><small>AI</small>`;c={mode:'brawl',eName:'친선전 상대',eLook:'art:c_rival2',eHp:(20+li*2)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())),noise:3,pHp:wlHp()+li*2*DS}}
   mm.querySelector('.vstitle').textContent='친선전 상대 발견!';sfx('whoosh');setTimeout(()=>{mm.remove();startBattle(c)},1500)}
 // ---- 모의전
 function showTraining(){const ids=Object.keys(WARLORDS).filter(k=>wlUnlocked(k)&&squadOf(k).length===8);
@@ -2170,8 +2198,8 @@ function showTraining(){const ids=Object.keys(WARLORDS).filter(k=>wlUnlocked(k)&
 // ---- 주간 균열 (주마다 바뀜)
 const DG_MODES={tower:{n:'하늘 계단',d:'층을 하나씩 올라가요. 높이 오를수록 적이 강해지고 보상이 커져요.'},raid:{n:'거신 토벌',d:'체력이 아주 많은 거신에게 하루 3번 도전해 피해를 누적해요. 쓰러뜨리면 큰 보상!'},pit:{n:'연승 결투장',d:'지휘관 체력이 이어지는 연전이에요. 몇 연승까지 갈 수 있을까요? 하루 3판.'}};
 function weekLeft(){return SEASON_EPOCH+(weekNo()+1)*7*DAY-Date.now()}
-function ensureDungeon(){const wk=weekNo();if(!save.dg||save.dg.wk!==wk){save.dg={wk,mode:['tower','raid','pit'][((wk%3)+3)%3],floor:1,raidLv:1,raidHp:0,pitBest:0,run:null};persist()}const td=new Date().toDateString();if(save.dg.day!==td){save.dg.day=td;save.dg.tries=3;persist()}return save.dg}
-function raidMax(lv){return 90+lv*40}
+function ensureDungeon(){const wk=weekNo();if(!save.dg||save.dg.wk!==wk){save.dg={ds:1,wk,mode:['tower','raid','pit'][((wk%3)+3)%3],floor:1,raidLv:1,raidHp:0,pitBest:0,run:null};persist()}if(!save.dg.ds){if(save.dg.raidHp)save.dg.raidHp*=DS;if(save.dg.run&&save.dg.run.hp)save.dg.run.hp*=DS;save.dg.ds=1;persist()}const td=new Date().toDateString();if(save.dg.day!==td){save.dg.day=td;save.dg.tries=3;persist()}return save.dg}
+function raidMax(lv){return (90+lv*40)*DS}
 function showDungeon(){const D=ensureDungeon(),M=DG_MODES[D.mode];if(D.mode==='raid'&&!D.raidHp)D.raidHp=raidMax(D.raidLv);
   let body='';
   if(D.mode==='tower')body=`<div class="dgbig">${D.floor}층</div><div class="rw">다음 보상: 골드 ${30+D.floor*6} · 별가루 ${3+Math.floor(D.floor/3)}${D.floor%5===0?' · 보석 5':''}</div><div class="btns"><button class="btn" id="dgGo">${D.floor}층 도전</button></div>`;
@@ -2182,16 +2210,16 @@ function showDungeon(){const D=ensureDungeon(),M=DG_MODES[D.mode];if(D.mode==='r
   <div class="dgcard"><h3>${M.n}</h3><p>${M.d}</p>${body}</div></div></div></div>`;
   bind('#bk',showChallenge);bind('#dgGo',startDungeon);bind('#dgStop',()=>{const w=D.run.w;D.pitBest=Math.max(D.pitBest,w);D.run=null;persist();toast(w+'연승으로 마쳤어요');showDungeon()})}
 function startDungeon(){ensureDeck();const D=ensureDungeon();const li=leagueIdx(save.trophies);
-  if(D.mode==='tower'){const f=D.floor;const d=aiDeck(Math.min(3,Math.floor(f/7)),mulberry(D.wk*100+f));startBattle({mode:'tower',eName:'하늘 계단 '+f+'층',eLook:['goblin','beast','knightc','flame','ice','storm','grave','dragonl'][f%8],eHp:Math.round(14+f*1.6),eDeck:d,eLvs:lvMap(d,1+Math.floor(f/3)),noise:Math.max(1,10-f*.4),pHp:wlHp()})}
-  if(D.mode==='raid'){if(D.tries<=0)return;D.tries--;persist();const lv=D.raidLv;const d=aiDeck(Math.min(3,1+Math.floor(lv/2)),mulberry(D.wk*7+lv),'ember');startBattle({mode:'raid',eName:'거신 Lv'+lv,eLook:'boss',bossSig:'boss',eHp:D.raidHp,eHpMax:raidMax(lv),eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+lv),noise:2,pHp:wlHp()+li*2,raidStart:D.raidHp})}
-  if(D.mode==='pit'){if(!D.run){if(D.tries<=0)return;D.tries--;D.run={w:0,hp:wlHp()+li*2};persist()}const w=D.run.w;const d=aiDeck(Math.min(3,Math.floor((w+li)/3)));startBattle({mode:'pit',eName:'결투장 '+(w+1)+'번째 상대',eLook:['beast','goblin','grave','storm','flame'][w%5],eHp:16+w*3,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+Math.floor(w/2)),noise:Math.max(1,8-w),pHp:D.run.hp,pHpMax:wlHp()+li*2})}}
+  if(D.mode==='tower'){const f=D.floor;const d=aiDeck(Math.min(3,Math.floor(f/7)),mulberry(D.wk*100+f));startBattle({mode:'tower',eName:'하늘 계단 '+f+'층',eLook:['goblin','beast','knightc','flame','ice','storm','grave','dragonl'][f%8],eHp:Math.round((14+f*1.6)*DS),eDeck:d,eLvs:lvMap(d,1+Math.floor(f/3)),noise:Math.max(1,10-f*.4),pHp:wlHp()})}
+  if(D.mode==='raid'){if(D.tries<=0)return;D.tries--;persist();const lv=D.raidLv;const d=aiDeck(Math.min(3,1+Math.floor(lv/2)),mulberry(D.wk*7+lv),'ember');startBattle({mode:'raid',eName:'거신 Lv'+lv,eLook:'boss',bossSig:'boss',eHp:D.raidHp,eHpMax:raidMax(lv),eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+lv),noise:2,pHp:wlHp()+li*2*DS,raidStart:D.raidHp})}
+  if(D.mode==='pit'){if(!D.run){if(D.tries<=0)return;D.tries--;D.run={w:0,hp:wlHp()+li*2*DS};persist()}const w=D.run.w;const d=aiDeck(Math.min(3,Math.floor((w+li)/3)));startBattle({mode:'pit',eName:'결투장 '+(w+1)+'번째 상대',eLook:['beast','goblin','grave','storm','flame'][w%5],eHp:(16+w*3)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+Math.floor(w/2)),noise:Math.max(1,8-w),pHp:D.run.hp,pHpMax:wlHp()+li*2*DS})}}
 const SPECIAL_MODES=['brawl','train','tower','raid','pit'];
 function specialEnd(win){const D=save.dg;let gold=0,gems=0,dust=0,txt='';
   if(cfg.mode==='train')txt='<div style="font-size:13px;opacity:.75">모의전이라 보상과 트로피 변화가 없어요</div>';
   if(cfg.mode==='brawl'){const b=brawlState();if(win&&b.w<BRAWL_MAX){b.w++;gold=30;dust=5;const id=giveCardsRandom(3);txt=`<div style="font-size:13px">친선전 보상 ${b.w}/${BRAWL_MAX}${id?' · '+V(id).name+' 카드 3장':''}</div>`}else if(win)txt='<div style="font-size:13px;opacity:.75">오늘 친선전 보상을 다 받았어요</div>';else txt='<div style="font-size:13px;opacity:.75">친선전는 져도 잃는 게 없어요</div>'}
   if(cfg.mode==='tower'){if(win){const f=D.floor;gold=30+f*6;dust=3+Math.floor(f/3);if(f%5===0)gems=5;D.floor++;txt=`<div style="font-size:14px;color:#ffd667">${f}층 돌파! 다음은 ${D.floor}층</div>`}}
-  if(cfg.mode==='raid'){const dmg=Math.max(0,cfg.raidStart-st.cmd.e.hp);D.raidHp=Math.max(0,D.raidHp-dmg);gold=dmg*4;dust=Math.floor(dmg/5);txt=`<div style="font-size:14px">거신에게 <b style="color:#ff8a8a">${dmg}</b> 피해 · 남은 체력 ${D.raidHp}</div>`;if(D.raidHp<=0){gems=20;dust+=30;txt+=`<div style="font-size:15px;font-weight:900;color:#ffd667">거신 처치! 보석 20 · 별가루 +30 · 다음 거신 Lv${D.raidLv+1}</div>`;D.raidLv++;D.raidHp=raidMax(D.raidLv)}}
-  if(cfg.mode==='pit'){if(win&&D.run){D.run.w++;D.run.hp=Math.min(cfg.pHpMax||st.cmd.p.max,st.cmd.p.hp+3);gold=25;dust=2;D.pitBest=Math.max(D.pitBest,D.run.w);txt=`<div style="font-size:14px;color:#ffd667">${D.run.w}연승! 지휘관 체력 ${D.run.hp} (+3 회복)</div>`}else if(D.run){txt=`<div style="font-size:14px">${D.run.w}연승으로 끝났어요 · 이번 주 최고 ${D.pitBest}연승</div>`;D.run=null}}
+  if(cfg.mode==='raid'){const dmg=Math.max(0,cfg.raidStart-st.cmd.e.hp);D.raidHp=Math.max(0,D.raidHp-dmg);gold=Math.round(dmg/DS*4);dust=Math.floor(dmg/DS/5);txt=`<div style="font-size:14px">거신에게 <b style="color:#ff8a8a">${dmg}</b> 피해 · 남은 체력 ${D.raidHp}</div>`;if(D.raidHp<=0){gems=20;dust+=30;txt+=`<div style="font-size:15px;font-weight:900;color:#ffd667">거신 처치! 보석 20 · 별가루 +30 · 다음 거신 Lv${D.raidLv+1}</div>`;D.raidLv++;D.raidHp=raidMax(D.raidLv)}}
+  if(cfg.mode==='pit'){if(win&&D.run){D.run.w++;D.run.hp=Math.min(cfg.pHpMax||st.cmd.p.max,st.cmd.p.hp+3*DS);gold=25;dust=2;D.pitBest=Math.max(D.pitBest,D.run.w);txt=`<div style="font-size:14px;color:#ffd667">${D.run.w}연승! 지휘관 체력 ${D.run.hp} (+30 회복)</div>`}else if(D.run){txt=`<div style="font-size:14px">${D.run.w}연승으로 끝났어요 · 이번 주 최고 ${D.pitBest}연승</div>`;D.run=null}}
   persist();return {gold,gems,dust,txt}}
 function specialAgain(){if(cfg.mode==='brawl')return startBrawl();if(cfg.mode==='train')return showTraining();return showDungeon()}
 // ---- 인연 맺기
@@ -2204,7 +2232,7 @@ function sbHTML(id){const b=baseOf(id);if(HEROES[b].token)return '';const n=sbOf
   const gems=Array.from({length:SB_MAX},(_,i)=>`<i class="${i<n?'on':''}">◆</i>`).join('');
   if(!R)return `<div class="sbbox"><b>인연 맺기</b> <span class="sbg">${gems}</span> <small>최대 인연 완료</small></div>`;
   const ok=R.parts.every(p=>bestLv(p)>=R.lv),lockL=save.bestLeague<SB_LEAGUE;
-  return `<div class="sbbox"><b>인연 맺기</b> <span class="sbg">${gems}</span> <small>${n}/${SB_MAX} · 인연을 맺을 때마다 체력 +2${R.k%2===0?', 공격 +1':''} (모든 버전)</small>
+  return `<div class="sbbox"><b>인연 맺기</b> <span class="sbg">${gems}</span> <small>${n}/${SB_MAX} · 인연을 맺을 때마다 공격 +6%, 체력 +10% (모든 버전)</small>
    <div class="sbreq">${R.parts.map(p=>{const have=bestLv(p);return `<div class="${have>=R.lv?'ok':''}"><div class="sbp">${portrait(vid(p,HEROES[p].rar))}</div><small>${HEROES[p].name} Lv${R.lv}${have>=R.lv?' ✓':' ('+(have||'-')+')'}</small></div>`}).join('')}
    <button class="btn sm ${ok&&!lockL?'grn':'sub'}" id="dSb" ${ok&&!lockL&&(save.dust|0)>=R.dust&&save.gold>=R.gold?'':'disabled'}>인연 맺기 · <span class="dusti">✦</span>${R.dust} · <span class="coin" style="width:10px;height:10px"></span>${R.gold}</button></div>
    ${lockL?`<small style="opacity:.6">${LEAGUES[SB_LEAGUE].n} 리그부터 열려요</small>`:''}</div>`}
@@ -2225,33 +2253,33 @@ function mergeProf(id){const v=V(id),H=HEROES[v.base]||{};if(H.mp)return H.mp;
   if(v.cls==='building')return {a:1,h:1.7};if(v.cls==='support')return {a:1,h:1.5};
   if(v.cls==='melee')return TANK_SK.includes(v.skill)?{a:1.2,h:1.75}:DPS_SK.includes(v.skill)?{a:1.65,h:1.3}:{a:1.45,h:1.45};
   return {a:1.55,h:1.25}}
-const MERGE_FX={sword:['recharge','다시 돌진'],priest:['healall','아군 전체 2 회복'],miel:['healall','아군 전체 2 회복'],necro:['charges','망령 소환 +2회'],toto:['spores','즉시 포자 살포'],knight:['armorlane','같은 줄 아군 철갑'],bron:['armorlane','같은 줄 아군 철갑'],valen:['armorlane','같은 줄 아군 철갑'],bolt:['chain','연쇄 번개 한 번 더'],frost:['freezefront','같은 줄 맨 앞 적 빙결'],poison:['poisonlane','같은 줄 적 전체 독 2'],berserk:['rage2','공격 +2'],bear:['fullheal','체력 전부 회복'],oakwood:['fullheal','체력 전부 회복'],pin:['evade','회피 +2'],drum:['inspire','같은 줄 아군 공격 +1'],cecil:['inspire','같은 줄 아군 공격 +1'],raven:['hexfront','맨 앞 적 공격 -2'],graul:['bleedlane','같은 줄 적 전체 출혈'],zak:['execfront','맨 앞 적 체력 절반 이하면 즉사'],obel:['silencefront','맨 앞 적 침묵'],nora:['splashlane','같은 줄 적 전체 1 피해'],leon:['armorself','자신에게 철갑'],sylphia:['healall','아군 전체 2 회복'],theo:['armorself','자신에게 철갑'],emma:['healall','아군 전체 2 회복'],toma:['fullheal','체력 전부 회복'],ria:['poisonlane','같은 줄 적 전체 독 2'],miru:['freezefront','같은 줄 맨 앞 적 빙결'],gor:['inspire','같은 줄 아군 공격 +1'],urk:['rage2','공격 +2']};
+const MERGE_FX={sword:['recharge','다시 돌진'],priest:['healall','아군 전체 20 회복'],miel:['healall','아군 전체 20 회복'],necro:['charges','망령 소환 +2회'],toto:['spores','즉시 포자 살포'],knight:['armorlane','같은 줄 아군 철갑'],bron:['armorlane','같은 줄 아군 철갑'],valen:['armorlane','같은 줄 아군 철갑'],bolt:['chain','연쇄 번개 한 번 더'],frost:['freezefront','같은 줄 맨 앞 적 빙결'],poison:['poisonlane','같은 줄 적 전체 독 2'],berserk:['rage2','공격 +20'],bear:['fullheal','체력 전부 회복'],oakwood:['fullheal','체력 전부 회복'],pin:['evade','회피 +2'],drum:['inspire','같은 줄 아군 공격 +10'],cecil:['inspire','같은 줄 아군 공격 +10'],raven:['hexfront','맨 앞 적 공격 -20'],graul:['bleedlane','같은 줄 적 전체 출혈'],zak:['execfront','맨 앞 적 체력 절반 이하면 즉사'],obel:['silencefront','맨 앞 적 침묵'],nora:['splashlane','같은 줄 적 전체 10 피해'],leon:['armorself','자신에게 철갑'],sylphia:['healall','아군 전체 20 회복'],theo:['armorself','자신에게 철갑'],emma:['healall','아군 전체 20 회복'],toma:['fullheal','체력 전부 회복'],ria:['poisonlane','같은 줄 적 전체 독 2'],miru:['freezefront','같은 줄 맨 앞 적 빙결'],gor:['inspire','같은 줄 아군 공격 +10'],urk:['rage2','공격 +20']};
 function mergeTxt(id){const P=mergeProf(id),fx=MERGE_FX[baseOf(id)];return `합체 ◆2 공격 ×${P.a} · 체력 ×${P.h}${fx?' · '+fx[1]:''}`}
 function mergeEffect(st,side,u,l,fx){const k=(MERGE_FX[baseOf(u.key)]||[])[0];if(!k)return;const foe=foeOf(side);const front=laneUnits(st,foe,l)[0];
   fx.push({to:'u'+u.uid,txt:'합체 효과!',k:'info',fxk:'rage'});
-  if(k==='recharge'){if(front)hitUnit(st,front,skillVal(u),fx);else hitCmd(st,foe,skillVal(u),fx,u)}
-  if(k==='healall')eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max){const h=Math.min(2,o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}});
+  if(k==='recharge'){if(front)hitUnit(st,front,skillVal(u),fx);else hitCmd(st,foe,sAmt(u),fx,u)}
+  if(k==='healall')eachUnit(st,side,o=>{if(o.hp>0&&o.hp<o.max){const h=Math.min(2*DS,o.max-o.hp);o.hp+=h;fx.push({to:'u'+o.uid,dmg:h,k:'heal'})}});
   if(k==='charges')u.charges+=2;
   if(k==='spores'){const es=[];eachUnit(st,foe,e=>{if(e.hp>0)es.push(e)});es.slice(0,2).forEach(e=>{e.poison=Math.max(e.poison,skillVal(u))})}
   if(k==='armorlane')laneUnits(st,side,l).forEach(o=>o.armor=true);
   if(k==='armorself')u.armor=true;
-  if(k==='chain')eachUnit(st,foe,t=>hitUnit(st,t,1,fx));
+  if(k==='chain')eachUnit(st,foe,t=>hitUnit(st,t,DS,fx));
   if(k==='freezefront'&&front&&canAffect(front))front.frozen=true;
   if(k==='poisonlane')laneUnits(st,foe,l).forEach(t=>{if(canAffect(t))t.poison=Math.max(t.poison,2)});
-  if(k==='rage2')u.atk+=2;
+  if(k==='rage2')u.atk+=2*DS;
   if(k==='fullheal')u.hp=u.max;
   if(k==='evade')u.eva=(u.eva|0)+2;
-  if(k==='inspire')laneUnits(st,side,l).forEach(o=>{if(o!==u&&o.atk>0)o.atk+=1});
-  if(k==='hexfront'&&front&&canAffect(front))front.atk=Math.max(0,front.atk-2);
+  if(k==='inspire')laneUnits(st,side,l).forEach(o=>{if(o!==u&&o.atk>0)o.atk+=DS});
+  if(k==='hexfront'&&front&&canAffect(front))front.atk=Math.max(0,front.atk-2*DS);
   if(k==='bleedlane')laneUnits(st,foe,l).forEach(t=>{if(canAffect(t))t.bleed=Math.max(t.bleed|0,2)});
   if(k==='execfront'&&front&&front.hp<=front.max/2&&tierOf(front.key)<3){front.hp=0;fx.push({to:'u'+front.uid,txt:'즉사!',k:'info',fxk:'exec'})}
   if(k==='silencefront'&&front&&canAffect(front)){front.sil=true;front.armor=false;front.bonus=0;front._sv=null;front.eva=0}
-  if(k==='splashlane')laneUnits(st,foe,l).forEach(t=>hitUnit(st,t,1,fx))}
+  if(k==='splashlane')laneUnits(st,foe,l).forEach(t=>hitUnit(st,t,DS,fx))}
 // ---- 덱 중복 금지 (같은 영웅은 버전이 달라도 1장)
 function sameBaseInDeck(id){return save.deck.find(x=>x!==id&&baseOf(x)===baseOf(id))||null}
 function dedupeDeck(d){const seen=new Set(),out=[];(d||[]).forEach(id=>{const b=baseOf(id);if(seen.has(b))return;seen.add(b);out.push(id)});return out}
 // ---- 변신(공성): 감시탑으로
-function siegeTransform(st,u,fx){const p=findPos(st,u);if(!p)return;const t=Math.max(1,tierOf(u.key));const nu=makeUnit({key:'watchtower_1',lv:Math.min(MAX_LV,u.lv+t),star:1},u.side);if(VU(u).ex==='fortress'){const b=u.aw?10:5;nu.max+=b;nu.hp+=b}
+function siegeTransform(st,u,fx){const p=findPos(st,u);if(!p)return;const t=Math.max(1,tierOf(u.key));const nu=makeUnit({key:'watchtower_1',lv:Math.min(MAX_LV,u.lv+t),star:1},u.side);if(VU(u).ex==='fortress'){const b=(u.aw?10:5)*DS;nu.max+=b;nu.hp+=b}
   st.board[u.side][p[0]][p[1]]=nu;fx.push({to:'cell-'+u.side+'-'+p[0]+'-'+p[1],txt:'감시탑으로 변신!',k:'info',fxk:'shield'})}
 // ---- 변이: 개구리
 function polymorph(st,t,fx){const p=findPos(st,t);if(!p)return false;const nu=makeUnit({key:'frog_0',lv:1,star:1},t.side);nu.hp=Math.min(nu.max,Math.max(1,t.hp));st.board[t.side][p[0]][p[1]]=nu;fx.push({to:'cell-'+t.side+'-'+p[0]+'-'+p[1],txt:'개구리로 변이!',k:'info',fxk:'curse'});return true}
@@ -2277,10 +2305,10 @@ async function startArena(){
   if(opp){const OW=WARLORDS[opp.wl];const oli=leagueIdx(opp.trophies||0);const elv2={},erb2={},esb2={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv2[k]=Math.max(1,Math.min(MAX_LV,raw%10||1));erb2[k]=Math.min(5,Math.floor(raw/10)%10);esb2[k]=Math.min(SB_MAX,Math.floor(raw/100))});
     const fc2={};opp.deck.forEach(id=>{const f=V(id).fac;fc2[f]=(fc2[f]||0)+1});const mf2=Object.entries(fc2).sort((x,y)=>y[1]-x[1])[0][0];
     en.innerHTML=enSide(OW.art,opp.name,`<span class="ubadge">유저 덱</span> ${OW.n} Lv${opp.wlLv} · ${LEAGUES[oli].n} 리그 · 주력 ${FAC[mf2].n}`);
-    c={mode:'arena',online:{uid:opp.uid,name:opp.name},eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:Math.min(WL_MAX,opp.wlLv|0||1),eHp:OW.hp+((opp.wlLv|0||1)-1)+oli*2,eDeck:opp.deck.slice(),eLvs:elv2,eRbs:erb2,eSbs:esb2,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2};
+    c={mode:'arena',online:{uid:opp.uid,name:opp.name},eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:Math.min(WL_MAX,opp.wlLv|0||1),eHp:(OW.hp+((opp.wlLv|0||1)-1)+oli*2)*DS,eDeck:opp.deck.slice(),eLvs:elv2,eRbs:erb2,eSbs:esb2,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2*DS};
   }else{
     en.innerHTML=enSide(rArt,nm.replace('AI 도전자 · ',''),'AI 도전자 · 주력 '+FAC[mfv].n);
-    c={mode:'arena',eName:nm,eLook:'art:'+rArt,eHp:20+li*2,eDeck:deck,eLvs:elv,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2};
+    c={mode:'arena',eName:nm,eLook:'art:'+rArt,eHp:(20+li*2)*DS,eDeck:deck,eLvs:elv,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2*DS};
   }
   mm.querySelector('.vstitle').textContent='상대 발견!';sfx('whoosh');track('arena_match',{online:opp?1:0});
   setTimeout(()=>{mm.remove();startBattle(c)},1700);
@@ -2299,7 +2327,7 @@ function autoDeck(fac){
 }
 function rbGold(id,o){return Math.round(400*((o.rb|0)+1)*TIER_GOLD_M[tierOf(id)])}
 function doReborn(id,m){const o=save.owned[id];if(!o||o.lv<MAX_LV||(o.rb|0)>=rbMax(id))return;if(save.bestLeague<RB_LEAGUE)return toast(LEAGUES[RB_LEAGUE].n+' 리그부터 초월할 수 있어요');const g=rbGold(id,o);if(save.gold<g)return toast('골드가 부족해요');
-  const v=V(id);const m2=modal(`<div class="ribbon">초월 ${ROM[(o.rb|0)+1]}</div><div class="rw" style="line-height:1.7"><b>${v.name}</b>의 레벨이 <b>Lv1</b>로 돌아가고 <b style="color:#ffd667">별이 하나 채워져요</b>.<br>대신 영구적으로 <b style="color:#7dffa1">공격 +1, 체력 +2</b>${((o.rb|0)+1)%2===0?', <b style="color:#7dffa1">스킬 수치 +1</b>':''}을 받아요.${tierOf(id)===3&&EX[baseOf(id)]&&!(o.rb|0)?'<br><b style="color:#7dffd8">전설 각성! 전설 스킬이 한 단계 강해져요</b>':''}<br><small style="opacity:.7">다시 키우면 예전보다 강해져요 · 골드 ${g}</small></div><div class="btns"><button class="btn grn" id="rbGo">초월하기</button><button class="btn sub" data-close>취소</button></div>`);
+  const v=V(id);const m2=modal(`<div class="ribbon">초월 ${ROM[(o.rb|0)+1]}</div><div class="rw" style="line-height:1.7"><b>${v.name}</b>의 레벨이 <b>Lv1</b>로 돌아가고 <b style="color:#ffd667">별이 하나 채워져요</b>.<br>대신 영구적으로 <b style="color:#7dffa1">공격·체력 +30%, 스킬 수치 +5</b>를 받아요.${tierOf(id)===3&&EX[baseOf(id)]&&!(o.rb|0)?'<br><b style="color:#7dffd8">전설 각성! 전설 스킬이 한 단계 강해져요</b>':''}<br><small style="opacity:.7">다시 키우면 예전보다 강해져요 · 골드 ${g}</small></div><div class="btns"><button class="btn grn" id="rbGo">초월하기</button><button class="btn sub" data-close>취소</button></div>`);
   m2.querySelector('#rbGo').onclick=()=>{save.gold-=g;o.rb=(o.rb|0)+1;o.lv=1;persist();track('reborn',{id,rb:o.rb});sfx('win');m2.remove();if(m)m.remove();toast(v.name+' 초월 '+ROM[o.rb]+'!'+(isAwake(id,o.lv,o.rb)&&o.rb===1?' 전설 각성!':''));heroDetail(id)}}
 let wlView=null;
 function showWarlords(){
@@ -2361,6 +2389,12 @@ function showHeroes(){
   app.querySelectorAll('[data-auto]').forEach(b=>b.onclick=()=>{const d=autoDeck(null);save.deck=d;persist();sfx('merge');toast('덱을 자동으로 짰어요');showHeroes()});
   app.querySelectorAll('[data-id]').forEach(h=>h.onclick=()=>{sfx('tick');heroDetail(h.dataset.id)});
 }
+function lvPreview(id,o){const v=V(id),sb=sbOf(baseOf(id)),rb=o.rb|0,atk=!(v.cls==='support'||v.cls==='building');
+  const cur=baseStats(id,o.lv,1,rb,sb);let top='';
+  if(o.lv<MAX_LV){const nx=baseStats(id,o.lv+1,1,rb,sb);top=`<div class="lvprev">다음 레벨 <b>Lv${o.lv+1}</b> · ${atk?`공격 ${cur.a} → <b class="a">${nx.a}</b> (+${nx.a-cur.a}) · `:''}체력 ${cur.h} → <b class="h">${nx.h}</b> (+${nx.h-cur.h})</div>`}
+  else if(rb<rbMax(id)){const n1=baseStats(id,1,1,rb+1,sb),n8=baseStats(id,MAX_LV,1,rb+1,sb);top=`<div class="lvprev">초월하면 Lv1 ${atk?'공격 '+n1.a+' · ':''}체력 ${n1.h} · 다시 Lv${MAX_LV}까지 키우면 ${atk?'공격 <b class="a">'+n8.a+'</b> · ':''}체력 <b class="h">${n8.h}</b></div>`}
+  const tb=Array.from({length:MAX_LV},(_,i)=>{const s2=baseStats(id,i+1,1,rb,sb);return `<div class="${i+1===o.lv?'cur':''}${i+1<o.lv?' past':''}"><small>Lv${i+1}</small>${atk?`<span class="a">${s2.a}</span>`:''}<span class="h">${s2.h}</span></div>`}).join('');
+  return top+`<div class="lvtbl">${tb}</div>`}
 function heroDetail(id){
   const v=V(id),o=save.owned[id],t=tierOf(id),b=baseOf(id);
   const line=versionsOf(b).map(x=>{const ow=save.owned[x];return `<div class="evo ${x===id?'cur':''} t${tierOf(x)}" data-go="${x}"><div class="art" ${ow?'':'style="filter:brightness(.15) saturate(0)"'}>${portrait(x)}</div><div style="color:${RAR[tierOf(x)].c}">${RAR[tierOf(x)].n}</div></div>`}).join('<span class="arr">›</span>');
@@ -2369,8 +2403,8 @@ function heroDetail(id){
   else{
     const st0=baseStats(id,o.lv,1,o.rb,sbOf(b));const max=o.lv>=MAX_LV;const need=max?0:lvNeed(id);const g=max?0:lvGold(id);
     const ei=evoInfo(id);const inD=save.deck.filter(x=>x===id).length;
-    body=`<div class="dstat"><span class="a">${v.cls==='support'||v.cls==='building'?'-':st0.a}</span> 공격 &nbsp; <span class="h">${st0.h}</span> 체력 &nbsp; Lv ${o.lv}/${MAX_LV} &nbsp; 카드 ${o.cards}장</div><div style="font-size:13px;margin:-2px 0 4px">초월 ${rbStars(id,o.rb)} <small style="opacity:.7">${o.rb|0}/${rbMax(id)}${o.lv>=MAX_LV&&(o.rb|0)<rbMax(id)?' · 지금 초월하면 별이 하나 채워져요':''}</small></div>
-    <div class="dsk"><b>${v.desc}</b>${t===3&&v.exd?`<br><span style="color:#ffd667">전설 스킬 · ${v.exd}</span>`:v.exd?`<br><span style="opacity:.55">전설 등급이 되면 · ${v.exd}</span>`:''}${EX[b]&&!HEROES[b].token?`<br><span style="color:${isAwake(id,o.lv,o.rb)?'#7dffd8':'#ffffff80'}">각성${isAwake(id,o.lv,o.rb)?' 완료':' (전설 버전 초월 1단계에서 열림)'} · ${AWD[EX[b].id]||''}</span>`:''}<br><span style="opacity:.6;font-size:12.5px">초월 ${o.rb|0}/${rbMax(id)} · Lv${MAX_LV}에서 초월하면 Lv1로 돌아가고 별 +1, 공격 +1, 체력 +2${save.bestLeague<RB_LEAGUE?' ('+LEAGUES[RB_LEAGUE].n+' 리그부터)':''}</span></div>
+    body=`<div class="dstat"><span class="a">${v.cls==='support'||v.cls==='building'?'-':st0.a}</span> 공격 &nbsp; <span class="h">${st0.h}</span> 체력 &nbsp; Lv ${o.lv}/${MAX_LV} &nbsp; 카드 ${o.cards}장</div>${lvPreview(id,o)}<div style="font-size:13px;margin:-2px 0 4px">초월 ${rbStars(id,o.rb)} <small style="opacity:.7">${o.rb|0}/${rbMax(id)}${o.lv>=MAX_LV&&(o.rb|0)<rbMax(id)?' · 지금 초월하면 별이 하나 채워져요':''}</small></div>
+    <div class="dsk"><b>${v.desc}</b>${t===3&&v.exd?`<br><span style="color:#ffd667">전설 스킬 · ${v.exd}</span>`:v.exd?`<br><span style="opacity:.55">전설 등급이 되면 · ${v.exd}</span>`:''}${EX[b]&&!HEROES[b].token?`<br><span style="color:${isAwake(id,o.lv,o.rb)?'#7dffd8':'#ffffff80'}">각성${isAwake(id,o.lv,o.rb)?' 완료':' (전설 버전 초월 1단계에서 열림)'} · ${AWD[EX[b].id]||''}</span>`:''}<br><span style="opacity:.6;font-size:12.5px">초월 ${o.rb|0}/${rbMax(id)} · Lv${MAX_LV}에서 초월하면 Lv1로 돌아가고 별 +1, 공격·체력 +30%${save.bestLeague<RB_LEAGUE?' ('+LEAGUES[RB_LEAGUE].n+' 리그부터)':''}</span></div>
     <div class="mgline">${v.cls==='building'?'':mergeTxt(id)}</div>${sbHTML(id)}<div class="dbtns">
       <button class="btn sm ${canLevel(id)?'grn':'sub'}" id="dUp" ${!max&&canLevel(id)&&save.gold>=g?'':'disabled'}>${max?'최대 레벨':`레벨업 · 카드 ${need} · <span class="coin" style="width:10px;height:10px"></span>${g}`}</button>
       ${ei.max?'':`<button class="btn sm ${ei.ok?'':'sub'}" id="dEvo" ${ei.ok?'':'disabled'}>진화 · 카드 ${ei.E.need}장 → ${V(ei.nx).name} ${ei.E.get}장 · <span class="coin" style="width:10px;height:10px"></span>${ei.E.gold}</button>`}
@@ -2415,7 +2449,7 @@ function showShop(){
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">상점</span>${resBar()}</div>
   <div class="body"><div class="shead"><b>일일 특가</b><small>새 특가까지 ${Math.floor(msLeft/3600000)}시간 ${Math.floor(msLeft%3600000/60000)}분</small></div>
   <div class="dealgrid">${DL.items.map((x,i)=>{const v=V(x.id),t=tierOf(x.id);return `<div class="deal t${t} ${x.b?'sold':''}"><div class="dart2">${portrait(x.id)}<span class="dn">×${x.n}</span></div><div class="dnm">${v.name}</div><div class="dtier" style="color:${RAR[t].c}">${RAR[t].n} 카드</div><button class="btn sm ${x.b?'sub':''}" data-deal="${i}" ${x.b||(x.cur==='gold'?save.gold<x.cost:save.gems<x.cost)?'disabled':''}>${x.b?'구매 완료':(x.cur==='gold'?'<span class="coin" style="width:12px;height:12px"></span>':'<span class="gem"></span>')+' '+x.cost}</button></div>`}).join('')}</div>
-  <div class="shead"><b>상자 · 재화</b></div><div class="shopgrid">${items.map(it=>`<div class="shopitem">${it.t?chestSVG(it.t):it.id==='dust'?'<div style="height:76px;display:flex;align-items:center;font-size:54px" class="dusti">✦</div>':`<div style="height:76px;display:flex;align-items:center">${ico(it.cur==='ad'?'gem':'coin','shico')}</div>`}<div class="nm">${it.n}</div><div class="ds">${it.d}</div>
+  <div class="shead"><b>상자 · 재화</b> <a href="#" class="oddsl" onclick="event.preventDefault();showOdds()">확률 보기 · 전설 확정까지 ${pityLeft()}개</a></div><div class="shopgrid">${items.map(it=>`<div class="shopitem">${it.t?chestSVG(it.t):it.id==='dust'?'<div style="height:76px;display:flex;align-items:center;font-size:54px" class="dusti">✦</div>':`<div style="height:76px;display:flex;align-items:center">${ico(it.cur==='ad'?'gem':'coin','shico')}</div>`}<div class="nm">${it.n}</div><div class="ds">${it.d}</div>
   <button class="btn sm ${it.cur==='free'||it.cur==='ad'?'grn':''}" data-buy="${it.id}" ${it.dis||(it.cur==='gem'&&save.gems<it.cost)?'disabled':''}>${it.cur==='free'?(it.dis?'내일 다시':'무료 받기'):it.cur==='ad'?(it.dis?'내일 다시':'광고 보기'):`<span class="gem"></span> ${it.cost}`}</button></div>`).join('')}</div>
   <div style="font-size:12.5px;opacity:.55;margin-top:14px;text-align:center">보석은 퀘스트, 상자, 리그 승급으로 얻어요. 실제 결제는 없어요.</div></div></div>`;
   bind('#bk',showLobby);
@@ -2431,7 +2465,7 @@ function showShop(){
 
 /* ===================== 전투 진행 ===================== */
 let st=null,cfg=null,ui=null;
-function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',board:{p:emptyBoard(),e:emptyBoard()},cmd:{p:{hp:c.pHp||22,max:c.pHpMax||c.pHp||22},e:{hp:c.eHp,max:c.eHpMax||c.eHp}},round:1,over:false,passive:c.passive||null,eTurns:0,kills:0}}
+function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',board:{p:emptyBoard(),e:emptyBoard()},cmd:{p:{hp:c.pHp||22*DS,max:c.pHpMax||c.pHp||22},e:{hp:c.eHp,max:c.eHpMax||c.eHp}},round:1,over:false,passive:c.passive||null,eTurns:0,kills:0}}
 async function startBattle(c){
   screen='battle';tryLandscape();track('battle_start',{mode:c.mode,stage:c.idx??-1});
   cfg=c;st=newState(c);BD=null;
@@ -2710,7 +2744,7 @@ async function doFx(fx,quick,noRender){
     if(f.k==='skill'){skillCall(el,SKILL_FX[f.sk]||f.sk);if(f.wave)laneWave(f.side,f.lane,f.wave);if(f.strike){const se=document.getElementById(f.strike);if(se)strikeFx(se)}sfx('merge');continue}
     const p=document.createElement('div');p.className='pop'+(f.k==='heal'?' heal':f.k==='info'?' info':'');
     p.textContent=f.k==='info'?f.txt:(f.k==='heal'?'+':'-')+f.dmg;
-    if(f.k==='dmg'&&f.dmg>=5)p.classList.add('big');
+    if(f.k==='dmg'||f.k==='heal'){const fs2=Math.min(46,16+Math.sqrt(f.dmg)*(f.k==='dmg'?2.6:2));p.style.fontSize=fs2.toFixed(1)+'px';if(f.k==='dmg'&&f.dmg>=60)p.classList.add('big');if(f.k==='dmg'&&f.dmg>=120)p.classList.add('huge');if(String(f.to).startsWith('cmd-')&&f.k==='dmg')p.classList.add('cmdhit')}
     const pt=appPoint(el);p.style.left=pt.x+'px';p.style.top=pt.y+'px';
     app.appendChild(p);setTimeout(()=>p.remove(),850);
     if(f.k==='dmg'){
@@ -2745,7 +2779,8 @@ function openChestModal(t,onDone){
     }else{
       done=true;
       stage.innerHTML=`<div class="ribbon">획득 보상</div><div class="gotgrid">${Object.entries(res.got).sort((a,b)=>tierOf(b[0])-tierOf(a[0])).map(([id,c],i)=>`<div class="got" style="animation-delay:${i*.08}s"><div class="art t${tierOf(id)}">${portrait(id)}</div><div class="x">x${c}</div>${res.found.includes(id)?'<div class="newb">NEW</div>':''}<div class="n" style="color:${RAR[tierOf(id)].c}">${V(id).name}</div></div>`).join('')}</div>
-      <div class="rw2">${ico('coin','mi')} <b>${res.gold}</b> 골드${res.gems?` &nbsp; ${ico('gem','mi')} <b>${res.gems}</b> 보석`:''}</div><button class="btn" data-done>확인</button>`;
+      <div class="rw2">${ico('coin','mi')} <b>${res.gold}</b> 골드${res.gems?` &nbsp; ${ico('gem','mi')} <b>${res.gems}</b> 보석`:''}</div><div class="pityl">${res.pityHit?'<b style="color:#ffb84d">전설 천장 발동!</b> · ':''}전설 확정까지 상자 ${pityLeft()}개 · <a href="#" data-odds>확률 보기</a></div><button class="btn" data-done>확인</button>`;
+      {const oa=stage.querySelector('[data-odds]');if(oa)oa.onclick=e=>{e.preventDefault();e.stopPropagation();showOdds()}}
       stage.querySelector('[data-done]').onclick=e=>{e.stopPropagation();sfx('tick');m.remove();onDone&&onDone()};
     }
     busy=false;
@@ -2866,22 +2901,22 @@ function track(name,params){try{if(window.gtag&&GA_ID)window.gtag('event',name,p
 
 /* ===================== 지휘관 ===================== */
 const WARLORDS={
-  asten:{n:'아스테른',fac:'bastion',art:'c_player',hp:22,pas:'성채 영웅을 놓을 때 체력 +1',act:{n:'천둥 일격',d:'적 유닛 하나에 3 피해',cd:3,target:'unit'},unlock:{t:'none',d:'기본 지휘관'}},
-  seraphine:{n:'세라핀',fac:'bastion',art:'w_seraphine',hp:26,pas:'지휘관 체력이 높다 (기본 26)',act:{n:'축복의 빛',d:'모든 아군 체력 2 회복',cd:3,target:'none'},unlock:{t:'league',v:1,d:'청동 리그 도달'}},
-  orwan:{n:'오르완',fac:'wild',art:'w_orwan',hp:22,pas:'들숲 영웅을 놓을 때 체력 +2',act:{n:'덩굴 속박',d:'고른 줄의 적 전체에 1 피해 + 빙결',cd:4,target:'lane'},unlock:{t:'stage',v:3,d:'모험 3 클리어'}},
-  maya:{n:'마야',fac:'wild',art:'w_maya',hp:22,pas:'내 턴마다 무작위 아군 체력 1 회복',act:{n:'야성 해방',d:'모든 아군 공격 +1 (영구)',cd:5,target:'none'},unlock:{t:'league',v:2,d:'은빛 리그 도달'}},
-  kardum:{n:'카르둠',fac:'ember',art:'w_kardum',hp:20,pas:'잿불 영웅이 지휘관에게 주는 피해 +1',act:{n:'유성 낙하',d:'적 유닛 하나에 5 피해',cd:4,target:'unit'},unlock:{t:'stage',v:6,d:'모험 6 클리어'}},
-  nox:{n:'녹스',fac:'ember',art:'w_nox',hp:21,pas:'적 유닛이 쓰러질 때마다 지휘관 체력 1 회복',act:{n:'그림자 저주',d:'적 유닛 하나의 공격 -2, 독 2',cd:3,target:'unit'},unlock:{t:'gems',v:150,d:'보석 150으로 영입'}}
+  asten:{n:'아스테른',fac:'bastion',art:'c_player',hp:22,pas:'성채 영웅을 놓을 때 체력 +10',act:{n:'천둥 일격',d:'적 유닛 하나에 30 피해',cd:3,target:'unit'},unlock:{t:'none',d:'기본 지휘관'}},
+  seraphine:{n:'세라핀',fac:'bastion',art:'w_seraphine',hp:26,pas:'지휘관 체력이 높다 (기본 260)',act:{n:'축복의 빛',d:'모든 아군 체력 20 회복',cd:3,target:'none'},unlock:{t:'league',v:1,d:'청동 리그 도달'}},
+  orwan:{n:'오르완',fac:'wild',art:'w_orwan',hp:22,pas:'들숲 영웅을 놓을 때 체력 +20',act:{n:'덩굴 속박',d:'고른 줄의 적 전체에 10 피해 + 빙결',cd:4,target:'lane'},unlock:{t:'stage',v:3,d:'모험 3 클리어'}},
+  maya:{n:'마야',fac:'wild',art:'w_maya',hp:22,pas:'내 턴마다 무작위 아군 체력 10 회복',act:{n:'야성 해방',d:'모든 아군 공격 +10 (영구)',cd:5,target:'none'},unlock:{t:'league',v:2,d:'은빛 리그 도달'}},
+  kardum:{n:'카르둠',fac:'ember',art:'w_kardum',hp:20,pas:'잿불 영웅이 지휘관에게 주는 피해 +10',act:{n:'유성 낙하',d:'적 유닛 하나에 50 피해',cd:4,target:'unit'},unlock:{t:'stage',v:6,d:'모험 6 클리어'}},
+  nox:{n:'녹스',fac:'ember',art:'w_nox',hp:21,pas:'적 유닛이 쓰러질 때마다 지휘관 체력 10 회복',act:{n:'그림자 저주',d:'적 유닛 하나의 공격 -20, 독 2',cd:3,target:'unit'},unlock:{t:'gems',v:150,d:'보석 150으로 영입'}}
 };
 function WL(){return WARLORDS[save.warlord]||WARLORDS.asten}
 const WL_MAX=10;
 const WSK={
-  asten:[{id:'thunder',n:'천둥 일격',d:'적 유닛 하나에 3 피해',target:'unit'},{id:'rally',n:'성채 소집',d:'빈 뒤쪽 칸에 궁수 피오 2명 소환',target:'none'},{id:'storm',n:'천둥 폭풍',d:'모든 적 유닛에 2 피해',target:'none'}],
-  seraphine:[{id:'bless',n:'축복의 빛',d:'모든 아군 체력 2 회복',target:'none'},{id:'aegis',n:'수호의 날개',d:'모든 아군에게 철갑 (다음 피해 1번 무시)',target:'none'},{id:'prayer',n:'성녀의 기도',d:'지휘관 체력 6 회복, 모든 아군 최대 체력 +2',target:'none'}],
-  orwan:[{id:'vines',n:'덩굴 속박',d:'고른 줄의 적 전체에 1 피해 + 빙결',target:'lane'},{id:'grove',n:'숲지기 부름',d:'빈 앞쪽 칸에 오크우드 1명 소환',target:'none'},{id:'quake',n:'대지의 분노',d:'모든 적 유닛에 1 피해 + 빙결',target:'none'}],
-  maya:[{id:'wild',n:'야성 해방',d:'모든 아군 공격 +1 (영구)',target:'none'},{id:'hunt',n:'사냥 본능',d:'무작위 적 3명에게 2 피해',target:'none'},{id:'roar',n:'야수의 포효',d:'모든 아군 공격 +2, 체력 +2',target:'none'}],
-  kardum:[{id:'meteor',n:'유성 낙하',d:'적 유닛 하나에 5 피해',target:'unit'},{id:'firewall',n:'화염 장벽',d:'고른 줄의 적 전체에 3 피해',target:'lane'},{id:'doom',n:'종말의 불비',d:'모든 적 유닛에 2 피해, 적 지휘관에 3 피해',target:'none'}],
-  nox:[{id:'curse',n:'그림자 저주',d:'적 유닛 하나의 공격 -2, 독 2',target:'unit'},{id:'drain',n:'영혼 흡수',d:'적 유닛 하나에 4 피해, 준 만큼 지휘관 회복',target:'unit'},{id:'legion',n:'망자의 군단',d:'빈 칸에 해골 3명 소환, 모든 적 독 1',target:'none'}]
+  asten:[{id:'thunder',n:'천둥 일격',d:'적 유닛 하나에 30 피해',target:'unit'},{id:'rally',n:'성채 소집',d:'빈 뒤쪽 칸에 궁수 피오 2명 소환',target:'none'},{id:'storm',n:'천둥 폭풍',d:'모든 적 유닛에 20 피해',target:'none'}],
+  seraphine:[{id:'bless',n:'축복의 빛',d:'모든 아군 체력 20 회복',target:'none'},{id:'aegis',n:'수호의 날개',d:'모든 아군에게 철갑 (다음 피해 1번 무시)',target:'none'},{id:'prayer',n:'성녀의 기도',d:'지휘관 체력 60 회복, 모든 아군 최대 체력 +20',target:'none'}],
+  orwan:[{id:'vines',n:'덩굴 속박',d:'고른 줄의 적 전체에 10 피해 + 빙결',target:'lane'},{id:'grove',n:'숲지기 부름',d:'빈 앞쪽 칸에 오크우드 1명 소환',target:'none'},{id:'quake',n:'대지의 분노',d:'모든 적 유닛에 10 피해 + 빙결',target:'none'}],
+  maya:[{id:'wild',n:'야성 해방',d:'모든 아군 공격 +10 (영구)',target:'none'},{id:'hunt',n:'사냥 본능',d:'무작위 적 3명에게 20 피해',target:'none'},{id:'roar',n:'야수의 포효',d:'모든 아군 공격 +20, 체력 +20',target:'none'}],
+  kardum:[{id:'meteor',n:'유성 낙하',d:'적 유닛 하나에 50 피해',target:'unit'},{id:'firewall',n:'화염 장벽',d:'고른 줄의 적 전체에 30 피해',target:'lane'},{id:'doom',n:'종말의 불비',d:'모든 적 유닛에 20 피해, 적 지휘관에 30 피해',target:'none'}],
+  nox:[{id:'curse',n:'그림자 저주',d:'적 유닛 하나의 공격 -20, 독 2',target:'unit'},{id:'drain',n:'영혼 흡수',d:'적 유닛 하나에 40 피해, 준 만큼 지휘관 회복',target:'unit'},{id:'legion',n:'망자의 군단',d:'빈 칸에 해골 3명 소환, 모든 적 독 1',target:'none'}]
 };
 const WSK_LV=[1,3,6],WSK_TURN=[1,3,6];
 const STRIKE={id:'strike',n:'지휘관 일격',d:'고유 스킬을 다 쓰면 매 턴 1개씩 쌓여요. 쓸 때의 턴이 늦을수록 피해가 커져요.',target:'none'};
@@ -2898,7 +2933,7 @@ function wskAt(i,side){return i===3?STRIKE:wskList(wsId(side))[i]}
 function wskTurn(i,side){return WSK_TURN[i]-(i===2&&wsLv(side)>=WL_MAX?1:0)}
 function wskState(i,side){const w=wsOf(side);if(i===3){if(!strikePhase(side))return 'queue';return w.ch>0?'ready':'wait'}if(i<w.used)return 'used';if(wsLv(side)<WSK_LV[i])return 'lock';if(i>w.used)return 'queue';if(st.round<wskTurn(i,side))return 'wait';return 'ready'}
 function curWsk(side){return wskAt(curIdx(side),side)}
-function strikeDmg(){return 1+Math.floor(st.round/4)}
+function strikeDmg(){return (1+Math.floor(st.round/4))*DS}
 function wsTick(side){const w=wsOf(side);if(strikePhase(side)&&w.doneR<st.round){w.ch++;return true}return false}
 function wantStrike(side){const w=wsOf(side),F=foeOf(side);if(w.ch<=0)return false;return w.ch*strikeDmg()>=st.cmd[F].hp||st.round>=MAX_ROUND||st.cmd[side].hp<=st.cmd[side].max*.3}
 function summonS(side,key,n,fx,pref){let c=0;const card={key,lv:1,star:1};const cells=validCells(st,side,card).filter(([r,l])=>!st.board[side][r][l]);
@@ -2912,7 +2947,7 @@ function wsAiTarget(side){const S=curWsk(side),F=foeOf(side),M=side;const foes=[
   const id=S.id;
   if(['rally','grove','legion'].includes(id)){const key=id==='rally'?'archer_0':id==='grove'?'oakwood_2':'skel_0';return validCells(st,M,{key,lv:1,star:1}).some(([r,l])=>!st.board[M][r][l])?null:undefined}
   if(id==='bless')return mine.some(u=>u.hp<u.max)?null:undefined;
-  if(id==='prayer')return (st.cmd[M].hp<=st.cmd[M].max-4||mine.length>=2)?null:undefined;
+  if(id==='prayer')return (st.cmd[M].hp<=st.cmd[M].max-4*DS||mine.length>=2)?null:undefined;
   if(['wild','roar','aegis'].includes(id))return mine.length>=2?null:undefined;
   return foes.length?null:undefined}
 async function castWsk(side,target){
@@ -2928,24 +2963,24 @@ async function castWsk(side,target){
   const elOf=u=>document.getElementById('u'+u.uid);
   const cmdHeal=h=>{h=Math.min(h,st.cmd[M].max-st.cmd[M].hp);if(h>0){st.cmd[M].hp+=h;fx.push({to:'cmd-'+M,dmg:h,k:'heal'})}};
   switch(S.id){
-    case 'thunder':{const el=elOf(target);if(el)strikeFx(el);hitUnit(st,target,3+pw,fx);break}
-    case 'meteor':{const el=elOf(target);if(el){strikeFx(el);burstFx(el,'fireball')}hitUnit(st,target,5+pw,fx);break}
-    case 'curse':{target.atk=Math.max(0,target.atk-2-pw);target.poison=Math.max(target.poison,2+pw);fx.push({to:'u'+target.uid,txt:'공격 -'+(2+pw)+' · 독 '+(2+pw),k:'info',fxk:'curse'});break}
-    case 'vines':{laneWave(F,target,'poison');laneUnits(st,F,target).forEach(t=>{hitUnit(st,t,1+pw,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break}
-    case 'bless':{allies().forEach(u=>{const h=Math.min(2+pw,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}});if(myEl)burstFx(myEl,'');break}
-    case 'wild':{allies().forEach(u=>{const a=1+(wsLv(M)>=7?1:0);u.atk+=a;fx.push({to:'u'+u.uid,txt:'공격 +'+a,k:'info',fxk:'rage'})});break}
+    case 'thunder':{const el=elOf(target);if(el)strikeFx(el);hitUnit(st,target,(3+pw)*DS,fx);break}
+    case 'meteor':{const el=elOf(target);if(el){strikeFx(el);burstFx(el,'fireball')}hitUnit(st,target,(5+pw)*DS,fx);break}
+    case 'curse':{target.atk=Math.max(0,target.atk-(2+pw)*DS);target.poison=Math.max(target.poison,2+pw);fx.push({to:'u'+target.uid,txt:'공격 -'+(2+pw)*DS+' · 독 '+(2+pw),k:'info',fxk:'curse'});break}
+    case 'vines':{laneWave(F,target,'poison');laneUnits(st,F,target).forEach(t=>{hitUnit(st,t,(1+pw)*DS,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break}
+    case 'bless':{allies().forEach(u=>{const h=Math.min((2+pw)*DS,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}});if(myEl)burstFx(myEl,'');break}
+    case 'wild':{allies().forEach(u=>{const a=(1+(wsLv(M)>=7?1:0))*DS;u.atk+=a;fx.push({to:'u'+u.uid,txt:'공격 +'+a,k:'info',fxk:'rage'})});break}
     case 'rally':summonS(M,'archer_0',2,fx,'back');break;
     case 'grove':summonS(M,'oakwood_2',1,fx,'front');break;
     case 'legion':{summonS(M,'skel_0',3,fx,'front');foes().forEach(t=>{t.poison=Math.max(t.poison,1+pw);fx.push({to:'u'+t.uid,txt:'독 '+(1+pw),k:'info',fxk:'curse'})});break}
-    case 'storm':foes().forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,2+pw,fx)});break;
-    case 'quake':foes().forEach(t=>{hitUnit(st,t,1+pw,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break;
-    case 'doom':{foes().forEach(t=>{const el=elOf(t);if(el)burstFx(el,'fireball');hitUnit(st,t,2+pw,fx)});hitCmd(st,F,3+pw,fx,null);break}
-    case 'firewall':{laneWave(F,target,'fire');laneUnits(st,F,target).forEach(t=>hitUnit(st,t,3+pw,fx));break}
-    case 'hunt':{foes().sort(()=>Math.random()-.5).slice(0,3).forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,2+pw,fx)});break}
-    case 'drain':{const before=target.hp;const el=elOf(target);if(el)burstFx(el,'');hitUnit(st,target,4+pw,fx);cmdHeal(Math.max(0,before-Math.max(0,target.hp)));break}
+    case 'storm':foes().forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,(2+pw)*DS,fx)});break;
+    case 'quake':foes().forEach(t=>{hitUnit(st,t,(1+pw)*DS,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break;
+    case 'doom':{foes().forEach(t=>{const el=elOf(t);if(el)burstFx(el,'fireball');hitUnit(st,t,(2+pw)*DS,fx)});hitCmd(st,F,(3+pw)*DS,fx,null);break}
+    case 'firewall':{laneWave(F,target,'fire');laneUnits(st,F,target).forEach(t=>hitUnit(st,t,(3+pw)*DS,fx));break}
+    case 'hunt':{foes().sort(()=>Math.random()-.5).slice(0,3).forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,(2+pw)*DS,fx)});break}
+    case 'drain':{const before=target.hp;const el=elOf(target);if(el)burstFx(el,'');hitUnit(st,target,(4+pw)*DS,fx);cmdHeal(Math.max(0,before-Math.max(0,target.hp)));break}
     case 'aegis':allies().forEach(u=>{if(!u.armor){u.armor=true;fx.push({to:'u'+u.uid,txt:'철갑',k:'info',fxk:'shield'})}});break;
-    case 'prayer':{cmdHeal(6+2*pw);allies().forEach(u=>{u.max+=2;u.hp+=2;fx.push({to:'u'+u.uid,dmg:2,k:'heal'})});break}
-    case 'roar':allies().forEach(u=>{u.atk+=2;u.max+=2;u.hp+=2;fx.push({to:'u'+u.uid,txt:'공격 +2 · 체력 +2',k:'info',fxk:'rage'})});break;
+    case 'prayer':{cmdHeal((6+2*pw)*DS);allies().forEach(u=>{u.max+=2*DS;u.hp+=2*DS;fx.push({to:'u'+u.uid,dmg:2*DS,k:'heal'})});break}
+    case 'roar':allies().forEach(u=>{u.atk+=2*DS;u.max+=2*DS;u.hp+=2*DS;fx.push({to:'u'+u.uid,txt:'공격 +20 · 체력 +20',k:'info',fxk:'rage'})});break;
   }
   cleanup(st,fx);if(M==='p'){qp('skill');track('warlord_skill',{id:st.wl,n:w.used})}sfx('cmd');
   if(myEl){rigPlay(myEl.querySelector('.cbody img'),'cast',700);skillCall(myEl,S.n);const b2=myEl.querySelector('.cbody img');if(b2)b2.animate([{filter:'brightness(1)'},{filter:'brightness(2.2) drop-shadow(0 0 16px #ffd667)'},{filter:'brightness(1)'}],{duration:700})}
@@ -2966,7 +3001,7 @@ function ewskHTML(){if(!st.ws)return '';const w=wsOf('e');const pips=[0,1,2].map
 function wlLv(id){save.wlx=save.wlx||{};return (save.wlx[id||save.warlord]||{lv:1}).lv}
 function wlXp(id){save.wlx=save.wlx||{};return (save.wlx[id||save.warlord]||{xp:0}).xp||0}
 function wlNeed(lv){return 40+lv*30}
-function wlHp(id){id=id||save.warlord;const W=WARLORDS[id]||WARLORDS.asten;return W.hp+(wlLv(id)-1)}
+function wlHp(id){id=id||save.warlord;const W=WARLORDS[id]||WARLORDS.asten;return Math.round(W.hp*DS*(1+.05*(wlLv(id)-1)))}
 function wlPow(id){return Math.floor((wlLv(id)-1)/3)}
 
 function addWlXp(n){save.wlx=save.wlx||{};const id=save.warlord;const o=save.wlx[id]||(save.wlx[id]={lv:1,xp:0});let up=0;if(o.lv>=WL_MAX)return 0;o.xp+=n;while(o.lv<WL_MAX&&o.xp>=wlNeed(o.lv)){o.xp-=wlNeed(o.lv);o.lv++;up++}if(o.lv>=WL_MAX)o.xp=0;persist();return up}
@@ -3175,7 +3210,7 @@ window.__simulate=function(n,stageIdx,eNoise){
   const S=STAGES[stageIdx||0];const eD=S.deck.map(b=>toVid(b,S.t||0));const elv={};eD.forEach(k=>elv[k]=S.lv);let pw=0,ew=0,rounds=0,errs=0;
   const plv=playerLvs();
   for(let g=0;g<n;g++){try{
-    const s=newState({eHp:S.hp});const pH=[],pP=makePile(save.deck),eH=[],eP=makePile(eD);
+    const s=newState({eHp:S.hp*DS});const pH=[],pP=makePile(save.deck),eH=[],eP=makePile(eD);
     while(!s.over){
       startTurnEffects(s,'p');if(s.over)break;
       refill(pH,pP,plv);let p=aiChoose(s,'p',pH,2);if(p){const cc=pH.splice(p.hi,1)[0];pP.push(cc.key);place(s,'p',cc,p.r,p.l)}
