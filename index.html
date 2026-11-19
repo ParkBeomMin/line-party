@@ -918,6 +918,48 @@ a.btn{display:inline-block;text-decoration:none}
 .hc2dk{top:auto!important;bottom:52px!important;left:4px}
 .slot .ct{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .bbot2 .card .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;left:2px;right:2px}
+/* v3.4 로비 (마이티파티식 하단 탭바) */
+.lobby3 .stage3{bottom:170px;height:250px}
+.lobby3 .hero2.lead{width:205px;height:225px;margin-left:-102px}
+.lobby3 .lside{top:76px}
+.lobby3 .sbtn{transform:scale(.88);transform-origin:top center;margin-bottom:-8px}
+.chestrow{position:absolute;left:50%;bottom:88px;width:520px;margin-left:-260px;z-index:2}
+.chestrow .chests2{height:76px}
+.lnav{position:absolute;left:0;right:0;bottom:0;height:80px;z-index:3;display:flex;align-items:flex-end;justify-content:center;gap:12px;padding-bottom:6px;background:linear-gradient(#0e0b1c00,#140f2ae6 30%,#0e0b1cf8);border-top:1px solid #ffd66733}
+.nav3{position:relative;width:96px;height:66px;border-radius:14px;border:2px solid #ffd66755;background:linear-gradient(#3b3168f2,#221b42f2);box-shadow:0 3px 0 #0008,inset 0 1px 0 #fff3;color:#fff;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:0}
+.nav3 .ic,.nav3 img.ico{width:30px;height:30px}
+.nav3 span{font-size:13px;font-weight:900;text-shadow:0 1px 2px #000}
+.nav3 .pt{width:34px;height:34px;border-radius:50%;overflow:hidden;border:2px solid #ffd667}
+.nav3 .dot{position:absolute;top:-4px;right:-4px}
+.lnav .fightb{width:210px;height:92px;margin:0 6px;transform:translateY(-6px)}
+.lobby3 .ver2{bottom:84px}
+.mute#bRule{font-weight:900;font-size:15px}
+/* 상점 일일 특가 */
+.shead{display:flex;align-items:baseline;gap:8px;margin:2px 4px 6px}.shead b{font-size:16px;color:#ffd667}.shead small{font-size:12.5px;opacity:.65}
+.dealgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.deal{display:flex;flex-direction:column;align-items:center;gap:3px;background:linear-gradient(#2b2350,#1a1530);border:2.5px solid var(--tc,#666);border-radius:14px;padding:8px}
+.deal.t0{--tc:#9aa3b5}.deal.t1{--tc:#4aa8ff}.deal.t2{--tc:#c066ff}.deal.t3{--tc:#ffb84d}
+.deal.sold{opacity:.5}
+.dart2{position:relative;width:96px;height:96px;border-radius:12px;overflow:hidden}.dart2 .pt{width:100%;height:100%}
+.dart2 .dn{position:absolute;right:3px;bottom:3px;background:#000c;color:#ffd667;font-weight:900;font-size:15px;border-radius:8px;padding:0 6px}
+.dnm{font-size:14px;font-weight:900}.dtier{font-size:12px;font-weight:800}
+/* 게임 가이드 탭 */
+.rtabs{display:flex;gap:6px;justify-content:center;margin:4px 0 8px}
+.rtab{border:1.5px solid #ffd66766;background:#0006;color:#fff;border-radius:14px;padding:5px 14px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer}
+.rtab.on{background:#ffd667;color:#2b1a00}
+.rlist{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:240px;overflow:auto;text-align:left}
+.ritem{background:#0005;border-radius:10px;padding:7px 10px}.ritem b{color:#ffd667;font-size:14px}.ritem p{margin:2px 0 0;font-size:13px;line-height:1.45;opacity:.92}
+.lobby3 .stage3{bottom:186px!important}
+.chestrow .slot .cico{width:48px!important;height:34px!important}
+.chestrow{bottom:90px!important;width:480px!important;margin-left:-240px!important}
+.chestrow .chests2{height:68px!important;gap:6px}
+.chestrow .slot{height:68px!important;min-height:0!important;padding:2px!important}
+.chestrow .slot svg,.chestrow .slot .chest{width:46px!important;height:36px!important}
+.chestrow .slot .cn{font-size:11.5px!important}
+.chestrow .slot .ct{font-size:10.5px!important}
+.lnav{height:76px!important}
+.lnav .fightb{height:80px!important;transform:none!important}
+.lobby3 .ver2{bottom:4px!important;right:8px;z-index:4;opacity:.5}
 </style>
 </head>
 <body>
@@ -925,7 +967,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.3 베타';
+const VERSION='v3.4 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1631,22 +1673,20 @@ function showLobby(){setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()}
   const prog=N?(save.trophies-L.t)/(N.t-L.t):1;
   const E=todayEvent();
   const lead=save.deck[0],side1=save.deck[1],side2=save.deck[2];
-  app.innerHTML=`<div class="screen lobby2">
+  app.innerHTML=`<div class="screen lobby2 lobby3">
     <div class="ltop">
       <div class="prof" id="bProf"><div class="ava">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}</div><div class="pinfo"><div class="pname">${WL().n} <small style="opacity:.7">지휘관 변경 ›</small></div>
         <div class="lg"><span class="lgb" style="--lc:${L.c}">${li+1}</span><div class="lbar2"><div class="lbn">${L.n} 리그 ${ico('trophy','mi')}${save.trophies}</div><div class="bar"><i style="width:${prog*100}%"></i></div></div></div></div></div>
       <div class="logo2">라인 파티</div>
-      <div class="cur"><button class="mute" id="bSet">⚙</button><button class="mute" id="bMute">${save.mute?'🔇':'🔊'}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
+      <div class="cur"><button class="mute" id="bRule" title="규칙">?</button><button class="mute" id="bSet">⚙</button><button class="mute" id="bMute">${save.mute?'🔇':'🔊'}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
     </div>
     <div class="lside left2">
       <button class="sbtn" id="bQuest">${ico('quest')}<span>퀘스트</span>${questDot()?'<i class="dot"></i>':''}</button>
       <button class="sbtn" id="bEvent">${ico('gift')}<span>${E?E.n:'이벤트'}</span>${E?'<i class="dot pink"></i>':''}</button>
       <button class="sbtn" id="bAtt">${ico('gift')}<span>출석</span>${attReady()?'<i class="dot"></i>':''}</button>
-      <button class="sbtn" id="bRule">${ico('map')}<span>규칙</span></button>
     </div>
     <div class="lside right2">
       <button class="sbtn" id="bIdle">${ico('crate')}<span id="idleAmt">${idleAmount()}</span><small>보급 창고</small></button>
-      <button class="sbtn" id="bShop">${ico('shop')}<span>상점</span>${!save.shop.free?'<i class="dot"></i>':''}</button>
       <button class="sbtn" id="bExp">${ico('map')}<span>원정</span>${anyExpDone()?'<i class="dot"></i>':''}</button>
       <button class="sbtn" id="bBoss">${ico('boss')}<span>오늘의 보스</span>${bossLeft()>0?'<i class="dot"></i>':''}</button>
     </div>
@@ -1655,15 +1695,17 @@ function showLobby(){setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()}
       ${side2?`<div class="hero2 s2"><img src="assets/${lobbyArt(side2)}.webp?v=${ASSET_V}"></div>`:''}
       ${lead?`<div class="hero2 lead t${tierOf(lead)}"><img src="assets/${lobbyArt(lead)}.webp?v=${ASSET_V}"><div class="hplate" style="--tc:${RAR[tierOf(lead)].c}">${facIcon(V(lead).fac,'ci')}${V(lead).name}<small>Lv${save.owned[lead]?save.owned[lead].lv:1}</small></div></div>`:''}
     </div>
-    <div class="lbot">
-      <button class="navb" id="bHero">${ico('hero')}<span>영웅</span>${anyUpgrade()?'<i class="dot"></i>':''}</button>
-      <div class="chests2" id="chests">${chestSlotsHTML()}</div>
-      <button class="navb" id="bAdv">${ico('map')}<span>모험 ${Math.min(save.cleared+1,STAGES.length)}/${STAGES.length}</span></button>
+    <div class="chestrow"><div class="chests2" id="chests">${chestSlotsHTML()}</div></div>
+    <div class="lnav">
+      <button class="nav3" id="bShop">${ico('shop')}<span>상점</span>${!save.shop.free||dealsFresh()?'<i class="dot"></i>':''}</button>
+      <button class="nav3" id="bHero">${ico('hero')}<span>부대</span>${anyUpgrade()?'<i class="dot"></i>':''}</button>
       <button class="fightb" id="bFight">${ico('battle','fi')}<span>전투</span><small>${L.n} 리그 아레나</small></button>
+      <button class="nav3" id="bAdv">${ico('map')}<span>모험 ${Math.min(save.cleared+1,STAGES.length)}/${STAGES.length}</span></button>
+      <button class="nav3" id="bWl">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}<span>지휘관</span></button>
     </div>
     <div class="ver2">${VERSION} · ${save.stats.w}승 ${save.stats.l}패</div>
   </div>`;
-  bind('#bFight',startArena);bind('#bAdv',showStages);bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bExp',showExpeditions);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
+  bind('#bFight',startArena);bind('#bAdv',showStages);bind('#bWl',()=>{wlView=save.warlord;showWarlords()});bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bExp',showExpeditions);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
   app.querySelectorAll('[data-shop]').forEach(b=>b.onclick=()=>{sfx('tick');showShop()});
   bind('#bIdle',()=>{const a=idleAmount();if(a<1)return toast(`분당 ${idleRate().toFixed(1)}골드씩 쌓여요 (최대 8시간)`);save.gold+=a;save.idle.last=Date.now();persist();sfx('coin');toast(`보급 ${a}골드를 받았어요`);showLobby()});
   bindChests();
@@ -1694,25 +1736,18 @@ function bindChests(){
   });
 }
 function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.daily.wins)}
-function showRules(){
-  modal(`<h3>규칙</h3><div class="rules">
-  <p><b>목표</b>: 적 지휘관 체력을 0으로. ${MAX_ROUND}라운드가 지나면 체력 비율이 높은 쪽이 이겨요.</p>
-  <p><b>보드</b>: 양쪽 4줄 x 3열. 가운데에 가까운 열이 앞열이에요. <b>근접</b>은 앞쪽 두 열, <b>원거리·마법</b>은 뒤쪽 두 열, <b>지원</b>은 어느 열이든 놓을 수 있어요.</p>
-  <p><b>내 턴</b>: 덱 8장을 섞어 손에 4장을 들어요. 카드 1장을 칸에 놓으면 내 유닛 전원이 공격하고, 덱에서 1장을 새로 뽑아요. 낸 카드는 덱 맨 아래로 돌아가요.</p>
-  <p><b>라인 막기</b>: 유닛은 자기 라인의 적만 때려요. 그 라인에 적 유닛이 없을 때만 적 지휘관을 때려요. 빈 라인은 그대로 뚫려요.</p>
-  <p><b>근접</b>은 같은 줄 앞에 아군이 있으면 공격하지 못해요. <b>원거리·마법</b>은 아군 너머로 공격해요. <b>지원</b>은 공격 대신 효과를 내요.</p>
-  <p><b>합체</b>: 같은 영웅 위에 놓으면 별이 오르고 체력이 다 차요 (최대 ★3).</p>
-  <p><b>지휘관 스킬</b>: 지휘관마다 고유 스킬 3개를 1턴, 3턴, 6턴부터 순서대로 한 번씩 써요 (2번은 지휘관 Lv3, 3번은 Lv6에 열림). 다 쓰면 매 턴 지휘관 일격이 1개씩 쌓이고, 늦게 쓸수록 1개당 피해가 커져요. 적 지휘관도 스킬을 써요.</p>
-  <p><b>원정</b>: 지휘관이 2명 이상이면, 전투에 쓰지 않는 지휘관을 원정 보내 영웅 카드, 골드, 보석을 얻어 와요. 지휘관마다 원정 특기가 달라서 가져오는 보상도 달라요.</p>
-  <p><b>건물</b>: 감시탑, 치유의 샘 같은 건물은 어느 열에든 놓을 수 있어요. 공격은 하지 않지만 줄을 막아 지휘관을 지키고, 매 턴 고유 효과를 내요. 독과 빙결에 걸리지 않고, 진화 없이 레벨업만 해요.</p>
-  <p><b>지휘관</b>: 로비 왼쪽 위 프로필을 눌러 지휘관을 고를 수 있어요. 지휘관마다 체력, 패시브, 전투 스킬이 달라요. 리그, 모험 진행, 보석으로 새 지휘관을 해금해요.</p>
-  <p><b>진영</b>: 모든 영웅은 성채(균형·보호), 들숲(체력·재생), 잿불(공격) 중 하나예요. 보드에 같은 진영이 2기, 4기 이상 있으면 시너지 효과가 켜져요. 전투 중 지휘관 아래 진영 아이콘을 누르면 효과를 볼 수 있어요.</p>
-  <p><b>등급과 진화</b>: 영웅마다 일반, 희귀, 영웅, 전설 버전이 따로 있어요. 같은 버전 카드를 모아 상위 버전 카드로 바꾸는 게 진화예요 (청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 가능). 전설 버전은 전용 스킬이 하나 더 있어요.</p>
-  <p><b>각성</b>: 전설 버전 영웅이 Lv5가 되면 각성해서 전설 스킬이 한 단계 강해져요. 전투에서 금빛으로 빛나요.</p>
-  <p><b>환생</b>: 황금 리그부터, Lv8 영웅을 환생시키면 Lv1로 돌아가는 대신 별이 하나 채워지고 공격 +1, 체력 +2를 영구로 받아요 (짝수 환생마다 스킬 수치 +1). 일반·희귀 3번, 영웅 4번, 전설 5번까지.</p>
-  <p><b>성장</b>: 아레나에서 이기면 트로피와 상자. 상자를 열면 영웅 카드가 나오고, 카드가 모이면 골드로 레벨업. 리그가 오르면 새 영웅이 합류해요.</p>
-  <p><b>운영</b>: 일일 퀘스트 3개, 요일마다 바뀌는 이벤트, 오늘의 보스, 모험 진행에 따라 늘어나는 보급 창고.</p>
-  </div><div class="btns"><button class="btn" data-close>확인</button></div>`);
+const RULE_TABS=[
+ {n:'전투',p:[['목표','적 지휘관 체력을 0으로 만들면 이겨요. '+MAX_ROUND+'턴이 지나면 체력 비율이 높은 쪽이 이겨요.'],['보드','양쪽 4줄 × 3열. 가운데에 가까운 열이 앞열이에요. 근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열, 지원과 건물은 어디든 놓을 수 있어요.'],['내 턴','덱 8장 중 손에 4장을 들어요. 카드 1장을 놓으면 내 유닛 전원이 공격하고 1장을 새로 뽑아요.'],['라인 막기','유닛은 자기 줄의 적만 때려요. 그 줄에 적이 없으면 적 지휘관을 바로 때려요. 내 줄이 비면 나도 맞아요.'],['합체','같은 영웅 위에 놓으면 합체해서 강해지고 체력이 다 차요 (최대 3단계).'],['진영','성채(보호), 들숲(재생), 잿불(공격). 같은 진영이 2기, 4기 모이면 시너지가 켜져요.'],['건물','공격하지 않지만 줄을 막고 매 턴 효과를 내요. 독과 빙결에 걸리지 않아요.']]},
+ {n:'지휘관',p:[['지휘관 스킬','지휘관마다 고유 스킬 3개를 1턴, 3턴, 6턴부터 순서대로 한 번씩 써요. 2번은 지휘관 Lv3, 3번은 Lv6에 열려요.'],['지휘관 일격','스킬을 다 쓰면 매 턴 1개씩 쌓여요. 늦게 쓸수록 1개당 피해가 커서 모아 뒀다 한 번에 써도 돼요.'],['상대 지휘관','상대도 자기 지휘관 스킬과 일격을 써요.'],['원정','전투에 안 쓰는 지휘관을 원정 보내 카드, 골드, 보석을 얻어요. 지휘관마다 특기가 달라요.']]},
+ {n:'성장',p:[['레벨','같은 카드를 모으고 골드를 내면 레벨업 (최대 Lv8).'],['진화','같은 버전 카드를 모아 상위 등급 버전으로 바꿔요. 청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 해요.'],['각성','전설 버전이 Lv5가 되면 전설 스킬이 한 단계 강해지고 금빛으로 빛나요.'],['환생','황금 리그부터, Lv8 영웅을 환생시키면 Lv1로 돌아가는 대신 별이 하나 채워지고 공격 +1, 체력 +2를 영구로 받아요.']]},
+ {n:'대전·운영',p:[['아레나','비슷한 트로피의 실제 유저 덱과 붙어요. 상대 덱은 AI가 조종해요 (마이티파티와 같은 방식). 상대가 없으면 AI 도전자와 붙어요.'],['방어 기록','다른 유저가 내 덱과 싸우면 기록이 남고, 방어에 성공하면 골드를 받아요.'],['계정','설정에서 구글 계정을 연동하면 자동으로 저장되고 다른 기기에서도 이어서 해요.'],['매일','일일 퀘스트, 일일 특가, 요일 이벤트, 오늘의 보스, 출석, 보급 창고.']]}
+];
+let ruleTab=0;
+function showRules(){const T=RULE_TABS[ruleTab];
+  const m=modal(`<div class="ribbon">게임 가이드</div><div class="rtabs">${RULE_TABS.map((t,i)=>`<button class="rtab ${i===ruleTab?'on':''}" data-rt="${i}">${t.n}</button>`).join('')}</div>
+  <div class="rlist">${T.p.map(([h,d])=>`<div class="ritem"><b>${h}</b><p>${d}</p></div>`).join('')}</div><div class="btns"><button class="btn sm" data-close>확인</button></div>`);
+  m.querySelector('.box').classList.add('wide');
+  m.querySelectorAll('[data-rt]').forEach(b=>b.onclick=()=>{ruleTab=+b.dataset.rt;sfx('tick');m.remove();showRules()});
 }
 
 /* ===================== 모험 / 보스 / 아레나 ===================== */
@@ -2029,6 +2064,13 @@ function evolveFx(from,to,n){sfx('evolve');
   const m=modal(`<h3 style="color:${RAR[tierOf(to)].c}">진화 성공!</h3><div class="evofx"><div class="art t${tierOf(from)}">${portrait(from)}</div><span class="arr">›</span><div class="art t${tierOf(to)} glowin">${portrait(to)}</div></div>
   <div class="rw"><b>${V(to).name}</b> 카드 ${n}장을 얻었어요</div><div class="btns"><button class="btn" data-close>확인</button></div>`,()=>heroDetail(to));
 }
+const DEAL_N=[12,6,3,1],DEAL_COST=[150,320,700,45],DEAL_CUR=['gold','gold','gold','gem'];
+function dealsFresh(){const d=save.shop&&save.shop.deals;return !d||d.d!==new Date().toDateString()||d.items.some(x=>!x.b)}
+function ensureDeals(){save.shop=save.shop||{};const td=new Date().toDateString();if(save.shop.deals&&save.shop.deals.d===td)return save.shop.deals;
+  let pool=Object.keys(save.owned).filter(id=>HEROES[baseOf(id)]&&!HEROES[baseOf(id)].token&&save.owned[id].lv<MAX_LV);
+  if(pool.length<3)pool=pool.concat(START_OWNED.map(b=>vid(b,HEROES[b].rar)));pool=[...new Set(pool)];
+  const items=[];while(items.length<3&&pool.length){const id=pool.splice(Math.floor(Math.random()*pool.length),1)[0];const t=tierOf(id);items.push({id,n:DEAL_N[t],cost:DEAL_COST[t],cur:DEAL_CUR[t],b:false})}
+  save.shop.deals={d:td,items};persist();return save.shop.deals}
 function showShop(){
   screen='shop';ensureDaily();
   const items=[
@@ -2038,11 +2080,15 @@ function showShop(){
     {id:'coins',t:null,n:'골드 꾸러미',d:'골드 500',cost:30,cur:'gem'},
     {id:'adgem',t:null,n:'광고 보고 보석',d:'보석 5개 · 오늘 '+adLeft('gems')+'번 남음',cost:0,cur:'ad',dis:adLeft('gems')<=0}
   ];
+  const DL=ensureDeals();const msLeft=new Date(new Date().setHours(24,0,0,0))-Date.now();
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">상점</span>${resBar()}</div>
-  <div class="body"><div class="shopgrid">${items.map(it=>`<div class="shopitem">${it.t?chestSVG(it.t):`<div style="height:76px;display:flex;align-items:center">${ico(it.cur==='ad'?'gem':'coin','shico')}</div>`}<div class="nm">${it.n}</div><div class="ds">${it.d}</div>
+  <div class="body"><div class="shead"><b>일일 특가</b><small>새 특가까지 ${Math.floor(msLeft/3600000)}시간 ${Math.floor(msLeft%3600000/60000)}분</small></div>
+  <div class="dealgrid">${DL.items.map((x,i)=>{const v=V(x.id),t=tierOf(x.id);return `<div class="deal t${t} ${x.b?'sold':''}"><div class="dart2">${portrait(x.id)}<span class="dn">×${x.n}</span></div><div class="dnm">${v.name}</div><div class="dtier" style="color:${RAR[t].c}">${RAR[t].n} 카드</div><button class="btn sm ${x.b?'sub':''}" data-deal="${i}" ${x.b||(x.cur==='gold'?save.gold<x.cost:save.gems<x.cost)?'disabled':''}>${x.b?'구매 완료':(x.cur==='gold'?'<span class="coin" style="width:12px;height:12px"></span>':'<span class="gem"></span>')+' '+x.cost}</button></div>`}).join('')}</div>
+  <div class="shead"><b>상자 · 재화</b></div><div class="shopgrid">${items.map(it=>`<div class="shopitem">${it.t?chestSVG(it.t):`<div style="height:76px;display:flex;align-items:center">${ico(it.cur==='ad'?'gem':'coin','shico')}</div>`}<div class="nm">${it.n}</div><div class="ds">${it.d}</div>
   <button class="btn sm ${it.cur==='free'||it.cur==='ad'?'grn':''}" data-buy="${it.id}" ${it.dis||(it.cur==='gem'&&save.gems<it.cost)?'disabled':''}>${it.cur==='free'?(it.dis?'내일 다시':'무료 받기'):it.cur==='ad'?(it.dis?'내일 다시':'광고 보기'):`<span class="gem"></span> ${it.cost}`}</button></div>`).join('')}</div>
   <div style="font-size:12.5px;opacity:.55;margin-top:14px;text-align:center">보석은 퀘스트, 상자, 리그 승급으로 얻어요. 실제 결제는 없어요.</div></div></div>`;
   bind('#bk',showLobby);
+  app.querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{const x=DL.items[+b.dataset.deal];if(!x||x.b)return;if(x.cur==='gold'){if(save.gold<x.cost)return;save.gold-=x.cost}else{if(save.gems<x.cost)return;save.gems-=x.cost}x.b=true;save.owned[x.id]=save.owned[x.id]||{lv:1,cards:0};save.owned[x.id].cards+=x.n;persist();sfx('coin');track('deal_buy',{id:x.id});toast(V(x.id).name+' 카드 '+x.n+'장!');showShop()});
   app.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=items.find(x=>x.id===b.dataset.buy);
     if(it.cur==='ad'){showRewardAd('gems','보석 5개를 드려요',()=>{save.gems+=5;persist();toast('보석 5개!');showShop()});return}
     if(it.cur==='free'){if(save.shop.free)return;save.shop.free=true;persist();openChestModal('wood',showShop);return}
