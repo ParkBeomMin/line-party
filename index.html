@@ -817,7 +817,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .trcode{font-size:22px;letter-spacing:3px;color:#ffd667;background:#0006;border-radius:8px;padding:2px 12px;min-width:150px;text-align:center;font-family:monospace}
 .trin{width:150px;font-family:monospace;font-size:16px;letter-spacing:2px;text-transform:uppercase;text-align:center;padding:5px 8px;border-radius:8px;border:1px solid #ffffff44;background:#0006;color:#fff}
 .troff{display:block;text-align:center;margin-top:6px;font-size:11px;color:#9fd8ff;opacity:.75}
-.qr{display:block;margin:6px auto;width:170px;height:170px;border-radius:10px;background:#fff}
+.qrimg{display:block;margin:6px auto;width:170px;height:170px;border-radius:10px;background:#fff}
 .appbar{position:absolute;top:54px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:6px;background:linear-gradient(#2fbf60,#178a40);border:2px solid #9dffb9;border-radius:20px;padding:3px 6px 3px 12px;box-shadow:0 4px 10px #0008}
 .appbar a{color:#fff;font-size:13px;text-decoration:none;font-weight:800}
 .appbar button{background:#0004;border:0;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer}
@@ -837,6 +837,7 @@ a.btn{display:inline-block;text-decoration:none}
 .rbline{position:absolute;left:50%;transform:translateX(-50%);bottom:2px;font-size:15px;line-height:1;background:#000a;border-radius:8px;padding:1px 5px;white-space:nowrap}
 .rbline .lvst{letter-spacing:0}
 .rbline .lvst i{color:#ffffff38}
+.dart .pt,.evo .art .pt{width:100%;height:100%}
 </style>
 </head>
 <body>
@@ -844,7 +845,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.2 베타';
+const VERSION='v3.2.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -985,7 +986,7 @@ const QUEST_POOL=[
   {id:'arenaWin',n:'아레나 2승',goal:2,gold:60,gems:2},
   {id:'place',n:'유닛 20번 놓기',goal:20,gold:40,gems:1},
   {id:'merge',n:'합체 3번 하기',goal:3,gold:50,gems:2},
-  {id:'skill',n:'번개 일격 3번 쓰기',goal:3,gold:40,gems:1},
+  {id:'skill',n:'지휘관 스킬 3번 쓰기',goal:3,gold:40,gems:1},
   {id:'journey',n:'모험 1판 하기',goal:1,gold:40,gems:1},
   {id:'chest',n:'상자 2개 열기',goal:2,gold:50,gems:2},
   {id:'upgrade',n:'영웅 1번 강화',goal:1,gold:40,gems:2},
@@ -1617,11 +1618,11 @@ function showRules(){
   modal(`<h3>규칙</h3><div class="rules">
   <p><b>목표</b>: 적 지휘관 체력을 0으로. ${MAX_ROUND}라운드가 지나면 체력 비율이 높은 쪽이 이겨요.</p>
   <p><b>보드</b>: 양쪽 4줄 x 3열. 가운데에 가까운 열이 앞열이에요. <b>근접</b>은 앞쪽 두 열, <b>원거리·마법</b>은 뒤쪽 두 열, <b>지원</b>은 어느 열이든 놓을 수 있어요.</p>
-  <p><b>내 턴</b>: 덱 8장을 섞어 손에 3장을 들어요. 카드 1장을 칸에 놓으면 내 유닛 전원이 공격하고, 덱에서 1장을 새로 뽑아요. 낸 카드는 덱 맨 아래로 돌아가요.</p>
+  <p><b>내 턴</b>: 덱 8장을 섞어 손에 4장을 들어요. 카드 1장을 칸에 놓으면 내 유닛 전원이 공격하고, 덱에서 1장을 새로 뽑아요. 낸 카드는 덱 맨 아래로 돌아가요.</p>
   <p><b>라인 막기</b>: 유닛은 자기 라인의 적만 때려요. 그 라인에 적 유닛이 없을 때만 적 지휘관을 때려요. 빈 라인은 그대로 뚫려요.</p>
   <p><b>근접</b>은 같은 줄 앞에 아군이 있으면 공격하지 못해요. <b>원거리·마법</b>은 아군 너머로 공격해요. <b>지원</b>은 공격 대신 효과를 내요.</p>
   <p><b>합체</b>: 같은 영웅 위에 놓으면 별이 오르고 체력이 다 차요 (최대 ★3).</p>
-  <p><b>번개 일격</b>: 지휘관 스킬, 적 유닛에 3 피해, 3턴마다.</p>
+  <p><b>지휘관 스킬</b>: 지휘관마다 고유 스킬 3개를 1턴, 3턴, 6턴부터 순서대로 한 번씩 써요 (2번은 지휘관 Lv3, 3번은 Lv6에 열림). 다 쓰면 매 턴 지휘관 일격이 1개씩 쌓이고, 늦게 쓸수록 1개당 피해가 커져요. 적 지휘관도 스킬을 써요.</p>
   <p><b>원정</b>: 지휘관이 2명 이상이면, 전투에 쓰지 않는 지휘관을 원정 보내 영웅 카드, 골드, 보석을 얻어 와요. 지휘관마다 원정 특기가 달라서 가져오는 보상도 달라요.</p>
   <p><b>건물</b>: 감시탑, 치유의 샘 같은 건물은 어느 열에든 놓을 수 있어요. 공격은 하지 않지만 줄을 막아 지휘관을 지키고, 매 턴 고유 효과를 내요. 독과 빙결에 걸리지 않고, 진화 없이 레벨업만 해요.</p>
   <p><b>지휘관</b>: 로비 왼쪽 위 프로필을 눌러 지휘관을 고를 수 있어요. 지휘관마다 체력, 패시브, 전투 스킬이 달라요. 리그, 모험 진행, 보석으로 새 지휘관을 해금해요.</p>
@@ -1775,7 +1776,7 @@ const isAndroid=()=>/Android/i.test(navigator.userAgent),isIOS=()=>/iPhone|iPad|
 function appCta(where,force){const md=appMode();if(!md)return false;const td=new Date().toDateString();if(!force&&(save.ctaDay===td||document.querySelector('.modal')))return false;save.ctaDay=td;persist();track('app_cta_show',{where,mode:md});
   const link=appLink(where);const tester=md==='tester';
   const body=isIOS()?'<div class="rw" style="opacity:.8">지금은 안드로이드 앱만 준비돼 있어요. 아이폰은 웹에서 계속 즐겨 주세요!</div>'
-    :isDesktop()?`<div class="rw">폰 카메라로 찍으면 바로 열려요</div><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&margin=6&data=${encodeURIComponent(link)}" alt="QR">`
+    :isDesktop()?`<div class="rw">폰 카메라로 찍으면 바로 열려요</div><img class="qrimg" src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&margin=6&data=${encodeURIComponent(link)}" alt="QR">`
     :`<div class="btns"><a class="btn grn" id="ctaGo" href="${link}" target="_blank" rel="noopener">${tester?'테스터 신청하기':'앱으로 계속하기'}</a></div>`;
   const m=modal(`<div class="ribbon">${tester?'앱 테스터 모집':'앱으로 더 편하게'}</div><div class="rw" style="line-height:1.75;text-align:left">
     ${tester?'라인 파티 안드로이드 앱을 먼저 해 볼 테스터를 모집해요.<br>':''}· 구글 계정으로 지금 진행 그대로 이어서<br>· 원정 완료, 상자 열림 알림<br>· 전체 화면으로 더 쾌적하게${tester?'<br>· 정식 출시 때 <b style="color:#ffd667">초기 테스터 보상</b>':''}</div>
