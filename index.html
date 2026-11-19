@@ -1010,7 +1010,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.7.1 베타';
+const VERSION='v3.7.2 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1036,7 +1036,7 @@ const HEROES={
   knight:{fac:'bastion',name:'아델',cls:'melee',rar:2,atk:3,hp:7,skill:'armor',sv:0,desc:'철갑: 처음 받는 피해 1번을 무시',look:{skin:'#e8c4a0',hair:'#c9c9d6',body:'#9aa3b5',acc:'helm'}},
   dragon:{fac:'ember',name:'이그니르',cls:'melee',rar:3,atk:5,hp:8,skill:'flying',sv:0,desc:'비행: 근접 공격에 맞지 않고, 뒷줄에서도 공격',look:{skin:'#c94a3a',hair:'#ffb347',body:'#8a2a20',acc:'none',extra:'dragon'}},
   archer:{fac:'bastion',name:'피오',cls:'ranged',rar:0,atk:2,hp:6,skill:'none',sv:0,desc:'명사수: 어느 줄에서든 공격',look:{skin:'#f1d0a8',hair:'#3f6b2f',body:'#3f6b2f',acc:'bow'}},
-  sniper:{fac:'wild',name:'실바',cls:'ranged',rar:1,atk:3,hp:4,skill:'snipe',sv:0,desc:'저격: 적 뒷줄을 먼저 노린다',look:{skin:'#e0b48c',hair:'#e8e8e8',body:'#2f4f4f',acc:'bow',extra:'hood'}},
+  sniper:{fac:'wild',name:'실바',cls:'ranged',rar:1,ga:0.3,atk:3,hp:4,skill:'snipe',sv:0,desc:'저격: 적 뒷줄을 먼저 노린다',look:{skin:'#e0b48c',hair:'#e8e8e8',body:'#2f4f4f',acc:'bow',extra:'hood'}},
   poison:{fac:'wild',name:'니즈',cls:'ranged',rar:0,atk:1,hp:6,skill:'poison',sv:2,desc:'독침: 맞은 적은 2턴 동안 턴마다 1 피해',look:{skin:'#c9e0a0',hair:'#7a3fa0',body:'#4a2f5a',acc:'dart'}},
   fire:{fac:'ember',name:'이그나',cls:'magic',rar:1,atk:3,hp:4,skill:'pierce',sv:0,desc:'관통: 라인의 적 전부를 공격',look:{skin:'#f6cfa6',hair:'#ff7a2a',body:'#a03a1a',acc:'staff',orb:'#ff8a3a'}},
   frost:{fac:'wild',name:'프리아',cls:'magic',rar:0,atk:2,hp:5,skill:'freeze',sv:0,desc:'빙결: 맞은 적은 다음 공격을 못 한다',look:{skin:'#f3dccb',hair:'#9fe0ff',body:'#3a6fa0',acc:'staff',orb:'#9fe0ff'}},
@@ -1045,11 +1045,11 @@ const HEROES={
   drum:{fac:'bastion',name:'둥둥',cls:'support',rar:1,atk:0,hp:7,skill:'drum',sv:1,desc:'북소리: 같은 줄 아군 공격 +1',look:{skin:'#d9a070',hair:'#2b2b2b',body:'#b5573f',acc:'drum'}},
   necro:{fac:'ember',name:'모르가',cls:'support',rar:2,atk:0,hp:6,skill:'necro',sv:0,desc:'망령 소환: 아군이 쓰러지면 그 자리에 해골(1/2) 소환, 3회',look:{skin:'#b8c0c8',hair:'#1a1a2a',body:'#2a1a3a',acc:'skull'}},
   bron:{fac:'bastion',name:'브론',cls:'melee',rar:1,atk:3,hp:7,skill:'forge',sv:0,desc:'담금질: 놓을 때 같은 줄 아군 모두에게 철갑',look:{}},
-  elia:{fac:'bastion',name:'엘리아',cls:'melee',rar:2,atk:4,hp:6,skill:'lance',sv:0,desc:'돌격창: 줄 앞의 적 2명을 함께 공격 (두 번째는 60% 피해)',look:{}},
+  elia:{fac:'bastion',name:'엘리아',cls:'melee',rar:2,ga:0.2,atk:4,hp:6,skill:'lance',sv:0,desc:'돌격창: 줄 앞의 적 2명을 함께 공격 (두 번째는 60% 피해)',look:{}},
   pipi:{fac:'bastion',name:'피피',cls:'magic',rar:1,atk:2,hp:4,skill:'barrier',sv:0,desc:'보호 마법: 내 턴마다 철갑 없는 가장 약한 아군에게 철갑',look:{}},
   solaris:{fac:'bastion',name:'솔라리스',cls:'melee',rar:3,atk:5,hp:10,skill:'radiant',sv:1,desc:'광휘: 공격할 때 위아래 줄 맨 앞 적에게 1 피해',look:{}},
   toto:{fac:'wild',name:'토토',cls:'support',rar:1,atk:0,hp:8,skill:'spores',sv:2,desc:'포자: 내 턴마다 무작위 적 2명에게 독 2',look:{}},
-  laila:{fac:'wild',name:'라일라',cls:'melee',rar:1,mp:{a:1.35,h:1.35},atk:3,hp:6,skill:'hunt',sv:0,desc:'사냥: 줄에서 체력이 가장 낮은 적을 노린다',look:{}},
+  laila:{fac:'wild',name:'라일라',cls:'melee',rar:1,ga:0.3,mp:{a:1.35,h:1.35},atk:3,hp:6,skill:'hunt',sv:0,desc:'사냥: 줄에서 체력이 가장 낮은 적을 노린다',look:{}},
   oakwood:{fac:'wild',name:'오크우드',cls:'melee',rar:2,atk:2,hp:12,skill:'root',sv:1,desc:'뿌리: 받는 피해 -1, 내 턴마다 체력 1 회복',look:{}},
   ciel:{fac:'wild',name:'시엘',cls:'ranged',rar:3,atk:3,hp:7,skill:'gale',fly:true,sv:0,desc:'돌풍: 자기 줄과 위아래 줄 맨 앞 적을 함께 공격 · 비행',look:{}},
   volka:{fac:'ember',name:'볼카',cls:'ranged',rar:1,atk:2,hp:4,skill:'bomb',sv:2,desc:'유폭: 쓰러지면 같은 줄 적 전체에 2 피해',look:{}},
@@ -1063,7 +1063,7 @@ const HEROES={
   luna:{fac:'wild',name:'루나',cls:'magic',rar:2,atk:3,hp:6,skill:'drain',sv:0,desc:'흡수: 준 피해만큼 가장 다친 아군을 회복',look:{}},
   eila:{fac:'wild',name:'에일라',cls:'magic',rar:3,atk:4,hp:8,skill:'bloom',sv:1,desc:'번성: 공격할 때마다 모든 아군 체력 1 회복',look:{}},
   mog:{fac:'ember',name:'모그',cls:'support',rar:1,atk:0,hp:6,skill:'sacrifice',sv:1,desc:'제물: 아군이 쓰러질 때마다 적 지휘관에게 1 피해',look:{}},
-  berk:{fac:'ember',name:'베르크',cls:'ranged',rar:2,atk:3,hp:5,skill:'scatter',sv:1,desc:'산탄: 공격할 때 옆 줄 맨 앞 적에게도 1 피해',look:{}},
+  berk:{fac:'ember',name:'베르크',cls:'ranged',rar:2,ga:0.2,atk:3,hp:5,skill:'scatter',sv:1,desc:'산탄: 공격할 때 옆 줄 맨 앞 적에게도 1 피해',look:{}},
   azra:{fac:'ember',name:'아즈라',cls:'ranged',rar:3,atk:4,hp:7,skill:'ignite',fly:true,sv:2,desc:'점화: 독에 걸린 적에게 2배 피해, 맞은 적에게 독 · 비행',look:{}},
   leon:{fac:'bastion',name:'레온',cls:'melee',rar:1,atk:3,hp:7,skill:'counter',sv:0,desc:'반격: 근접 공격을 받으면 한 번 되받아친다',look:{}},
   miel:{fac:'bastion',name:'미엘',cls:'support',rar:1,atk:0,hp:7,skill:'cleanse',sv:1,desc:'정화: 내 턴마다 아군의 나쁜 효과를 지우고 체력 1 회복',look:{}},
@@ -1085,7 +1085,7 @@ const HEROES={
   ria:{fac:'wild',name:'리아',cls:'ranged',rar:1,atk:3,hp:5,skill:'viper',sv:2,desc:'독사 사냥: 독이 없는 적을 먼저 노리고 독 2를 건다',look:{}},
   urk:{fac:'wild',name:'우르',cls:'melee',rar:1,atk:3,hp:6,skill:'bloodlust',sv:2,desc:'피의 사냥: 적을 쓰러뜨리면 공격 +2, 체력 2 회복',look:{}},
   miru:{fac:'wild',name:'미루',cls:'magic',rar:1,atk:2,hp:6,skill:'frostnova',sv:0,desc:'서리 폭발: 놓을 때 같은 줄 적 모두 빙결',look:{}},
-  rag:{fac:'ember',name:'라그',cls:'melee',rar:1,atk:3,hp:5,skill:'reckless',sv:1,desc:'무모: 공격 피해 +1 (합체 ◆마다 +1), 공격할 때마다 자신도 1 피해',look:{}},
+  rag:{fac:'ember',name:'라그',cls:'melee',rar:1,ga:0.3,atk:3,hp:5,skill:'reckless',sv:1,desc:'무모: 공격 피해 +1 (합체 ◆마다 +1), 공격할 때마다 자신도 1 피해',look:{}},
   rio:{fac:'ember',name:'리오',cls:'ranged',rar:1,atk:2,hp:5,skill:'firebomb',sv:2,desc:'화염병: 맞은 적 뒤의 적에게도 2 피해, 둘 다 독 1',look:{}},
   kaya:{fac:'ember',name:'카야',cls:'magic',rar:1,atk:3,hp:4,skill:'overheat',sv:1,desc:'과열: 공격할 때마다 공격 +1 (3번까지)',look:{}},
   gor:{fac:'ember',name:'고르',cls:'support',rar:1,atk:0,hp:9,skill:'warcry',sv:1,desc:'전쟁 함성: 놓을 때 아군 모두 공격 +1, 아군이 쓰러질 때마다 무작위 아군 공격 +1',look:{}},
