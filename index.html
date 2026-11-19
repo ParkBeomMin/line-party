@@ -817,6 +817,14 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .trcode{font-size:22px;letter-spacing:3px;color:#ffd667;background:#0006;border-radius:8px;padding:2px 12px;min-width:150px;text-align:center;font-family:monospace}
 .trin{width:150px;font-family:monospace;font-size:16px;letter-spacing:2px;text-transform:uppercase;text-align:center;padding:5px 8px;border-radius:8px;border:1px solid #ffffff44;background:#0006;color:#fff}
 .troff{display:block;text-align:center;margin-top:6px;font-size:11px;color:#9fd8ff;opacity:.75}
+.qr{display:block;margin:6px auto;width:170px;height:170px;border-radius:10px;background:#fff}
+.appbar{position:absolute;top:54px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:6px;background:linear-gradient(#2fbf60,#178a40);border:2px solid #9dffb9;border-radius:20px;padding:3px 6px 3px 12px;box-shadow:0 4px 10px #0008}
+.appbar a{color:#fff;font-size:13px;text-decoration:none;font-weight:800}
+.appbar button{background:#0004;border:0;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer}
+.deflist{display:flex;flex-direction:column;gap:4px;margin:6px 0;max-height:170px;overflow:auto}
+.deflist>div{background:#0005;border-radius:8px;padding:4px 10px;font-size:12px;text-align:left}
+.deflist .dw b{color:#7dffa1}.deflist .dl b{color:#ff8a8a}.deflist small{opacity:.6;float:right}
+a.btn{display:inline-block;text-decoration:none}
 </style>
 </head>
 <body>
@@ -824,7 +832,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v2.7.1 베타';
+const VERSION='v2.8 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1491,7 +1499,7 @@ function showEventInfo(){
 }
 const B_SET=new Set(['shield_0','shield_1','shield_2','shield_3','sword_0','sword_1','sword_2','sword_3','archer_0','archer_1','archer_2','archer_3','poison_0','poison_1','poison_2','poison_3','frost_0','frost_1','frost_2','frost_3','priest_0','priest_1','priest_2','priest_3','berserk_1','berserk_2','berserk_3','bear_1','bear_2','bear_3','sniper_1','sniper_2','sniper_3','fire_1','fire_2','fire_3','drum_1','drum_2','drum_3','knight_2','knight_3','bolt_2','bolt_3','necro_2','necro_3','dragon_3','skel_0']);
 function lobbyArt(id){return (B_SET.has(id)?'b_':'s_')+id}
-function showLobby(){setTimeout(()=>{syncDeck();cloudAuto()},1200);linkNudge();
+function showLobby(){setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
   screen='lobby';ensureDaily();tickChests();
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
@@ -1611,7 +1619,7 @@ function startDaily(){
 const FB={k:'AIzaSyB_hRwh6kvM4GCoVCgSS9wWc03FmnPYLNg',p:'line-party-9a4ca'};
 const FB_BASE=`https://firestore.googleapis.com/v1/projects/${FB.p}/databases/(default)/documents`;
 const fbEnc=v=>typeof v==='string'?{stringValue:v}:Number.isInteger(v)?{integerValue:String(v)}:Array.isArray(v)?{arrayValue:{values:v.map(fbEnc)}}:(v&&typeof v==='object')?{mapValue:{fields:Object.fromEntries(Object.entries(v).map(([k,x])=>[k,fbEnc(x)]))}}:{nullValue:null};
-const fbDec=f=>!f?null:'stringValue' in f?f.stringValue:'integerValue' in f?+f.integerValue:'doubleValue' in f?f.doubleValue:'arrayValue' in f?(f.arrayValue.values||[]).map(fbDec):'mapValue' in f?Object.fromEntries(Object.entries(f.mapValue.fields||{}).map(([k,x])=>[k,fbDec(x)])):null;
+const fbDec=f=>!f?null:'timestampValue' in f?Date.parse(f.timestampValue):'booleanValue' in f?f.booleanValue:'stringValue' in f?f.stringValue:'integerValue' in f?+f.integerValue:'doubleValue' in f?f.doubleValue:'arrayValue' in f?(f.arrayValue.values||[]).map(fbDec):'mapValue' in f?Object.fromEntries(Object.entries(f.mapValue.fields||{}).map(([k,x])=>[k,fbDec(x)])):null;
 function fbFetch(url,opt,ms){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms||4000);return fetch(url,{...(opt||{}),signal:c.signal}).finally(()=>clearTimeout(t))}
 function fbStore(){try{return JSON.parse(localStorage.getItem('lineparty_fb')||'{}')}catch(e){return {}}}
 async function fbAuth(){let a=fbStore();if(a.tok&&a.exp>Date.now()+60000)return a;
@@ -1638,7 +1646,7 @@ async function fbQueryRange(lo,hi){
   if(!r.ok)return [];const j=await r.json();
   return j.filter(x=>x.document).map(x=>{const f=x.document.fields||{};const o={};for(const k in f)o[k]=fbDec(f[k]);o.uid=x.document.name.split('/').pop();return o})}
 async function findOpponent(){const me=fbStore().uid;const T=save.trophies|0;
-  const ok=o=>o.uid!==me&&typeof o.name==='string'&&nickOk(o.name)&&WARLORDS[o.wl]&&Array.isArray(o.deck)&&o.deck.length===8&&o.deck.every(validKey)&&o.wlLv>=1;
+  const ok=o=>o.uid!==me&&typeof o.name==='string'&&nickOk(o.name)&&WARLORDS[o.wl]&&Array.isArray(o.deck)&&o.deck.length===8&&o.deck.every(validKey)&&o.wlLv>=1&&plausibleDeck(o);
   for(const R of [150,400,1500,20000]){const list=(await fbQueryRange(Math.max(0,T-R),T+R)).filter(ok);if(list.length){const o=list[rnd(list.length)];o.lvs=o.lvs||{};return o}}
   return null}
 async function findOpponentT(ms){return Promise.race([findOpponent().catch(()=>null),new Promise(r=>setTimeout(()=>r(null),ms||3500))])}
@@ -1711,6 +1719,51 @@ function showBackupCode(){const m=modal(`<div class="ribbon">오프라인 백업
   m.querySelector('.box').classList.add('wide');
   m.querySelector('#bkCopy').onclick=async()=>{const t=m.querySelector('#bkCode');t.select();try{await navigator.clipboard.writeText(t.value)}catch(e){document.execCommand('copy')}toast('복사했어요')};
   m.querySelector('#bkLoad').onclick=()=>{try{const o=decodeSave(m.querySelector('#bkIn').value);if(!confirm('지금 진행 상황을 이 코드로 덮어쓸까요?'))return;applySaveObj(o);toast('불러왔어요');document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}catch(e){toast('코드가 올바르지 않아요')}}}
+/* ===================== 앱 유도 (플레이 콘솔 등록 후 링크만 채우면 켜짐) ===================== */
+const APP_CFG={playUrl:'',testerUrl:''};
+function inNativeApp(){return !!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())}
+function appMode(){if(inNativeApp())return '';return APP_CFG.playUrl?'play':APP_CFG.testerUrl?'tester':''}
+function appLink(where){if(APP_CFG.playUrl){const u=APP_CFG.playUrl;return u+(u.includes('?')?'&':'?')+'referrer='+encodeURIComponent('utm_source=web&utm_medium='+where)}return APP_CFG.testerUrl}
+const isAndroid=()=>/Android/i.test(navigator.userAgent),isIOS=()=>/iPhone|iPad|iPod/i.test(navigator.userAgent),isDesktop=()=>!/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+function appCta(where,force){const md=appMode();if(!md)return false;const td=new Date().toDateString();if(!force&&(save.ctaDay===td||document.querySelector('.modal')))return false;save.ctaDay=td;persist();track('app_cta_show',{where,mode:md});
+  const link=appLink(where);const tester=md==='tester';
+  const body=isIOS()?'<div class="rw" style="opacity:.8">지금은 안드로이드 앱만 준비돼 있어요. 아이폰은 웹에서 계속 즐겨 주세요!</div>'
+    :isDesktop()?`<div class="rw">폰 카메라로 찍으면 바로 열려요</div><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&margin=6&data=${encodeURIComponent(link)}" alt="QR">`
+    :`<div class="btns"><a class="btn grn" id="ctaGo" href="${link}" target="_blank" rel="noopener">${tester?'테스터 신청하기':'앱으로 계속하기'}</a></div>`;
+  const m=modal(`<div class="ribbon">${tester?'앱 테스터 모집':'앱으로 더 편하게'}</div><div class="rw" style="line-height:1.75;text-align:left">
+    ${tester?'라인 파티 안드로이드 앱을 먼저 해 볼 테스터를 모집해요.<br>':''}· 구글 계정으로 지금 진행 그대로 이어서<br>· 원정 완료, 상자 열림 알림<br>· 전체 화면으로 더 쾌적하게${tester?'<br>· 정식 출시 때 <b style="color:#ffd667">초기 테스터 보상</b>':''}</div>
+    ${body}<div class="btns"><button class="btn sub sm" data-close>나중에</button></div>`);
+  const go=m.querySelector('#ctaGo');if(go)go.onclick=()=>{track('app_cta_click',{where,mode:md});setTimeout(()=>m.remove(),300)};return true}
+function appNudge(){if(!appMode())return;const td=new Date().toDateString();if(!isLinked()&&save.nudgeDay!==td&&((save.trophies|0)>=150||(save.cleared|0)>=3))return;
+  const wins=((save.stats||{}).wins|0);if(wins<3&&(save.bestLeague|0)<1)return;setTimeout(()=>{if(screen==='lobby')appCta('lobby')},2600)}
+function appBar(){if(!appMode()||!isAndroid()||screen!=='lobby')return;if((save.barHide|0)>Date.now())return;if(app.querySelector('.appbar'))return;
+  const b=document.createElement('div');b.className='appbar';b.innerHTML=`<a href="${appLink('bar')}" target="_blank" rel="noopener" id="abGo">📱 ${appMode()==='tester'?'앱 테스터 모집 중':'앱으로 계속하기'}</a><button id="abX">✕</button>`;app.appendChild(b);
+  b.querySelector('#abGo').onclick=()=>track('app_cta_click',{where:'bar',mode:appMode()});b.querySelector('#abX').onclick=()=>{save.barHide=Date.now()+3*864e5;persist();b.remove()}}
+/* ===================== 방어 기록 ===================== */
+async function defLog(uid,defWon){try{const a=await fbAuth();if(!uid||uid===a.uid)return;const id=[...crypto.getRandomValues(new Uint8Array(15))].map(x=>TR_AB[x%32]).join('');
+  const w={update:{name:`projects/${FB.p}/databases/(default)/documents/defense/${uid}/log/${id}`,fields:{n:fbEnc(myNick()),w:{booleanValue:!!defWon},a:fbEnc(a.uid)}},updateTransforms:[{fieldPath:'t',setToServerValue:'REQUEST_TIME'}]};
+  await fbFetch(FB_BASE+':commit',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+a.tok},body:JSON.stringify({writes:[w]})})}catch(e){}}
+let defLast=0;
+async function defCheck(){if(Date.now()-defLast<120000)return;defLast=Date.now();try{const st0=fbStore();if(!st0.uid)return;const a=await fbAuth();
+  const r=await fbFetch(FB_BASE+'/defense/'+a.uid+':runQuery',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+a.tok},body:JSON.stringify({structuredQuery:{from:[{collectionId:'log'}],limit:50}})});
+  if(!r.ok)return;const j=await r.json();const docs=j.filter(x=>x.document);if(!docs.length)return;
+  const ent=docs.map(x=>{const f=x.document.fields||{};return {n:fbDec(f.n)||'?',w:!!(f.w&&f.w.booleanValue),t:f.t&&f.t.timestampValue?Date.parse(f.t.timestampValue):Date.now(),path:x.document.name}}).sort((p,q)=>q.t-p.t);
+  const td=new Date().toDateString();if(save.defDay!==td){save.defDay=td;save.defGold=0}
+  const wins=ent.filter(e=>e.w).length,loss=ent.length-wins;const gold=Math.max(0,Math.min(wins*5,50-(save.defGold|0)));
+  save.def=save.def||{w:0,l:0,hist:[]};save.def.w+=wins;save.def.l+=loss;save.def.hist=[...ent.map(e=>({n:e.n,w:e.w,t:e.t})),...save.def.hist].slice(0,20);save.gold+=gold;save.defGold=(save.defGold|0)+gold;persist();
+  ent.forEach(e=>fbFetch('https://firestore.googleapis.com/v1/'+e.path,{method:'DELETE',headers:{Authorization:'Bearer '+a.tok}}).catch(()=>{}));track('defense_seen',{n:ent.length,w:wins});
+  const show=()=>{if(screen!=='lobby'||document.querySelector('.modal')){toast(`방어 기록: ${ent.length}번 중 ${wins}승${gold?' · +'+gold+' 골드':''}`);return}
+    const m=modal(`<div class="ribbon">방어 기록</div><div class="rw">내가 없는 동안 내 덱이 <b>${ent.length}번</b> 싸웠어요</div>
+     <div class="deflist">${ent.slice(0,8).map(e=>`<div class="${e.w?'dw':'dl'}"><b>${e.w?'방어 성공':'방어 실패'}</b> ${esc(e.n)} <small>${new Date(e.t).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</small></div>`).join('')}</div>
+     <div class="rw">${wins}승 ${loss}패${gold?` · 방어 보상 <b style="color:#ffd667">+${gold} 골드</b>`:''}<br><small style="opacity:.6">누적 ${save.def.w}승 ${save.def.l}패 · 방어 보상은 하루 50골드까지</small></div>
+     <div class="btns"><button class="btn sm" data-close>확인</button></div>`,showLobby)};show()}catch(e){}}
+/* ===================== 핵 방지: 비정상 덱 거르기 ===================== */
+function baseOfKey(k){const i=k.lastIndexOf('_');return [k.slice(0,i),+k.slice(i+1)]}
+function heroLeague(b){if(START_OWNED.includes(b))return 0;const i=LEAGUES.findIndex(L=>L.un.includes(b));return i<0?99:i}
+function plausibleDeck(o){const T=o.trophies|0,li=leagueIdx(T);const lvCap=Math.min(MAX_LV,4+Math.floor(T/250));
+  if(o.wl==='seraphine'&&li<1||o.wl==='maya'&&li<2)return false;if((o.wlLv|0)>Math.min(WL_MAX,4+li*2))return false;
+  if(o.t&&Date.now()-o.t>30*864e5)return false;
+  return o.deck.every(k=>{const [b,tr]=baseOfKey(k);if(!HEROES[b]||b==='skel')return false;const lv=(o.lvs[k]|0)||1;if(lv<1||lv>lvCap)return false;if(heroLeague(b)>li+1)return false;if(tr>HEROES[b].rar&&li<1)return false;return true})}
 async function startArena(){
   ensureDeck();
   const li=leagueIdx(save.trophies);
@@ -2226,6 +2279,8 @@ function decodeSave(code){const o=JSON.parse(decodeURIComponent(escape(atob(code
 function showSettings(){
   const m=modal(`<div class="ribbon">설정</div>
   ${isLinked()?`<div class="setrow"><span>구글 계정 연동됨 <small style="opacity:.7">${esc(fbStore().email||'')} · 자동 저장 중</small></span><span style="display:flex;gap:6px"><button class="btn sm grn" id="stGSave">지금 저장</button><button class="btn sm sub" id="stGOut">로그아웃</button></span></div>`:`<div class="setrow"><span>구글 계정 연동 <small style="opacity:.7">(자동 클라우드 저장, 다른 기기·앱에서 이어하기)</small></span><button class="btn sm grn" id="stG">구글로 연동</button></div>`}
+  ${appMode()?`<div class="setrow"><span>📱 ${appMode()==='tester'?'앱 테스터 신청':'안드로이드 앱 받기'}</span><button class="btn sm grn" id="stApp">열기</button></div>`:''}
+  ${save.def?`<div class="setrow"><span>방어 기록 <small style="opacity:.7">내 덱이 다른 유저와 싸운 결과</small></span><b>${save.def.w}승 ${save.def.l}패</b></div>`:''}
   <div class="setrow"><span>닉네임 <small style="opacity:.6">(대전 상대에게 보여요, 10자까지)</small></span><span style="display:flex;gap:6px"><input id="stNick" maxlength="10" value="${esc(myNick())}" style="width:120px;font-family:inherit;font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #ffffff44;background:#0006;color:#fff"><button class="btn sm grn" id="stNickSave">저장</button></span></div>
   <div class="setrow"><span>소리</span><button class="btn sm ${save.mute?'sub':'grn'}" id="stMute">${save.mute?'꺼짐':'켜짐'}</button></div>
   <div class="setrow col"><span>기기 이전 코드 <small style="opacity:.6">(구글 연동 없이 옮길 때 · 24시간 유효)</small></span>
@@ -2237,6 +2292,7 @@ function showSettings(){
   <div class="btns"><button class="btn sub sm" data-close>닫기</button></div>`,showLobby);
   m.querySelector('.box').classList.add('wide');
   if(!isLinked())fbSdk().catch(()=>{});
+  bind('#stApp',()=>{m.remove();appCta('settings',true)});
   bind('#stG',async()=>{const ok=await googleLogin();if(ok){m.remove();if(!document.querySelector('.modal'))showSettings()}});
   bind('#stGSave',async()=>{const ok=await cloudPut();toast(ok?'구글 계정에 저장했어요':'저장에 실패했어요')});
   bind('#stGOut',()=>{if(!confirm('로그아웃할까요? 이 기기 진행은 남지만 자동 저장이 멈춰요.'))return;googleLogout();m.remove();showSettings()});
@@ -2498,7 +2554,7 @@ function showExpeditions(){
   <div class="expgrid">${ids.map(card).join('')}</div>
   <div style="font-size:11px;opacity:.6;text-align:center;margin-top:8px">지휘관 레벨이 1 오를 때마다 원정 보상 +10%. 원정 중인 지휘관은 전투 지휘관으로 고를 수 없어요.</div></div></div>`;
   bind('#bk',showLobby);
-  app.querySelectorAll('[data-send]').forEach(b=>b.onclick=()=>{const id=b.dataset.send,D=EXP_DEST.find(x=>x.id===b.dataset.dest);save.exp[id]={dest:D.id,start:Date.now(),end:Date.now()+expMins(D)*60000};persist();qp('exped');track('expedition_send',{wl:id,dest:D.id});sfx('whoosh');toast(WARLORDS[id].n+' 출발! '+D.n);showExpeditions()});
+  app.querySelectorAll('[data-send]').forEach(b=>b.onclick=()=>{const id=b.dataset.send,D=EXP_DEST.find(x=>x.id===b.dataset.dest);save.exp[id]={dest:D.id,start:Date.now(),end:Date.now()+expMins(D)*60000};persist();setTimeout(()=>appCta('exped'),900);qp('exped');track('expedition_send',{wl:id,dest:D.id});sfx('whoosh');toast(WARLORDS[id].n+' 출발! '+D.n);showExpeditions()});
   app.querySelectorAll('[data-claim]').forEach(b=>b.onclick=()=>{const id=b.dataset.claim,e=expOf(id);if(!e||!expDone(id))return;const res=expRoll(id,e.dest);delete save.exp[id];persist();track('expedition_claim',{wl:id,dest:e.dest});expRewardModal(id,e.dest,res)});
   app.querySelectorAll('[data-rush]').forEach(b=>b.onclick=()=>{const id=b.dataset.rush,e=expOf(id);const cost=Math.max(1,Math.ceil((e.end-Date.now())/60000/10));if(save.gems<cost)return toast('보석이 부족해요');save.gems-=cost;e.end=Date.now();persist();sfx('coin');showExpeditions()});
   app.querySelectorAll('[data-ad]').forEach(b=>b.onclick=()=>{const id=b.dataset.ad;showRewardAd('chest','원정 시간을 30분 줄여드려요',()=>{const e=expOf(id);if(e){e.end-=30*60000;persist()}showExpeditions()})});
@@ -2517,6 +2573,7 @@ function synChips(side){return `<div class="syn">${FAC_KEYS.map(f=>{const n=facC
 function infoText(u){const H=V(u.key);return `<b style="color:${RAR[H.tier].c}">${H.name}</b> ${'★'.repeat(u.star)} Lv${u.lv} (<span style="color:${FAC[H.fac].c}">${FAC[H.fac].n}</span> ${CLS[H.cls].n})<br>공격 ${effAtk(st,u)} · 체력 ${u.hp}/${u.max}<br>${H.desc}${H.ex?'<br><span style="color:#ffd667">'+H.exd+'</span>':''}`}
 function endBattle(){setTimeout(cloudAuto,800);
   const win=st.timeout?st.cmd.p.hp/st.cmd.p.max>st.cmd.e.hp/st.cmd.e.max:(st.cmd.e.hp<=0&&st.cmd.p.hp>0);
+  if(cfg.mode==='arena'&&cfg.online&&!st.gaveUp)defLog(cfg.online.uid,!win);
   const gm=ev('goldrush')?2:1;
   let gold=0,gems=0,chest=null,chestFail=false,dT=0,unlocks=[],leagueUp=null,direct=null;
   qp('kill',st.kills||0);if(st.fac4)qp('fac4');
