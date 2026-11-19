@@ -774,8 +774,8 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .battle.field.b2 .cell,.battle.field.b2 .cell.valid,.battle.field.b2 .cell.target,.battle.field.b2 .grid .cell.valid{background:none!important;border:0!important;box-shadow:none!important;outline:0!important;animation:none!important}
 .b2 .cell:before,.b2 .cell:after{display:none!important}
 .b2 .bbot2 .card{width:92px!important;height:112px!important}
-.b2 .bbot2 .pilec{left:320px;bottom:16px}
-.b2 .tip2{left:auto;right:216px;bottom:10px;width:300px;max-width:none}
+.b2 .bbot2 .pilec{left:418px;bottom:16px}
+.b2 .tip2{left:auto;right:216px;bottom:10px;width:240px;max-width:none}
 .b2 .cmdx.e .cbody .rigc{transform:scaleX(-1)}
 
 /* v2.4 지휘관 스킬 3개 */
@@ -805,6 +805,11 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 .wsk.strk.ready{background:radial-gradient(circle at 50% 35%,#e0704a,#5a1a10);border-color:#ffb28a}
 .wsl .strk{border:1px dashed #ffb28a88}
 .wsl .strk .wsn{background:#ffb28a}
+.b2 .ewsk{display:flex;gap:3px;margin-top:-4px;margin-bottom:4px;z-index:3}
+.b2 .ewsk .ep{min-width:20px;height:20px;border-radius:10px;background:#16122a;border:1.5px solid #ff9a8a88;font-size:11px;line-height:17px;text-align:center;padding:0 3px;cursor:pointer}
+.b2 .ewsk .ep.used{opacity:.45}.b2 .ewsk .ep.lock{opacity:.3}
+.b2 .ewsk .ep.ready{border-color:#ff6b6b;box-shadow:0 0 8px #ff6b6b}
+.b2 .ewsk .ep.strk{background:#5a1a10}
 </style>
 </head>
 <body>
@@ -812,7 +817,7 @@ button{font-family:inherit;border:0;cursor:pointer;color:inherit;background:none
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v2.4.1 베타';
+const VERSION='v2.5 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1327,7 +1332,7 @@ function drawHand(deck,lvs){
 }
 function colOk(id,r){const c=V(id).cls;if(c==='melee')return r<=1;if(c==='ranged'||c==='magic')return r>=1;return true}
 function makePile(deck){const p=deck.slice();for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}return p}
-function refill(hand,pile,lvs){const added=[];while(hand.length<3&&pile.length){const k=pile.shift();const c={key:k,star:1,lv:lvs[k]||1};hand.push(c);added.push(c)}return added}
+function refill(hand,pile,lvs){const added=[];while(hand.length<4&&pile.length){const k=pile.shift();const c={key:k,star:1,lv:lvs[k]||1};hand.push(c);added.push(c)}return added}
 function validCells(st,side,card){
   const out=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u?(u.key===card.key&&u.star<3):colOk(card.key,r))out.push([r,l])}
   return out;
@@ -1717,18 +1722,22 @@ function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',bo
 async function startBattle(c){
   screen='battle';tryLandscape();track('battle_start',{mode:c.mode,stage:c.idx??-1});
   cfg=c;st=newState(c);BD=null;
-  ui={auto:!!save.autoOn,hand:[],sel:-1,phase:'wait',reels:null,wsUsed:0,strikeCd:0,targeting:false,resolve:null,log:'',newUid:null,info:''};
+  if(!c.eWl){const art=(c.eLook||'').startsWith('art:')?c.eLook.slice(4):'';const hit=Object.keys(WARLORDS).find(k=>WARLORDS[k].art===art);
+    if(hit)c.eWl=hit;else{const fc={};(c.eDeck||[]).forEach(k=>{const f=V(k).fac;fc[f]=(fc[f]||0)+1});const mf=Object.keys(fc).sort((x,y)=>fc[y]-fc[x])[0]||'bastion';const L=FAC_WL[mf]||FAC_WL.bastion;c.eWl=L[(c.idx||0)%L.length]}}
+  if(!c.eWlLv)c.eWlLv=c.mode==='arena'?Math.min(WL_MAX,1+Math.round(leagueIdx(save.trophies)*1.5)):c.mode==='stage'?Math.min(WL_MAX,1+Math.floor((c.idx||0)*.6)):4;
+  st.ws={p:{used:0,ch:0,doneR:99},e:{used:0,ch:0,doneR:99}};
+  ui={auto:!!save.autoOn,hand:[],sel:-1,phase:'wait',reels:null,targeting:false,resolve:null,log:'',newUid:null,info:''};
   renderBattle();
   const b0=c.mode==='daily'?'보스전 시작!':c.mode==='arena'?'아레나 전투!':'전투 시작!';banner(b0);bgmStart('battle');await sleep(900);
   const pDeck=save.deck.slice(),pLvs=playerLvs();const pPile=makePile(pDeck);const eHand=[],ePile=makePile(c.eDeck);ui.hand=[];ui.pile=pPile;
   while(!st.over){
     ui.log='내 턴';if(st.round===1||st.round%5===0)turnBanner(st.round+' 라운드','rnd');else turnBanner('내 턴','me');await sleep(350);await doFx(startTurnEffects(st,'p'));if(st.over)break;
-    if(ui.strikeCd>0)ui.strikeCd--;
+    if(wsTick('p'))toast('지휘관 일격 +1 (쌓인 '+wsOf('p').ch+'개)');
     {const added=refill(ui.hand,pPile,pLvs);added.forEach(a=>a.fresh=1);ui.sel=ui.hand.length===1?0:-1;BD&&(BD.sig='');renderBattle();if(added.length)sfx('tick');await sleep(added.length?350:0);ui.hand.forEach(h=>delete h.fresh)}
     ui.phase='choose';renderBattle();if(ui.auto)autoPlay();
     if(ui.hand.some(h=>V(h.key).cls==='building'))tutTip('bld','<b>건물 카드</b>건물은 어느 열에든 놓을 수 있어요. 공격은 안 하지만 줄을 막고 매 턴 효과를 내요.');
-    if(wskState(curIdx())==='ready')tutTip('wlskill','<b>지휘관 스킬</b>오른쪽 아래 둥근 버튼이 빛나면 지휘관 스킬을 쓸 수 있어요. 스킬은 3개, 한 판에 한 번씩 순서대로 써요. 다 쓰고 나면 2턴마다 적 지휘관을 직접 때리는 지휘관 일격으로 바뀌어요. 지휘관마다 스킬이 달라요.');
-    tutTip('pick','<b>1. 카드 고르기</b>아래 카드 중 하나를 누르세요. 덱에서 3장씩 들고, 1장을 내면 1장을 새로 뽑아요. 같은 영웅 위에 놓으면 ★로 합체해서 더 강해져요.');
+    if(wskState(curIdx())==='ready')tutTip('wlskill','<b>지휘관 스킬</b>오른쪽 아래 둥근 버튼이 빛나면 지휘관 스킬을 쓸 수 있어요. 스킬은 3개, 한 판에 한 번씩 순서대로 써요. 다 쓰고 나면 매 턴 지휘관 일격이 1개씩 쌓여요. 늦게 쓸수록 1개당 피해가 커지니 모아 뒀다 한 번에 쓸 수도 있어요. 적 지휘관도 스킬을 써요! 지휘관마다 스킬이 달라요.');
+    tutTip('pick','<b>1. 카드 고르기</b>아래 카드 중 하나를 누르세요. 덱에서 4장씩 들고, 1장을 내면 1장을 새로 뽑아요. 같은 영웅 위에 놓으면 ★로 합체해서 더 강해져요.');
     const act=await new Promise(r=>ui.resolve=r);tutClear();
     ui.phase='wait';
     if(st.over)break;
@@ -1740,6 +1749,7 @@ async function startBattle(c){
     if(save.tut&&!save.tut.lane&&st.round===1)tutTip('lane','<b>2. 라인 막기</b>영웅은 자기 줄의 적만 공격해요. 그 줄에 적이 없으면 적 지휘관을 바로 때려요. 내 줄이 비어 있으면 나도 맞아요!');
     ui.log='적 턴';turnBanner('적 턴','en');renderBattle();await sleep(500);
     await doFx(startTurnEffects(st,'e'));if(st.over)break;
+    wsTick('e');await enemyWsk();if(st.over)break;
     refill(eHand,ePile,c.eLvs);
     const pick=aiChoose(st,'e',eHand,c.noise);
     if(pick){const card=eHand.splice(pick.hi,1)[0];ePile.push(card.key);await enemyCardFx(card,pick.r,pick.l);ui.log=`적이 ${V(card.key).name}${card.star>1?' ★'+card.star:''}을(를) 놓음`;if(V(card.key).tier===3&&!st.board.e[pick.r][pick.l]){const v=V(card.key);await cutIn({side:'e',img:artOf(card.key),tag:'적 전설 등장',name:v.name,desc:v.exd||v.desc})}
@@ -1808,12 +1818,12 @@ function buildBattleDOM(){
 function cmdPanelHTML(side){
   const c=st.cmd[side];
   const art=side==='p'?(WARLORDS[st.wl]||WARLORDS.asten).art:lookArt(cfg.eLook);
-  return `<div class="chp ${c.hp<=c.max*.3?'low':''}"><span class="hrt">♥</span>${c.hp}<small>/${c.max}</small></div>${cmdBody(art)}${synChips(side)}`;
+  return `<div class="chp ${c.hp<=c.max*.3?'low':''}"><span class="hrt">♥</span>${c.hp}<small>/${c.max}</small></div>${cmdBody(art)}${side==='e'?ewskHTML():''}${synChips(side)}`;
 }
 function wskButtons(){const ci=curIdx();const idx=strikePhase()?[0,1,2,3]:[0,1,2];return idx.map(i=>{const S=wskAt(i),stt=wskState(i);const big=i===ci&&stt!=='used';
-  const lab=stt==='used'?'✓':stt==='lock'?'🔒':i===3&&stt==='wait'?ui.strikeCd:(stt==='wait'||stt==='queue')?wskTurn(i):'';
-  return `<button class="wsk ${stt} ${big?'big':''} ${i===3?'strk':''} ${ui.targeting&&big?'tg':''}" data-wsk="${i}" ${ui.phase!=='choose'&&stt==='ready'?'data-off="1"':''}><span class="wn">${i===3?'⚔':i+1}</span>${lab!==''?`<b>${lab}</b>`:''}${big?`<small>${S.n}</small>`:''}</button>`}).join('')}
-function autoPlay(){setTimeout(()=>{if(!ui.auto||ui.phase!=='choose'||!ui.resolve)return;if(wskState(curIdx())==='ready'&&!ui.casting){const S=curWsk();let tg=null;if(S.target==='unit'){let b=null;eachUnit(st,'e',u=>{if(!b||effAtk(st,u)+u.hp>effAtk(st,b)+b.hp)b=u});tg=b}else if(S.target==='lane'){let bl=-1,bn=0;for(let l=0;l<LANES;l++){const n=laneUnits(st,'e',l).length;if(n>bn){bn=n;bl=l}}tg=bl>=0?bl:null}if(S.target==='none'||tg!==null){useWarlordSkill(tg);setTimeout(autoPlay,1600/SPEED);return}}const p=aiChoose(st,'p',ui.hand,1);if(p)ui.resolve({type:'place',hi:p.hi,r:p.r,l:p.l});else ui.resolve({type:'pass'})},450/SPEED)}
+  const lab=stt==='used'?'✓':stt==='lock'?'🔒':i===3?'×'+wsOf('p').ch:(stt==='wait'||stt==='queue')?wskTurn(i):'';
+  return `<button class="wsk ${stt} ${big?'big':''} ${i===3?'strk':''} ${ui.targeting&&big?'tg':''}" data-wsk="${i}" ${ui.phase!=='choose'&&stt==='ready'?'data-off="1"':''}><span class="wn">${i===3?'⚔':i+1}</span>${lab!==''?`<b>${lab}</b>`:''}${big?`<small>${i===3?'일격 '+strikeDmg()+' 피해':S.n}</small>`:''}</button>`}).join('')}
+function autoPlay(){setTimeout(()=>{if(!ui.auto||ui.phase!=='choose'||!ui.resolve)return;if(wskState(curIdx())==='ready'&&!ui.casting&&(curIdx()!==3||wantStrike('p'))){const S=curWsk();let tg=null;if(S.target==='unit'){let b=null;eachUnit(st,'e',u=>{if(!b||effAtk(st,u)+u.hp>effAtk(st,b)+b.hp)b=u});tg=b}else if(S.target==='lane'){let bl=-1,bn=0;for(let l=0;l<LANES;l++){const n=laneUnits(st,'e',l).length;if(n>bn){bn=n;bl=l}}tg=bl>=0?bl:null}if(S.target==='none'||tg!==null){useWarlordSkill(tg);setTimeout(autoPlay,1600/SPEED);return}}const p=aiChoose(st,'p',ui.hand,1);if(p)ui.resolve({type:'place',hi:p.hi,r:p.r,l:p.l});else ui.resolve({type:'pass'})},450/SPEED)}
 function topBarHTML(){
   const W=WARLORDS[st.wl]||WARLORDS.asten;const li=leagueIdx(save.trophies);
   const myTurn=ui.log==='내 턴'||ui.phase==='choose';
@@ -1879,7 +1889,7 @@ function renderBattle(){
   const sel=ui.sel>=0?ui.hand[ui.sel]:null;
   const descTxt=ui.targeting?`<b style="color:#ffd667">${curWsk().n}</b><br>${curWsk().d}<br><span style="opacity:.7">${curWsk().target==='lane'?'적 줄 하나를 누르세요':'적 유닛을 누르세요'}</span>`:(sel?`<b style="color:${RAR[V(sel.key).tier].c}">${V(sel.key).name}</b> ${'★'.repeat(sel.star)} (<span style="color:${FAC[V(sel.key).fac].c}">${FAC[V(sel.key).fac].n}</span> ${CLS[V(sel.key).cls].n})<br>${V(sel.key).desc}${V(sel.key).ex?'<br><span style="color:#ffd667">'+V(sel.key).exd+'</span>':''}<br><span style="opacity:.7">${V(sel.key).cls==='melee'?'근접: 앞쪽 두 열':V(sel.key).cls==='support'?'지원: 어느 열이든':V(sel.key).cls==='building'?'건물: 어느 열이든, 공격하지 않고 줄을 막아요':'원거리·마법: 뒤쪽 두 열'} · 같은 영웅 위면 합체!</span>`:ui.info||'');
   const noValid=ui.phase==='choose'&&ui.hand.every(c=>validCells(st,'p',c).length===0);
-  const sig=JSON.stringify([(ui.pile||[]).length,ui.reels,ui.hand,ui.sel,ui.phase,ui.wsUsed,ui.strikeCd,st.round,ui.targeting,descTxt,noValid]);
+  const sig=JSON.stringify([(ui.pile||[]).length,ui.reels,ui.hand,ui.sel,ui.phase,JSON.stringify(st.ws),st.round,ui.targeting,descTxt,noValid]);
   if(sig!==BD.sig){
     BD.sig=sig;
     let handArea;
@@ -1890,11 +1900,12 @@ function renderBattle(){
      <div class="bside"><div class="wskrow">${wskButtons()}</div>
      ${noValid?'<button class="btn sm sub" id="bPass">넘기기</button>':''}</div>`;
     BD.bot.querySelectorAll('.card').forEach(c=>c.onclick=()=>{if(ui.phase!=='choose')return;ui.targeting=false;const i=+c.dataset.hi;ui.sel=ui.sel===i?-1:i;sfx('tick');renderBattle();if(ui.sel>=0&&save.tut&&save.tut.pick!==2){save.tut.pick=1;tutTip('place','<b>노란 칸에 놓기</b>근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열에 놓을 수 있어요.')}});
-    BD.bot.querySelectorAll('[data-wsk]').forEach(b=>b.onclick=()=>{const i=+b.dataset.wsk,S=wskAt(i),stt=wskState(i);if(stt!=='ready'||ui.phase!=='choose'){ui.info=`<b style="color:#ffd667">${i===3?'':'스킬 '+(i+1)+' · '}${S.n}</b><br>${S.d}<br><span style="opacity:.7">${stt==='used'?'이번 판에 이미 썼어요':stt==='lock'?'지휘관 Lv'+WSK_LV[i]+'에 열려요':stt==='queue'?'앞 스킬을 먼저 써야 해요':stt==='wait'?(i===3?ui.strikeCd+'턴 뒤에 다시 쓸 수 있어요':wskTurn(i)+'턴부터 쓸 수 있어요'):'내 차례에 쓸 수 있어요'}</span>`;renderBattle();return}
+    BD.bot.querySelectorAll('[data-wsk]').forEach(b=>b.onclick=()=>{const i=+b.dataset.wsk,S=wskAt(i),stt=wskState(i);if(stt!=='ready'||ui.phase!=='choose'){ui.info=`<b style="color:#ffd667">${i===3?'':'스킬 '+(i+1)+' · '}${S.n}</b><br>${S.d}<br><span style="opacity:.7">${stt==='used'?'이번 판에 이미 썼어요':stt==='lock'?'지휘관 Lv'+WSK_LV[i]+'에 열려요':stt==='queue'?'앞 스킬을 먼저 써야 해요':stt==='wait'?(i===3?'다음 내 턴에 1개 쌓여요':wskTurn(i)+'턴부터 쓸 수 있어요'):'내 차례에 쓸 수 있어요'}${i===3?'<br>쌓인 일격 '+wsOf('p').ch+'개 · 지금 쓰면 1개당 '+strikeDmg()+' 피해':''}</span>`;renderBattle();return}
       const A=S;if(A.target==='none'){useWarlordSkill(null);return}let any=false;eachUnit(st,'e',()=>any=true);if(!any)return toast('대상이 될 적 유닛이 없어요');ui.targeting=!ui.targeting;ui.sel=-1;renderBattle()});
     bind('#bSkillX',()=>{const A=curWsk();if(A.target==='none'){useWarlordSkill(null);return}let any=false;eachUnit(st,'e',()=>any=true);if(!any)return toast('대상이 될 적 유닛이 없어요');ui.targeting=!ui.targeting;ui.sel=-1;renderBattle()});
     bind('#bPass',()=>ui.resolve&&ui.resolve({type:'pass'}));
   }
+  app.querySelectorAll('[data-ewsk]').forEach(c=>c.onclick=()=>{const i=+c.dataset.ewsk,S=wskAt(i,'e'),stt=wskState(i,'e');ui.info=`<b style="color:#ff9a8a">적 ${i===3?'':'스킬 '+(i+1)+' · '}${S.n}</b><br>${S.d}<br><span style="opacity:.7">${i===3?'쌓인 일격 '+wsOf('e').ch+'개':stt==='used'?'이미 씀':stt==='lock'?'적 지휘관 레벨이 낮아 잠김':stt==='ready'?'지금 쓸 수 있음':wskTurn(i,'e')+'턴부터'}</span>`;renderBattle()});
   app.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const F=FAC[c.dataset.fac];ui.info=`<b style="color:${F.c}">${F.n}</b> 진영 시너지<br>${F.s2}<br>${F.s4}`;renderBattle()});
   bind('#bSpeed',()=>{SPEED=SPEED>=3?1:SPEED+1;save.speed=SPEED;persist();renderBattle()});
   bind('#bAuto',()=>{ui.auto=!ui.auto;save.autoOn=ui.auto;persist();renderBattle();if(ui.auto)autoPlay()});
@@ -2129,20 +2140,85 @@ const WSK={
   nox:[{id:'curse',n:'그림자 저주',d:'적 유닛 하나의 공격 -2, 독 2',target:'unit'},{id:'drain',n:'영혼 흡수',d:'적 유닛 하나에 4 피해, 준 만큼 지휘관 회복',target:'unit'},{id:'legion',n:'망자의 군단',d:'빈 칸에 해골 3명 소환, 모든 적 독 1',target:'none'}]
 };
 const WSK_LV=[1,3,6],WSK_TURN=[1,3,6];
-const STRIKE={id:'strike',n:'지휘관 일격',d:'적 지휘관에게 직접 2 피해 (2턴마다 반복)',target:'none'};
-function wskUnl(id){return WSK_LV.filter(v=>wlLv(id||st.wl)>=v).length}
-function strikePhase(){return ui.wsUsed>=wskUnl()}
-function curIdx(){return strikePhase()?3:ui.wsUsed}
-function wskAt(i){return i===3?STRIKE:wskList(st.wl)[i]}
-function wskTurn(i,id){return WSK_TURN[i]-(i===2&&wlLv(id||st.wl)>=WL_MAX?1:0)}
+const STRIKE={id:'strike',n:'지휘관 일격',d:'고유 스킬을 다 쓰면 매 턴 1개씩 쌓여요. 쓸 때의 턴이 늦을수록 피해가 커져요.',target:'none'};
+const FAC_WL={bastion:['asten','seraphine'],wild:['orwan','maya'],ember:['kardum','nox']};
+function wsOf(side){return st.ws[side||'p']}
+function wsId(side){return (side||'p')==='p'?st.wl:(cfg.eWl||'asten')}
+function wsLv(side){return (side||'p')==='p'?wlLv(st.wl):(cfg.eWlLv||1)}
+function wsPow(side){return Math.floor((wsLv(side)-1)/3)}
+function wskUnl(side){return WSK_LV.filter(v=>wsLv(side)>=v).length}
+function strikePhase(side){return wsOf(side).used>=wskUnl(side)}
+function curIdx(side){return strikePhase(side)?3:wsOf(side).used}
 function wskList(id){return WSK[id]||WSK.asten}
-function wskState(i){const id=st.wl,L=wskList(id);if(i===3){if(!strikePhase())return 'queue';return ui.strikeCd>0?'wait':'ready'}if(i<ui.wsUsed)return 'used';if(wlLv(id)<WSK_LV[i])return 'lock';if(i>ui.wsUsed)return 'queue';if(st.round<wskTurn(i,id))return 'wait';return 'ready'}
-function curWsk(){return wskAt(curIdx())}
-function summonP(key,n,fx,pref){let c=0;const card={key,lv:1,star:1};const cells=validCells(st,'p',card).filter(([r,l])=>!st.board.p[r][l]);
+function wskAt(i,side){return i===3?STRIKE:wskList(wsId(side))[i]}
+function wskTurn(i,side){return WSK_TURN[i]-(i===2&&wsLv(side)>=WL_MAX?1:0)}
+function wskState(i,side){const w=wsOf(side);if(i===3){if(!strikePhase(side))return 'queue';return w.ch>0?'ready':'wait'}if(i<w.used)return 'used';if(wsLv(side)<WSK_LV[i])return 'lock';if(i>w.used)return 'queue';if(st.round<wskTurn(i,side))return 'wait';return 'ready'}
+function curWsk(side){return wskAt(curIdx(side),side)}
+function strikeDmg(){return 1+Math.floor(st.round/4)}
+function wsTick(side){const w=wsOf(side);if(strikePhase(side)&&w.doneR<st.round){w.ch++;return true}return false}
+function wantStrike(side){const w=wsOf(side),F=foeOf(side);if(w.ch<=0)return false;return w.ch*strikeDmg()>=st.cmd[F].hp||st.round>=MAX_ROUND||st.cmd[side].hp<=st.cmd[side].max*.3}
+function summonS(side,key,n,fx,pref){let c=0;const card={key,lv:1,star:1};const cells=validCells(st,side,card).filter(([r,l])=>!st.board[side][r][l]);
   cells.sort((a,b)=>pref==='back'?b[0]-a[0]:a[0]-b[0]);
   const pick=[];const lanes=new Set();for(const x of cells){if(pick.length>=n)break;if(!lanes.has(x[1])){pick.push(x);lanes.add(x[1])}}for(const x of cells){if(pick.length>=n)break;if(!pick.includes(x))pick.push(x)}
-  for(const [r,l] of pick){const res=place(st,'p',{...card},r,l);fx.push({to:'u'+res.u.uid,txt:'소환!',k:'info',fxk:'shield'});res.fx.forEach(f=>fx.push(f));c++}
-  if(!c)fx.push({to:'cmd-p',txt:'빈 칸이 없어요',k:'info'});return c}
+  for(const [r,l] of pick){const res=place(st,side,{...card},r,l);fx.push({to:'u'+res.u.uid,txt:'소환!',k:'info',fxk:'shield'});res.fx.forEach(f=>fx.push(f));c++}
+  return c}
+function wsAiTarget(side){const S=curWsk(side),F=foeOf(side),M=side;const foes=[],mine=[];eachUnit(st,F,u=>{if(u.hp>0)foes.push(u)});eachUnit(st,M,u=>{if(u.hp>0)mine.push(u)});
+  if(S.target==='unit'){if(!foes.length)return undefined;return foes.sort((a,b)=>(effAtk(st,b)+b.hp)-(effAtk(st,a)+a.hp))[0]}
+  if(S.target==='lane'){let bl=-1,bn=0;for(let l=0;l<LANES;l++){const n=laneUnits(st,F,l).length;if(n>bn){bn=n;bl=l}}return bl>=0?bl:undefined}
+  const id=S.id;
+  if(['rally','grove','legion'].includes(id)){const key=id==='rally'?'archer_0':id==='grove'?'oakwood_2':'skel_0';return validCells(st,M,{key,lv:1,star:1}).some(([r,l])=>!st.board[M][r][l])?null:undefined}
+  if(id==='bless')return mine.some(u=>u.hp<u.max)?null:undefined;
+  if(id==='prayer')return (st.cmd[M].hp<=st.cmd[M].max-4||mine.length>=2)?null:undefined;
+  if(['wild','roar','aegis'].includes(id))return mine.length>=2?null:undefined;
+  return foes.length?null:undefined}
+async function castWsk(side,target){
+  const M=side,F=foeOf(side),S=curWsk(side),pw=wsPow(side),w=wsOf(side),fx=[];
+  const myEl=document.getElementById('cmd-'+M),foeEl=document.getElementById('cmd-'+F);
+  const art=M==='p'?(WARLORDS[st.wl]||WARLORDS.asten).art:lookArt(cfg.eLook);
+  if(S.id==='strike'){w.ch--;renderBattle();if(myEl)rigPlay(myEl.querySelector('.cbody img'),'cast',600);skillCall(myEl,S.n);sfx('whoosh');await sleep(350/SPEED);
+    const d=strikeDmg();if(foeEl){strikeFx(foeEl);burstFx(foeEl,'')}hitCmd(st,F,d,fx,null);cleanup(st,fx);if(M==='p'){qp('skill');track('warlord_strike',{id:st.wl,r:st.round})}sfx('cmd');await doFx(fx);return}
+  w.used++;if(strikePhase(side))w.doneR=st.round;renderBattle();
+  await cutIn({side:M,img:'k_'+art,tag:(M==='p'?'지휘관 스킬 ':'적 지휘관 스킬 ')+w.used,name:S.n,desc:S.d,kind:'wl',ms:800,snd:'whoosh'});
+  const foes=()=>{const o=[];eachUnit(st,F,u=>{if(u.hp>0)o.push(u)});return o};
+  const allies=()=>{const o=[];eachUnit(st,M,u=>{if(u.hp>0)o.push(u)});return o};
+  const elOf=u=>document.getElementById('u'+u.uid);
+  const cmdHeal=h=>{h=Math.min(h,st.cmd[M].max-st.cmd[M].hp);if(h>0){st.cmd[M].hp+=h;fx.push({to:'cmd-'+M,dmg:h,k:'heal'})}};
+  switch(S.id){
+    case 'thunder':{const el=elOf(target);if(el)strikeFx(el);hitUnit(st,target,3+pw,fx);break}
+    case 'meteor':{const el=elOf(target);if(el){strikeFx(el);burstFx(el,'fireball')}hitUnit(st,target,5+pw,fx);break}
+    case 'curse':{target.atk=Math.max(0,target.atk-2-pw);target.poison=Math.max(target.poison,2+pw);fx.push({to:'u'+target.uid,txt:'공격 -'+(2+pw)+' · 독 '+(2+pw),k:'info',fxk:'curse'});break}
+    case 'vines':{laneWave(F,target,'poison');laneUnits(st,F,target).forEach(t=>{hitUnit(st,t,1+pw,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break}
+    case 'bless':{allies().forEach(u=>{const h=Math.min(2+pw,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}});if(myEl)burstFx(myEl,'');break}
+    case 'wild':{allies().forEach(u=>{const a=1+(wsLv(M)>=7?1:0);u.atk+=a;fx.push({to:'u'+u.uid,txt:'공격 +'+a,k:'info',fxk:'rage'})});break}
+    case 'rally':summonS(M,'archer_0',2,fx,'back');break;
+    case 'grove':summonS(M,'oakwood_2',1,fx,'front');break;
+    case 'legion':{summonS(M,'skel_0',3,fx,'front');foes().forEach(t=>{t.poison=Math.max(t.poison,1+pw);fx.push({to:'u'+t.uid,txt:'독 '+(1+pw),k:'info',fxk:'curse'})});break}
+    case 'storm':foes().forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,2+pw,fx)});break;
+    case 'quake':foes().forEach(t=>{hitUnit(st,t,1+pw,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break;
+    case 'doom':{foes().forEach(t=>{const el=elOf(t);if(el)burstFx(el,'fireball');hitUnit(st,t,2+pw,fx)});hitCmd(st,F,3+pw,fx,null);break}
+    case 'firewall':{laneWave(F,target,'fire');laneUnits(st,F,target).forEach(t=>hitUnit(st,t,3+pw,fx));break}
+    case 'hunt':{foes().sort(()=>Math.random()-.5).slice(0,3).forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,2+pw,fx)});break}
+    case 'drain':{const before=target.hp;const el=elOf(target);if(el)burstFx(el,'');hitUnit(st,target,4+pw,fx);cmdHeal(Math.max(0,before-Math.max(0,target.hp)));break}
+    case 'aegis':allies().forEach(u=>{if(!u.armor){u.armor=true;fx.push({to:'u'+u.uid,txt:'철갑',k:'info',fxk:'shield'})}});break;
+    case 'prayer':{cmdHeal(6+2*pw);allies().forEach(u=>{u.max+=2;u.hp+=2;fx.push({to:'u'+u.uid,dmg:2,k:'heal'})});break}
+    case 'roar':allies().forEach(u=>{u.atk+=2;u.max+=2;u.hp+=2;fx.push({to:'u'+u.uid,txt:'공격 +2 · 체력 +2',k:'info',fxk:'rage'})});break;
+  }
+  cleanup(st,fx);if(M==='p'){qp('skill');track('warlord_skill',{id:st.wl,n:w.used})}sfx('cmd');
+  if(myEl){rigPlay(myEl.querySelector('.cbody img'),'cast',700);skillCall(myEl,S.n);const b2=myEl.querySelector('.cbody img');if(b2)b2.animate([{filter:'brightness(1)'},{filter:'brightness(2.2) drop-shadow(0 0 16px #ffd667)'},{filter:'brightness(1)'}],{duration:700})}
+  await doFx(fx);
+}
+async function useWarlordSkill(target){
+  if(ui.casting||wskState(curIdx('p'),'p')!=='ready')return;ui.casting=true;ui.targeting=false;
+  try{await castWsk('p',target)}finally{ui.casting=false}
+  renderBattle();if(st.over&&ui.resolve)ui.resolve({type:'pass'});
+}
+async function enemyWsk(){
+  for(let k=0;k<8&&!st.over;k++){const i=curIdx('e');if(wskState(i,'e')!=='ready')break;
+    if(i===3){if(!wantStrike('e'))break;await castWsk('e',null);continue}
+    const tg=wsAiTarget('e');if(tg===undefined)break;await castWsk('e',tg);await sleep(200/SPEED)}
+}
+function ewskHTML(){if(!st.ws)return '';const w=wsOf('e');const pips=[0,1,2].map(i=>{const s=wskState(i,'e');return `<span class="ep ${s}" data-ewsk="${i}">${s==='used'?'✓':s==='lock'?'·':i+1}</span>`}).join('');
+  return `<div class="ewsk">${pips}${strikePhase('e')?`<span class="ep strk ${w.ch?'ready':''}" data-ewsk="3">⚔${w.ch}</span>`:''}</div>`}
 function wlLv(id){save.wlx=save.wlx||{};return (save.wlx[id||save.warlord]||{lv:1}).lv}
 function wlXp(id){save.wlx=save.wlx||{};return (save.wlx[id||save.warlord]||{xp:0}).xp||0}
 function wlNeed(lv){return 40+lv*30}
@@ -2158,50 +2234,13 @@ function showWarlords(){
   <div class="body"><div class="wlgrid">${Object.entries(WARLORDS).map(([id,W])=>{const un=wlUnlocked(id),cur=save.warlord===id;
     return `<div class="wlcard ${cur?'cur':''} ${un?'':'lock'}" style="--fc:${FAC[W.fac].c}"><div class="wart"><img src="assets/k_${W.art}.webp?v=${ASSET_V}" alt=""></div><div class="winfo">
     <div class="wname">${W.n} ${facIcon(W.fac,'ci')}<span style="color:${FAC[W.fac].c};font-size:12px">${FAC[W.fac].n}</span></div>
-    <div class="wl">Lv ${wlLv(id)}/${WL_MAX} · 체력 ${wlHp(id)}${un&&wlLv(id)<WL_MAX?`<div class="bar q" style="height:6px;margin-top:2px"><i style="width:${wlXp(id)/wlNeed(wlLv(id))*100}%"></i></div><small style="opacity:.65">경험치 ${wlXp(id)}/${wlNeed(wlLv(id))} · 3레벨마다 스킬 위력 +1 · Lv10에 3번 스킬 1턴 빨리</small>`:''}</div><div class="wl"><b>패시브</b> ${W.pas}</div><div class="wsl">${wskList(id).map((S,i)=>`<div class="${wlLv(id)<WSK_LV[i]?'off':''}"><span class="wsn">${i+1}</span><b>${S.n}</b> <small>${WSK_TURN[i]}턴~${wlLv(id)<WSK_LV[i]?' · 🔒Lv'+WSK_LV[i]:''}</small><br><span class="wsd">${S.d}</span></div>`).join('')}<div class="strk"><span class="wsn">⚔</span><b>지휘관 일격</b> <small>열린 스킬을 다 쓰면</small><br><span class="wsd">적 지휘관에게 직접 2 피해, 2턴마다 반복</span></div></div>
+    <div class="wl">Lv ${wlLv(id)}/${WL_MAX} · 체력 ${wlHp(id)}${un&&wlLv(id)<WL_MAX?`<div class="bar q" style="height:6px;margin-top:2px"><i style="width:${wlXp(id)/wlNeed(wlLv(id))*100}%"></i></div><small style="opacity:.65">경험치 ${wlXp(id)}/${wlNeed(wlLv(id))} · 3레벨마다 스킬 위력 +1 · Lv10에 3번 스킬 1턴 빨리</small>`:''}</div><div class="wl"><b>패시브</b> ${W.pas}</div><div class="wsl">${wskList(id).map((S,i)=>`<div class="${wlLv(id)<WSK_LV[i]?'off':''}"><span class="wsn">${i+1}</span><b>${S.n}</b> <small>${WSK_TURN[i]}턴~${wlLv(id)<WSK_LV[i]?' · 🔒Lv'+WSK_LV[i]:''}</small><br><span class="wsd">${S.d}</span></div>`).join('')}<div class="strk"><span class="wsn">⚔</span><b>지휘관 일격</b> <small>열린 스킬을 다 쓰면</small><br><span class="wsd">매 턴 1개씩 쌓임. 1개당 적 지휘관에게 (1 + 턴÷4) 피해, 모아서 한 번에 써도 돼요</span></div></div>
     <div class="wbtn">${cur?'<span class="done">사용 중</span>':(un&&expOf(id))?'<span class="lk">원정 중</span>':un?`<button class="btn sm grn" data-pick="${id}">선택</button>`:W.unlock.t==='gems'?`<button class="btn sm" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} 영입</button>`:`<span class="lk">🔒 ${W.unlock.d}</span>`}</div></div></div>`}).join('')}</div></div></div>`;
   bind('#bk',showLobby);
   app.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{sfx('merge');save.warlord=b.dataset.pick;persist();track('warlord_pick',{id:save.warlord});showWarlords()});
   app.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const id=b.dataset.buy,W=WARLORDS[id];if(save.gems<W.unlock.v)return;save.gems-=W.unlock.v;save.wl=save.wl||{};save.wl[id]=true;save.warlord=id;persist();sfx('win');toast(W.n+' 영입!');showWarlords()});
 }
 for(const k in WARLORDS)WARLORDS[k].act={...WSK[k][0],cd:0};
-async function useWarlordSkill(target){
-  if(ui.casting||wskState(curIdx())!=='ready')return;ui.casting=true;
-  const W=WARLORDS[st.wl]||WARLORDS.asten;const S=curWsk();const fx=[];const pw=wlPow(st.wl);
-  if(S.id==='strike'){ui.strikeCd=2;ui.targeting=false;renderBattle();
-    const cp0=document.getElementById('cmd-p'),ce0=document.getElementById('cmd-e');if(cp0)rigPlay(cp0.querySelector('.cbody img'),'cast',600);skillCall(cp0,S.n);sfx('whoosh');await sleep(350/SPEED);
-    if(ce0){strikeFx(ce0);burstFx(ce0,'')}hitCmd(st,'e',2+pw,fx,null);cleanup(st,fx);qp('skill');track('warlord_strike',{id:st.wl});sfx('cmd');
-    doFx(fx).then(()=>{ui.casting=false;renderBattle();if(st.over&&ui.resolve)ui.resolve({type:'pass'})});return}
-  ui.targeting=false;ui.wsUsed++;if(strikePhase())ui.strikeCd=Math.max(ui.strikeCd,1);renderBattle();await cutIn({side:'p',img:'k_'+W.art,tag:'지휘관 스킬 '+ui.wsUsed,name:S.n,desc:S.d,kind:'wl',ms:800,snd:'whoosh'});
-  const enemies=()=>{const o=[];eachUnit(st,'e',u=>{if(u.hp>0)o.push(u)});return o};
-  const allies=()=>{const o=[];eachUnit(st,'p',u=>{if(u.hp>0)o.push(u)});return o};
-  const elOf=u=>document.getElementById('u'+u.uid);
-  const cmdHeal=h=>{h=Math.min(h,st.cmd.p.max-st.cmd.p.hp);if(h>0){st.cmd.p.hp+=h;fx.push({to:'cmd-p',dmg:h,k:'heal'})}};
-  switch(S.id){
-    case 'thunder':{const el=elOf(target);if(el)strikeFx(el);hitUnit(st,target,3+pw,fx);break}
-    case 'meteor':{const el=elOf(target);if(el){strikeFx(el);burstFx(el,'fireball')}hitUnit(st,target,5+pw,fx);break}
-    case 'curse':{target.atk=Math.max(0,target.atk-2-pw);target.poison=Math.max(target.poison,2+pw);fx.push({to:'u'+target.uid,txt:'공격 -'+(2+pw)+' · 독 '+(2+pw),k:'info',fxk:'curse'});break}
-    case 'vines':{laneWave('e',target,'poison');laneUnits(st,'e',target).forEach(t=>{hitUnit(st,t,1+pw,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break}
-    case 'bless':{allies().forEach(u=>{const h=Math.min(2+pw,u.max-u.hp);if(h>0){u.hp+=h;fx.push({to:'u'+u.uid,dmg:h,k:'heal'})}});const c=document.getElementById('cmd-p');if(c)burstFx(c,'');break}
-    case 'wild':{allies().forEach(u=>{const a=1+(wlLv(st.wl)>=7?1:0);u.atk+=a;fx.push({to:'u'+u.uid,txt:'공격 +'+a,k:'info',fxk:'rage'})});break}
-    case 'rally':summonP('archer_0',2,fx,'back');break;
-    case 'grove':summonP('oakwood_2',1,fx,'front');break;
-    case 'legion':{summonP('skel_0',3,fx,'front');enemies().forEach(t=>{t.poison=Math.max(t.poison,1+pw);fx.push({to:'u'+t.uid,txt:'독 '+(1+pw),k:'info',fxk:'curse'})});break}
-    case 'storm':enemies().forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,2+pw,fx)});break;
-    case 'quake':enemies().forEach(t=>{hitUnit(st,t,1+pw,fx);if(t.hp>0){t.frozen=true;fx.push({to:'u'+t.uid,txt:'',k:'info',fxk:'ice'})}});break;
-    case 'doom':{enemies().forEach(t=>{const el=elOf(t);if(el)burstFx(el,'fireball');hitUnit(st,t,2+pw,fx)});hitCmd(st,'e',3+pw,fx,null);break}
-    case 'firewall':{laneWave('e',target,'fire');laneUnits(st,'e',target).forEach(t=>hitUnit(st,t,3+pw,fx));break}
-    case 'hunt':{const es=enemies().sort(()=>Math.random()-.5).slice(0,3);es.forEach(t=>{const el=elOf(t);if(el)strikeFx(el);hitUnit(st,t,2+pw,fx)});break}
-    case 'drain':{const before=target.hp;const el=elOf(target);if(el)burstFx(el,'');hitUnit(st,target,4+pw,fx);cmdHeal(Math.max(0,before-Math.max(0,target.hp)));break}
-    case 'aegis':allies().forEach(u=>{if(!u.armor){u.armor=true;fx.push({to:'u'+u.uid,txt:'철갑',k:'info',fxk:'shield'})}});break;
-    case 'prayer':{cmdHeal(6+2*pw);allies().forEach(u=>{u.max+=2;u.hp+=2;fx.push({to:'u'+u.uid,dmg:2,k:'heal'})});break}
-    case 'roar':allies().forEach(u=>{u.atk+=2;u.max+=2;u.hp+=2;fx.push({to:'u'+u.uid,txt:'공격 +2 · 체력 +2',k:'info',fxk:'rage'})});break;
-  }
-  ui.targeting=false;cleanup(st,fx);qp('skill');track('warlord_skill',{id:st.wl,n:ui.wsUsed});sfx('cmd');
-  const cp=document.getElementById('cmd-p');if(cp){rigPlay(cp.querySelector('.cbody img'),'cast',700);skillCall(cp,S.n);const b2=cp.querySelector('.cbody img');if(b2)b2.animate([{filter:'brightness(1)',transform:'scale(1)'},{filter:'brightness(2.2) drop-shadow(0 0 16px #ffd667)',transform:'scale(1.12) translateY(-6px)'},{filter:'brightness(1)',transform:'scale(1)'}],{duration:700})}
-  doFx(fx).then(()=>{ui.casting=false;renderBattle();if(st.over&&ui.resolve)ui.resolve({type:'pass'})});
-
-}
 
 /* ===================== 뼈대(메시) 애니메이션 ===================== */
 const RIG={cols:9,rows:11,hip:[.5,.68],neck:[.5,.33],shoulder:[.55,.42]};
