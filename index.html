@@ -1002,6 +1002,7 @@ a.btn{display:inline-block;text-decoration:none}
 .unit .ic .sb{font-size:13px;line-height:17px;padding:0 3px;border-radius:7px;background:#000b;border:1px solid #ffffff33;white-space:nowrap}
 .sb.psn{color:#9dff9d}.sb.bld{color:#ff8a8a}.sb.tox{color:#c8ff6a}.sb.inv{color:#ffe48a}.sb.imm{color:#9fd8ff}.sb.eva{color:#d8fff0}
 .mgline{font-size:12.5px;color:#9fd8ff;margin:2px 0 3px}
+.b2 .unit .ubody{transition:bottom .45s ease-in}
 </style>
 </head>
 <body>
@@ -1009,7 +1010,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.6 베타';
+const VERSION='v3.6.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1418,7 +1419,7 @@ function facCount(st,side,f){let n=0;eachUnit(st,side,u=>{if(u.hp>0&&V(u.key).fa
 function facLv(st,side,f){const n=facCount(st,side,f);return n>=4?2:n>=2?1:0}
 function canAttack(st,u,r,l){
   const v=VU(u);if(v.cls==='support')return false;
-  if(v.cls==='melee'&&!isFlyV(v)){for(let k=0;k<r;k++)if(st.board[u.side][k][l])return false}
+  if(v.cls==='melee'&&!isFlyU(u)){for(let k=0;k<r;k++)if(st.board[u.side][k][l])return false}
   return true;
 }
 function hitCmd(st,side,dmg,fx,src){
@@ -1512,9 +1513,9 @@ function* attackPhase(st,side){
       }else{
         let order=v.skill==='snipe'?enemies.slice().reverse():enemies;
         if(v.skill==='hunt')order=enemies.slice().sort((a,b)=>a.hp-b.hp);
-        const meleeGround=v.cls==='melee'&&!isFlyV(v);
+        const meleeGround=v.cls==='melee'&&!isFlyU(u);
         let t=null;
-        if(order.length){t=order.find(x=>!(meleeGround&&isFlyV(V(x.key))));if(!t){if(!acted)fx.push({to:'u'+u.uid,txt:'닿지 않음',k:'info'});break}}
+        if(order.length){t=order.find(x=>!(meleeGround&&isFlyU(x)));if(!t){if(!acted)fx.push({to:'u'+u.uid,txt:'닿지 않음',k:'info'});break}}
         if(t){
           if(t.eva>0&&(v.cls==='ranged'||v.cls==='magic')&&!hasAcc(u)){t.eva--;fx.push({to:'u'+t.uid,txt:'회피!',k:'info',fxk:'dash'});acted=true;cleanup(st,fx);continue}
           if(v.skill==='assassin'&&t.hp<=skillVal(u)&&tierOf(t.key)<3&&V(t.key).cls!=='building'){t.hp=0;fx.push({to:'u'+t.uid,txt:'즉사!',k:'info',fxk:'exec'});acted=true;cleanup(st,fx);continue}
@@ -1529,7 +1530,7 @@ function* attackPhase(st,side){
           if(t.hp>0&&findPos(st,t)&&canAffect(t)){
             if(v.skill==='bleed'){t.bleed=Math.max(t.bleed|0,skillVal(u));fx.push({to:'u'+t.uid,txt:'출혈',k:'info',fxk:'spike'})}
             if(v.skill==='dazzle'){t.miss=1;fx.push({to:'u'+t.uid,txt:'현혹',k:'info',fxk:'curse'})}
-            if(v.skill==='silence'&&!t.sil){t.sil=true;t.armor=false;t.bonus=0;t._sv=null;fx.push({to:'u'+t.uid,txt:'침묵',k:'info',fxk:'curse'})}
+            if(v.skill==='silence'&&!t.sil){t.sil=true;t.armor=false;t.bonus=0;t._sv=null;t.eva=0;fx.push({to:'u'+t.uid,txt:'침묵',k:'info',fxk:'curse'})}
             if(v.ex==='curselink'){t.cursed=true;fx.push({to:'u'+t.uid,txt:'저주 연결',k:'info',fxk:'curse'})}
             if(v.ex==='toxin'){t.toxin=Math.max(t.toxin|0,u.aw?3:2);fx.push({to:'u'+t.uid,txt:'독소',k:'info',fxk:'poison'})}
             if(v.ex==='setatk'&&(tierOf(t.key)<3||u.aw)&&t.atk>1){t.atk=1;t.bonus=0;fx.push({to:'u'+u.uid,k:'skill',sk:'setatk'})}
@@ -2122,8 +2123,9 @@ function playerSbs(){const o={};Object.keys(save.owned).forEach(id=>o[id]=sbOf(b
 /* ===================== v3.6 마이티파티식 스킬 전부 · 영웅별 합체 · 덱 중복 금지 ===================== */
 function VU(u){const v=V(u.key);if(!u.sil)return v;return u._sv||(u._sv={...v,skill:'none',ex:null,sv:0,exd:''})}
 function isFlyV(v){return v.skill==='flying'||!!(HEROES[v.base]&&HEROES[v.base].fly)}
+function isFlyU(u){return !u.sil&&isFlyV(V(u.key))}
 function isImm(u){return !!(u.imm2||(HEROES[baseOf(u.key)]||{}).imm)}
-function hasAcc(u){return !!(HEROES[baseOf(u.key)]||{}).acc}
+function hasAcc(u){return !u.sil&&!!(HEROES[baseOf(u.key)]||{}).acc}
 function canAffect(t){return !isImm(t)&&V(t.key).cls!=='building'}
 function clearNeg(u){u.poison=0;u.frozen=false;u.bleed=0;u.toxin=0;u.miss=0;u.mark=0;u.cursed=false}
 // ---- 영웅별 합체 (◆)
@@ -2152,7 +2154,7 @@ function mergeEffect(st,side,u,l,fx){const k=(MERGE_FX[baseOf(u.key)]||[])[0];if
   if(k==='hexfront'&&front&&canAffect(front))front.atk=Math.max(0,front.atk-2);
   if(k==='bleedlane')laneUnits(st,foe,l).forEach(t=>{if(canAffect(t))t.bleed=Math.max(t.bleed|0,2)});
   if(k==='execfront'&&front&&front.hp<=front.max/2&&tierOf(front.key)<3){front.hp=0;fx.push({to:'u'+front.uid,txt:'즉사!',k:'info',fxk:'exec'})}
-  if(k==='silencefront'&&front&&canAffect(front)){front.sil=true;front.armor=false;front.bonus=0;front._sv=null}
+  if(k==='silencefront'&&front&&canAffect(front)){front.sil=true;front.armor=false;front.bonus=0;front._sv=null;front.eva=0}
   if(k==='splashlane')laneUnits(st,foe,l).forEach(t=>hitUnit(st,t,1,fx))}
 // ---- 덱 중복 금지 (같은 영웅은 버전이 달라도 1장)
 function sameBaseInDeck(id){return save.deck.find(x=>x!==id&&baseOf(x)===baseOf(id))||null}
@@ -2464,7 +2466,7 @@ function updateUnitEl(d,u){
   d.querySelector('.a').textContent=H.skill==='heal'?'+'+skillVal(u):(H.cls==='support'||H.cls==='building')?'-':effAtk(st,u);
   const h=d.querySelector('.h');h.textContent=u.hp;h.classList.toggle('hurt',u.hp<u.max);
   d.querySelector('.st').textContent='◆'.repeat(u.star);
-  const ic=[];const B=(c,t,tip)=>ic.push(`<span class="sb ${c}" title="${tip}">${t}</span>`);if(u.poison>0)B('psn','☠'+u.poison,'독');if(u.bleed>0)B('bld','🩸'+u.bleed,'출혈');if(u.toxin>0)B('tox','☣'+u.toxin,'독소');if(u.mark)B('mrk','🎯','표식');if(u.miss)B('mis','💫','현혹');if(u.sil)B('sil','🔇','침묵');if(u.cursed)B('cur','⛓','저주 연결');if(u.eva>0)B('eva','💨'+u.eva,'회피');if(u.inv>0)B('inv','✨','무적');if(isImm(u))B('imm','🛡','면역');if(u.charges)B('chg','👻'+u.charges,'망령');d.classList.toggle('armored',!!u.armor);d.classList.toggle('invul',u.inv>0);d.classList.toggle('silenced',!!u.sil);
+  const ic=[];const B=(c,t,tip)=>ic.push(`<span class="sb ${c}" title="${tip}">${t}</span>`);if(u.poison>0)B('psn','☠'+u.poison,'독');if(u.bleed>0)B('bld','🩸'+u.bleed,'출혈');if(u.toxin>0)B('tox','☣'+u.toxin,'독소');if(u.mark)B('mrk','🎯','표식');if(u.miss)B('mis','💫','현혹');if(u.sil)B('sil','🔇','침묵');if(u.cursed)B('cur','⛓','저주 연결');if(u.eva>0)B('eva','💨'+u.eva,'회피');if(u.inv>0)B('inv','✨','무적');if(isImm(u))B('imm','🛡','면역');if(u.charges)B('chg','👻'+u.charges,'망령');d.classList.toggle('armored',!!u.armor);d.classList.toggle('invul',u.inv>0);d.classList.toggle('silenced',!!u.sil);d.classList.toggle('fly',isFlyU(u));
   const icH=ic.join('');const icEl=d.querySelector('.ic');if(icEl.innerHTML!==icH)icEl.innerHTML=icH;
   d.classList.toggle('frozen',!!u.frozen);
   if(d.dataset.star&&+d.dataset.star<u.star){const b=d.querySelector('.ubody');b.animate([{filter:'brightness(3)',transform:'scale(1.25)'},{filter:'brightness(1)',transform:'scale(1)'}],{duration:500});}
