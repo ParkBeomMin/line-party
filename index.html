@@ -830,6 +830,10 @@ a.btn{display:inline-block;text-decoration:none}
 @keyframes awp{50%{opacity:.35;transform:scale(1.15)}}
 .rbb{color:#ff9ad8;font-size:10px}
 .awb{position:absolute;top:4px;right:4px;background:linear-gradient(#ffe48a,#ff9d2e);color:#3a1800;font-size:9px;font-weight:900;border-radius:6px;padding:1px 4px;box-shadow:0 0 6px #ffb84d}
+.lvst{color:#ffd667;letter-spacing:-1px;text-shadow:0 1px 0 #6a3a00}
+.lvst i{font-style:normal;color:#ffffff30}
+.rbst{margin-left:3px;font-size:9px;color:#fff;background:#c2408f;border-radius:5px;padding:0 3px;vertical-align:1px}
+.hcard .lvb{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -837,7 +841,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.0 베타';
+const VERSION='v3.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const s=Math.min(innerWidth/960,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1175,6 +1179,8 @@ const EX={
 const TIER_CARD_M=[1,.7,.45,.3],TIER_GOLD_M=[1,1.5,2.2,3.2];
 const EVO=[{need:20,get:3,gold:100},{need:24,get:2,gold:300},{need:12,get:1,gold:800}];
 const EVO_LEAGUE=1; // 청동 리그부터 진화 가능
+const LV_STAR=[0,1,1,2,2,3,3,3,4];function starOf(lv){return LV_STAR[Math.max(1,Math.min(8,lv|0))]}
+function starsHTML(lv,rb){const n=starOf(lv);return `<span class="lvst">${'★'.repeat(n)}<i>${'★'.repeat(4-n)}</i></span>${rb?`<span class="rbst">환생${rb}</span>`:''}`}
 const RB_LEAGUE=3,RB_MAX=[3,3,4,5],AW_LV=5,ROM=['','Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ'];
 const AWD={guard:'수호 피해 감소 -1 → -2',crit:'지휘관 피해 2배 → 2.5배',volley:'추가 피해 1 → 2',plague:'역병 독 +1',blizzard:'얼린 적에게 1 피해 추가',sanctuary:'추가 회복 1 → 2',lifesteal:'흡혈할 때 지휘관도 1 회복',regrow:'재생 2 → 4',burn:'화상 독 1 → 2',warsong:'전쟁의 노래 공격 +1 추가',reforge:'재무장할 때 체력 1 회복',storm:'폭풍이 적 2명을 노림',legion:'해골 소환 5회 → 7회',breath:'놓을 때 피해 2 → 4',double:'두 번째 공격 45% → 60%',pierceshot:'줄의 적 전부를 꿰뚫음',rally:'고무 대상 2명 → 3명',moonlight:'달빛 회복 1 → 2',spring:'봄의 축복 회복 3 → 5',bloodpact:'제물 피해 2배 → 3배',phoenix:'부활 체력 절반 → 전부'};
 function isAwake(id,lv,rb){return tierOf(id)===3&&!!EX[baseOf(id)]&&!HEROES[baseOf(id)].token&&((lv|0)>=AW_LV||(rb|0)>=1)}
@@ -1206,7 +1212,7 @@ function baseStats(id,lv,star,rb){
   if(star>=3){a*=2;h*=2}
   return {a,h};
 }
-function skillVal(u){return V(u.key).sv+(u.star-1)+Math.floor((u.lv-1)/3)+Math.floor((u.rb|0)/2)}
+function skillVal(u){return V(u.key).sv+(u.star-1)+(starOf(u.lv)-1)+Math.floor((u.rb|0)/2)}
 function makeUnit(card,side){
   const b=baseStats(card.key,card.lv,card.star,card.rb);const v=V(card.key);const aw=isAwake(card.key,card.lv,card.rb);
   return {uid:UID++,key:card.key,lv:card.lv,star:card.star,rb:card.rb|0,aw,side,atk:b.a,hp:b.h,max:b.h,bonus:0,frozen:false,poison:0,armor:v.skill==='armor',charges:v.skill==='necro'?(v.ex==='legion'?(aw?7:5):3):0};
@@ -1618,8 +1624,9 @@ function showRules(){
   <p><b>지휘관</b>: 로비 왼쪽 위 프로필을 눌러 지휘관을 고를 수 있어요. 지휘관마다 체력, 패시브, 전투 스킬이 달라요. 리그, 모험 진행, 보석으로 새 지휘관을 해금해요.</p>
   <p><b>진영</b>: 모든 영웅은 성채(균형·보호), 들숲(체력·재생), 잿불(공격) 중 하나예요. 보드에 같은 진영이 2기, 4기 이상 있으면 시너지 효과가 켜져요. 전투 중 지휘관 아래 진영 아이콘을 누르면 효과를 볼 수 있어요.</p>
   <p><b>등급과 진화</b>: 영웅마다 일반, 희귀, 영웅, 전설 버전이 따로 있어요. 같은 버전 카드를 모아 상위 버전 카드로 바꾸는 게 진화예요 (청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 가능). 전설 버전은 전용 스킬이 하나 더 있어요.</p>
-  <p><b>각성</b>: 전설 버전 영웅이 Lv5이 되면 각성해서 전설 스킬이 한 단계 강해져요. 전투에서 금빛으로 빛나요.</p>
-  <p><b>환생</b>: 황금 리그부터, Lv8 영웅을 환생시키면 Lv1로 돌아가는 대신 공격 +1, 체력 +2를 영구로 받아요 (짝수 환생마다 스킬 수치 +1). 일반·희귀 3번, 영웅 4번, 전설 5번까지.</p>
+  <p><b>별</b>: 레벨이 오르면 별이 늘어요 (Lv1 ★1, Lv3 ★2, Lv5 ★3, Lv8 ★4). 별이 하나 오를 때마다 스킬 수치가 +1 강해져요.</p>
+  <p><b>3성 각성</b>: 전설 버전 영웅이 ★3이 되면 각성해서 전설 스킬이 한 단계 강해져요. 전투에서 금빛으로 빛나요.</p>
+  <p><b>환생</b>: 황금 리그부터, ★4(Lv8) 영웅을 환생시키면 ★1로 돌아가는 대신 공격 +1, 체력 +2를 영구로 받아요 (짝수 환생마다 스킬 수치 +1). 일반·희귀 3번, 영웅 4번, 전설 5번까지.</p>
   <p><b>성장</b>: 아레나에서 이기면 트로피와 상자. 상자를 열면 영웅 카드가 나오고, 카드가 모이면 골드로 레벨업. 리그가 오르면 새 영웅이 합류해요.</p>
   <p><b>운영</b>: 일일 퀘스트 3개, 요일마다 바뀌는 이벤트, 오늘의 보스, 모험 진행에 따라 늘어나는 보급 창고.</p>
   </div><div class="btns"><button class="btn" data-close>확인</button></div>`);
@@ -1857,7 +1864,7 @@ function showHeroes(){
       if(!o){cards+=`<div class="hcard unk t${t}" data-id="${id}"><div class="art" style="filter:brightness(.15) saturate(0)">${portrait(id)}</div><div class="inf"><div class="nm" style="color:${RAR[t].c}">${RAR[t].n}</div><div style="font-size:10px;opacity:.7">미발견 · 상자에서 획득</div></div></div>`;return}
       const inD=save.deck.filter(x=>x===id).length;const max=o.lv>=MAX_LV;const need=max?1:lvNeed(id);
       const up=canLevel(id),ev=evoInfo(id).ok;
-      cards+=`<div class="hcard t${t} ${inD?'indeck':''}" data-id="${id}"><div class="art">${portrait(id)}${facIcon(v.fac,'fe2')}<span class="lvb">Lv${o.lv}${o.rb?' <b class=rbb>'+ROM[o.rb]+'</b>':''}</span>${isAwake(id,o.lv,o.rb)?'<span class=awb>각성</span>':''}${inD?`<span class="dk">덱${inD>1?' x'+inD:''}</span>`:''}${up||ev?`<span class="upd">${ev?'진화':'강화'}</span>`:''}</div>
+      cards+=`<div class="hcard t${t} ${inD?'indeck':''}" data-id="${id}"><div class="art">${portrait(id)}${facIcon(v.fac,'fe2')}<span class="lvb">${starsHTML(o.lv,o.rb)}</span>${isAwake(id,o.lv,o.rb)?'<span class=awb>각성</span>':''}${inD?`<span class="dk">덱${inD>1?' x'+inD:''}</span>`:''}${up||ev?`<span class="upd">${ev?'진화':'강화'}</span>`:''}</div>
       <div class="inf"><div class="nm">${v.name}</div><div class="tn"><span style="color:${RAR[t].c}">${RAR[t].n}</span> · <span style="color:${FAC[v.fac].c}">${FAC[v.fac].n}</span> · ${CLS[v.cls].n}</div>
       <div class="cb ${up?'ok':''}"><i style="width:${max?100:Math.min(100,o.cards/need*100)}%"></i><b>${max?'최대 · '+o.cards:o.cards+' / '+need}</b></div></div></div>`;
     });
@@ -1880,7 +1887,7 @@ function showHeroes(){
 }
 function rbGold(id,o){return Math.round(400*((o.rb|0)+1)*TIER_GOLD_M[tierOf(id)])}
 function doReborn(id,m){const o=save.owned[id];if(!o||o.lv<MAX_LV||(o.rb|0)>=rbMax(id))return;if(save.bestLeague<RB_LEAGUE)return toast(LEAGUES[RB_LEAGUE].n+' 리그부터 환생할 수 있어요');const g=rbGold(id,o);if(save.gold<g)return toast('골드가 부족해요');
-  const v=V(id);const m2=modal(`<div class="ribbon">환생 ${ROM[(o.rb|0)+1]}</div><div class="rw" style="line-height:1.7"><b>${v.name}</b>의 레벨이 <b>Lv1</b>로 돌아가요.<br>대신 영구적으로 <b style="color:#7dffa1">공격 +1, 체력 +2</b>${((o.rb|0)+1)%2===0?', <b style="color:#7dffa1">스킬 수치 +1</b>':''}을 받아요.<br><small style="opacity:.7">다시 키우면 예전보다 강해져요 · 골드 ${g}</small></div><div class="btns"><button class="btn grn" id="rbGo">환생하기</button><button class="btn sub" data-close>취소</button></div>`);
+  const v=V(id);const m2=modal(`<div class="ribbon">환생 ${ROM[(o.rb|0)+1]}</div><div class="rw" style="line-height:1.7"><b>${v.name}</b>의 별이 <b>★1</b>(Lv1)로 돌아가요.<br>대신 영구적으로 <b style="color:#7dffa1">공격 +1, 체력 +2</b>${((o.rb|0)+1)%2===0?', <b style="color:#7dffa1">스킬 수치 +1</b>':''}을 받아요.<br><small style="opacity:.7">다시 키우면 예전보다 강해져요 · 골드 ${g}</small></div><div class="btns"><button class="btn grn" id="rbGo">환생하기</button><button class="btn sub" data-close>취소</button></div>`);
   m2.querySelector('#rbGo').onclick=()=>{save.gold-=g;o.rb=(o.rb|0)+1;o.lv=1;persist();track('reborn',{id,rb:o.rb});sfx('win');m2.remove();if(m)m.remove();toast(v.name+' 환생 '+ROM[o.rb]+'!');heroDetail(id)}}
 function heroDetail(id){
   const v=V(id),o=save.owned[id],t=tierOf(id),b=baseOf(id);
@@ -1890,8 +1897,8 @@ function heroDetail(id){
   else{
     const st0=baseStats(id,o.lv,1,o.rb);const max=o.lv>=MAX_LV;const need=max?0:lvNeed(id);const g=max?0:lvGold(id);
     const ei=evoInfo(id);const inD=save.deck.filter(x=>x===id).length;
-    body=`<div class="dstat"><span class="a">${v.cls==='support'||v.cls==='building'?'-':st0.a}</span> 공격 &nbsp; <span class="h">${st0.h}</span> 체력 &nbsp; Lv ${o.lv}/${MAX_LV} &nbsp; 카드 ${o.cards}장${o.rb?` &nbsp; <b style="color:#ff9ad8">환생 ${ROM[o.rb]}</b>`:''}</div>
-    <div class="dsk"><b>${v.desc}</b>${t===3&&v.exd?`<br><span style="color:#ffd667">전설 스킬 · ${v.exd}</span>`:v.exd?`<br><span style="opacity:.55">전설 등급이 되면 · ${v.exd}</span>`:''}${EX[b]&&!HEROES[b].token?`<br><span style="color:${isAwake(id,o.lv,o.rb)?'#7dffd8':'#ffffff80'}">각성${isAwake(id,o.lv,o.rb)?' 완료':` (전설 Lv${AW_LV}에 열림)`} · ${AWD[EX[b].id]||''}</span>`:''}<br><span style="opacity:.6;font-size:11px">환생 ${o.rb|0}/${rbMax(id)} · Lv${MAX_LV}에서 환생하면 Lv1로 돌아가고 공격 +1, 체력 +2${save.bestLeague<RB_LEAGUE?' ('+LEAGUES[RB_LEAGUE].n+' 리그부터)':''}</span></div>
+    body=`<div class="dstat"><span class="a">${v.cls==='support'||v.cls==='building'?'-':st0.a}</span> 공격 &nbsp; <span class="h">${st0.h}</span> 체력 &nbsp; ${starsHTML(o.lv,o.rb)} <small style="opacity:.65">Lv ${o.lv}/${MAX_LV}</small> &nbsp; 카드 ${o.cards}장</div><div style="font-size:11px;opacity:.7;margin:-2px 0 4px">${o.lv>=MAX_LV?'최대 별 ★4 · 환생하면 다시 ★1부터 더 강하게':'다음 별: Lv'+LV_STAR.findIndex((x,i)=>i>o.lv&&x>starOf(o.lv))+'에서 ★'+(starOf(o.lv)+1)+' (스킬 수치 +1'+(tierOf(id)===3&&starOf(o.lv)+1===3&&EX[b]?', 각성':'')+')'}</div>
+    <div class="dsk"><b>${v.desc}</b>${t===3&&v.exd?`<br><span style="color:#ffd667">전설 스킬 · ${v.exd}</span>`:v.exd?`<br><span style="opacity:.55">전설 등급이 되면 · ${v.exd}</span>`:''}${EX[b]&&!HEROES[b].token?`<br><span style="color:${isAwake(id,o.lv,o.rb)?'#7dffd8':'#ffffff80'}">3성 각성${isAwake(id,o.lv,o.rb)?' 완료':` (전설 ★3에 열림)`} · ${AWD[EX[b].id]||''}</span>`:''}<br><span style="opacity:.6;font-size:11px">환생 ${o.rb|0}/${rbMax(id)} · ★4(Lv${MAX_LV})에서 환생하면 ★1로 돌아가고 공격 +1, 체력 +2${save.bestLeague<RB_LEAGUE?' ('+LEAGUES[RB_LEAGUE].n+' 리그부터)':''}</span></div>
     <div class="dbtns">
       <button class="btn sm ${canLevel(id)?'grn':'sub'}" id="dUp" ${!max&&canLevel(id)&&save.gold>=g?'':'disabled'}>${max?'최대 레벨':`레벨업 · 카드 ${need} · <span class="coin" style="width:10px;height:10px"></span>${g}`}</button>
       ${ei.max?'':`<button class="btn sm ${ei.ok?'':'sub'}" id="dEvo" ${ei.ok?'':'disabled'}>진화 · 카드 ${ei.E.need}장 → ${V(ei.nx).name} ${ei.E.get}장 · <span class="coin" style="width:10px;height:10px"></span>${ei.E.gold}</button>`}
@@ -1904,7 +1911,7 @@ function heroDetail(id){
   <div class="evoline">${line}</div><div class="btns"><button class="btn sub sm" data-close>닫기</button></div>`,showHeroes);
   m.querySelector('.box').classList.add('wide');
   m.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>{m.remove();heroDetail(e.dataset.go)});
-  const up=m.querySelector('#dUp');if(up)up.onclick=()=>{if(!canLevel(id)||save.gold<lvGold(id))return;save.gold-=lvGold(id);o.cards-=lvNeed(id);o.lv++;persist();qp('upgrade');sfx('merge');m.remove();toast(`${v.name} Lv${o.lv}!`);heroDetail(id)};
+  const up=m.querySelector('#dUp');if(up)up.onclick=()=>{if(!canLevel(id)||save.gold<lvGold(id))return;save.gold-=lvGold(id);o.cards-=lvNeed(id);o.lv++;persist();qp('upgrade');sfx('merge');m.remove();toast(starOf(o.lv)>starOf(o.lv-1)?`${v.name} ★${starOf(o.lv)} 달성! 스킬 강화${isAwake(id,o.lv,o.rb)&&!isAwake(id,o.lv-1,o.rb)?' · 각성!':''}`:`${v.name} Lv${o.lv}!`);heroDetail(id)};
   const evb=m.querySelector('#dEvo');if(evb)evb.onclick=()=>{const r=doEvolve(id);if(!r)return;sfx('win');m.remove();evolveFx(id,r.nx,r.E.get)};
   const rbBtn=m.querySelector('#dRb');if(rbBtn)rbBtn.onclick=()=>doReborn(id,m);
   const dd=m.querySelector('#dDeck');if(dd)dd.onclick=()=>{if(save.deck.length<8)save.deck.push(id);else{toast('덱이 가득 찼어요. 먼저 하나를 빼세요');return}persist();sfx('place');m.remove();heroDetail(id)};
