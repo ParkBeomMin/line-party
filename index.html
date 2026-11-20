@@ -1105,6 +1105,8 @@ a.btn{display:inline-block;text-decoration:none}
 .pickc{width:190px;background:#0005;border:3px solid var(--tc,#ffd667);border-radius:14px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;font-family:inherit;cursor:pointer;transition:transform .15s}
 .pickc:active{transform:scale(.96)}.pickc.t3{--tc:#ff8a3a;box-shadow:0 0 16px #ff8a3a66}.pickc.t2{--tc:#c77dff}
 .pickc .pkart{width:110px;height:120px;border-radius:10px;overflow:hidden}.pickc b{font-size:15px}.pickc small{font-size:11.5px;opacity:.85}.pickc .pkd{opacity:.7;line-height:1.35}
+
+html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-size:9.5px}html[lang=en] .hs2 .chip,html[lang=en] .chipbar button{font-size:12.5px}html[lang=en] .trin{font-size:14px;letter-spacing:1px}
 </style>
 </head>
 <body>
@@ -1112,7 +1114,10 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.12 베타';
+const LANG='ko';
+(function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
+function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
+const VERSION='v3.13 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -2078,7 +2083,20 @@ let FB_SDK=null;
 function fbSdk(){if(!FB_SDK)FB_SDK=(async()=>{const SV='10.14.1';const [ap,au]=await Promise.all([import(`https://www.gstatic.com/firebasejs/${SV}/firebase-app.js`),import(`https://www.gstatic.com/firebasejs/${SV}/firebase-auth.js`)]);
   const app=ap.initializeApp({apiKey:FB.k,authDomain:FB.p+'.firebaseapp.com',projectId:FB.p,appId:'1:376895097100:web:7f81379f1eceeb79756129'});const auth=au.getAuth(app);await au.setPersistence(auth,au.inMemoryPersistence);return {au,auth}})().catch(e=>{FB_SDK=null;throw e});return FB_SDK}
 function isLinked(){return !!fbStore().google}
+function nativeGoogle(){return inNativeApp()?(window.Capacitor.Plugins||{}).FirebaseAuthentication:null}
+async function googleLoginNative(){const FA=nativeGoogle();if(!FA){toast('이 버전에서는 구글 연동을 쓸 수 없어요');return false}
+  let r;try{r=await FA.signInWithGoogle()}catch(e){toast('로그인을 취소했어요');return false}
+  const idt=r&&r.credential&&r.credential.idToken;if(!idt){toast('로그인 정보를 받지 못했어요');return false}
+  let j;try{const x=await fbFetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key='+FB.k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({postBody:'id_token='+encodeURIComponent(idt)+'&providerId=google.com',requestUri:'http://localhost',returnSecureToken:true})},9000);j=await x.json();if(!x.ok||!j.localId)throw 0}catch(e){toast('구글 로그인에 실패했어요. 잠시 뒤 다시 해 주세요');return false}
+  const old=fbStore();
+  if(old.uid&&!old.google&&old.uid!==j.localId){try{const a=await fbAuth();await fbFetch(FB_BASE+'/decks/'+a.uid,{method:'DELETE',headers:{Authorization:'Bearer '+a.tok}})}catch(e){}}
+  localStorage.setItem('lineparty_fb',JSON.stringify({uid:j.localId,tok:j.idToken,rt:j.refreshToken,exp:Date.now()+3300*1000,google:1,email:j.email||''}));
+  localStorage.removeItem('lineparty_fbsig');localStorage.removeItem('lineparty_cloudsig');
+  try{await FA.signOut()}catch(e){}
+  track('account_link',{native:1});
+  await cloudReconcile(true);return true}
 async function googleLogin(){
+  if(inNativeApp())return googleLoginNative();
   let sdk;try{sdk=await fbSdk()}catch(e){toast('로그인 모듈을 불러오지 못했어요');return false}
   const {au,auth}=sdk;let res;
   try{res=await au.signInWithPopup(auth,new au.GoogleAuthProvider())}catch(e){toast(e&&e.code==='auth/popup-blocked'?'팝업이 막혔어요. 팝업을 허용해 주세요':'로그인을 취소했어요');return false}
@@ -2971,11 +2989,12 @@ async function deleteMyData(){let ok=true;try{const a=await fbAuth();const H={he
   track('data_delete',{ok:ok?1:0});return ok}
 function showSettings(){
   const m=modal(`<div class="ribbon">설정</div>
-  ${inNativeApp()&&!isLinked()?`<div class="setrow"><span>구글 계정 연동 <small style="opacity:.7">(앱에서는 준비 중이에요. 웹 진행은 아래 기기 이전 코드로 옮겨 주세요)</small></span></div>`:isLinked()?`<div class="setrow"><span>구글 계정 연동됨 <small style="opacity:.7">${esc(fbStore().email||'')} · 자동 저장 중</small></span><span style="display:flex;gap:6px"><button class="btn sm grn" id="stGSave">지금 저장</button><button class="btn sm sub" id="stGOut">로그아웃</button></span></div>`:`<div class="setrow"><span>구글 계정 연동 <small style="opacity:.7">(자동 클라우드 저장, 다른 기기·앱에서 이어하기)</small></span><button class="btn sm grn" id="stG">구글로 연동</button></div>`}
+  ${inNativeApp()&&!isLinked()&&!nativeGoogle()?`<div class="setrow"><span>구글 계정 연동 <small style="opacity:.7">(이 버전에서는 준비 중이에요. 웹 진행은 아래 기기 이전 코드로 옮겨 주세요)</small></span></div>`:isLinked()?`<div class="setrow"><span>구글 계정 연동됨 <small style="opacity:.7">${esc(fbStore().email||'')} · 자동 저장 중</small></span><span style="display:flex;gap:6px"><button class="btn sm grn" id="stGSave">지금 저장</button><button class="btn sm sub" id="stGOut">로그아웃</button></span></div>`:`<div class="setrow"><span>구글 계정 연동 <small style="opacity:.7">(자동 클라우드 저장, 다른 기기·앱에서 이어하기)</small></span><button class="btn sm grn" id="stG">구글로 연동</button></div>`}
   ${appMode()?`<div class="setrow"><span>📱 ${appMode()==='tester'?'앱 테스터 신청':'안드로이드 앱 받기'}</span><button class="btn sm grn" id="stApp">열기</button></div>`:''}
   ${save.def?`<div class="setrow"><span>방어 기록 <small style="opacity:.7">내 덱이 다른 유저와 싸운 결과</small></span><b>${save.def.w}승 ${save.def.l}패</b></div>`:''}
   <div class="setrow"><span>닉네임 <small style="opacity:.6">(대전 상대에게 보여요, 10자까지)</small></span><span style="display:flex;gap:6px"><input id="stNick" maxlength="10" value="${esc(myNick())}" style="width:120px;font-family:inherit;font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #ffffff44;background:#0006;color:#fff"><button class="btn sm grn" id="stNickSave">저장</button></span></div>
   ${inNativeApp()?`<div class="setrow"><span>알림 <small style="opacity:.6">(상자 열림, 원정 완료)</small></span><button class="btn sm ${save.notiOn?'grn':'sub'}" id="stNoti">${save.notiOn?'켜짐':'꺼짐'}</button></div>`:''}
+  <div class="setrow"><span>Language <small style="opacity:.6">(\uC5B8\uC5B4)</small></span><button class="btn sm" id="stLang">${LANG==='ko'?'English':'\uD55C\uAD6D\uC5B4'}</button></div>
   <div class="setrow"><span>소리</span><button class="btn sm ${save.mute?'sub':'grn'}" id="stMute">${save.mute?'꺼짐':'켜짐'}</button></div>
   <div class="setrow col"><span>기기 이전 코드 <small style="opacity:.6">(구글 연동 없이 옮길 때 · 24시간 유효)</small></span>
    <div class="trrow"><b id="trCode" class="trcode">----·----</b><button class="btn sm" id="trMake">코드 만들기</button><button class="btn sm sub" id="trCopy" style="display:none">복사</button></div>
@@ -2987,7 +3006,7 @@ function showSettings(){
   <div class="setrow"><span style="opacity:.6;font-size:12px">계정 ID <span id="stUid" style="user-select:all">${esc((fbStore().uid||'-').slice(0,12))}</span> · ${VERSION}</span><a href="https://parkbeommin.github.io/line-party/privacy.html" target="_blank" rel="noopener" style="color:#9fd8ff;font-size:12.5px">개인정보처리방침</a></div>
   <div class="btns"><button class="btn sub sm" data-close>닫기</button></div>`,showLobby);
   m.querySelector('.box').classList.add('wide','scrolly');
-  if(!isLinked())fbSdk().catch(()=>{});
+  if(!isLinked()&&!inNativeApp())fbSdk().catch(()=>{});
   bind('#stApp',()=>{m.remove();appCta('settings',true)});
   bind('#stG',async()=>{const ok=await googleLogin();if(ok){m.remove();if(!document.querySelector('.modal'))showSettings()}});
   bind('#stGSave',async()=>{const ok=await cloudPut();toast(ok?'구글 계정에 저장했어요':'저장에 실패했어요')});
@@ -3000,6 +3019,7 @@ function showSettings(){
   m.querySelector('#trLoad').onclick=async()=>{const v=m.querySelector('#trIn').value;const c=trNorm(v);if(c.length===8){if(await redeemTransfer(c)){document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}return}try{const o=decodeSave(v);if(!confirm('지금 진행 상황을 이 코드로 덮어쓸까요?'))return;applySaveObj(o);toast('불러왔어요');document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}catch(e){toast('코드 8자리를 확인해 주세요')}};
   m.querySelector('#trOff').onclick=e=>{e.preventDefault();showBackupCode()};
   bind('#stNoti',async()=>{if(!save.notiOn){const ok=await notiEnable();if(!ok)toast('휴대폰 설정에서 라인 파티 알림을 허용해 주세요')}else{save.notiOn=false;persist();notiClear()}m.remove();showSettings()});
+  bind('#stLang',()=>setLang(LANG==='ko'?'en':'ko'));
   bind('#stDel',async()=>{if(!confirm('서버와 이 기기에 있는 라인 파티 데이터를 모두 지울까요? 되돌릴 수 없어요.'))return;if(!confirm('정말 지울까요? 영웅, 재화, 트로피가 전부 사라져요.'))return;toast('지우는 중...');const ok=await deleteMyData();alert(ok?'데이터를 지웠어요. 처음 화면으로 돌아가요.':'서버 데이터 일부를 지우지 못했어요. 기기 저장은 지웠어요. 남은 데이터는 개인정보처리방침의 이메일로 요청해 주세요.');location.reload()});
   m.querySelector('#stReset').onclick=()=>{if(!confirm('모든 진행 상황이 지워져요. 정말 처음부터 할까요?'))return;save=defaultSave();save.tut={};persist();m.remove();showLobby()};
 }
