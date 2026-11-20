@@ -1099,7 +1099,12 @@ a.btn{display:inline-block;text-decoration:none}
 @keyframes lvout{to{opacity:0;transform:translate(-50%,-60%)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.modal .box.wide{overflow-y:auto;overscroll-behavior:contain}.modal .box.wide>*{flex-shrink:0}
+.modal .box.scrolly{overflow-y:auto;overscroll-behavior:contain;padding-top:14px}.modal .box.scrolly>*{flex-shrink:0}.modal .box.scrolly .ribbon{margin-top:0}
+
+.pickrow{display:flex;gap:12px;justify-content:center;margin:6px 0}
+.pickc{width:190px;background:#0005;border:3px solid var(--tc,#ffd667);border-radius:14px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;font-family:inherit;cursor:pointer;transition:transform .15s}
+.pickc:active{transform:scale(.96)}.pickc.t3{--tc:#ff8a3a;box-shadow:0 0 16px #ff8a3a66}.pickc.t2{--tc:#c77dff}
+.pickc .pkart{width:110px;height:120px;border-radius:10px;overflow:hidden}.pickc b{font-size:15px}.pickc small{font-size:11.5px;opacity:.85}.pickc .pkd{opacity:.7;line-height:1.35}
 </style>
 </head>
 <body>
@@ -1107,7 +1112,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.11.1 베타';
+const VERSION='v3.12 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1226,16 +1231,16 @@ const CHEST_CYCLE=['wood','wood','silver','wood','silver','wood','wood','gold','
 const STAGES=[
   {n:'고블린 파수꾼',cmd:'goblin',hp:12,lv:1,t:0,deck:['shield','sword','archer','poison','frost','priest','berserk','fire']},
   {n:'늪지 사냥꾼',cmd:'swamp',hp:14,lv:1,t:0,deck:['poison','poison','archer','shield','sword','priest','frost','berserk']},
-  {n:'동굴 곰 무리',cmd:'beast',hp:18,lv:2,t:0,deck:['bear','bear','berserk','shield','archer','priest','sword','poison']},
-  {n:'숲의 저격대',cmd:'elf',hp:19,lv:2,t:0,deck:['sniper','sniper','archer','archer','shield','bear','priest','frost']},
-  {n:'불꽃 교단',cmd:'flame',hp:21,lv:2,t:1,deck:['fire','fire','fire','shield','berserk','priest','sword','drum']},
-  {n:'북치는 오크',cmd:'goblin',hp:22,lv:2,t:1,deck:['drum','drum','berserk','berserk','sword','shield','archer','fire']},
-  {n:'얼음 성채',cmd:'ice',hp:24,lv:3,t:1,deck:['frost','frost','knight','shield','sniper','priest','fire','bear']},
-  {n:'은빛 기사단',cmd:'knightc',hp:25,lv:3,t:1,deck:['knight','knight','shield','sword','archer','priest','drum','sniper']},
-  {n:'폭풍 마탑',cmd:'storm',hp:27,lv:3,t:2,deck:['bolt','bolt','fire','frost','shield','knight','priest','sniper']},
-  {n:'광전사 부족',cmd:'beast',hp:28,lv:3,t:2,deck:['berserk','berserk','drum','drum','bear','knight','fire','sword']},
-  {n:'망자의 무덤',cmd:'grave',hp:30,lv:5,t:2,deck:['necro','necro','knight','bear','fire','bolt','priest','sniper']},
-  {n:'용의 둥지',cmd:'dragonl',hp:34,lv:4,t:3,deck:['dragon','knight','necro','bolt','fire','drum','sniper','berserk']}
+  {n:'동굴 곰 무리',cmd:'beast',hp:18,lv:1,t:0,deck:['bear','bear','berserk','shield','archer','priest','sword','poison']},
+  {n:'숲의 저격대',cmd:'elf',hp:25,lv:1,t:0,deck:['sniper','sniper','archer','archer','shield','bear','priest','frost']},
+  {n:'불꽃 교단',cmd:'flame',hp:19,lv:1,t:1,deck:['fire','fire','fire','shield','berserk','priest','sword','drum']},
+  {n:'북치는 오크',cmd:'goblin',hp:22,lv:2,t:0,deck:['drum','drum','berserk','berserk','sword','shield','archer','fire']},
+  {n:'얼음 성채',cmd:'ice',hp:25,lv:2,t:0,deck:['frost','frost','knight','shield','sniper','priest','fire','bear']},
+  {n:'은빛 기사단',cmd:'knightc',hp:20,lv:1,t:1,deck:['knight','knight','shield','sword','archer','priest','drum','sniper']},
+  {n:'폭풍 마탑',cmd:'storm',hp:24,lv:1,t:1,deck:['bolt','bolt','fire','frost','shield','knight','priest','sniper']},
+  {n:'광전사 부족',cmd:'beast',hp:28,lv:4,t:1,deck:['berserk','berserk','drum','drum','bear','knight','fire','sword']},
+  {n:'망자의 무덤',cmd:'grave',hp:30,lv:5,t:1,deck:['necro','necro','knight','bear','fire','bolt','priest','sniper']},
+  {n:'용의 둥지',cmd:'dragonl',hp:32,lv:1,t:2,deck:['dragon','knight','necro','bolt','fire','drum','sniper','berserk']}
 ];
 [[1,6,'fountain'],[3,6,'bush'],[6,6,'watchtower'],[9,6,'altar'],[10,6,'powder'],[4,7,'volka'],[5,6,'bron'],[6,7,'toto'],[7,7,'elia'],[8,7,'pipi'],[9,7,'laila'],[10,7,'raven'],[11,7,'caldera']].forEach(([i,j,b])=>STAGES[i].deck[j]=b);
 const CMD_LOOK={
@@ -1295,7 +1300,7 @@ const SAVE_KEY='lineparty_v2';
 function dayKey(d){d=d||new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
 function defaultSave(){
   const owned={};START_OWNED.forEach(k=>owned[vid(k,HEROES[k].rar)]={lv:1,cards:0});
-  return {v:3,gold:150,gems:30,owned,deck:START_OWNED.map(k=>vid(k,HEROES[k].rar)),trophies:0,bestLeague:0,cleared:0,
+  return {v:3,gold:300,gems:30,owned,deck:START_OWNED.map(k=>vid(k,HEROES[k].rar)),trophies:0,bestLeague:0,cleared:0,
     chests:[{t:'wood',st:'ready'},null,null,null],cycle:0,
     quests:null,idle:{last:Date.now()},daily:{date:0,wins:0},shop:{date:0,free:false},stats:{w:0,l:0},seen:{}};
 }
@@ -1400,7 +1405,7 @@ function face(L,bg,bg2){
 const CMD_ART={player:"player",goblin:"goblin",swamp:"swamp",beast:"beast",elf:"elf",flame:"flame",ice:"ice",knightc:"knightc",storm:"storm",grave:"grave",dragonl:"dragonl",boss:"boss",boss2:"boss2",boss3:"boss3",boss4:"boss4",rival1:"rival1",rival2:"rival2",rival3:"rival1",rival4:"rival2"};
 const RIVAL_ART=["c_rival1","c_rival2","w_seraphine","w_orwan","w_maya","w_kardum","w_nox"];
 const ASSET_V="14";
-function artImg(src){return `<img src="assets/${src}.webp?v=${ASSET_V}" alt="" draggable="false">`}
+function artImg(src){return `<img src="assets/${src}.webp?v=${ASSET_V}" alt="" draggable="false" decoding="async">`}
 function portrait(id){if(!id.includes("_"))id=id+"_"+HEROES[id].rar;const H=HEROES[baseOf(id)];return `<div class="pt" style="background:radial-gradient(circle at 50% 30%,${CLS[H.cls].bg2},${CLS[H.cls].bg} 75%)">${artImg(artOf(id))}</div>`}
 function cmdPortrait(id){const f=id&&id.startsWith("art:")?id.slice(4):"c_"+(CMD_ART[id]||"player");return `<div class="pt" style="background:radial-gradient(circle at 50% 30%,#4a3a7a,#1f1838 75%)">${artImg(f)}</div>`}
 
@@ -1778,7 +1783,7 @@ function aiChoose(st,side,hand,noise){
   hand.forEach((card,hi)=>{for(const [r,l] of validCells(st,side,card)){
     const sim=structuredClone(st);place(sim,side,card,r,l);
     if(!sim.over)for(const _ of attackPhase(sim,side)){}
-    const sc=evaluate(sim,st,side)+Math.random()*(noise||0);
+    const sc=evaluate(sim,st,side)+Math.random()*(noise||0)*DS;
     if(sc>bs){bs=sc;best={hi,r,l}}
   }});
   return best;
@@ -1921,7 +1926,7 @@ function showEventInfo(){
 const B_SET=new Set(['shield_0','shield_1','shield_2','shield_3','sword_0','sword_1','sword_2','sword_3','archer_0','archer_1','archer_2','archer_3','poison_0','poison_1','poison_2','poison_3','frost_0','frost_1','frost_2','frost_3','priest_0','priest_1','priest_2','priest_3','berserk_1','berserk_2','berserk_3','bear_1','bear_2','bear_3','sniper_1','sniper_2','sniper_3','fire_1','fire_2','fire_3','drum_1','drum_2','drum_3','knight_2','knight_3','bolt_2','bolt_3','necro_2','necro_3','dragon_3','skel_0']);
 function lobbyArt(id){return (B_SET.has(id)?'b_':'s_')+id}
 function showLobby(){setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
-  screen='lobby';ensureDaily();tickChests();checkSeason();if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
+  screen='lobby';ensureDaily();tickChests();checkSeason();if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
   const prog=N?(save.trophies-L.t)/(N.t-L.t):1;
@@ -1984,7 +1989,7 @@ function bindChests(){
     if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t)*1000;persist();showLobby();return}
     const cost=gemCost(c);
     const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'남은 시간 '+fmtT((c.readyAt-Date.now())/1000):'다른 상자를 여는 중이에요'}<br>보석 ${cost}개로 지금 바로 열 수 있어요</div>
-    <div class="btns"><button class="btn" id="cNow" ${save.gems<cost?'disabled':''}><span class="gem"></span> ${cost} 바로 열기</button>${c.st==='unlocking'?`<button class="btn grn" id="cAd" ${adLeft('chest')>0?'':'disabled'}>광고 보고 30분 단축 (${adLeft('chest')})</button>`:''}<button class="btn sub" data-close>닫기</button></div>`);
+    <div class="btns"><button class="btn" id="cNow" ${save.gems<cost?'disabled':''}><span class="gem"></span> ${cost} 바로 열기</button>${c.st==='unlocking'?`<button class="btn grn" id="cAd" ${adLeft('chest')>0?'':'disabled'}>${adW('광고 보고 30분 단축','무료로 30분 단축')} (${adLeft('chest')})</button>`:''}<button class="btn sub" data-close>닫기</button></div>`);
     const ca=m.querySelector('#cAd');if(ca)ca.onclick=()=>{m.remove();showRewardAd('chest','상자 여는 시간을 30분 줄여드려요',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=30*60000;tickChests();persist()}toast('30분 단축!');showLobby()})};
     m.querySelector('#cNow').onclick=()=>{if(save.gems<cost)return;save.gems-=cost;save.chests[i]=null;persist();m.remove();openChestModal(c.t,showLobby)};
   });
@@ -1994,7 +1999,7 @@ const RULE_TABS=[
  {n:'전투',p:[['목표','적 지휘관 체력을 0으로 만들면 이겨요. '+MAX_ROUND+'턴이 지나면 체력 비율이 높은 쪽이 이겨요.'],['보드','양쪽 4줄 × 3열. 가운데에 가까운 열이 앞열이에요. 근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열, 지원과 건물은 어디든 놓을 수 있어요.'],['내 턴','덱 8장 중 손에 4장을 들어요. 카드 1장을 놓으면 내 유닛 전원이 공격하고 1장을 새로 뽑아요.'],['라인 막기','유닛은 자기 줄의 적만 때려요. 그 줄에 적이 없으면 적 지휘관을 바로 때려요. 내 줄이 비면 나도 맞아요.'],['합체 ◆','같은 영웅 카드가 다시 손에 오면 그 영웅 위에 겹쳐 놓아 합체할 수 있어요. 영웅마다 오르는 능력치와 합체 효과가 달라요 (최대 ◆3). 덱에는 같은 영웅을 1장만 넣을 수 있어요.'],['진영','성채(보호), 들숲(재생), 잿불(공격). 같은 진영이 2기, 4기 모이면 시너지가 켜져요.'],['건물','공격하지 않지만 줄을 막고 매 턴 효과를 내요. 독과 빙결에 걸리지 않아요.']]},
  {n:'지휘관',p:[['지휘관 스킬','지휘관마다 고유 스킬 3개를 1턴, 3턴, 6턴부터 순서대로 한 번씩 써요. 2번은 지휘관 Lv3, 3번은 Lv6에 열려요.'],['지휘관 일격','스킬을 다 쓰면 매 턴 1개씩 쌓여요. 늦게 쓸수록 1개당 피해가 커서 모아 뒀다 한 번에 써도 돼요.'],['상대 지휘관','상대도 자기 지휘관 스킬과 일격을 써요.'],['원정','전투에 안 쓰는 지휘관을 원정 보내 카드, 골드, 보석을 얻어요. 지휘관마다 특기가 달라요.']]},
  {n:'성장',p:[['레벨','같은 카드를 모으고 골드를 내면 레벨업 (최대 Lv8). 레벨마다 공격·체력이 기본 수치의 12%씩, 스킬 피해·회복도 조금씩 올라요.'],['진화','같은 버전 카드를 모아 상위 등급 버전으로 바꿔요. 청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 해요.'],['전설 각성','전설 버전 영웅이 처음 초월하면 전설 스킬이 한 단계 강해지고 전투에서 금빛으로 빛나요.'],['초월','황금 리그부터, Lv8 영웅을 초월시키면 Lv1로 돌아가는 대신 별이 하나 채워지고 공격·체력 +30%(기본 수치 기준)와 스킬 수치 +5를 영구로 받아요.'],['인연 맺기','은빛 리그부터. 다른 영웅 2명을 정해진 레벨까지 키우고 별가루를 쓰면, 그 영웅의 모든 버전이 영구로 강해져요 (최대 4번).']]},
- {n:'대전·운영',p:[['아레나','비슷한 트로피의 실제 유저 덱과 붙어요. 상대 덱은 AI가 조종해요 (마이티파티와 같은 방식). 상대가 없으면 AI 도전자와 붙어요.'],['방어 기록','다른 유저가 내 덱과 싸우면 기록이 남고, 방어에 성공하면 골드를 받아요.'],['계정','설정에서 구글 계정을 연동하면 자동으로 저장되고 다른 기기에서도 이어서 해요.'],['시즌','14일마다 시즌이 바뀌어요. 시즌 최고 리그에 따라 보상을 받고, 700을 넘는 트로피는 절반이 줄어요. 전체 랭킹도 볼 수 있어요.'],['파티','지휘관마다 덱이 따로 저장돼요. 파티 화면 위에서 바꿔요.'],['친선전·모의전','친선전는 져도 트로피를 잃지 않는 대전 (하루 보상 5번). 모의전은 내 파티끼리 붙여 보는 모드예요.'],['주간 균열','매주 바뀌어요. 하늘 계단(층 오르기), 거신 토벌(피해 누적), 연승 결투장(체력이 이어지는 연전).'],['매일','일일 퀘스트, 일일 특가, 요일 이벤트, 오늘의 보스, 출석, 보급 창고.']]}
+ {n:'대전·운영',p:[['아레나','비슷한 트로피의 실제 유저 덱과 붙어요. 상대 덱은 AI가 조종해요 (마이티파티와 같은 방식). 상대가 없으면 AI 도전자와 붙어요.'],['방어 기록','다른 유저가 내 덱과 싸우면 기록이 남고, 방어에 성공하면 골드를 받아요.'],['계정','설정에서 구글 계정을 연동하면 자동으로 저장되고 다른 기기에서도 이어서 해요.'],['시즌','14일마다 시즌이 바뀌어요. 시즌 최고 리그에 따라 보상을 받고(황금 리그부터 영웅 카드, 다이아 리그부터 전설 카드를 골라 받아요), 700을 넘는 트로피는 절반이 줄어요. 전체 랭킹도 볼 수 있어요.'],['파티','지휘관마다 덱이 따로 저장돼요. 파티 화면 위에서 바꿔요.'],['친선전·모의전','친선전는 져도 트로피를 잃지 않는 대전 (하루 보상 5번). 모의전은 내 파티끼리 붙여 보는 모드예요.'],['주간 균열','매주 바뀌어요. 하늘 계단(층 오르기), 거신 토벌(피해 누적), 연승 결투장(체력이 이어지는 연전).'],['매일','일일 퀘스트, 일일 특가, 요일 이벤트, 오늘의 보스, 출석, 보급 창고.']]}
 ];
 RULE_TABS.splice(1,0,{n:'스킬',p:[['비행','근접 공격(비행 아님)에 맞지 않아요.'],['철갑·무적','철갑은 피해 1번 무시, 무적은 한 턴 동안 모든 피해 무시.'],['면역','독, 빙결, 출혈 같은 나쁜 효과에 걸리지 않아요.'],['회피·정확','회피는 원거리·마법 공격을 피해요. 정확이 있으면 회피와 현혹을 무시해요.'],['반격·가시','반격은 근접 공격을 되받아치고, 가시는 때린 적에게 피해를 줘요.'],['출혈·독소','출혈은 공격할 때마다 피해, 독소는 공격할 때마다 공격력이 줄어요.'],['침묵','스킬과 강화가 영원히 사라져요.'],['현혹','다음 공격이 빗나가요.'],['변신·변이','공성 기사는 감시탑으로 변신하고, 변이는 적을 개구리로 만들어요.'],['범위·관통','범위는 대상 주변, 관통은 같은 줄 적 전부를 때려요.'],['즉사','체력이 낮은 적을 바로 쓰러뜨려요.'],['저주 연결','연결된 적끼리 피해를 나눠 받아요.'],['파쇄','철갑과 무적을 깨뜨리고 피해를 더 줘요.'],['성장·과열','성장은 체력이, 과열은 공격력이 턴마다 올라요.'],['휘감기','덩굴 벽을 때린 근접 적은 다음 공격을 못 해요.'],['투석','투석기는 적 지휘관을 직접 때려요.']]});
 let ruleTab=0;
@@ -2113,10 +2118,25 @@ function linkNudge(){if(isLinked())return;const td=new Date().toDateString();if(
   setTimeout(()=>{if(screen!=='lobby'||document.querySelector('.modal'))return;save.nudgeDay=td;persist();track('link_nudge',{});
     const m=modal(`<div class="ribbon">진행 상황 지키기</div><div class="rw" style="line-height:1.7">지금 진행은 이 브라우저에만 저장돼 있어요.<br>브라우저 데이터가 지워지면 사라질 수 있어요.<br><b style="color:#ffd667">구글 계정에 연동</b>하면 자동으로 저장되고,<br>다른 기기나 나중에 나올 앱에서도 이어서 할 수 있어요.</div><div class="btns"><button class="btn grn" id="nzGo">구글로 연동</button><button class="btn sub" data-close>나중에</button></div>`);
     m.querySelector('#nzGo').onclick=async()=>{m.remove();await googleLogin()}},2500)}
+function notiPlan(){const out=[],now=Date.now();
+  const un=save.chests.filter(c=>c&&c.st==='unlocking').sort((a,b)=>a.readyAt-b.readyAt);let last=un.length?un[un.length-1].readyAt:now;let first=un.length?un[0].readyAt:0;
+  const locked=save.chests.filter(c=>c&&c.st==='locked');locked.forEach(c=>{last+=chestSec(c.t)*1000;if(!first)first=last});
+  if(first>now+60000)out.push({id:101,at:first,title:'라인 파티',body:'상자가 열렸어요! 눌러서 카드를 받으세요.'});
+  if(locked.length&&last>first+60000)out.push({id:102,at:last,title:'라인 파티',body:'상자가 모두 준비됐어요. 열고 새 상자 자리를 비워 주세요!'});
+  Object.entries(save.exp||{}).slice(0,6).forEach(([k,e],i)=>{if(e&&e.end>now+60000)out.push({id:110+i,at:e.end,title:'원정 완료',body:(WARLORDS[k]?WARLORDS[k].n:'지휘관')+' 원정대가 돌아왔어요. 보상을 받으세요!'})});
+  return out}
+function notiLN(){return inNativeApp()?(window.Capacitor.Plugins||{}).LocalNotifications:null}
+async function notiClear(){const LN=notiLN();if(!LN)return;try{await LN.cancel({notifications:[101,102,110,111,112,113,114,115].map(id=>({id}))})}catch(e){}}
+async function notiSync(){const LN=notiLN();if(!LN)return;await notiClear();if(!save.notiOn)return;
+  try{const p=await LN.checkPermissions();if(p.display!=='granted')return;const plan=notiPlan();if(plan.length)await LN.schedule({notifications:plan.map(n=>({id:n.id,title:n.title,body:n.body,schedule:{at:new Date(n.at),allowWhileIdle:true},smallIcon:'ic_stat_noti',iconColor:'#FFC547'}))})}catch(e){}}
+async function notiEnable(){const LN=notiLN();if(!LN)return false;try{let p=await LN.checkPermissions();if(p.display!=='granted')p=await LN.requestPermissions();const ok=p.display==='granted';save.notiOn=ok;persist();track('noti_permission',{ok:ok?1:0});return ok}catch(e){return false}}
+function notiAsk(){if(!notiLN()||save.notiAsked||screen!=='lobby'||document.querySelector('.modal'))return;if(((save.stats||{}).w|0)<1)return;save.notiAsked=1;persist();
+  const m=modal(`<div class="ribbon">알림 받기</div><div class="rw" style="line-height:1.7">상자가 열리거나 원정대가 돌아오면<br>알림으로 알려 드릴까요?</div><div class="btns"><button class="btn grn" id="ntY">알림 받기</button><button class="btn sub" id="ntN">괜찮아요</button></div>`);
+  m.querySelector('#ntY').onclick=async()=>{m.remove();const ok=await notiEnable();toast(ok?'알림을 켰어요':'알림 권한이 꺼져 있어요. 설정에서 다시 켤 수 있어요')};m.querySelector('#ntN').onclick=()=>{m.remove()}}
 function nativeSetup(){if(!inNativeApp())return;const P=window.Capacitor.Plugins||{};document.documentElement.classList.add('native');
   try{P.StatusBar&&P.StatusBar.hide()}catch(e){}
   try{P.App&&P.App.addListener('backButton',()=>{const ms=[...document.querySelectorAll('.modal')];if(ms.length){const t=ms[ms.length-1];const c=t.querySelector('[data-close],#pmOk,[data-done]');if(c)c.click();else t.remove();return}if(screen==='battle'){toast('전투 중에는 포기 버튼으로 나갈 수 있어요');return}if(screen!=='lobby'){showLobby();return}if(confirm('라인 파티를 종료할까요?'))P.App.exitApp()})}catch(e){}
-  try{P.App&&P.App.addListener('appStateChange',st2=>{if(st2.isActive){try{P.StatusBar&&P.StatusBar.hide()}catch(e){}}else{try{persist()}catch(e){}}})}catch(e){}}
+  try{P.App&&P.App.addListener('appStateChange',st2=>{if(st2.isActive){try{P.StatusBar&&P.StatusBar.hide()}catch(e){}notiClear();try{if(screen==='lobby'){tickChests();const c=document.getElementById('chests');if(c){c.innerHTML=chestSlotsHTML();bindChests()}}}catch(e){}}else{try{persist()}catch(e){}notiSync()}})}catch(e){}}
 /* ===================== 기기 이전 코드 (8자리, 24시간) ===================== */
 const TR_AB='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function trNorm(c){return (c||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
@@ -2201,15 +2221,25 @@ function addDust(n){save.dust=(save.dust|0)+n}
 function giveCardsRandom(n){const pool=save.deck.filter(id=>save.owned[id]);if(!pool.length)return null;const id=pool[Math.floor(Math.random()*pool.length)];save.owned[id].cards+=n;return id}
 // ---- 시즌
 const SEASON_REWARD=li=>({gold:100*(li+1),gems:5*li,dust:10*(li+1),chest:li>=5?'gold':li>=2?'silver':'wood'});
+const SEASON_PICK=li=>li>=7?{t:3,c:3}:li>=6?{t:3,c:2}:li>=5?{t:3,c:1}:li>=3?{t:2,c:1}:null;
+function pickTxt(P){return P?(P.t===3?'전설':'영웅')+' 카드 선택 '+P.c+'장':''}
+function queuePick(t,c,why){save.picks=save.picks||[];save.picks.push({t,c,why});persist()}
+function showPick(then){const P=(save.picks||[])[0];if(!P){then&&then();return}
+  if(!P.opts){const pool=unlockedBases().filter(b=>!HEROES[b].token&&!HEROES[b].fixed&&HEROES[b].rar<=P.t).map(b=>vid(b,P.t)).sort(()=>Math.random()-.5);P.opts=pool.slice(0,3);persist()}
+  if(!P.opts.length){save.picks.shift();persist();then&&then();return}
+  const m=modal(`<div class="ribbon">${P.t===3?'전설':'영웅'} 카드 선택</div><div class="rw">${P.why||'보상'} · 셋 중 하나를 골라 <b>${P.c}장</b> 받아요</div>
+   <div class="pickrow">${P.opts.map(id=>{const v=V(id),own=save.owned[id];return `<button class="pickc t${P.t}" data-pk="${id}"><div class="pkart">${portrait(id)}</div><b>${v.name}</b><small>${FAC[v.fac].n} · ${CLS[v.cls].n}${own?' · Lv'+own.lv:' · <span style="color:#7dffa1">새 버전</span>'}</small><small class="pkd">${v.desc}</small></button>`}).join('')}</div>`);
+  m.querySelector('.box').classList.add('wide');
+  m.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{const id=b.dataset.pk;if(!save.owned[id])save.owned[id]={lv:1,cards:0};save.owned[id].cards+=P.c;save.picks.shift();persist();sfx('fanfare');track('card_pick',{id,t:P.t});m.remove();toast(V(id).name+' 카드 '+P.c+'장 획득!');if((save.picks||[]).length)showPick(then);else then&&then()})}
 function checkSeason(){const cur=seasonNo();if(!save.season){save.season={n:cur,best:leagueIdx(save.trophies)};persist();return}
   if(save.season.n>=cur)return;const best=save.season.best|0,R=SEASON_REWARD(best),before=save.trophies;
   save.gold+=R.gold;save.gems+=R.gems;addDust(R.dust);if(save.trophies>700)save.trophies=700+Math.floor((save.trophies-700)/2);
-  const old=save.season.n;save.season={n:cur,best:leagueIdx(save.trophies)};persist();track('season_reward',{season:old,best});
-  setTimeout(()=>{const m=modal(`<div class="ribbon">시즌 ${old} 종료!</div><div class="rw" style="line-height:1.8">이번 시즌 최고 리그: <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b><br>${ico('coin','mi')} ${R.gold} · ${ico('gem','mi')} ${R.gems} · <span class="dusti">✦</span> 별가루 ${R.dust}<br>+ ${CHESTS[R.chest].n}<br><small style="opacity:.7">트로피 ${before} → ${save.trophies} · 시즌 ${cur} 시작!</small></div><div class="btns"><button class="btn" id="snGo">상자 열기</button></div>`);m.querySelector('#snGo').onclick=()=>{m.remove();openChestModal(R.chest,showLobby)}},700)}
+  const old=save.season.n;const SP=SEASON_PICK(best);if(SP)queuePick(SP.t,SP.c,'시즌 '+old+' 보상');save.season={n:cur,best:leagueIdx(save.trophies)};persist();track('season_reward',{season:old,best});
+  setTimeout(()=>{const m=modal(`<div class="ribbon">시즌 ${old} 종료!</div><div class="rw" style="line-height:1.8">이번 시즌 최고 리그: <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b><br>${ico('coin','mi')} ${R.gold} · ${ico('gem','mi')} ${R.gems} · <span class="dusti">✦</span> 별가루 ${R.dust}<br>+ ${CHESTS[R.chest].n}${SP?'<br>+ <b style="color:#ffb84d">'+pickTxt(SP)+'</b>':''}<br><small style="opacity:.7">트로피 ${before} → ${save.trophies} · 시즌 ${cur} 시작!</small></div><div class="btns"><button class="btn" id="snGo">상자 열기</button></div>`);m.querySelector('#snGo').onclick=()=>{m.remove();openChestModal(R.chest,()=>showPick(showLobby))}},700)}
 async function fbTopRank(){try{const r=await fbFetch(FB_BASE+':runQuery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'decks'}],orderBy:[{field:{fieldPath:'trophies'},direction:'DESCENDING'}],limit:30}})},5000);if(!r.ok)return null;const j=await r.json();return j.filter(x=>x.document).map(x=>{const f=x.document.fields||{};return {uid:x.document.name.split('/').pop(),name:fbDec(f.name),wl:fbDec(f.wl),tr:fbDec(f.trophies)}})}catch(e){return null}}
 function showSeason(){checkSeason();const best=save.season.best|0;
   const m=modal(`<div class="ribbon">시즌 ${seasonNo()}</div><div class="rw">남은 기간 <b>${fmtDH(seasonLeft())}</b> · 이번 시즌 최고 <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b></div>
-   <div class="sn2"><div class="snrw"><b>시즌 보상 (최고 리그 기준)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${L.n}</span><small>${R.gold}골드 · 보석 ${R.gems} · 별가루 ${R.dust} · ${CHESTS[R.chest].n}</small></div>`}).join('')}<small style="opacity:.6">시즌이 끝나면 700 트로피를 넘는 만큼 절반이 줄어요</small></div>
+   <div class="sn2"><div class="snrw"><b>시즌 보상 (최고 리그 기준)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${L.n}</span><small>${R.gold}골드 · 보석 ${R.gems} · 별가루 ${R.dust} · ${CHESTS[R.chest].n}${SEASON_PICK(i)?' · <b style="color:#ffb84d">'+pickTxt(SEASON_PICK(i))+'</b>':''}</small></div>`}).join('')}<small style="opacity:.6">시즌이 끝나면 700 트로피를 넘는 만큼 절반이 줄어요</small></div>
    <div class="snrk"><b>전체 랭킹</b><div id="rkList" class="rklist">불러오는 중...</div></div></div><div class="btns"><button class="btn sm" data-close>닫기</button></div>`);
   m.querySelector('.box').classList.add('wide');
   fbTopRank().then(L=>{const el=m.querySelector('#rkList');if(!el)return;const me=fbStore().uid;if(!L||!L.length){el.innerHTML='<small style="opacity:.6">아직 랭킹이 없어요</small>';return}
@@ -2238,7 +2268,7 @@ async function startBrawl(){ensureDeck();const li=leagueIdx(save.trophies);const
   const opp=await findOpponentT(3000);let c;const en=mm.querySelector('.vside.en');en.classList.remove('searching');
   if(opp){const OW=WARLORDS[opp.wl];const elv={},erb={},esb={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv[k]=raw%10||1;erb[k]=Math.floor(raw/10)%10;esb[k]=Math.floor(raw/100)});
     en.innerHTML=`<img src="assets/k_${OW.art}.webp?v=${ASSET_V}"><b>${esc(opp.name)}</b><small><span class="ubadge">유저 덱</span> ${OW.n}</small>`;
-    c={mode:'brawl',online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:(OW.hp+((opp.wlLv|0||1)-1)+leagueIdx(opp.trophies||0)*2)*DS,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2*DS}}
+    c={mode:'brawl',online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:wlHpAt(opp.wl,opp.wlLv)+leagueIdx(opp.trophies||0)*2*DS,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2*DS}}
   else{const d=aiDeck(Math.min(3,Math.floor(li/2)));en.innerHTML=`<img src="assets/k_c_rival2.webp?v=${ASSET_V}"><b>친선전 상대</b><small>AI</small>`;c={mode:'brawl',eName:'친선전 상대',eLook:'art:c_rival2',eHp:(20+li*2)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())),noise:3,pHp:wlHp()+li*2*DS}}
   mm.querySelector('.vstitle').textContent='친선전 상대 발견!';sfx('whoosh');setTimeout(()=>{mm.remove();startBattle(c)},1500)}
 // ---- 모의전
@@ -2253,7 +2283,7 @@ function ensureDungeon(){const wk=weekNo();if(!save.dg||save.dg.wk!==wk){save.dg
 function raidMax(lv){return (90+lv*40)*DS}
 function showDungeon(){const D=ensureDungeon(),M=DG_MODES[D.mode];if(D.mode==='raid'&&!D.raidHp)D.raidHp=raidMax(D.raidLv);
   let body='';
-  if(D.mode==='tower')body=`<div class="dgbig">${D.floor}층</div><div class="rw">다음 보상: 골드 ${30+D.floor*6} · 별가루 ${3+Math.floor(D.floor/3)}${D.floor%5===0?' · 보석 5':''}</div><div class="btns"><button class="btn" id="dgGo">${D.floor}층 도전</button></div>`;
+  if(D.mode==='tower')body=`<div class="dgbig">${D.floor}층</div><div class="rw">다음 보상: 골드 ${30+D.floor*6} · 별가루 ${3+Math.floor(D.floor/3)}${D.floor%5===0?' · 보석 5':''}${D.floor%10===0?' · <b style="color:#ffb84d">'+(D.floor>=20?'전설':'영웅')+' 카드 선택</b>':''}</div><div class="rw" style="font-size:12.5px;opacity:.75">10층: 영웅 카드 선택 · 20층부터 10층마다: 전설 카드 선택</div><div class="btns"><button class="btn" id="dgGo">${D.floor}층 도전</button></div>`;
   if(D.mode==='raid')body=`<div class="dgboss"><img src="assets/k_c_boss.webp?v=${ASSET_V}"><div class="bar q" style="height:14px;width:260px"><i style="width:${D.raidHp/raidMax(D.raidLv)*100}%;background:linear-gradient(#ff7b7b,#c22)"></i></div><b>거신 Lv${D.raidLv} · ${D.raidHp}/${raidMax(D.raidLv)}</b></div><div class="rw">오늘 남은 도전 ${D.tries}/3 · 준 피해 1당 골드 4, 5당 별가루 1</div><div class="btns"><button class="btn" id="dgGo" ${D.tries>0?'':'disabled'}>거신에게 도전</button></div>`;
   if(D.mode==='pit')body=`<div class="dgbig">${D.run?D.run.w+'연승 중':'최고 '+D.pitBest+'연승'}</div><div class="rw">${D.run?`지휘관 체력 ${D.run.hp} 남음 · 이길수록 상대가 강해져요`:`오늘 남은 도전 ${D.tries}/3 · 1승마다 골드 25, 별가루 2`}</div><div class="btns"><button class="btn" id="dgGo" ${D.run||D.tries>0?'':'disabled'}>${D.run?'다음 상대':'결투장 입장'}</button>${D.run?'<button class="btn sub" id="dgStop">여기서 그만</button>':''}</div>`;
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 도전</button><span class="h2">주간 균열</span>${resBar()}</div>
@@ -2268,7 +2298,8 @@ const SPECIAL_MODES=['brawl','train','tower','raid','pit'];
 function specialEnd(win){const D=save.dg;let gold=0,gems=0,dust=0,txt='';
   if(cfg.mode==='train')txt='<div style="font-size:13px;opacity:.75">모의전이라 보상과 트로피 변화가 없어요</div>';
   if(cfg.mode==='brawl'){const b=brawlState();if(win&&b.w<BRAWL_MAX){b.w++;gold=30;dust=5;const id=giveCardsRandom(3);txt=`<div style="font-size:13px">친선전 보상 ${b.w}/${BRAWL_MAX}${id?' · '+V(id).name+' 카드 3장':''}</div>`}else if(win)txt='<div style="font-size:13px;opacity:.75">오늘 친선전 보상을 다 받았어요</div>';else txt='<div style="font-size:13px;opacity:.75">친선전는 져도 잃는 게 없어요</div>'}
-  if(cfg.mode==='tower'){if(win){const f=D.floor;gold=30+f*6;dust=3+Math.floor(f/3);if(f%5===0)gems=5;D.floor++;txt=`<div style="font-size:14px;color:#ffd667">${f}층 돌파! 다음은 ${D.floor}층</div>`}}
+  let txt2='';
+  if(cfg.mode==='tower'){if(win){const f=D.floor;gold=30+f*6;dust=3+Math.floor(f/3);if(f%5===0)gems=5;if(f%10===0){queuePick(f>=20?3:2,1,'하늘 계단 '+f+'층 보상');txt2=`<div style="font-size:13px;color:#ffb84d">${f>=20?'전설':'영웅'} 카드 선택권 획득! 로비에서 골라요</div>`}D.floor++;txt=`<div style="font-size:14px;color:#ffd667">${f}층 돌파! 다음은 ${D.floor}층</div>`+txt2}}
   if(cfg.mode==='raid'){const dmg=Math.max(0,cfg.raidStart-st.cmd.e.hp);D.raidHp=Math.max(0,D.raidHp-dmg);gold=Math.round(dmg/DS*4);dust=Math.floor(dmg/DS/5);txt=`<div style="font-size:14px">거신에게 <b style="color:#ff8a8a">${dmg}</b> 피해 · 남은 체력 ${D.raidHp}</div>`;if(D.raidHp<=0){gems=20;dust+=30;txt+=`<div style="font-size:15px;font-weight:900;color:#ffd667">거신 처치! 보석 20 · 별가루 +30 · 다음 거신 Lv${D.raidLv+1}</div>`;D.raidLv++;D.raidHp=raidMax(D.raidLv)}}
   if(cfg.mode==='pit'){if(win&&D.run){D.run.w++;D.run.hp=Math.min(cfg.pHpMax||st.cmd.p.max,st.cmd.p.hp+3*DS);gold=25;dust=2;D.pitBest=Math.max(D.pitBest,D.run.w);txt=`<div style="font-size:14px;color:#ffd667">${D.run.w}연승! 지휘관 체력 ${D.run.hp} (+30 회복)</div>`}else if(D.run){txt=`<div style="font-size:14px">${D.run.w}연승으로 끝났어요 · 이번 주 최고 ${D.pitBest}연승</div>`;D.run=null}}
   persist();return {gold,gems,dust,txt}}
@@ -2338,10 +2369,10 @@ function splashTargets(st,side,t){const p=findPos(st,t);if(!p)return [];const ou
 async function startArena(){
   ensureDeck();
   const li=leagueIdx(save.trophies);
-  const pool=[];LEAGUES.slice(0,li+2).forEach(L=>pool.push(...L.un));pool.push(...START_OWNED);
-  const cap=Math.min(3,Math.floor(li/2));const mf=FAC_KEYS[rnd(3)];const main=pool.filter(b=>HEROES[b].fac===mf);const deck=[];for(let i=0;i<8;i++){const b=(i<5&&main.length)?main[rnd(main.length)]:pool[rnd(pool.length)];deck.push(toVid(b,rr(0,cap)))}
+  const pool=[];LEAGUES.slice(0,li+1).forEach(L=>pool.push(...L.un));pool.push(...START_OWNED);const nb=Math.max(0,2-li);
+  const cap=Math.max(0,Math.min(3,Math.floor((li-1)/2)));const mf=FAC_KEYS[rnd(3)];const main=pool.filter(b=>HEROES[b].fac===mf);const deck=[];for(let i=0;i<8;i++){const b=(i<5&&main.length)?main[rnd(main.length)]:pool[rnd(pool.length)];deck.push(toVid(b,rr(0,cap)))}
   const dk=save.deck.map(id=>save.owned[id]?save.owned[id].lv:1);const avg=dk.reduce((a,b)=>a+b,0)/dk.length;
-  const lv=Math.max(1,Math.round(avg+(Math.random()*1.4-.6)+li*.15));
+  const lv=Math.max(1,Math.round(avg+(Math.random()*1.4-.6)+li*.05-.4-nb*.5));
   const elv={};deck.forEach(k=>elv[k]=lv);
   const A=['붉은','푸른','은빛','어둠의','폭풍','황금','잿빛','숲의'],B=['여우','늑대','매','곰','뱀','사자','까마귀','올빼미'];
   const nm='AI 도전자 · '+A[rnd(A.length)]+' '+B[rnd(B.length)];
@@ -2356,10 +2387,10 @@ async function startArena(){
   if(opp){const OW=WARLORDS[opp.wl];const oli=leagueIdx(opp.trophies||0);const elv2={},erb2={},esb2={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv2[k]=Math.max(1,Math.min(MAX_LV,raw%10||1));erb2[k]=Math.min(5,Math.floor(raw/10)%10);esb2[k]=Math.min(SB_MAX,Math.floor(raw/100))});
     const fc2={};opp.deck.forEach(id=>{const f=V(id).fac;fc2[f]=(fc2[f]||0)+1});const mf2=Object.entries(fc2).sort((x,y)=>y[1]-x[1])[0][0];
     en.innerHTML=enSide(OW.art,opp.name,`<span class="ubadge">유저 덱</span> ${OW.n} Lv${opp.wlLv} · ${LEAGUES[oli].n} 리그 · 주력 ${FAC[mf2].n}`);
-    c={mode:'arena',online:{uid:opp.uid,name:opp.name},eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:Math.min(WL_MAX,opp.wlLv|0||1),eHp:(OW.hp+((opp.wlLv|0||1)-1)+oli*2)*DS,eDeck:opp.deck.slice(),eLvs:elv2,eRbs:erb2,eSbs:esb2,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2*DS};
+    c={mode:'arena',online:{uid:opp.uid,name:opp.name},eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:Math.min(WL_MAX,opp.wlLv|0||1),eHp:wlHpAt(opp.wl,opp.wlLv)+oli*2*DS,eDeck:opp.deck.slice(),eLvs:elv2,eRbs:erb2,eSbs:esb2,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2*DS};
   }else{
     en.innerHTML=enSide(rArt,nm.replace('AI 도전자 · ',''),'AI 도전자 · 주력 '+FAC[mfv].n);
-    c={mode:'arena',eName:nm,eLook:'art:'+rArt,eHp:(20+li*2)*DS,eDeck:deck,eLvs:elv,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2*DS};
+    c={mode:'arena',eName:nm,eLook:'art:'+rArt,eHp:(20+li*2-nb*2)*DS,eDeck:deck,eLvs:elv,noise:Math.max(3,10-li)+nb*3,pHp:wlHp()+li*2*DS};
   }
   mm.querySelector('.vstitle').textContent='상대 발견!';sfx('whoosh');track('arena_match',{online:opp?1:0});
   setTimeout(()=>{mm.remove();startBattle(c)},1700);
@@ -2495,14 +2526,14 @@ function showShop(){
     {id:'gold',t:'gold',n:'황금 상자',d:'카드 36장 · 희귀 이상 확정',cost:150,cur:'gem'},
     {id:'coins',t:null,n:'골드 꾸러미',d:'골드 500',cost:30,cur:'gem'},
     {id:'dust',t:null,n:'별가루 꾸러미',d:'별가루 40 (인연 맺기용)',cost:25,cur:'gem'},
-    {id:'adgem',t:null,n:'광고 보고 보석',d:'보석 5개 · 오늘 '+adLeft('gems')+'번 남음',cost:0,cur:'ad',dis:adLeft('gems')<=0}
+    {id:'adgem',t:null,n:adW('광고 보고 보석','무료 보석'),d:'보석 5개 · 오늘 '+adLeft('gems')+'번 남음',cost:0,cur:'ad',dis:adLeft('gems')<=0}
   ];
   const DL=ensureDeals();const msLeft=new Date(new Date().setHours(24,0,0,0))-Date.now();
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">상점</span>${resBar()}</div>
   <div class="body"><div class="shead"><b>일일 특가</b><small>새 특가까지 ${Math.floor(msLeft/3600000)}시간 ${Math.floor(msLeft%3600000/60000)}분</small></div>
   <div class="dealgrid">${DL.items.map((x,i)=>{const v=V(x.id),t=tierOf(x.id);return `<div class="deal t${t} ${x.b?'sold':''}"><div class="dart2">${portrait(x.id)}<span class="dn">×${x.n}</span></div><div class="dnm">${v.name}</div><div class="dtier" style="color:${RAR[t].c}">${RAR[t].n} 카드</div><button class="btn sm ${x.b?'sub':''}" data-deal="${i}" ${x.b||(x.cur==='gold'?save.gold<x.cost:save.gems<x.cost)?'disabled':''}>${x.b?'구매 완료':(x.cur==='gold'?'<span class="coin" style="width:12px;height:12px"></span>':'<span class="gem"></span>')+' '+x.cost}</button></div>`}).join('')}</div>
   <div class="shead"><b>상자 · 재화</b> <a href="#" class="oddsl" onclick="event.preventDefault();showOdds()">확률 보기 · 전설 확정까지 ${pityLeft()}개</a></div><div class="shopgrid">${items.map(it=>`<div class="shopitem">${it.t?chestSVG(it.t):it.id==='dust'?'<div style="height:76px;display:flex;align-items:center;font-size:54px" class="dusti">✦</div>':`<div style="height:76px;display:flex;align-items:center">${ico(it.cur==='ad'?'gem':'coin','shico')}</div>`}<div class="nm">${it.n}</div><div class="ds">${it.d}</div>
-  <button class="btn sm ${it.cur==='free'||it.cur==='ad'?'grn':''}" data-buy="${it.id}" ${it.dis||(it.cur==='gem'&&save.gems<it.cost)?'disabled':''}>${it.cur==='free'?(it.dis?'내일 다시':'무료 받기'):it.cur==='ad'?(it.dis?'내일 다시':'광고 보기'):`<span class="gem"></span> ${it.cost}`}</button></div>`).join('')}</div>
+  <button class="btn sm ${it.cur==='free'||it.cur==='ad'?'grn':''}" data-buy="${it.id}" ${it.dis||(it.cur==='gem'&&save.gems<it.cost)?'disabled':''}>${it.cur==='free'?(it.dis?'내일 다시':'무료 받기'):it.cur==='ad'?(it.dis?'내일 다시':adW('광고 보기','무료 받기')):`<span class="gem"></span> ${it.cost}`}</button></div>`).join('')}</div>
   <div style="font-size:12.5px;opacity:.55;margin-top:14px;text-align:center">보석은 퀘스트, 상자, 리그 승급으로 얻어요. 실제 결제는 없어요.</div></div></div>`;
   bind('#bk',showLobby);
   app.querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{const x=DL.items[+b.dataset.deal];if(!x||x.b)return;if(x.cur==='gold'){if(save.gold<x.cost)return;save.gold-=x.cost}else{if(save.gems<x.cost)return;save.gems-=x.cost}x.b=true;save.owned[x.id]=save.owned[x.id]||{lv:1,cards:0};save.owned[x.id].cards+=x.n;persist();sfx('coin');track('deal_buy',{id:x.id});toast(V(x.id).name+' 카드 '+x.n+'장!');showShop()});
@@ -2520,6 +2551,7 @@ let st=null,cfg=null,ui=null;
 function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',board:{p:emptyBoard(),e:emptyBoard()},cmd:{p:{hp:c.pHp||22*DS,max:c.pHpMax||c.pHp||22},e:{hp:c.eHp,max:c.eHpMax||c.eHp}},round:1,over:false,passive:c.passive||null,eTurns:0,kills:0}}
 async function startBattle(c){
   screen='battle';tryLandscape();track('battle_start',{mode:c.mode,stage:c.idx??-1});
+  try{await preloadBattle([...(save.deck||[]),...(c.eDeck||[]),'skel_0','frog_0','watchtower_1','archer_0','oakwood_2'])}catch(e){}
   cfg=c;st=newState(c);BD=null;
   if(!c.eWl){const art=(c.eLook||'').startsWith('art:')?c.eLook.slice(4):'';const hit=Object.keys(WARLORDS).find(k=>WARLORDS[k].art===art);
     if(hit)c.eWl=hit;else{const fc={};(c.eDeck||[]).forEach(k=>{const f=V(k).fac;fc[f]=(fc[f]||0)+1});const mf=Object.keys(fc).sort((x,y)=>fc[y]-fc[x])[0]||'bastion';const L=FAC_WL[mf]||FAC_WL.bastion;c.eWl=L[(c.idx||0)%L.length]}}
@@ -2917,9 +2949,12 @@ function laneWave(side,l,kind){const c0=document.getElementById(`cell-${side}-0-
 /* --- 보상형 광고 (연동 전에는 3초 자리표시) --- */
 const AD_LIMIT={chest:5,trophy:3,gems:3};
 function adLeft(kind){const d=dayKey();if(!save.ads||save.ads.date!==d)save.ads={date:d,n:{}};return AD_LIMIT[kind]-(save.ads.n[kind]||0)}
+function freeAd(){return inNativeApp()&&typeof window.adBreak!=='function'}
+function adW(a,b){return freeAd()?b:a}
 function showRewardAd(kind,label,onReward){
-  if(adLeft(kind)<=0)return toast('오늘 광고 보상을 다 받았어요');
+  if(adLeft(kind)<=0)return toast(adW('오늘 광고 보상을 다 받았어요','오늘 무료 보너스를 다 받았어요'));
   const done=()=>{save.ads.n[kind]=(save.ads.n[kind]||0)+1;persist();track('ad_reward',{kind});onReward()};
+  if(freeAd()){sfx('coin');done();return}
   if(typeof window.adBreak==='function'){try{window.adBreak({type:'reward',name:kind,beforeReward:show=>show(),adViewed:done,adDismissed:()=>toast('광고를 끝까지 보면 보상을 받아요'),afterAd:()=>{}});return}catch(e){}}
   const m=modal(`<div class="ribbon">광고 보상</div><div class="rw">${label}</div><div class="adbox"><div class="adph">광고 자리<br><small>광고 연동 전이라 3초 뒤 바로 보상을 드려요</small></div><div class="bar"><i id="adBar" style="width:0%"></i></div></div><div class="btns"><button class="btn sub sm" data-close>취소</button></div>`);
   const t0=Date.now();const iv=setInterval(()=>{const k=Math.min(1,(Date.now()-t0)/3000);const b=m.querySelector('#adBar');if(!b){clearInterval(iv);return}b.style.width=k*100+'%';if(k>=1){clearInterval(iv);m.remove();sfx('coin');done()}},50);
@@ -2940,6 +2975,7 @@ function showSettings(){
   ${appMode()?`<div class="setrow"><span>📱 ${appMode()==='tester'?'앱 테스터 신청':'안드로이드 앱 받기'}</span><button class="btn sm grn" id="stApp">열기</button></div>`:''}
   ${save.def?`<div class="setrow"><span>방어 기록 <small style="opacity:.7">내 덱이 다른 유저와 싸운 결과</small></span><b>${save.def.w}승 ${save.def.l}패</b></div>`:''}
   <div class="setrow"><span>닉네임 <small style="opacity:.6">(대전 상대에게 보여요, 10자까지)</small></span><span style="display:flex;gap:6px"><input id="stNick" maxlength="10" value="${esc(myNick())}" style="width:120px;font-family:inherit;font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #ffffff44;background:#0006;color:#fff"><button class="btn sm grn" id="stNickSave">저장</button></span></div>
+  ${inNativeApp()?`<div class="setrow"><span>알림 <small style="opacity:.6">(상자 열림, 원정 완료)</small></span><button class="btn sm ${save.notiOn?'grn':'sub'}" id="stNoti">${save.notiOn?'켜짐':'꺼짐'}</button></div>`:''}
   <div class="setrow"><span>소리</span><button class="btn sm ${save.mute?'sub':'grn'}" id="stMute">${save.mute?'꺼짐':'켜짐'}</button></div>
   <div class="setrow col"><span>기기 이전 코드 <small style="opacity:.6">(구글 연동 없이 옮길 때 · 24시간 유효)</small></span>
    <div class="trrow"><b id="trCode" class="trcode">----·----</b><button class="btn sm" id="trMake">코드 만들기</button><button class="btn sm sub" id="trCopy" style="display:none">복사</button></div>
@@ -2950,7 +2986,7 @@ function showSettings(){
   <div class="setrow"><span style="opacity:.7">내 데이터 삭제 <small style="opacity:.7">(서버 저장·대전 덱·방어 기록·기기 저장 모두)</small></span><button class="btn sm sub" id="stDel">삭제</button></div>
   <div class="setrow"><span style="opacity:.6;font-size:12px">계정 ID <span id="stUid" style="user-select:all">${esc((fbStore().uid||'-').slice(0,12))}</span> · ${VERSION}</span><a href="https://parkbeommin.github.io/line-party/privacy.html" target="_blank" rel="noopener" style="color:#9fd8ff;font-size:12.5px">개인정보처리방침</a></div>
   <div class="btns"><button class="btn sub sm" data-close>닫기</button></div>`,showLobby);
-  m.querySelector('.box').classList.add('wide');
+  m.querySelector('.box').classList.add('wide','scrolly');
   if(!isLinked())fbSdk().catch(()=>{});
   bind('#stApp',()=>{m.remove();appCta('settings',true)});
   bind('#stG',async()=>{const ok=await googleLogin();if(ok){m.remove();if(!document.querySelector('.modal'))showSettings()}});
@@ -2963,6 +2999,7 @@ function showSettings(){
   m.querySelector('#trCopy').onclick=async()=>{const c=m.querySelector('#trCode').textContent;try{await navigator.clipboard.writeText(c)}catch(e){}toast('코드를 복사했어요: '+c)};
   m.querySelector('#trLoad').onclick=async()=>{const v=m.querySelector('#trIn').value;const c=trNorm(v);if(c.length===8){if(await redeemTransfer(c)){document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}return}try{const o=decodeSave(v);if(!confirm('지금 진행 상황을 이 코드로 덮어쓸까요?'))return;applySaveObj(o);toast('불러왔어요');document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}catch(e){toast('코드 8자리를 확인해 주세요')}};
   m.querySelector('#trOff').onclick=e=>{e.preventDefault();showBackupCode()};
+  bind('#stNoti',async()=>{if(!save.notiOn){const ok=await notiEnable();if(!ok)toast('휴대폰 설정에서 라인 파티 알림을 허용해 주세요')}else{save.notiOn=false;persist();notiClear()}m.remove();showSettings()});
   bind('#stDel',async()=>{if(!confirm('서버와 이 기기에 있는 라인 파티 데이터를 모두 지울까요? 되돌릴 수 없어요.'))return;if(!confirm('정말 지울까요? 영웅, 재화, 트로피가 전부 사라져요.'))return;toast('지우는 중...');const ok=await deleteMyData();alert(ok?'데이터를 지웠어요. 처음 화면으로 돌아가요.':'서버 데이터 일부를 지우지 못했어요. 기기 저장은 지웠어요. 남은 데이터는 개인정보처리방침의 이메일로 요청해 주세요.');location.reload()});
   m.querySelector('#stReset').onclick=()=>{if(!confirm('모든 진행 상황이 지워져요. 정말 처음부터 할까요?'))return;save=defaultSave();save.tut={};persist();m.remove();showLobby()};
 }
@@ -3073,6 +3110,7 @@ function ewskHTML(){if(!st.ws)return '';const w=wsOf('e');const pips=[0,1,2].map
 function wlLv(id){save.wlx=save.wlx||{};return (save.wlx[id||save.warlord]||{lv:1}).lv}
 function wlXp(id){save.wlx=save.wlx||{};return (save.wlx[id||save.warlord]||{xp:0}).xp||0}
 function wlNeed(lv){return 40+lv*30}
+function wlHpAt(id,lv){const W=WARLORDS[id]||WARLORDS.asten;return Math.round(W.hp*DS*(1+.05*(Math.max(1,Math.min(WL_MAX,lv|0||1))-1)))}
 function wlHp(id){id=id||save.warlord;const W=WARLORDS[id]||WARLORDS.asten;return Math.round(W.hp*DS*(1+.05*(wlLv(id)-1)))}
 function wlPow(id){return Math.floor((wlLv(id)-1)/3)}
 
@@ -3195,7 +3233,7 @@ function showExpeditions(){
     let st='';
     if(cur)st=`<span class="lk">전투 지휘관이라 원정 불가</span>`;
     else if(e){const D=EXP_DEST.find(x=>x.id===e.dest);const left=e.end-Date.now();
-      st=left<=0?`<button class="btn sm grn" data-claim="${id}">보상 받기</button>`:`<div class="expprog"><div class="bar q"><i style="width:${Math.min(100,(Date.now()-e.start)/(e.end-e.start)*100)}%"></i></div><small>${D.n} · ${fmtT(left/1000)} 남음</small></div><div class="expbtns"><button class="btn sm" data-rush="${id}">${ico('gem','mi')} ${Math.max(1,Math.ceil(left/60000/10))} 즉시 귀환</button><button class="btn sm grn" data-ad="${id}" ${adLeft('chest')>0?'':'disabled'}>광고 -30분</button></div>`}
+      st=left<=0?`<button class="btn sm grn" data-claim="${id}">보상 받기</button>`:`<div class="expprog"><div class="bar q"><i style="width:${Math.min(100,(Date.now()-e.start)/(e.end-e.start)*100)}%"></i></div><small>${D.n} · ${fmtT(left/1000)} 남음</small></div><div class="expbtns"><button class="btn sm" data-rush="${id}">${ico('gem','mi')} ${Math.max(1,Math.ceil(left/60000/10))} 즉시 귀환</button><button class="btn sm grn" data-ad="${id}" ${adLeft('chest')>0?'':'disabled'}>${adW('광고 -30분','무료 -30분')}</button></div>`}
     else st=`<div class="expbtns">${EXP_DEST.map(D=>`<button class="btn sm sub" data-send="${id}" data-dest="${D.id}">${D.n}<small>${fmtT(expMins(D)*60)}</small></button>`).join('')}</div>`;
     return `<div class="expcard ${cur?'cur':''} ${e&&expDone(id)?'done':''}" style="--fc:${FAC[W.fac].c}"><div class="eart"><img src="assets/k_${W.art}.webp?v=${ASSET_V}"></div><div class="einfo"><div class="wname">${W.n} <small style="color:#ffd667">Lv${wlLv(id)}</small> ${facIcon(W.fac,'ci')}</div><div class="espec">원정 특기 · ${S.d}</div>${st}</div></div>`};
   app.innerHTML=`<div class="screen expscr"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">지휘관 원정</span>${resBar()}</div>
@@ -3237,7 +3275,7 @@ function endBattle(){setTimeout(cloudAuto,800);
     if(after>save.bestLeague){leagueUp=LEAGUES[after];const pg=10*after;save.gems+=pg;unlocks=checkLeagueUnlock();save.promo={li:after,gems:pg,un:unlocks,evo:after>=EVO_LEAGUE&&before<EVO_LEAGUE}}
   }else if(cfg.mode==='stage'){
     qp('journey');
-    if(win){gold=(30+cfg.idx*12)*gm;if(cfg.idx>=save.cleared){save.cleared=cfg.idx+1;direct='silver';save.idle.last=Math.min(save.idle.last,Date.now())}}
+    if(win){gold=(30+cfg.idx*12)*gm;if(cfg.idx>=save.cleared){save.cleared=cfg.idx+1;direct='silver';const fb=(100+cfg.idx*40)*gm;gold+=fb;extraS+=`<div style="font-size:13px;color:#ffd667">첫 클리어 보너스 골드 +${fb}</div>`;save.idle.last=Math.min(save.idle.last,Date.now())}}
     else gold=10*gm;
   }else if(SPECIAL_MODES.includes(cfg.mode)){const SR=specialEnd(win);gold=SR.gold;gems=SR.gems;dustG=SR.dust;extraS=SR.txt;
   }else{
@@ -3262,7 +3300,7 @@ function endBattle(){setTimeout(cloudAuto,800);
   ${mvp?`<div class="mvp"><div class="mart t${tierOf(mvp.key)}">${portrait(mvp.key)}</div><div><div class="mtag">MVP</div><b style="color:${RAR[tierOf(mvp.key)].c}">${V(mvp.key).name}</b><div style="font-size:12.5px;opacity:.8">총 피해 ${mvp.d}</div></div></div>`:''}
   <div class="rrows">${dT?`<div class="rrow">${ico('trophy','qi')}<span>트로피</span><b class="cnt" data-v="${dT}">0</b></div>`:''}<div class="rrow">${ico('coin','qi')}<span>골드</span><b class="cnt" data-v="${gold}">0</b></div><div class="rrow"><span style="font-size:16px">⚔</span><span>${WL().n} 경험치</span><b class="cnt" data-v="${wxp}">0</b></div>${gems?`<div class="rrow">${ico('gem','qi')}<span>보석</span><b class="cnt" data-v="${gems}">0</b></div>`:''}${dustG?`<div class="rrow"><span class="dusti" style="font-size:20px">✦</span><span>별가루</span><b class="cnt" data-v="${dustG}">0</b></div>`:''}</div>
   ${cfg.mode==='arena'?(()=>{const li2=leagueIdx(save.trophies),L2=LEAGUES[li2],N2=LEAGUES[li2+1];const p0=N2?Math.max(0,(trB-L2.t)/(N2.t-L2.t)):1,p1=N2?(save.trophies-L2.t)/(N2.t-L2.t):1;return `<div class="rleague"><span style="color:${L2.c}">${L2.n} 리그</span><div class="bar"><i class="tb" style="width:${Math.min(100,p0*100)}%" data-to="${Math.min(100,p1*100)}"></i></div><span>${save.trophies}${N2?' / '+N2.t:''}</span></div>`})():''}${extra}
-  ${cfg.mode==='arena'&&!win&&dT<0?`<button class="btn grn sm" id="rProt" ${adLeft('trophy')>0?'':'disabled'}>광고 보고 트로피 ${-dT} 돌려받기 (${adLeft('trophy')})</button>`:''}
+  ${cfg.mode==='arena'&&!win&&dT<0?`<button class="btn grn sm" id="rProt" ${adLeft('trophy')>0?'':'disabled'}>${adW('광고 보고 ','무료로 ')}트로피 ${-dT} 돌려받기 (${adLeft('trophy')})</button>`:''}
   <div class="btns">${cfg.mode==='arena'?'<button class="btn" id="rAgain">다음 아레나</button>':cfg.mode==='stage'&&win&&cfg.idx+1<STAGES.length?'<button class="btn" id="rNext">다음 스테이지</button>':''}
   ${cfg.mode!=='arena'?`<button class="btn sub" id="rRetry">${cfg.mode==='pit'&&save.dg&&save.dg.run?'다음 상대':cfg.mode==='tower'||cfg.mode==='raid'?'균열로':'다시 하기'}</button>`:''}<button class="btn sub" id="rHome">로비</button></div>`);
   m.querySelector('.box').classList.add('resbox');
@@ -3299,15 +3337,31 @@ window.__simulate=function(n,stageIdx,eNoise){
 };
 save=loadSave();try{nativeSetup()}catch(e){}if(save.deck)save.deck=dedupeDeck(save.deck);if(!save.warlord)save.warlord='asten';if(!save.wl)save.wl={};checkLeagueUnlock();if(save.tut===undefined)save.tut=(save.stats.w+save.stats.l===0)?{}:null;persist();
 addEventListener('pointerdown',()=>{if(!BGM.on&&!save.mute)bgmStart(screen==='battle'?'battle':'lobby')},{once:true});
-(function preload(){window.__imgs=[];Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/"+artOf(id)+".webp?v="+ASSET_V;__imgs.push(i)}));[...new Set(Object.values(CMD_ART))].forEach(k=>{const i=new Image();i.src="assets/c_"+k+".webp?v="+ASSET_V;__imgs.push(i)});["wood","silver","gold","boss"].forEach(k=>{const i=new Image();i.src="assets/x_"+k+".webp?v="+ASSET_V;__imgs.push(i)});FAC_KEYS.forEach(k=>{const i=new Image();i.src="assets/f_"+k+".webp?v="+ASSET_V;__imgs.push(i)});Object.keys(HEROES).forEach(b=>versionsOf(b).forEach(id=>{const i=new Image();i.src="assets/s_"+id+".webp?v="+ASSET_V;__imgs.push(i)}));{const i=new Image();i.src="assets/bg_field2.webp?v=16";__imgs.push(i)}["bg_lobby","bg_map","k_c_player","k_w_seraphine","k_w_orwan","k_w_maya","k_w_kardum","k_w_nox","k_c_rival1","k_c_rival2","k_c_goblin","k_c_swamp","k_c_beast","k_c_elf","k_c_flame","k_c_ice","k_c_knightc","k_c_storm","k_c_grave","k_c_dragonl","k_c_boss","k_c_boss2","k_c_boss3","k_c_boss4","w_seraphine","w_orwan","w_maya","w_kardum","w_nox","c_boss2","c_boss3","c_boss4","i_battle","i_map","i_boss","i_hero","i_shop","i_quest","i_gift","i_trophy","i_gem","i_coin","i_bolt","i_crate"].forEach(n=>{const i=new Image();i.src="assets/"+n+".webp?v="+ASSET_V;__imgs.push(i)});})();
+(function preload(){window.__imgs=[];const add=src=>{const i=new Image();i.src=src;__imgs.push(i)};const A=n=>"assets/"+n+".webp?v="+ASSET_V;
+  // 첫 화면에 필요한 것만 먼저 (덱 8장, 로비 캐릭터, 아이콘, 내 지휘관)
+  const deck=(save&&save.deck&&save.deck.length?save.deck:START_OWNED.map(k=>vid(k,HEROES[k].rar)));
+  deck.forEach(id=>{try{add(A(artOf(id)))}catch(e){}});deck.slice(0,3).forEach(id=>{try{add(A(lobbyArt(id)))}catch(e){}});
+  ["wood","silver","gold","boss"].forEach(k=>add(A("x_"+k)));FAC_KEYS.forEach(k=>add(A("f_"+k)));
+  ["i_battle","i_map","i_boss","i_hero","i_shop","i_quest","i_gift","i_trophy","i_gem","i_coin","i_bolt","i_crate"].forEach(n=>add(A(n)));
+  try{add(A('k_'+(WARLORDS[save.warlord]||WARLORDS.asten).art))}catch(e){}
+  add("assets/bg_lobby.webp?v=9");
+})();
+// 나머지 그림은 로비가 뜬 뒤 한가할 때 조금씩 (보유 영웅 → 전투 배경 → 그 외)
+function preloadList(list,gap){let i=0;const next=()=>{if(i>=list.length)return;const im=new Image();im.onload=im.onerror=()=>setTimeout(next,gap||30);im.src=list[i++]};next();next()}
+function preloadRest(){if(window.__restPre)return;window.__restPre=1;const A=n=>"assets/"+n+".webp?v="+ASSET_V;const L=["assets/bg_field2.webp?v=16"];
+  save.deck.forEach(id=>L.push(A('s_'+id)));Object.keys(save.owned).forEach(id=>{try{L.push(A(artOf(id)))}catch(e){}});
+  ["k_c_player","k_w_seraphine","k_w_orwan","k_w_maya","k_w_kardum","k_w_nox","k_c_rival1","k_c_rival2","k_c_boss"].forEach(n=>L.push(A(n)));
+  Object.keys(save.owned).forEach(id=>L.push(A('s_'+id)));preloadList([...new Set(L)],40)}
+function preloadBattle(ids){const A=n=>"assets/"+n+".webp?v="+ASSET_V;const L=[...new Set(ids)].map(id=>A('s_'+id));L.push("assets/bg_field2.webp?v=16");
+  return Promise.race([Promise.all(L.map(src=>new Promise(r=>{const im=new Image();im.onload=im.onerror=r;im.src=src}))),new Promise(r=>setTimeout(r,2500))])}
 (function boot(){
   const L=document.createElement('div');L.id='loader';L.innerHTML='<div class="llogo">라인 파티</div><div class="lbar3"><i id="lprog"></i></div><div class="ltip" id="ltip">영웅들을 깨우는 중...</div>';app.appendChild(L);
   const tips=['같은 영웅 위에 놓으면 ★ 합체!','줄에 적이 없으면 지휘관을 바로 때려요','같은 진영 2기, 4기면 시너지가 켜져요','건물은 공격하지 않지만 줄을 막아줘요','근접은 앞쪽 두 열, 원거리는 뒤쪽 두 열'];document.getElementById('ltip').textContent='TIP · '+tips[Math.floor(Math.random()*tips.length)];
   const imgs=window.__imgs||[];let done=0,fin=false;const total=imgs.length||1;
-  const finish=()=>{if(fin)return;fin=true;document.getElementById('lprog').style.width='100%';setTimeout(()=>{L.classList.add('out');setTimeout(()=>L.remove(),400)},200);ensureDaily();showLobby();app.appendChild(L);if(isLinked())setTimeout(()=>cloudReconcile(false),600)};
+  const finish=()=>{if(fin)return;fin=true;document.getElementById('lprog').style.width='100%';setTimeout(()=>{L.classList.add('out');setTimeout(()=>L.remove(),400)},200);ensureDaily();showLobby();app.appendChild(L);setTimeout(preloadRest,1500);if(isLinked())setTimeout(()=>cloudReconcile(false),600)};
   const tick=()=>{done++;const p=document.getElementById('lprog');if(p)p.style.width=Math.round(done/total*100)+'%';if(done>=total)finish()};
   imgs.forEach(i=>{if(i.complete)tick();else{i.addEventListener('load',tick,{once:true});i.addEventListener('error',tick,{once:true})}});
-  setTimeout(finish,9000);
+  setTimeout(finish,5000);
 })();
 </script>
 </body>
