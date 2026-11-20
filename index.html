@@ -1139,7 +1139,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='ko';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.16 베타';
+const VERSION='v3.16.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1838,8 +1838,7 @@ function qp(id,n){ensureDaily();save.quests.list.forEach(q=>{if(q.id===id&&!q.cl
 function questReady(){ensureDaily();return save.quests.list.some(q=>!q.claimed&&q.prog>=QUEST_POOL.find(x=>x.id===q.id).goal)||(!save.quests.bonus&&save.quests.list.every(q=>q.claimed))}
 function idleRate(){return 1+save.cleared*0.8}
 function idleAmount(){const min=Math.min(8*60,(Date.now()-save.idle.last)/60000);return Math.floor(min*idleRate())}
-const APP_CHEST_M=.75; // 앱 보너스: 상자 여는 시간 25% 단축
-function chestSec(t){return Math.round(CHESTS[t].sec*(ev('chestfest')?.5:1)*(inNativeApp()?APP_CHEST_M:1))}
+function chestSec(t){return Math.round(CHESTS[t].sec*(ev('chestfest')?.5:1))}
 function addChest(t){const i=save.chests.findIndex(c=>!c);if(i<0)return false;save.chests[i]={t,st:CHESTS[t].sec?'locked':'ready'};persist();tickChests();return true}
 function nextCycleChest(){const t=CHEST_CYCLE[save.cycle%CHEST_CYCLE.length];save.cycle++;return t}
 function unlockingNow(){return save.chests.some(c=>c&&c.st==='unlocking'&&c.readyAt>Date.now())}
@@ -2024,7 +2023,7 @@ function bindChests(){
     if(c.st==='ready'){save.chests[i]=null;persist();openChestModal(c.t,showLobby);return}
     if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t)*1000;persist();showLobby();return}
     const cost=gemCost(c);
-    const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'남은 시간 '+fmtT((c.readyAt-Date.now())/1000):'다른 상자를 여는 중이에요'}<br>보석 ${cost}개로 지금 바로 열 수 있어요</div>${appMode()?`<a href="#" class="apphint" id="cApp">📱 앱에서는 상자가 25% 더 빨리 열려요 ›</a>`:inNativeApp()?`<div class="apphint on">📱 앱 보너스 · 상자 여는 시간 25% 단축 중</div>`:''}
+    const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'남은 시간 '+fmtT((c.readyAt-Date.now())/1000):'다른 상자를 여는 중이에요'}<br>보석 ${cost}개로 지금 바로 열 수 있어요</div>${appMode()?`<a href="#" class="apphint" id="cApp">📱 앱에서는 상자를 더 빨리 열 수 있어요 ›</a>`:''}
     <div class="btns"><button class="btn" id="cNow" ${save.gems<cost?'disabled':''}><span class="gem"></span> ${cost} 바로 열기</button>${adOn()&&c.st==='unlocking'?`<button class="btn grn" id="cAd" ${adLeft('chest')>0?'':'disabled'}>${adW('광고 보고 30분 단축','무료로 30분 단축')} (${adLeft('chest')})</button>`:''}<button class="btn sub" data-close>닫기</button></div>`);
     const cap=m.querySelector('#cApp');if(cap)cap.onclick=e=>{e.preventDefault();m.remove();appCta('chest',true)};
     const ca=m.querySelector('#cAd');if(ca)ca.onclick=()=>{m.remove();showRewardAd('chest','상자 여는 시간을 30분 줄여드려요',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=30*60000;tickChests();persist()}toast('30분 단축!');showLobby()})};
@@ -2223,13 +2222,13 @@ function appCta(where,force){const md=appMode();if(!md)return false;const td=new
     :isDesktop()?`<div class="rw">폰 카메라로 찍으면 바로 열려요</div><img class="qrimg" src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&margin=6&data=${encodeURIComponent(link)}" alt="QR">`
     :`<div class="btns"><a class="btn grn" id="ctaGo" href="${link}" target="_blank" rel="noopener">${tester?'테스터 신청하기':'앱으로 계속하기'}</a></div>`;
   const m=modal(`<div class="ribbon">${tester?'앱 테스터 모집':'앱으로 더 편하게'}</div><div class="rw" style="line-height:1.75;text-align:left">
-    ${tester?'라인 파티 안드로이드 앱을 먼저 해 볼 테스터를 모집해요.<br>':''}· 상자가 <b style="color:#7dffa1">25% 더 빨리</b> 열려요<br>· 상자 열림, 원정 완료 알림<br>· 구글 계정으로 지금 진행 그대로 이어서<br>· 전체 화면으로 더 쾌적하게${tester?'<br>· 정식 출시 때 <b style="color:#ffd667">초기 테스터 보상</b>':''}</div>
+    ${tester?'라인 파티 안드로이드 앱을 먼저 해 볼 테스터를 모집해요.<br>':''}· 상자를 <b style="color:#7dffa1">더 빨리</b> 열 수 있어요<br>· 승리 골드 2배, 보석 같은 <b style="color:#7dffa1">앱 보너스</b><br>· 상자 열림, 원정 완료 알림<br>· 구글 계정으로 지금 진행 그대로 이어서<br>· 전체 화면으로 더 쾌적하게${tester?'<br>· 정식 출시 때 <b style="color:#ffd667">초기 테스터 보상</b>':''}</div>
     ${body}<div class="btns"><button class="btn sub sm" data-close>나중에</button></div>`);
   const go=m.querySelector('#ctaGo');if(go)go.onclick=()=>{track('app_cta_click',{where,mode:md});setTimeout(()=>m.remove(),300)};return true}
 function appNudge(){if(!appMode())return;const td=new Date().toDateString();if(!isLinked()&&save.nudgeDay!==td&&((save.trophies|0)>=150||(save.cleared|0)>=3))return;
   const wins=((save.stats||{}).wins|0);if(wins<3&&(save.bestLeague|0)<1)return;setTimeout(()=>{if(screen==='lobby')appCta('lobby')},2600)}
 function appBar(){if(!appMode()||!isAndroid()||screen!=='lobby')return;if((save.barHide|0)>Date.now())return;if(app.querySelector('.appbar'))return;
-  const b=document.createElement('div');b.className='appbar';b.innerHTML=`<a href="${appLink('bar')}" target="_blank" rel="noopener" id="abGo">📱 ${appMode()==='tester'?'앱 테스터 모집 중 · 상자 25% 더 빨리':'앱에서는 상자가 25% 더 빨리 열려요'}</a><button id="abX">✕</button>`;app.appendChild(b);
+  const b=document.createElement('div');b.className='appbar';b.innerHTML=`<a href="${appLink('bar')}" target="_blank" rel="noopener" id="abGo">📱 ${appMode()==='tester'?'앱 테스터 모집 중 · 상자 더 빨리 열기':'앱에서는 상자를 더 빨리 열 수 있어요'}</a><button id="abX">✕</button>`;app.appendChild(b);
   b.querySelector('#abGo').onclick=()=>track('app_cta_click',{where:'bar',mode:appMode()});b.querySelector('#abX').onclick=()=>{save.barHide=Date.now()+3*864e5;persist();b.remove()}}
 /* ===================== 방어 기록 ===================== */
 async function defLog(uid,defWon){try{const a=await fbAuth();if(!uid||uid===a.uid)return;const id=[...crypto.getRandomValues(new Uint8Array(15))].map(x=>TR_AB[x%32]).join('');
