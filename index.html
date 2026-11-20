@@ -1078,7 +1078,7 @@ a.btn{display:inline-block;text-decoration:none}
 .critTag{position:absolute;z-index:52;transform:translate(-50%,0);font-size:17px;font-weight:900;color:#fff;background:linear-gradient(#ff6a3d,#c2160a);border:2px solid #fff;border-radius:8px;padding:0 6px;pointer-events:none;animation:crit .8s forwards;white-space:nowrap}
 @keyframes crit{0%{transform:translate(-50%,0) scale(.3) rotate(-12deg);opacity:0}20%{transform:translate(-50%,-6px) scale(1.25) rotate(-6deg);opacity:1}80%{opacity:1}100%{transform:translate(-50%,-26px) scale(1) rotate(-6deg);opacity:0}}
 .hitstop *{animation-play-state:paused!important}
-.hitflash{position:absolute;inset:0;z-index:65;background:#fff;opacity:.35;pointer-events:none;animation:cflash .26s ease-out both}
+.hitflash{position:absolute;inset:0;z-index:65;background:#fff;opacity:.18;pointer-events:none;animation:cflash .26s ease-out both}
 .hitflash.ko{opacity:.8;animation-duration:.6s}
 .killfx{position:absolute;z-index:40;pointer-events:none}
 .killfx::before{content:"";position:absolute;left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 18px #ffd667;animation:kring .5s ease-out forwards}
@@ -1107,7 +1107,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div id="rotate"><div class="ph"></div><div>가로로 돌려서 플레이해 주세요</div><div style="font-size:13px;opacity:.6">라인 파티는 가로 화면 게임이에요</div></div>
 <script>
 'use strict';
-const VERSION='v3.11 베타';
+const VERSION='v3.11.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
