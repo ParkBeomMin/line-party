@@ -1107,6 +1107,23 @@ a.btn{display:inline-block;text-decoration:none}
 .pickc .pkart{width:110px;height:120px;border-radius:10px;overflow:hidden}.pickc b{font-size:15px}.pickc small{font-size:11.5px;opacity:.85}.pickc .pkd{opacity:.7;line-height:1.35}
 
 html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-size:9.5px}html[lang=en] .hs2 .chip,html[lang=en] .chipbar button{font-size:12.5px}html[lang=en] .trin{font-size:14px;letter-spacing:1px}
+
+.chdrop{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;margin:4px auto;padding:6px 16px;border-radius:14px;font-size:15px;animation:chdIn .55s cubic-bezier(.2,1.6,.4,1) both .35s}
+.chdrop.r3{background:linear-gradient(90deg,#5a2a9a00,#5a2a9a88,#5a2a9a00);color:#e3c8ff}
+.chdrop.r4{background:linear-gradient(90deg,#c9500a00,#c9500a99,#c9500a00);color:#ffe08a}
+.chdrop b{font-size:18px}.chdrop small{font-size:12px;opacity:.8;color:#fff}
+.chdrop .chimg{width:92px;height:76px;position:relative;z-index:1;animation:chdBob 1.4s ease-in-out infinite}
+.chdrop .chimg .cico{width:100%;height:100%;max-width:none;max-height:none}
+.chdrop .chglow{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -120px;border-radius:50%;pointer-events:none;animation:chdSpin 4s linear infinite;opacity:.8}
+.chdrop.r3 .chglow{background:repeating-conic-gradient(#c79bff55 0 12deg,transparent 12deg 30deg);-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%)}
+.chdrop.r4 .chglow{background:repeating-conic-gradient(#ffd66777 0 12deg,transparent 12deg 30deg);-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%)}
+@keyframes chdIn{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes chdBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+@keyframes chdSpin{to{transform:rotate(360deg)}}
+.wodds{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;align-items:center;font-size:13px;margin:2px 0 8px}
+.wodds b{width:100%;text-align:center;font-size:13.5px;color:#ffd667}
+.wodds span{padding:2px 8px;border-radius:8px;background:#ffffff10}
+.wodds .r3{color:#d6b4ff;background:#7a3ad033}.wodds .r4{color:#ffcf5a;background:#ff8a3a33}
 </style>
 </head>
 <body>
@@ -1117,7 +1134,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='en';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.13 beta';
+const VERSION='v3.14 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1230,8 +1247,14 @@ const CHESTS={
   wood:{n:'Wooden Chest',sec:60,cards:6,gold:[20,40],gems:[0,0],c1:'#8a5a2a',c2:'#c48a4a',band:'#5a3a1a'},
   silver:{n:'Silver Chest',sec:15*60,cards:16,gold:[70,110],gems:[0,2],c1:'#7a8698',c2:'#c9d4e2',band:'#4a5468'},
   gold:{n:'Gold Chest',sec:60*60,cards:36,gold:[180,260],gems:[3,6],c1:'#c98a00',c2:'#ffd667',band:'#7a4a00',minRar:1},
-  boss:{n:'Boss Chest',sec:0,cards:30,gold:[150,200],gems:[2,4],c1:'#7a1a3a',c2:'#ff5a8a',band:'#3a0a1a',minRar:2}
+  boss:{n:'Boss Chest',sec:0,cards:30,gold:[150,200],gems:[2,4],c1:'#7a1a3a',c2:'#ff5a8a',band:'#3a0a1a',minRar:2},
+  epic:{n:'Epic Chest',sec:90*60,cards:30,gold:[220,300],gems:[4,7],c1:'#5a2a9a',c2:'#c79bff',band:'#2a0a5a',minRar:2,minN:2},
+  legend:{n:'Legendary Chest',sec:3*3600,cards:40,gold:[350,450],gems:[8,12],c1:'#c9500a',c2:'#ffcf5a',band:'#7a2a00',minRar:3}
 };
+// 아레나 승리 상자: 매번 확률로 종류를 뽑는다 (첫 2승은 나무 상자)
+const WIN_CHEST=[['wood',56],['silver',30],['gold',10],['epic',3],['legend',1]];
+function rollWinChest(){if((save.stats.w|0)<2)return 'wood';let x=Math.random()*100;for(const [t,p] of WIN_CHEST){x-=p;if(x<0)return t}return 'wood'}
+const CHEST_RANK={wood:0,silver:1,gold:2,boss:2,epic:3,legend:4};
 const CHEST_CYCLE=['wood','wood','silver','wood','silver','wood','wood','gold','silver','wood'];
 const STAGES=[
   {n:'Goblin Sentry',cmd:'goblin',hp:12,lv:1,t:0,deck:['shield','sword','archer','poison','frost','priest','berserk','fire']},
@@ -1831,13 +1854,14 @@ function tickChests(){let ch=false;const now=Date.now();let last=0;
 function gemCost(c){if(c.st==='locked')return Math.max(1,Math.ceil(chestSec(c.t)/60/6));return Math.max(1,Math.ceil((c.readyAt-Date.now())/60000/6))}
 function unlockedBases(){const s=new Set(START_OWNED);for(let i=0;i<=save.bestLeague;i++)LEAGUES[i].un.forEach(b=>s.add(b));return [...s]}
 // 상자 확률 (카드 종류 1개마다, 등급을 먼저 정한 뒤 그 등급 안에서 고르게 뽑음)
-const CHEST_ODDS={wood:[70,25,4.5,.5],silver:[55,33,10,2],gold:[40,42,15,3],boss:[30,45,22,3]};
+const CHEST_ODDS={wood:[70,25,4.5,.5],silver:[55,33,10,2],gold:[40,42,15,3],boss:[30,45,22,3],epic:[30,40,25,5],legend:[25,40,27,8]};
 const PITY_N=40;
 function tierWeights(t){return CHEST_ODDS[t]||CHEST_ODDS.wood}
 function pityLeft(){return Math.max(1,PITY_N-(save.pity|0))}
-function oddsHTML(){const RN=['Common','Rare','Epic','Legendary'];return `<div class="oddst"><div class="oh"><span></span>${RN.map((n,i)=>`<b style="color:${RAR[i].c}">${n}</b>`).join('')}</div>${['wood','silver','gold','boss'].map(t=>`<div><span>${CHESTS[t].n}</span>${CHEST_ODDS[t].map(p=>`<i>${p}%</i>`).join('')}</div>`).join('')}</div>
-<div class="rw" style="font-size:12.5px;line-height:1.6">Each card in a chest rolls a rarity by the odds above, then picks evenly from unlocked heroes of that rarity. Gold Chests guarantee 1 Rare or better, Boss Chests 1 Epic or better.<br><b style="color:#ffb84d">Legendary Pity</b> · If ${PITY_N} chests give no Legendary, chest ${PITY_N} is a guaranteed Legendary (${pityLeft()} left)</div>`}
-function showOdds(){const m=modal(`<div class="ribbon">Chest Odds</div>${oddsHTML()}<div class="btns"><button class="btn" id="odOk">OK</button></div>`);m.querySelector('#odOk').onclick=()=>m.remove()}
+function oddsHTML(){const RN=['Common','Rare','Epic','Legendary'];return `<div class="oddst"><div class="oh"><span></span>${RN.map((n,i)=>`<b style="color:${RAR[i].c}">${n}</b>`).join('')}</div>${['wood','silver','gold','boss','epic','legend'].map(t=>`<div><span>${CHESTS[t].n}</span>${CHEST_ODDS[t].map(p=>`<i>${p}%</i>`).join('')}</div>`).join('')}</div>
+<div class="rw" style="font-size:12.5px;line-height:1.6">Each card type in a chest rolls its rarity with the odds above, then picks evenly among unlocked heroes of that rarity. Gold Chests guarantee 1 Rare or better, Boss Chests 1 Epic or better, Epic Chests 2 Epic or better, and Legendary Chests 1 Legendary.<br><b style="color:#ffb84d">Legendary Pity</b> · If ${PITY_N} chests give no Legendary, chest ${PITY_N} is a guaranteed Legendary (${pityLeft()} left)</div>`}
+function winChestHTML(){return `<div class="wodds"><b>Arena Win Chest</b>${WIN_CHEST.map(([t,p])=>`<span class="r${CHEST_RANK[t]}">${CHESTS[t].n} ${p}%</span>`).join('')}</div>`}
+function showOdds(){const m=modal(`<div class="ribbon">Chest Odds</div>${winChestHTML()}${oddsHTML()}<div class="btns"><button class="btn" id="odOk">OK</button></div>`);m.querySelector('#odOk').onclick=()=>m.remove()}
 function rollChest(t){
   const C=CHESTS[t];const pool=[];unlockedBases().forEach(b=>versionsOf(b).forEach(id=>pool.push(id)));
   let n=Math.round(C.cards*(ev('cards')?1.5:1));
@@ -1847,7 +1871,7 @@ function rollChest(t){
     while(tr>0&&!byT[tr].length)tr--;const L=byT[tr];return L[Math.floor(Math.random()*L.length)]};
   save.pity=(save.pity|0)+1;const forceLeg=save.pity>=PITY_N&&byT[3].length;
   const got={};const add=(id,c)=>got[id]=(got[id]||0)+c;
-  if(C.minRar){const id=pick(C.minRar);add(id,Math.max(1,Math.round(n*.15/(tierOf(id)+1))+1));}
+  if(C.minRar)for(let k=0;k<(C.minN||1);k++){const id=pick(C.minRar);add(id,Math.max(1,Math.round(n*.15/(tierOf(id)+1))+1));}
   const kinds=rr(3,5);const parts=[];for(let i=0;i<kinds;i++)parts.push(i===0&&forceLeg?pick(0,3):pick());
   let pityHit=false;if(Object.keys(got).concat(parts).some(id=>tierOf(id)===3)){pityHit=!!forceLeg;save.pity=0}
   const PW=[1,.55,.3,.15];const pw=parts.map(id=>PW[tierOf(id)]);const ptot=pw.reduce((a,b)=>a+b,0);
@@ -1922,7 +1946,7 @@ function showAttendance(onDone){
     else{m.remove();openChestModal(a.v,onDone||showLobby)}};
 }
 function showEventInfo(){
-  const E=todayEvent();const days=['d','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const E=todayEvent();if(save.evSeen!==dayKey()){save.evSeen=dayKey();persist();const d=document.querySelector('#bEvent .dot');if(d)d.remove()}const days=['d','Mon','Tue','Wed','Thu','Fri','Sat'];
   modal(`<div class="ribbon pink">Weekday Event</div>
   <div class="evlist">${EVENTS.map(e=>`<div class="evrow ${E&&E.id===e.id?'on':''}"><b>${e.days.map(d=>days[d]).join('·')}</b><span>${e.n}</span><small>${e.d}</small></div>`).join('')}</div>
   <div style="font-size:12.5px;opacity:.7">${E?`Today: <b style="color:#ff8ab0">${E.n}</b> · Until midnight ${fmtT((new Date().setHours(24,0,0,0)-Date.now())/1000)}`:''}</div>
@@ -1946,7 +1970,7 @@ function showLobby(){setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()}
     </div>
     <div class="lside left2">
       <button class="sbtn" id="bQuest">${ico('quest')}<span>Quests</span>${questDot()?'<i class="dot"></i>':''}</button>
-      <button class="sbtn" id="bEvent">${ico('gift')}<span>${E?E.n:'Event'}</span>${E?'<i class="dot pink"></i>':''}</button>
+      <button class="sbtn" id="bEvent">${ico('gift')}<span>${E?E.n:'Event'}</span>${E&&save.evSeen!==dayKey()?'<i class="dot pink"></i>':''}</button>
       <button class="sbtn" id="bAtt">${ico('gift')}<span>Check-in</span>${attReady()?'<i class="dot"></i>':''}</button>
       <button class="sbtn" id="bSeason">${ico('trophy')}<span>Season ${seasonNo()}</span><small>${fmtDH(seasonLeft())}</small></button>
     </div>
@@ -3287,7 +3311,7 @@ function endBattle(){setTimeout(cloudAuto,800);
   const wxp=cfg.mode==='train'?0:win?(cfg.mode==='daily'?50:30):10;const wup=addWlXp(wxp);
   if(cfg.mode==='arena'){
     const before=leagueIdx(save.trophies);
-    if(win){dT=Math.round(rr(26,32)*(ev('trophy')?1.5:1));gold=20*gm;chest=nextCycleChest();if(!addChest(chest)){chestFail=true;gold+=10}qp('arenaWin')}
+    if(win){dT=Math.round(rr(26,32)*(ev('trophy')?1.5:1));gold=20*gm;chest=rollWinChest();track('win_chest',{type:chest});if(!addChest(chest)){if(CHEST_RANK[chest]>=2){direct=chest;chest=null}else{chestFail=true;gold+=10}}qp('arenaWin')}
     else{dT=-Math.min(save.trophies-LEAGUES[before].t,rr(12,16));gold=5*gm}
     save.trophies=Math.max(0,save.trophies+dT);
     if(save.season)save.season.best=Math.max(save.season.best|0,leagueIdx(save.trophies));
@@ -3309,9 +3333,9 @@ function endBattle(){setTimeout(cloudAuto,800);
   if(dT)parts.push(`<span class="trophy"></span> ${dT>0?'+':''}${dT} Trophies`);
   parts.push(`<span class="coin"></span> +${gold}`);if(gems)parts.push(`<span class="gem"></span> +${gems}`);
   let extra='';
-  if(chest&&!chestFail)extra+=`<div style="display:flex;align-items:center;justify-content:center;gap:8px"><div style="width:70px;height:52px">${chestSVG(chest)}</div><span>${CHESTS[chest].n} obtained! Added to lobby chest slot</span></div>`;
+  if(chest&&!chestFail)extra+=CHEST_RANK[chest]>=3?`<div class="chdrop r${CHEST_RANK[chest]}"><div class="chglow"></div><div class="chimg">${chestSVG(chest)}</div><div><b>${CHESTS[chest].n}</b> obtained!<br><small>Added to your chest slots in the Lobby</small></div></div>`:`<div style="display:flex;align-items:center;justify-content:center;gap:8px"><div style="width:70px;height:52px">${chestSVG(chest)}</div><span>${CHESTS[chest].n} obtained! Added to lobby chest slot</span></div>`;
   if(chestFail)extra+=`<div style="font-size:13px;color:#ff9a8a">Chest slots full, so Gold +10 instead</div>`;
-  if(direct)extra+=`<div style="font-size:13px;color:#ffd667">${CHESTS[direct].n} reward! Opens right after OK</div>`;
+  if(direct)extra+=cfg.mode==='arena'?`<div class="chdrop r${CHEST_RANK[direct]}"><div class="chglow"></div><div class="chimg">${chestSVG(direct)}</div><div><b>${CHESTS[direct].n}</b> obtained!<br><small>Chest slots are full, so it opens right away when you tap OK</small></div></div>`:`<div style="font-size:13px;color:#ffd667">${CHESTS[direct].n} reward! Opens right after OK</div>`;
   extra+=extraS;
   const stars=win?battleStars():0;const trB=save.trophies-dT;
   const mvp=st.mvp?Object.values(st.mvp).sort((a,b)=>b.d-a.d)[0]:null;
@@ -3327,6 +3351,7 @@ function endBattle(){setTimeout(cloudAuto,800);
   if(wup)setTimeout(()=>{banner(WL().n+' Lv'+wlLv()+'!');sfx('levelup')},900);
   setTimeout(()=>{m.querySelectorAll('.cnt').forEach(e=>countUp(e,+e.dataset.v,700));const tb=m.querySelector('.tb');if(tb)tb.style.width=tb.dataset.to+'%'},350);
   bgmStop();
+  const bigC=cfg.mode==='arena'&&Math.max(CHEST_RANK[chest]|0,CHEST_RANK[direct]|0)>=3;if(bigC)setTimeout(()=>{sfx('fanfare');if(navigator.vibrate)try{navigator.vibrate(60)}catch(e){}},650);
   const go=fn=>()=>{sfx('tick');m.remove();st=null;const next=()=>showPromo(fn);if(direct){const d=direct;direct=null;openChestModal(d,next)}else next()};
   const pr=m.querySelector('#rProt');if(pr)pr.onclick=()=>showRewardAd('trophy','Get back Trophies lost in this defeat',()=>{save.trophies-=dT;persist();pr.disabled=true;pr.textContent='Trophies returned';toast('Trophies restored!')});
   const a=m.querySelector('#rAgain');if(a)a.onclick=go(startArena);
@@ -3361,7 +3386,7 @@ addEventListener('pointerdown',()=>{if(!BGM.on&&!save.mute)bgmStart(screen==='ba
   // 첫 화면에 필요한 것만 먼저 (덱 8장, 로비 캐릭터, 아이콘, 내 지휘관)
   const deck=(save&&save.deck&&save.deck.length?save.deck:START_OWNED.map(k=>vid(k,HEROES[k].rar)));
   deck.forEach(id=>{try{add(A(artOf(id)))}catch(e){}});deck.slice(0,3).forEach(id=>{try{add(A(lobbyArt(id)))}catch(e){}});
-  ["wood","silver","gold","boss"].forEach(k=>add(A("x_"+k)));FAC_KEYS.forEach(k=>add(A("f_"+k)));
+  ["wood","silver","gold","boss","epic","legend"].forEach(k=>add(A("x_"+k)));FAC_KEYS.forEach(k=>add(A("f_"+k)));
   ["i_battle","i_map","i_boss","i_hero","i_shop","i_quest","i_gift","i_trophy","i_gem","i_coin","i_bolt","i_crate"].forEach(n=>add(A(n)));
   try{add(A('k_'+(WARLORDS[save.warlord]||WARLORDS.asten).art))}catch(e){}
   add("../assets/bg_lobby.webp?v=9");
