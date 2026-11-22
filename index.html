@@ -1139,6 +1139,14 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 @keyframes lgPulse{0%,100%{box-shadow:0 0 0 0 #ffd66700}50%{box-shadow:0 0 0 6px #ffd66788}}
 
 .modal .box.scrolly .dbtns{position:sticky;bottom:-18px;z-index:3;margin:0 -8px -18px;padding:8px 8px 14px;background:linear-gradient(#1d173600,#1d1736 30%);}
+
+.btchip{display:inline-block;font-size:11px;line-height:1.3;padding:1px 7px;border-radius:8px;background:#3a8cff33;color:#9fd0ff;border:1px solid #6fb2ff88;vertical-align:middle;white-space:nowrap}
+.btchip.t{background:linear-gradient(90deg,#ffb84d55,#ff7ad955);color:#ffe7a8;border-color:#ffd66799}
+.btlist{display:flex;flex-direction:column;gap:6px;margin:4px 0;text-align:left}
+.btlist>div{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:10px;background:#ffffff0d;border:1px solid #ffffff18}
+.btlist>div b{width:58px;color:#ffd667;font-weight:400}.btlist>div span{flex:1}.btlist>div i{font-style:normal;opacity:.6;font-size:12px}
+.btlist>div.on{background:#2fbf5a22;border-color:#2fbf5a66}.btlist>div.on i{color:#7dffa1;opacity:1}
+.btlist>div.now{box-shadow:0 0 0 2px #ffd667aa inset}
 </style>
 </head>
 <body>
@@ -1149,7 +1157,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='ko';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.17 베타';
+const VERSION='v3.18 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1981,7 +1989,7 @@ function showGuide(){document.querySelectorAll('.lguide').forEach(e=>e.remove())
   d.style.left=((r.left+r.width/2-ar.left)/sc)+'px';d.style.top=((r.top-ar.top)/sc)+'px';d.innerHTML=`<div class="gdbub">${G.txt}</div><div class="lgh">👇</div>`;app.appendChild(d);el.classList.add('lgpulse');
 }
 function showLobby(){setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
-  screen='lobby';ensureDaily();tickChests();checkSeason();if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
+  screen='lobby';ensureDaily();tickChests();checkSeason();{const bt=betaTick();if(bt&&bt.length)setTimeout(()=>betaModal(bt),500)}if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
   const prog=N?(save.trophies-L.t)/(N.t-L.t):1;
@@ -1989,7 +1997,7 @@ function showLobby(){setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudA
   const lead=save.deck[0],side1=save.deck[1],side2=save.deck[2];
   app.innerHTML=`<div class="screen lobby2 lobby3">
     <div class="ltop">
-      <div class="prof" id="bProf"><div class="ava">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}</div><div class="pinfo"><div class="pname">${WL().n} <small style="opacity:.7">지휘관 변경 ›</small></div>
+      <div class="prof" id="bProf"><div class="ava">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}</div><div class="pinfo"><div class="pname">${WL().n} ${betaChip()||'<small style="opacity:.7">지휘관 변경 ›</small>'}</div>
         <div class="lg"><span class="lgb" style="--lc:${L.c}">${li+1}</span><div class="lbar2"><div class="lbn">${L.n} 리그 ${ico('trophy','mi')}${save.trophies}</div><div class="bar"><i style="width:${prog*100}%"></i></div></div></div></div></div>
       <div class="logo2">라인 파티</div>
       <div class="cur"><button class="mute" id="bRule" title="규칙">?</button><button class="mute" id="bSet">⚙</button><button class="mute" id="bMute">${save.mute?'🔇':'🔊'}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
@@ -2110,13 +2118,28 @@ async function fbAuth(){let a=fbStore();if(a.tok&&a.exp>Date.now()+60000)return 
   if(!r.ok)throw new Error('auth');const j=await r.json();a={uid:j.localId,tok:j.idToken,rt:j.refreshToken,exp:Date.now()+(+j.expiresIn)*1000};localStorage.setItem('lineparty_fb',JSON.stringify(a));return a}
 const NICK_BAN=['시발','씨발','병신','좆','개새','fuck','shit','섹스','sex','admin','운영자'];
 function nickOk(n){n=(n||'').trim();if(n.length<1||n.length>10)return false;const l=n.toLowerCase();return !NICK_BAN.some(b=>l.includes(b))}
+/* ===================== 베타 테스터 보상 (플레이 비공개 테스트 앱) ===================== */
+const APP_BETA=true; // 정식 출시 버전에서 false 로 바꾸면 새로 시작하는 사람은 테스터가 아님 (이미 시작한 테스터는 계속 진행)
+function betaN(){return save.beta?save.beta.days.length:0}
+function betaTick(){if(!inNativeApp())return null;if(!save.beta){if(!APP_BETA)return null;save.beta={days:[],got:{}}}const B=save.beta;B.got=B.got||{};const d=dayKey();if(!B.days.includes(d)){B.days.push(d);if(B.days.length>40)B.days=B.days.slice(-40)}const n=B.days.length,out=[];
+  if(!B.got[1]){B.got[1]=1;save.gems+=300;out.push(1)}
+  if(n>=7&&!B.got[7]){B.got[7]=1;queuePick(2,1,'베타 테스터 7일 보상');out.push(7)}
+  if(n>=14&&!B.got[14]){B.got[14]=1;B.title=1;queuePick(3,1,'베타 테스터 14일 보상');out.push(14)}
+  persist();return out}
+function betaChip(){if(!save.beta)return '';return save.beta.title?'<span class="btchip t">초기 테스터</span>':'<span class="btchip">β 테스터 '+Math.min(14,betaN())+'/14일</span>'}
+function betaModal(got){if(screen!=='lobby')return;if(document.querySelector('.modal'))return void setTimeout(()=>betaModal(got),800);
+  const n=Math.min(14,betaN());const rows=[[1,'첫 실행','보석 300 + 황금 상자'],[7,'7일째','영웅 카드 선택권'],[14,'14일째','전설 카드 선택권 + 초기 테스터 칭호']];
+  const m=modal(`<div class="ribbon">베타 테스터 보상</div><div class="rw">라인 파티 앱 테스트에 참여해 주셔서 고마워요!<br><small style="opacity:.75">앱을 켠 날짜가 쌓이면 보상을 받아요 · 지금 ${n}/14일</small></div>
+   <div class="btlist">${rows.map(([d,a,b])=>`<div class="${save.beta.got[d]?'on':''} ${got.includes(d)?'now':''}"><b>${a}</b><span>${b}</span><i>${save.beta.got[d]?'✓':d+'일'}</i></div>`).join('')}</div>
+   <div class="btns"><button class="btn" id="btOk">${got.includes(1)?'황금 상자 열기':'받기'}</button></div>`);
+  sfx('fanfare');m.querySelector('#btOk').onclick=()=>{m.remove();if(got.includes(1))openChestModal('gold',showLobby);else showLobby()}}
 function myNick(){if(!save.nick||!nickOk(save.nick)){save.nick='모험가'+(1000+rnd(9000));persist()}return save.nick}
 function validKey(k){try{const v=V(k);return !!(v&&v.name)}catch(e){return false}}
 let fbSyncing=false;
 async function syncDeck(force){if(fbSyncing)return;fbSyncing=true;try{
   if(!save.deck||save.deck.length!==8)return;
   const lvs={};save.deck.forEach(k=>{const ow=save.owned[k]||{};lvs[k]=Math.max(1,Math.min(MAX_LV,(ow.lv|0)||1))+10*Math.min(5,ow.rb|0)+100*Math.min(SB_MAX,sbOf(baseOf(k)))});
-  const d={name:myNick(),wl:WARLORDS[save.warlord]?save.warlord:'asten',wlLv:Math.max(1,Math.min(WL_MAX,wlLv())),deck:save.deck.slice(),lvs,trophies:Math.max(0,Math.min(20000,save.trophies|0)),v:VERSION};
+  const d={name:myNick(),wl:WARLORDS[save.warlord]?save.warlord:'asten',wlLv:Math.max(1,Math.min(WL_MAX,wlLv())),deck:save.deck.slice(),lvs,trophies:Math.max(0,Math.min(20000,save.trophies|0)),v:VERSION+(save.beta&&save.beta.title?' ·β':'')};
   const sig=JSON.stringify(d);if(!force&&localStorage.getItem('lineparty_fbsig')===sig)return;
   const a=await fbAuth();
   const r=await fbFetch(FB_BASE+':commit',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+a.tok},body:JSON.stringify({writes:[{update:{name:`projects/${FB.p}/databases/(default)/documents/decks/${a.uid}`,fields:Object.fromEntries(Object.entries(d).map(([k,v])=>[k,fbEnc(v)]))},updateTransforms:[{fieldPath:'t',setToServerValue:'REQUEST_TIME'}]}]})});
@@ -2458,7 +2481,7 @@ async function startArena(){
   let c;const en=mm.querySelector('.vside.en');en.classList.remove('searching');
   if(opp){const OW=WARLORDS[opp.wl];const oli=leagueIdx(opp.trophies||0);const elv2={},erb2={},esb2={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv2[k]=Math.max(1,Math.min(MAX_LV,raw%10||1));erb2[k]=Math.min(5,Math.floor(raw/10)%10);esb2[k]=Math.min(SB_MAX,Math.floor(raw/100))});
     const fc2={};opp.deck.forEach(id=>{const f=V(id).fac;fc2[f]=(fc2[f]||0)+1});const mf2=Object.entries(fc2).sort((x,y)=>y[1]-x[1])[0][0];
-    en.innerHTML=enSide(OW.art,opp.name,`<span class="ubadge">유저 덱</span> ${OW.n} Lv${opp.wlLv} · ${LEAGUES[oli].n} 리그 · 주력 ${FAC[mf2].n}`);
+    en.innerHTML=enSide(OW.art,opp.name,`${String(opp.v||'').includes('·β')?'<span class="btchip t">초기 테스터</span> ':''}<span class="ubadge">유저 덱</span> ${OW.n} Lv${opp.wlLv} · ${LEAGUES[oli].n} 리그 · 주력 ${FAC[mf2].n}`);
     c={mode:'arena',online:{uid:opp.uid,name:opp.name},eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:Math.min(WL_MAX,opp.wlLv|0||1),eHp:wlHpAt(opp.wl,opp.wlLv)+oli*2*DS,eDeck:opp.deck.slice(),eLvs:elv2,eRbs:erb2,eSbs:esb2,noise:Math.max(1,10-li*1.2),pHp:wlHp()+li*2*DS};
   }else{
     en.innerHTML=enSide(rArt,nm.replace('AI 도전자 · ',''),'AI 도전자 · 주력 '+FAC[mfv].n);
