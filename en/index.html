@@ -1129,6 +1129,16 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 
 .apphint{display:block;margin:6px auto 0;font-size:13px;color:#7dffa1;text-decoration:none;font-weight:700}
 .apphint.on{color:#9fe8b4;opacity:.85;font-weight:600}
+
+.lguide{width:max-content;position:absolute;z-index:60;pointer-events:none;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;animation:lgIn .35s ease-out both}
+.lguide .gdbub{width:max-content;background:#fff8e1;color:#3a2a10;font-size:14px;font-weight:800;padding:6px 12px;border-radius:12px;border:2px solid #ffb84d;box-shadow:0 3px 10px #0008;white-space:nowrap}
+.lguide .lgh{font-size:26px;line-height:1;margin-top:-2px;animation:lgBob .8s ease-in-out infinite;filter:drop-shadow(0 2px 3px #0008)}
+@keyframes lgBob{0%,100%{transform:translateY(-2px)}50%{transform:translateY(6px)}}
+@keyframes lgIn{from{opacity:0;transform:translate(-50%,-80%)}to{opacity:1;transform:translate(-50%,-100%)}}
+.lgpulse{animation:lgPulse 1.2s ease-in-out infinite}
+@keyframes lgPulse{0%,100%{box-shadow:0 0 0 0 #ffd66700}50%{box-shadow:0 0 0 6px #ffd66788}}
+
+.modal .box.scrolly .dbtns{position:sticky;bottom:-18px;z-index:3;margin:0 -8px -18px;padding:8px 8px 14px;background:linear-gradient(#1d173600,#1d1736 30%);}
 </style>
 </head>
 <body>
@@ -1139,7 +1149,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='en';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.16.1 beta';
+const VERSION='v3.17 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1913,6 +1923,7 @@ function checkLeagueUnlock(){
 function modal(html,onClose){
   const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="box">${html}</div>`;app.appendChild(m);
   m.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>{sfx('tick');m.remove();onClose&&onClose()});
+  const fitBox=()=>{const bx=m.querySelector('.box');if(bx&&!bx.classList.contains('scrolly')&&bx.scrollHeight>bx.clientHeight+4)bx.classList.add('scrolly')};requestAnimationFrame(fitBox);setTimeout(fitBox,300);
   return m;
 }
 function bind(sel,fn){const el=app.querySelector(sel);if(el)el.onclick=e=>{sfx('tick');fn(e)}}
@@ -1959,7 +1970,17 @@ function showEventInfo(){
 }
 const B_SET=new Set(['shield_0','shield_1','shield_2','shield_3','sword_0','sword_1','sword_2','sword_3','archer_0','archer_1','archer_2','archer_3','poison_0','poison_1','poison_2','poison_3','frost_0','frost_1','frost_2','frost_3','priest_0','priest_1','priest_2','priest_3','berserk_1','berserk_2','berserk_3','bear_1','bear_2','bear_3','sniper_1','sniper_2','sniper_3','fire_1','fire_2','fire_3','drum_1','drum_2','drum_3','knight_2','knight_3','bolt_2','bolt_3','necro_2','necro_3','dragon_3','skel_0']);
 function lobbyArt(id){return (B_SET.has(id)?'b_':'s_')+id}
-function showLobby(){setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
+function guideStep(){if(!save.tut)return null;const g=save.guide=save.guide||{};const n=(save.stats.w|0)+(save.stats.l|0);
+  if(n===0)return {sel:'#bFight',txt:'Start your first battle!',pos:'up'};
+  const ri=save.chests.findIndex(c=>c&&c.st==='ready');if(!g.chest&&ri>=0)return {sel:`[data-c="${ri}"]`,txt:'Tap the chest to open it',pos:'up',k:'chest'};
+  if(!g.up&&anyUpgrade())return {sel:'#bHero',txt:'Enough cards! Upgrade in Party',pos:'up',k:'up'};
+  if(!g.adv&&n>=2&&(save.cleared|0)===0)return {sel:'#bAdv',txt:'Get rewards on the Adventure map',pos:'up',k:'adv'};
+  return null}
+function showGuide(){document.querySelectorAll('.lguide').forEach(e=>e.remove());if(screen!=='lobby'||document.querySelector('.modal'))return;const G=guideStep();if(!G)return;const el=app.querySelector(G.sel);if(!el)return;
+  const ar=app.getBoundingClientRect(),r=el.getBoundingClientRect(),sc=ar.width/app.offsetWidth||1;const d=document.createElement('div');d.className='lguide';
+  d.style.left=((r.left+r.width/2-ar.left)/sc)+'px';d.style.top=((r.top-ar.top)/sc)+'px';d.innerHTML=`<div class="gdbub">${G.txt}</div><div class="lgh">👇</div>`;app.appendChild(d);el.classList.add('lgpulse');
+}
+function showLobby(){setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
   screen='lobby';ensureDaily();tickChests();checkSeason();if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
@@ -2005,6 +2026,7 @@ function showLobby(){setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()}
   clearInterval(lobbyTimer);
   lobbyTimer=setInterval(()=>{if(screen!=='lobby'){clearInterval(lobbyTimer);return}
     tickChests();const c=document.getElementById('chests');if(c){c.innerHTML=chestSlotsHTML();bindChests()}
+    if(document.querySelector('.modal'))document.querySelectorAll('.lguide').forEach(e=>e.remove());else if(!document.querySelector('.lguide')&&guideStep())showGuide();
     const ia=document.getElementById('idleAmt');if(ia)ia.textContent=idleAmount()},1000);
 }
 function chestSlotsHTML(){
@@ -2020,7 +2042,7 @@ function bindChests(){
   app.querySelectorAll('[data-adc]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const i=+b.dataset.adc;showRewardAd('chest','Cuts 30 min off chest time',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=30*60000;tickChests();persist()}toast('-30 min!');if(screen==='lobby')showLobby()})});
   app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{
     sfx('tick');const i=+b.dataset.c,c=save.chests[i];if(!c)return;
-    if(c.st==='ready'){save.chests[i]=null;persist();openChestModal(c.t,showLobby);return}
+    if(c.st==='ready'){save.chests[i]=null;(save.guide=save.guide||{}).chest=1;persist();openChestModal(c.t,showLobby);return}
     if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t)*1000;persist();showLobby();return}
     const cost=gemCost(c);
     const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'Time left '+fmtT((c.readyAt-Date.now())/1000):'Another chest is opening'}<br>Gems ${cost} opens it now</div>${appMode()?`<a href="#" class="apphint" id="cApp">📱 Open chests faster in the app ›</a>`:''}
@@ -2194,7 +2216,7 @@ async function makeTransfer(){const a=await fbAuth();
   for(let k=0;k<3;k++){const r8=crypto.getRandomValues(new Uint8Array(8));const code=[...r8].map(x=>TR_AB[x%32]).join('');
     const w=fsDoc('transfers/'+code,{data:encodeSave(),exp:Date.now()+24*3600*1000,owner:a.uid});w.currentDocument={exists:false};
     const r=await fbFetch(FB_BASE+':commit',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+a.tok},body:JSON.stringify({writes:[w]})},6000);
-    if(r.ok){track('transfer_make',{});return code}}
+    if(r.ok){track('transfer_make',{});try{const L=JSON.parse(localStorage.getItem('lineparty_trcodes')||'[]');L.push(code);localStorage.setItem('lineparty_trcodes',JSON.stringify(L.slice(-20)))}catch(e){}return code}}
   throw new Error('make')}
 function applySaveObj(o){save=o;if(save.v===2){localStorage.setItem(SAVE_KEY,JSON.stringify(save));save=loadSave()}persist();localStorage.removeItem('lineparty_fbsig')}
 async function redeemTransfer(code){
@@ -2297,7 +2319,7 @@ function showSeason(){checkSeason();const best=save.season.best|0;
 function setWarlord(id){save.decks=save.decks||{};if(save.warlord)save.decks[save.warlord]=save.deck.slice();save.warlord=id;const d=dedupeDeck(save.decks[id]);if(d&&d.length===8&&d.every(k=>save.owned[k]))save.deck=d.slice();persist()}
 function squadOf(id){save.decks=save.decks||{};return id===save.warlord?save.deck:(save.decks[id]||[])}
 // ---- 도전 허브
-function showChallenge(){screen='challenge';ensureDaily();ensureDungeon();const D=save.dg,M=DG_MODES[D.mode];const bw=brawlState();
+function showChallenge(){(save.guide=save.guide||{}).adv=1;screen='challenge';ensureDaily();ensureDungeon();const D=save.dg,M=DG_MODES[D.mode];const bw=brawlState();
   const cards=[
     {id:'adv',n:'Adventure',d:`Stage ${Math.min(save.cleared+1,STAGES.length)}/${STAGES.length}`,ic:'map',c:'#7fc8ff'},
     {id:'boss',n:'Today’s Boss',d:bossLeft()>0?`Tries left ${bossLeft()}`:'Tomorrow',ic:'boss',c:'#ff8a7a',dot:bossLeft()>0},
@@ -2431,7 +2453,8 @@ async function startArena(){
   const enSide=(art,name,sub)=>`<img src="../assets/k_${art}.webp?v=${ASSET_V}"><b>${esc(name)}</b><small>${sub}</small>`;
   mm.innerHTML=`<div class="vsbox"><div class="vside me"><img src="../assets/k_${W.art}.webp?v=${ASSET_V}"><b>${esc(myNick())}</b><small>${W.n} Lv${wlLv()} · ${LEAGUES[li].n} League</small></div><div class="vsx">VS</div><div class="vside en searching"><div class="vsq">?</div><b>Finding opponent...</b><small>Finding a deck with similar trophies</small></div><div class="vstitle">Finding Opponent</div></div>`;app.appendChild(mm);
   syncDeck();
-  const opp=await findOpponentT(3500);
+  const newbie=((save.stats.w|0)+(save.stats.l|0))<3;
+  const opp=newbie?(await sleep(1200),null):await findOpponentT(3500);
   let c;const en=mm.querySelector('.vside.en');en.classList.remove('searching');
   if(opp){const OW=WARLORDS[opp.wl];const oli=leagueIdx(opp.trophies||0);const elv2={},erb2={},esb2={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv2[k]=Math.max(1,Math.min(MAX_LV,raw%10||1));erb2[k]=Math.min(5,Math.floor(raw/10)%10);esb2[k]=Math.min(SB_MAX,Math.floor(raw/100))});
     const fc2={};opp.deck.forEach(id=>{const f=V(id).fac;fc2[f]=(fc2[f]||0)+1});const mf2=Object.entries(fc2).sort((x,y)=>y[1]-x[1])[0][0];
@@ -2549,7 +2572,7 @@ function heroDetail(id){
   <div class="evoline">${line}</div><div class="btns"><button class="btn sub sm" data-close>Close</button></div>`,showHeroes);
   m.querySelector('.box').classList.add('wide');
   m.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>{m.remove();heroDetail(e.dataset.go)});
-  const up=m.querySelector('#dUp');if(up)up.onclick=()=>{if(!canLevel(id)||save.gold<lvGold(id))return;save.gold-=lvGold(id);o.cards-=lvNeed(id);const sbB=sbOf(baseOf(id)),pre=baseStats(id,o.lv,1,o.rb,sbB);o.lv++;persist();qp('upgrade');sfx('levelup');m.remove();const post=baseStats(id,o.lv,1,o.rb,sbB);heroDetail(id);lvUpFx(v,o.lv,post.a-pre.a,post.h-pre.h)};
+  const up=m.querySelector('#dUp');if(up)up.onclick=()=>{if(!canLevel(id)||save.gold<lvGold(id))return;(save.guide=save.guide||{}).up=1;save.gold-=lvGold(id);o.cards-=lvNeed(id);const sbB=sbOf(baseOf(id)),pre=baseStats(id,o.lv,1,o.rb,sbB);o.lv++;persist();qp('upgrade');sfx('levelup');m.remove();const post=baseStats(id,o.lv,1,o.rb,sbB);heroDetail(id);lvUpFx(v,o.lv,post.a-pre.a,post.h-pre.h)};
   const evb=m.querySelector('#dEvo');if(evb)evb.onclick=()=>{const r=doEvolve(id);if(!r)return;sfx('win');m.remove();evolveFx(id,r.nx,r.E.get)};
   const rbBtn=m.querySelector('#dRb');if(rbBtn)rbBtn.onclick=()=>doReborn(id,m);
   const sbBtn=m.querySelector('#dSb');if(sbBtn)sbBtn.onclick=()=>doSoulbind(id);
@@ -3031,7 +3054,8 @@ function encodeSave(){return btoa(unescape(encodeURIComponent(JSON.stringify(sav
 function decodeSave(code){const o=JSON.parse(decodeURIComponent(escape(atob(code.trim()))));if(!o||!o.owned||!o.deck)throw new Error('bad');return o}
 async function deleteMyData(){let ok=true;try{const a=await fbAuth();const H={headers:{Authorization:'Bearer '+a.tok}};
     for(const p of ['/decks/','/saves/']){try{const r=await fbFetch(FB_BASE+p+a.uid,{method:'DELETE',...H},6000);if(!r.ok&&r.status!==404)ok=false}catch(e){ok=false}}
-    try{const r=await fbFetch(FB_BASE+'/defense/'+a.uid+'/log?pageSize=300',H,6000);if(r.ok){const j=await r.json();for(const d of (j.documents||[])){try{await fbFetch('https://firestore.googleapis.com/v1/'+d.name,{method:'DELETE',...H},4000)}catch(e){}}}}catch(e){}
+    try{for(let pg=0;pg<10;pg++){const r=await fbFetch(FB_BASE+'/defense/'+a.uid+'/log?pageSize=300',H,6000);if(!r.ok){ok=false;break}const j=await r.json();const D=j.documents||[];if(!D.length)break;for(const d of D){try{const x=await fbFetch('https://firestore.googleapis.com/v1/'+d.name,{method:'DELETE',...H},4000);if(!x.ok)ok=false}catch(e){ok=false}}}}catch(e){ok=false}
+    try{const L=JSON.parse(localStorage.getItem('lineparty_trcodes')||'[]');for(const c of L){try{await fbFetch(FB_BASE+'/transfers/'+c,{method:'DELETE',...H},4000)}catch(e){}}}catch(e){}
     try{await fbFetch('https://identitytoolkit.googleapis.com/v1/accounts:delete?key='+FB.k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idToken:a.tok})},6000)}catch(e){}
   }catch(e){ok=false}
   try{Object.keys(localStorage).filter(k=>k.startsWith('lineparty')).forEach(k=>localStorage.removeItem(k))}catch(e){}
