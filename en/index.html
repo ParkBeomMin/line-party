@@ -1216,7 +1216,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='en';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.20 beta';
+const VERSION='v3.21 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1326,12 +1326,12 @@ const MAX_LV=8;
 const LV_CARDS=[0,2,4,8,16,30,50,80];   // lv -> Lv+1 cards needed
 const LV_GOLD=[0,30,80,180,400,800,1500,2600];const RB_COST_M=.5;
 const CHESTS={
-  wood:{n:'Wooden Chest',sec:60,cards:6,gold:[20,40],gems:[0,0],c1:'#8a5a2a',c2:'#c48a4a',band:'#5a3a1a'},
-  silver:{n:'Silver Chest',sec:15*60,cards:16,gold:[70,110],gems:[0,2],c1:'#7a8698',c2:'#c9d4e2',band:'#4a5468'},
-  gold:{n:'Gold Chest',sec:60*60,cards:36,gold:[180,260],gems:[3,6],c1:'#c98a00',c2:'#ffd667',band:'#7a4a00',minRar:1},
+  wood:{n:'Wooden Chest',sec:15*60,cards:6,gold:[20,40],gems:[0,0],c1:'#8a5a2a',c2:'#c48a4a',band:'#5a3a1a'},
+  silver:{n:'Silver Chest',sec:60*60,cards:16,gold:[70,110],gems:[0,2],c1:'#7a8698',c2:'#c9d4e2',band:'#4a5468'},
+  gold:{n:'Gold Chest',sec:3*3600,cards:36,gold:[180,260],gems:[3,6],c1:'#c98a00',c2:'#ffd667',band:'#7a4a00',minRar:1},
   boss:{n:'Boss Chest',sec:0,cards:30,gold:[150,200],gems:[2,4],c1:'#7a1a3a',c2:'#ff5a8a',band:'#3a0a1a',minRar:2},
-  epic:{n:'Epic Chest',sec:90*60,cards:30,gold:[220,300],gems:[4,7],c1:'#5a2a9a',c2:'#c79bff',band:'#2a0a5a',minRar:2,minN:2},
-  legend:{n:'Legendary Chest',sec:3*3600,cards:40,gold:[350,450],gems:[8,12],c1:'#c9500a',c2:'#ffcf5a',band:'#7a2a00',minRar:3}
+  epic:{n:'Epic Chest',sec:5*3600,cards:30,gold:[220,300],gems:[4,7],c1:'#5a2a9a',c2:'#c79bff',band:'#2a0a5a',minRar:2,minN:2},
+  legend:{n:'Legendary Chest',sec:8*3600,cards:40,gold:[350,450],gems:[8,12],c1:'#c9500a',c2:'#ffcf5a',band:'#7a2a00',minRar:3}
 };
 // 아레나 승리 상자: 매번 확률로 종류를 뽑는다 (첫 2승은 나무 상자)
 const WIN_CHEST=[['wood',56],['silver',30],['gold',10],['epic',3],['legend',1]];
@@ -1916,8 +1916,13 @@ function qp(id,n){ensureDaily();save.quests.list.forEach(q=>{if(q.id===id&&!q.cl
 function questReady(){ensureDaily();return save.quests.list.some(q=>!q.claimed&&q.prog>=QUEST_POOL.find(x=>x.id===q.id).goal)||(!save.quests.bonus&&save.quests.list.every(q=>q.claimed))}
 function idleRate(){return 1+save.cleared*0.8}
 function idleAmount(){const min=Math.min(8*60,(Date.now()-save.idle.last)/60000);return Math.floor(min*idleRate())}
-function chestSec(t){return Math.round(CHESTS[t].sec*(ev('chestfest')?.5:1))}
-function addChest(t){const i=save.chests.findIndex(c=>!c);if(i<0)return false;save.chests[i]={t,st:CHESTS[t].sec?'locked':'ready'};persist();tickChests();return true}
+// 같은 날 같은 종류 상자를 또 받으면 여는 시간이 늘어난다 (자정에 초기화). 처음 3승까지는 나무·은 상자 1분
+const CHEST_STEPS={wood:[1,2,4,8],silver:[1,2,3],gold:[1,4/3,2],epic:[1,1.6],legend:[1,1.5]};
+function chestSecFor(t){if(!CHESTS[t].sec)return 0;const d=dayKey();if(!save.chestDay||save.chestDay.d!==d)save.chestDay={d,n:{}};const n=save.chestDay.n[t]|0;save.chestDay.n[t]=n+1;const st=CHEST_STEPS[t]||[1];let x=CHESTS[t].sec*st[Math.min(n,st.length-1)];if((save.stats.w|0)<3&&(t==='wood'||t==='silver'))x=60;return Math.round(x)}
+function chestSec(t,c){const base=c&&c.sec?c.sec:CHESTS[t].sec;return Math.round(base*(ev('chestfest')?.5:1))}
+function fmtS(sec){const m=Math.max(1,Math.round(sec/60));const h=Math.floor(m/60),mm=m%60;return h?h+'h'+(mm?' '+mm+'m':''):m+'m'}
+function adCut(c){return Math.max(30*60000,Math.round((c.readyAt-Date.now())/3))}
+function addChest(t){const i=save.chests.findIndex(c=>!c);if(i<0)return false;save.chests[i]={t,st:CHESTS[t].sec?'locked':'ready',sec:chestSecFor(t)};persist();tickChests();return true}
 function nextCycleChest(){const t=CHEST_CYCLE[save.cycle%CHEST_CYCLE.length];save.cycle++;return t}
 function unlockingNow(){return save.chests.some(c=>c&&c.st==='unlocking'&&c.readyAt>Date.now())}
 function showPromo(then){const P=save.promo;if(!P){then&&then();return}save.promo=null;persist();
@@ -1932,9 +1937,9 @@ function showPromo(then){const P=save.promo;if(!P){then&&then();return}save.prom
 function tickChests(){let ch=false;const now=Date.now();let last=0;
   save.chests.forEach(c=>{if(c&&c.st==='unlocking'&&c.readyAt<=now){c.st='ready';last=Math.max(last,c.readyAt);ch=true}});
   for(let g=0;g<6;g++){if(save.chests.some(c=>c&&c.st==='unlocking'))break;const c=save.chests.find(c=>c&&c.st==='locked');if(!c)break;
-    const start=last||now;c.st='unlocking';c.readyAt=start+chestSec(c.t)*1000;ch=true;if(c.readyAt<=now){c.st='ready';last=c.readyAt}else break}
+    const start=last||now;c.st='unlocking';c.readyAt=start+chestSec(c.t,c)*1000;ch=true;if(c.readyAt<=now){c.st='ready';last=c.readyAt}else break}
   if(ch)persist();return ch}
-function gemCost(c){if(c.st==='locked')return Math.max(1,Math.ceil(chestSec(c.t)/60/6));return Math.max(1,Math.ceil((c.readyAt-Date.now())/60000/6))}
+function gemCost(c){if(c.st==='locked')return Math.max(1,Math.ceil(chestSec(c.t,c)/60/6));return Math.max(1,Math.ceil((c.readyAt-Date.now())/60000/6))}
 function unlockedBases(){const s=new Set(START_OWNED);for(let i=0;i<=save.bestLeague;i++)LEAGUES[i].un.forEach(b=>s.add(b));return [...s]}
 // 상자 확률 (카드 종류 1개마다, 등급을 먼저 정한 뒤 그 등급 안에서 고르게 뽑음)
 const CHEST_ODDS={wood:[70,25,4.5,.5],silver:[55,33,10,2],gold:[40,42,15,3],boss:[30,45,22,3],epic:[30,40,25,5],legend:[25,40,27,8]};
@@ -2104,21 +2109,21 @@ function chestSlotsHTML(){
     if(!c)return `<div class="slot"><span style="opacity:.5">Empty chest slot</span><span class="ct" style="opacity:.45">Won in Arena</span></div>`;
     const C=CHESTS[c.t];
     if(c.st==='ready')return `<button class="slot full ready" data-c="${i}">${chestSVG(c.t)}<span class="cn">${C.n}</span><span class="ct" style="color:#7dffa1;font-weight:800">Open!</span></button>`;
-    if(c.st==='unlocking')return `<button class="slot full" data-c="${i}">${adOn()&&adLeft('chest')>0?`<span class="adchip" data-adc="${i}">${adW('▶ -30m','Free -30m')}</span>`:''}${chestSVG(c.t)}<span class="cn">${C.n}</span><span class="ct">${fmtT((c.readyAt-Date.now())/1000)}</span><span class="cta"><span class="gem" style="width:9px;height:9px"></span>${gemCost(c)}</span></button>`;
-    return `<button class="slot full" data-c="${i}">${chestSVG(c.t)}<span class="cn">${C.n}</span><span class="ct">${'Waiting · '+fmtT(chestSec(c.t))}</span></button>`;
+    if(c.st==='unlocking')return `<button class="slot full" data-c="${i}">${adOn()&&adLeft('chest')>0?`<span class="adchip" data-adc="${i}">${adW('▶ -','Free -')+fmtS(adCut(c)/1000)}</span>`:''}${chestSVG(c.t)}<span class="cn">${C.n}</span><span class="ct">${fmtT((c.readyAt-Date.now())/1000)}</span><span class="cta"><span class="gem" style="width:9px;height:9px"></span>${gemCost(c)}</span></button>`;
+    return `<button class="slot full" data-c="${i}">${chestSVG(c.t)}<span class="cn">${C.n}</span><span class="ct">${'Waiting · '+fmtT(chestSec(c.t,c))}</span></button>`;
   }).join('');
 }
 function bindChests(){
-  app.querySelectorAll('[data-adc]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const i=+b.dataset.adc;showRewardAd('chest','Cuts 30 min off chest time',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=30*60000;tickChests();persist()}toast('-30 min!');if(screen==='lobby')showLobby()})});
+  app.querySelectorAll('[data-adc]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const i=+b.dataset.adc;showRewardAd('chest','Cut the chest unlock time',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=adCut(cc);tickChests();persist()}toast('Time cut!');if(screen==='lobby')showLobby()})});
   app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{
     sfx('tick');const i=+b.dataset.c,c=save.chests[i];if(!c)return;
     if(c.st==='ready'){save.chests[i]=null;(save.guide=save.guide||{}).chest=1;persist();openChestModal(c.t,showLobby);return}
-    if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t)*1000;persist();showLobby();return}
+    if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t,c)*1000;persist();showLobby();return}
     const cost=gemCost(c);
     const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'Time left '+fmtT((c.readyAt-Date.now())/1000):'Another chest is opening'}<br>Gems ${cost} opens it now</div>${appMode()?`<a href="#" class="apphint" id="cApp">📱 Open chests faster in the app ›</a>`:''}
-    <div class="btns"><button class="btn" id="cNow" ${save.gems<cost?'disabled':''}><span class="gem"></span> ${cost} Open Now</button>${adOn()&&c.st==='unlocking'?`<button class="btn grn" id="cAd" ${adLeft('chest')>0?'':'disabled'}>${adW('Watch ad: -30 min','Free -30 min')} (${adLeft('chest')})</button>`:''}<button class="btn sub" data-close>Close</button></div>`);
+    <div class="btns"><button class="btn" id="cNow" ${save.gems<cost?'disabled':''}><span class="gem"></span> ${cost} Open Now</button>${adOn()&&c.st==='unlocking'?`<button class="btn grn" id="cAd" ${adLeft('chest')>0?'':'disabled'}>${adW('Watch ad: ','Free: ')+fmtS(adCut(c)/1000)+' faster'} (${adLeft('chest')})</button>`:''}<button class="btn sub" data-close>Close</button></div>`);
     const cap=m.querySelector('#cApp');if(cap)cap.onclick=e=>{e.preventDefault();m.remove();appCta('chest',true)};
-    const ca=m.querySelector('#cAd');if(ca)ca.onclick=()=>{m.remove();showRewardAd('chest','Cuts 30 min off chest time',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=30*60000;tickChests();persist()}toast('-30 min!');showLobby()})};
+    const ca=m.querySelector('#cAd');if(ca)ca.onclick=()=>{m.remove();showRewardAd('chest','Cut the chest unlock time',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=adCut(cc);tickChests();persist()}toast('Time cut!');showLobby()})};
     m.querySelector('#cNow').onclick=()=>{if(save.gems<cost)return;save.gems-=cost;save.chests[i]=null;persist();m.remove();openChestModal(c.t,showLobby)};
   });
 }
@@ -2279,7 +2284,7 @@ function linkNudge(){if(isLinked())return;const td=new Date().toDateString();if(
     m.querySelector('#nzGo').onclick=async()=>{m.remove();await googleLogin()}},2500)}
 function notiPlan(){const out=[],now=Date.now();
   const un=save.chests.filter(c=>c&&c.st==='unlocking').sort((a,b)=>a.readyAt-b.readyAt);let last=un.length?un[un.length-1].readyAt:now;let first=un.length?un[0].readyAt:0;
-  const locked=save.chests.filter(c=>c&&c.st==='locked');locked.forEach(c=>{last+=chestSec(c.t)*1000;if(!first)first=last});
+  const locked=save.chests.filter(c=>c&&c.st==='locked');locked.forEach(c=>{last+=chestSec(c.t,c)*1000;if(!first)first=last});
   if(first>now+60000)out.push({id:101,at:first,title:'Hero Lanes',body:'A chest is open! Tap to get your cards.'});
   if(locked.length&&last>first+60000)out.push({id:102,at:last,title:'Hero Lanes',body:'All chests are ready. Open them to free up slots!'});
   Object.entries(save.exp||{}).slice(0,6).forEach(([k,e],i)=>{if(e&&e.end>now+60000)out.push({id:110+i,at:e.end,title:'Expedition Done',body:(WARLORDS[k]?WARLORDS[k].n:'Commander')+'’s expedition team is back. Claim your rewards!'})});
@@ -3118,7 +3123,7 @@ const AD_LIMIT={chest:6,trophy:3,gems:3,gold:5};
 const APPAD={plug:null,ready:false,loading:false,fails:0,unit:'',test:false,inAd:false};
 function admobLoad(){const A=APPAD.plug;if(!A||APPAD.loading||APPAD.ready)return;APPAD.loading=true;
   A.prepareRewardVideoAd({adId:APPAD.unit,isTesting:APPAD.test}).then(()=>{APPAD.ready=true;APPAD.loading=false;APPAD.fails=0}).catch(()=>{APPAD.loading=false;APPAD.fails++;setTimeout(admobLoad,Math.min(120000,15000*APPAD.fails))})}
-function admobInit(){if(!inNativeApp())return;let A=null;try{A=window.Capacitor.registerPlugin?window.Capacitor.registerPlugin('AdMob'):null}catch(e){A=null}if(!A)return;
+function admobInit(){if(!inNativeApp())return;let A=null;try{A=(window.Capacitor.Plugins||{}).AdMob||(window.Capacitor.registerPlugin?window.Capacitor.registerPlugin('AdMob'):null)}catch(e){A=null}if(!A){track('app_ad_noplugin',{});return}
   APPAD.plug=A;APPAD.test=window.LP_AD_TEST===true;APPAD.unit=APPAD.test?'ca-app-pub-3940256099942544/5224354917':'ca-app-pub-7426857657290789/8731421467';
   (async()=>{try{await A.initialize({initializeForTesting:APPAD.test});try{const ci=await A.requestConsentInfo();if(ci&&ci.isConsentFormAvailable&&ci.status==='REQUIRED')await A.showConsentForm()}catch(e){}admobLoad()}catch(e){APPAD.plug=null;track('app_ad_init_fail',{})}})()}
 async function admobShow(done,kind){const A=APPAD.plug;APPAD.ready=false;APPAD.inAd=true;let got=false,closed=false,onClose=null;const hs=[];
