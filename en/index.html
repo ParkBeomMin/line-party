@@ -838,7 +838,7 @@ a.btn{display:inline-block;text-decoration:none}
 .rbline .lvst{letter-spacing:0}
 .rbline .lvst i{color:#ffffff38}
 .dart .pt,.evo .art .pt{width:100%;height:100%}
-/* v3.3 파티 화면 (마이티파티 파티 구성 참고) */
+/* v3.3 파티 화면 */
 .hs2 .hs2top{display:flex;align-items:center;gap:10px;padding:6px 14px 4px;background:linear-gradient(#2a2250cc,#1a1530cc);border-bottom:2px solid #ffd66733}
 .hs2wl{flex:none;width:96px;height:112px;border-radius:12px;border:2.5px solid var(--fc);background:radial-gradient(circle at 50% 30%,#3a3270,#15122c);position:relative;overflow:hidden;cursor:pointer;padding:0;color:#fff;font-family:inherit}
 .hs2wl img{position:absolute;left:50%;bottom:16px;height:110%;transform:translateX(-50%);object-fit:contain}
@@ -879,7 +879,7 @@ a.btn{display:inline-block;text-decoration:none}
 .hc2.lock .hc2nm{bottom:24px;opacity:.6}
 .hs2none{grid-column:1/-1;text-align:center;opacity:.6;padding:30px;font-size:14px}
 .hs2{display:flex;flex-direction:column}
-/* v3.3 지휘관 화면 (마이티파티 지휘관 화면 참고: 큰 캐릭터 + 스킬 패널 + 하단 목록) */
+/* v3.3 지휘관 화면 (큰 캐릭터 + 스킬 패널 + 하단 목록) */
 .wl2{display:flex;flex-direction:column}
 .wl2main{flex:1;display:flex;gap:16px;padding:6px 18px 0;min-height:0}
 .wl2art{flex:none;width:300px;position:relative;display:flex;align-items:flex-end;justify-content:center}
@@ -918,7 +918,7 @@ a.btn{display:inline-block;text-decoration:none}
 .hc2dk{top:auto!important;bottom:52px!important;left:4px}
 .slot .ct{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .bbot2 .card .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;left:2px;right:2px}
-/* v3.4 로비 (마이티파티식 하단 탭바) */
+/* v3.4 로비 (하단 탭바) */
 .lobby3 .stage3{bottom:170px;height:250px}
 .lobby3 .hero2.lead{width:205px;height:225px;margin-left:-102px}
 .lobby3 .lside{top:76px}
@@ -1157,7 +1157,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='en';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.18 beta';
+const VERSION='v3.18.1 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -2065,7 +2065,7 @@ const RULE_TABS=[
  {n:'Battle',p:[['Goal','Reduce the enemy Commander’s HP to 0 to win. After '+MAX_ROUND+' turns, the higher HP % wins.'],['Board','Each side has 4 lanes × 3 columns. The column nearest the center is the front. Melee goes in the front two columns, Ranged and Magic in the back two, Support and Buildings anywhere.'],['Your Turn','Hold 4 cards from your 8-card Deck. Play 1 card and all your units attack, then draw 1.'],['Lane Block','Units only hit enemies in their own lane. With no enemy in the lane, they hit the enemy Commander. If your lane is empty, you get hit too.'],['Merge ◆','Play a duplicate hero card on that hero to Merge. Stat gains and Merge effects differ per hero (max ◆3). A Deck holds only 1 card per hero.'],['Factions','Bastion (Protect), Wildwood (Regen), Ember (ATK). Gather 2 or 4 units of one faction to activate synergy.'],['Building','They don’t attack but block lanes and give effects every turn. Immune to Poison and Freeze.']]},
  {n:'Commander',p:[['Commander Skills','Each Commander has 3 unique skills, used once each in order from turn 1, 3 and 6. Skill 2 unlocks at Commander Lv3, skill 3 at Lv6.'],['Commander Strike','After using all skills, you gain 1 Strike per turn. The later you use it, the more damage each deals, so you can save up and use them at once.'],['Enemy Commander','The enemy also uses Commander skills and Strikes.'],['Expedition','Send idle Commanders on Expeditions to earn cards, Gold, and Gems. Each Commander has different strengths.']]},
  {n:'Growth',p:[['Level','Collect copies and pay Gold to level up (max Lv8). Each level adds 12% of base ATK and HP, and skill damage and heal grow a bit too.'],['Evolve','Collect same-version cards to switch to a higher rarity version. Starts at Bronze League, and you must get the higher version from a chest once.'],['Legendary Awakening','When a Legendary hero first Transcends, its Legendary skill gets stronger and glows gold in battle.'],['Transcend','From Gold League. Transcending a Lv8 hero resets it to Lv1 but adds a star, permanent ATK and HP +30% (of base) and skill values +5.'],['Bond','From Silver League. Raise 2 other heroes to set levels and spend Stardust to permanently strengthen all versions of that hero (max 4 times).']]},
- {n:'Battles & More',p:[['Arena','Face real players’ Decks with similar Trophies. AI controls the opponent Deck (same as Mighty Party). If none are found, you face an AI challenger.'],['Defense Log','When another player fights your Deck it is logged, and you earn Gold if you hold.'],['Account','Link a Google account in Settings to save automatically and continue on other devices.'],['Season','Seasons change every 14 days. Get rewards by your top League (pick an Epic card from Gold League, a Legendary card from Diamond League). Trophies over 700 are cut by half. Global ranking is also available.'],['Party','Each Commander has a separate Deck. Switch at the top of the Party screen.'],['Friendly Match · Sparring','A match where losing costs no Trophies (5 rewards per day). Sparring lets your own Parties fight each other.'],['Weekly Rift','Changes weekly. Sky Stairs (climb floors), Titan Hunt (total damage), Streak Arena (back-to-back fights with carried HP).'],['Daily','Daily Quests, Daily Deals, Weekday Event, Today’s Boss, Check-in, Supply Depot.']]}
+ {n:'Battles & More',p:[['Arena','Face real players’ Decks with similar Trophies. AI controls the opponent Deck. If none are found, you face an AI challenger.'],['Defense Log','When another player fights your Deck it is logged, and you earn Gold if you hold.'],['Account','Link a Google account in Settings to save automatically and continue on other devices.'],['Season','Seasons change every 14 days. Get rewards by your top League (pick an Epic card from Gold League, a Legendary card from Diamond League). Trophies over 700 are cut by half. Global ranking is also available.'],['Party','Each Commander has a separate Deck. Switch at the top of the Party screen.'],['Friendly Match · Sparring','A match where losing costs no Trophies (5 rewards per day). Sparring lets your own Parties fight each other.'],['Weekly Rift','Changes weekly. Sky Stairs (climb floors), Titan Hunt (total damage), Streak Arena (back-to-back fights with carried HP).'],['Daily','Daily Quests, Daily Deals, Weekday Event, Today’s Boss, Check-in, Supply Depot.']]}
 ];
 RULE_TABS.splice(1,0,{n:'Skills',p:[['Flying','Can’t be hit by Melee attacks (non-Flying).'],['Armor · Invincible','Armor ignores 1 hit of damage. Invincible ignores all damage for one turn.'],['Immune','Can’t get bad effects like Poison, Freeze, or Bleed.'],['Evade · Accurate','Evade dodges Ranged and Magic attacks. Accurate ignores Evade and Dazzle.'],['Counter · Thorns','Counter hits back at Melee attacks. Thorns damage the attacker.'],['Bleed · Toxin','Bleed deals damage on each attack. Toxin lowers ATK on each attack.'],['Silence','Skills and buffs vanish for good.'],['Dazzle','The next attack misses.'],['Transform · Polymorph','Siege Knight transforms into a Watchtower. Polymorph turns an enemy into a Frog.'],['Splash · Pierce','Splash hits around the target. Pierce hits every enemy in the lane.'],['Execute','Instantly defeats low-HP enemies.'],['Curse Link','Linked enemies share damage.'],['Shatter','Breaks Armor and Invincible and deals extra damage.'],['Growth · Overheat','Growth raises HP and Overheat raises ATK each turn.'],['Snare','Melee enemies that hit a Vine Wall can’t attack next time.'],['Bombard','The Catapult hits the enemy Commander directly.']]});
 let ruleTab=0;
@@ -2104,7 +2104,7 @@ function startDaily(){
   <div class="btns"><button class="btn" id="dGo">Challenge</button><button class="btn sub" data-close>Close</button></div>`);
   m.querySelector('#dGo').onclick=()=>{sfx('tick');m.remove();startBattle({mode:'daily',pHp:wlHp(),bossSig:bossLook,eName:nm,eLook:bossLook,eHp:(30+lv*2)*DS,eDeck:vdeck,eLvs:elv,noise:0,passive:P.id,passiveName:P.n})};
 }
-/* ===================== 온라인 대전 (마이티파티 방식: 실제 유저 덱 + AI 조종) ===================== */
+/* ===================== 온라인 대전 (실제 유저 덱 + AI 조종) ===================== */
 const FB={k:'AIzaSyB_hRwh6kvM4GCoVCgSS9wWc03FmnPYLNg',p:'line-party-9a4ca'};
 const FB_BASE=`https://firestore.googleapis.com/v1/projects/${FB.p}/databases/(default)/documents`;
 const fbEnc=v=>typeof v==='string'?{stringValue:v}:Number.isInteger(v)?{integerValue:String(v)}:Array.isArray(v)?{arrayValue:{values:v.map(fbEnc)}}:(v&&typeof v==='object')?{mapValue:{fields:Object.fromEntries(Object.entries(v).map(([k,x])=>[k,fbEnc(x)]))}}:{nullValue:null};
@@ -2338,7 +2338,7 @@ function showSeason(){checkSeason();const best=save.season.best|0;
   m.querySelector('.box').classList.add('wide');
   fbTopRank().then(L=>{const el=m.querySelector('#rkList');if(!el)return;const me=fbStore().uid;if(!L||!L.length){el.innerHTML='<small style="opacity:.6">No rankings yet</small>';return}
     el.innerHTML=L.map((x,i)=>`<div class="${x.uid===me?'me':''}"><span class="rk">${i+1}</span><b>${esc(x.name||'?')}</b><small>${(WARLORDS[x.wl]||{}).n||''}</small><span>${ico('trophy','mi')}${x.tr}</span></div>`).join('')})}
-// ---- 파티 여러 개 (지휘관마다 덱 1개, 마이티파티 방식)
+// ---- 파티 여러 개 (지휘관마다 덱 1개)
 function setWarlord(id){save.decks=save.decks||{};if(save.warlord)save.decks[save.warlord]=save.deck.slice();save.warlord=id;const d=dedupeDeck(save.decks[id]);if(d&&d.length===8&&d.every(k=>save.owned[k]))save.deck=d.slice();persist()}
 function squadOf(id){save.decks=save.decks||{};return id===save.warlord?save.deck:(save.decks[id]||[])}
 // ---- 도전 허브
@@ -2415,7 +2415,7 @@ function sbHTML(id){const b=baseOf(id);if(HEROES[b].token)return '';const n=sbOf
 function doSoulbind(id){const b=baseOf(id),R=sbReq(b);if(!R||save.bestLeague<SB_LEAGUE)return;if(!R.parts.every(p=>bestLv(p)>=R.lv))return toast('A required hero’s level is too low');if((save.dust|0)<R.dust||save.gold<R.gold)return toast('Not enough Stardust or Gold');
   save.dust-=R.dust;save.gold-=R.gold;save.sb=save.sb||{};save.sb[b]=R.k;persist();sfx('win');track('soulbind',{b,k:R.k});toast(HEROES[b].name+' Bond Lv'+R.k+'!');document.querySelectorAll('.modal').forEach(x=>x.remove());heroDetail(id)}
 function playerSbs(){const o={};Object.keys(save.owned).forEach(id=>o[id]=sbOf(baseOf(id)));return o}
-/* ===================== v3.6 마이티파티식 스킬 전부 · 영웅별 합체 · 덱 중복 금지 ===================== */
+/* ===================== v3.6 스킬 전부 · 영웅별 합체 · 덱 중복 금지 ===================== */
 function VU(u){const v=V(u.key);if(!u.sil)return v;return u._sv||(u._sv={...v,skill:'none',ex:null,sv:0,exd:''})}
 function isFlyV(v){return v.skill==='flying'||!!(HEROES[v.base]&&HEROES[v.base].fly)}
 function isFlyU(u){return !u.sil&&isFlyV(V(u.key))}
