@@ -1147,6 +1147,65 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 .btlist>div b{width:58px;color:#ffd667;font-weight:400}.btlist>div span{flex:1}.btlist>div i{font-style:normal;opacity:.6;font-size:12px}
 .btlist>div.on{background:#2fbf5a22;border-color:#2fbf5a66}.btlist>div.on i{color:#7dffa1;opacity:1}
 .btlist>div.now{box-shadow:0 0 0 2px #ffd667aa inset}
+.sbbox.rune .rsocks{display:flex;gap:8px;margin:6px 0}.rsock{flex:1;display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:10px;background:#0006;border:1px dashed #ffffff40;opacity:.65}.rsock.on{opacity:1;border-style:solid}.rsock.ra.on{border-color:#ff9f6b;box-shadow:0 0 8px #ff9f6b66}.rsock.rh.on{border-color:#7fe3a0;box-shadow:0 0 8px #7fe3a066}.rsock i{font-style:normal;font-size:16px}.rsock b{font-size:12.5px}.rsock small{margin-left:auto;font-size:11px;opacity:.8}.rnext{font-size:12.5px;margin:4px 0}
+
+/* v3.19 lobby4: 왼쪽 레일 + 가운데 무대 + 오른쪽 전투 열 */
+.lobby4 .ltop{height:54px;top:6px}
+.lrail{position:absolute;left:10px;top:70px;bottom:28px;width:76px;display:flex;flex-direction:column;gap:8px;z-index:3;padding:8px 6px;border-radius:22px;background:linear-gradient(#1d1738e6,#120e24e6);border:2px solid #ffd66740;box-shadow:0 6px 16px #0008}
+.rbtn{position:relative;flex:1;min-height:0;border-radius:16px;border:none;background:radial-gradient(circle at 50% 30%,#4a3f86,#241d48);box-shadow:inset 0 -3px 0 #0006,inset 0 1px 0 #fff3;color:#fff;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;padding:0}
+.rbtn .ic,.rbtn img.ico{width:30px;height:30px}.rbtn .pt{width:32px;height:32px;border-radius:50%;overflow:hidden;border:2px solid #ffd667}
+.rbtn span{font-size:12.5px;font-weight:900;text-shadow:0 1px 2px #000}
+.rbtn .dot{position:absolute;top:2px;right:2px}.rbtn:active{transform:translateY(2px)}
+.lstrip{position:absolute;left:100px;right:280px;top:72px;display:flex;gap:6px;z-index:3;justify-content:center}
+.lchip{position:relative;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px 0 6px;border-radius:16px;border:1.5px solid #ffd66766;background:#120e24d9;color:#fff;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap;max-width:200px;overflow:hidden}
+.lchip .ic,.lchip img.ico{width:22px;height:22px;flex:none}.lchip span{overflow:hidden;text-overflow:ellipsis}.lchip .dot{position:absolute;top:-3px;right:-3px}
+.dio{position:absolute;left:96px;right:270px;top:108px;bottom:26px;z-index:1;pointer-events:none}
+.dioground{position:absolute;left:8%;right:8%;bottom:10px;height:70px;border-radius:50%;background:radial-gradient(#ffe3a055,#3a2a1a88 55%,#0000 72%);box-shadow:0 0 40px #ffcf6b33}
+.diotitle{position:absolute;left:0;right:0;top:4px;text-align:center;font-size:26px;letter-spacing:2px;color:#fff3c4;text-shadow:0 2px 0 #5a2a00,0 0 12px #000;opacity:.9}
+.lobby4 .hero2.lead{left:50%;width:210px;height:230px;margin-left:-105px;bottom:34px}
+.lobby4 .hero2.s1,.lobby4 .hero2.s2{width:140px;height:160px;bottom:60px}
+.lobby4 .hero2.s1{left:4%}.lobby4 .hero2.s2{right:4%;left:auto}
+.lobby4 .hplate{bottom:-24px}
+.lcol{position:absolute;right:10px;top:70px;bottom:28px;width:252px;display:flex;flex-direction:column;gap:8px;z-index:3}
+.lcol .fightb{width:100%;height:96px;transform:none;margin:0}
+.lchest{flex:1;min-height:0}
+.lobby4 .chests2{grid-template-columns:1fr 1fr!important;grid-auto-rows:1fr;height:100%!important;gap:6px}
+.lobby4 .chests2 .slot{height:auto!important;min-height:0!important}
+.lobby4 .chests2 .slot .cico{width:46px!important;height:34px!important}
+.lmini{display:flex;gap:6px;height:58px;flex:none}
+.mbtn{position:relative;flex:1;border-radius:14px;border:2px solid #ffd66755;background:linear-gradient(#3b3168f2,#221b42f2);color:#fff;font-family:inherit;display:grid;grid-template-columns:34px 1fr;grid-template-rows:1fr 1fr;align-items:center;padding:2px 8px;cursor:pointer;text-align:left}
+.mbtn .ic,.mbtn img.ico{grid-row:1/3;width:30px;height:30px}.mbtn span{font-size:14px;font-weight:900;align-self:end}.mbtn small{font-size:11px;opacity:.75;align-self:start}.mbtn .dot{position:absolute;top:-4px;right:-4px}
+.lobby4 .ver2{position:absolute;left:100px;right:auto;bottom:6px;font-size:11px;opacity:.5}
+/* v3.19 ps3: 왼쪽 출전 대형 패널 + 오른쪽 수집함 */
+.ps3{flex-direction:row!important}
+.ps3l{flex:none;width:300px;display:flex;flex-direction:column;gap:6px;padding:6px 8px 8px 10px;background:linear-gradient(90deg,#241c46f0,#1a1430e6);border-right:2px solid #ffd66733;overflow:auto}
+.ps3cap{font-size:12px;font-weight:900;color:#ffd667;letter-spacing:1px}
+.ps3 .hs2top{flex-direction:column;align-items:stretch;padding:0;background:none;border:none;gap:6px}
+.ps3 .hs2wl{width:100%;height:58px;display:flex;align-items:center;gap:8px;text-align:left;padding:0 10px 0 64px}
+.ps3 .hs2wl img{left:6px;bottom:auto;top:-4px;height:74px;transform:none}
+.ps3 .hs2wl b{position:static;font-size:15px}.ps3 .hs2wl small{position:static;font-size:11.5px}
+.ps3 .hs2deck{grid-template-columns:repeat(4,1fr);gap:5px}
+.ps3 .hs2slot{height:92px}
+.ps3 .hs2side{flex-direction:row;justify-content:space-between;align-items:center}
+.ps3 .hs2syn{flex-direction:row;gap:8px}
+.ps3 .sqrow{padding:0;gap:4px}.ps3 .sqrow small{display:none}
+.ps3r{flex:1;min-width:0;display:flex;flex-direction:column}
+.ps3r .hs2filter{padding:6px 10px}.ps3r .hs2grid{grid-template-columns:repeat(auto-fill,minmax(98px,1fr));padding:4px 10px 16px}
+/* v3.19 wl3: 왼쪽 지휘관 목록 + 오른쪽 카드형 프로필 */
+.wl3{display:block!important}
+.wl3 .wl2list{position:absolute;left:10px;top:54px;bottom:10px;width:132px;flex-direction:column;justify-content:flex-start;gap:6px;padding:6px;overflow:auto;background:#0e0b1cd9;border-radius:16px;border:1.5px solid #ffd66733}
+.wl3 .wl2th{width:100%;height:64px;flex:none}.wl3 .wl2th img{left:auto;right:-6px;transform:none;height:140%}.wl3 .wl2th span{text-align:left;padding-left:8px;bottom:auto;top:50%;transform:translateY(-50%);background:none;font-size:13px}
+.wl3 .wl2th.on{transform:translateX(4px)}
+.wl3 .wl2main{position:absolute;left:154px;right:10px;top:54px;bottom:10px;display:grid;grid-template-columns:190px 1fr;grid-template-rows:auto auto auto 1fr auto;align-content:start;grid-template-rows:auto auto auto auto 1fr;grid-template-areas:"art name" "art stat" "art pas" "art ." "sk sk";gap:6px 14px;padding:12px 14px;border-radius:18px;border:2.5px solid var(--fc);background:linear-gradient(160deg,#2c2452f2,#141026f2);box-shadow:0 0 18px #0009,inset 0 0 30px #0006}
+.wl3 .wl2art{grid-area:art;width:190px;height:212px;border-radius:14px;overflow:hidden;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--fc) 45%,#000),#0d0a1a);border:2px solid #ffffff30;align-items:flex-start}
+.wl3 .wl2art img{height:300px;max-width:none;margin-top:-6px}
+.wl3 .wl2glow{display:none}
+.wl3 .wl2info{display:contents}
+.wl3 .wl2name{grid-area:name;font-size:26px}.wl3 .wl2stat{grid-area:stat}.wl3 .wl2pas{grid-area:pas;font-size:13px}
+.wl3 .wl2sk{grid-area:sk;display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:auto;min-height:0;align-content:start}
+.wl3h{grid-column:1/-1;font-size:12px;font-weight:900;color:#ffd667;letter-spacing:1px}
+.wl3 .wsk2 p{font-size:12.5px}
+.wl3 .wl2btn{position:absolute;right:16px;top:12px;padding:0}
 </style>
 </head>
 <body>
@@ -1157,7 +1216,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='ko';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.18.1 베타';
+const VERSION='v3.19 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1575,16 +1634,17 @@ function toVid(b,t){if(HEROES[b].fixed)return vid(b,HEROES[b].rar);return vid(b,
 let UID=1;
 const emptyBoard=()=>Array.from({length:COLS},()=>Array(LANES).fill(null));
 function baseStats(id,lv,star,rb,sb){
-  const v=V(id);rb=rb|0;sb=sb|0;let a=v.atk?v.atk*(1+GR.lv*(lv-1)+GR.rb*rb+GR.sbA*sb):0,h=v.hp*(1+GR.lv*(lv-1)+GR.rb*rb+GR.sbH*sb);
+  const v=V(id);rb=rb|0;sb=sb|0;let a=v.atk?v.atk*(1+GR.lv*(lv-1)+GR.rb*rb+GR.rA*Math.ceil(sb/2)):0,h=v.hp*(1+GR.lv*(lv-1)+GR.rb*rb+GR.rH*Math.floor(sb/2));
   a=Math.round(a*DS);h=Math.round(h*DS);
   if(star>=2){const P=mergeProf(id);const ma=star>=3?1+(P.a-1)*2:P.a,mh=star>=3?1+(P.h-1)*2:P.h;a=Math.round(a*ma);h=Math.round(h*mh)}
   return {a,h};
 }
-const DS=10,GR={lv:.12,rb:.3,sbA:.06,sbH:.1};function sAmt(u){return Math.round(DS*(V(u.key).sv+(u.star-1)+(u.lv-1)/3+(u.rb|0)/2))}
+const DS=10,GR={lv:.12,rb:.3,rA:.12,rH:.2};function sAmt(u){return Math.round(DS*(V(u.key).sv+(u.star-1)+(u.lv-1)/3+(u.rb|0)/2))}
 function skillVal(u){return V(u.key).sv+(u.star-1)+Math.floor((u.lv-1)/3)+Math.floor((u.rb|0)/2)}
 function makeUnit(card,side){
   const b=baseStats(card.key,card.lv,card.star,card.rb,card.sb);const v=V(card.key);const aw=isAwake(card.key,card.lv,card.rb);
-  return {uid:UID++,key:card.key,lv:card.lv,star:card.star,rb:card.rb|0,sb:card.sb|0,aw,eva:v.skill==='evade'?v.sv:0,side,atk:b.a,hp:b.h,max:b.h,bonus:0,frozen:false,poison:0,armor:v.skill==='armor',charges:v.skill==='necro'?(v.ex==='legion'?(aw?7:5):3):0};
+  const tA=TWIST==='ranged'&&(v.cls==='ranged'||v.cls==='magic')?Math.round(b.a*1.25):b.a;
+  return {uid:UID++,key:card.key,lv:card.lv,star:card.star,rb:card.rb|0,sb:card.sb|0,aw,eva:v.skill==='evade'?v.sv:0,side,atk:tA,hp:b.h,max:b.h,bonus:0,frozen:false,poison:0,armor:v.skill==='armor',charges:v.skill==='necro'?(v.ex==='legion'?(aw?7:5):3):0};
 }
 const foeOf=s=>s==='p'?'e':'p';
 function eachUnit(st,side,fn){for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u)fn(u,r,l)}}
@@ -1800,7 +1860,7 @@ function drawHand(deck,lvs){
 }
 function colOk(id,r){const c=V(id).cls;if(c==='melee')return r<=1;if(c==='ranged'||c==='magic')return r>=1;return true}
 function makePile(deck){const p=deck.slice();for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}return p}
-function refill(hand,pile,lvs,rbs,sbs){const added=[];while(hand.length<4&&pile.length){const k=pile.shift();const c={key:k,star:1,lv:lvs[k]||1,rb:(rbs&&rbs[k])|0,sb:(sbs&&sbs[k])|0};hand.push(c);added.push(c)}return added}
+function refill(hand,pile,lvs,rbs,sbs){const added=[];while(hand.length<HANDMAX&&pile.length){const k=pile.shift();const c={key:k,star:1,lv:lvs[k]||1,rb:(rbs&&rbs[k])|0,sb:(sbs&&sbs[k])|0};hand.push(c);added.push(c)}return added}
 function validCells(st,side,card){
   const out=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u?(u.key===card.key&&u.star<3):colOk(card.key,r))out.push([r,l])}
   return out;
@@ -1988,43 +2048,45 @@ function showGuide(){document.querySelectorAll('.lguide').forEach(e=>e.remove())
   const ar=app.getBoundingClientRect(),r=el.getBoundingClientRect(),sc=ar.width/app.offsetWidth||1;const d=document.createElement('div');d.className='lguide';
   d.style.left=((r.left+r.width/2-ar.left)/sc)+'px';d.style.top=((r.top-ar.top)/sc)+'px';d.innerHTML=`<div class="gdbub">${G.txt}</div><div class="lgh">👇</div>`;app.appendChild(d);el.classList.add('lgpulse');
 }
-function showLobby(){setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
+function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
   screen='lobby';ensureDaily();tickChests();checkSeason();{const bt=betaTick();if(bt&&bt.length)setTimeout(()=>betaModal(bt),500)}if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
   const prog=N?(save.trophies-L.t)/(N.t-L.t):1;
   const E=todayEvent();
   const lead=save.deck[0],side1=save.deck[1],side2=save.deck[2];
-  app.innerHTML=`<div class="screen lobby2 lobby3">
+  app.innerHTML=`<div class="screen lobby2 lobby4">
     <div class="ltop">
       <div class="prof" id="bProf"><div class="ava">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}</div><div class="pinfo"><div class="pname">${WL().n} ${betaChip()||'<small style="opacity:.7">지휘관 변경 ›</small>'}</div>
         <div class="lg"><span class="lgb" style="--lc:${L.c}">${li+1}</span><div class="lbar2"><div class="lbn">${L.n} 리그 ${ico('trophy','mi')}${save.trophies}</div><div class="bar"><i style="width:${prog*100}%"></i></div></div></div></div></div>
-      <div class="logo2">라인 파티</div>
       <div class="cur"><button class="mute" id="bRule" title="규칙">?</button><button class="mute" id="bSet">⚙</button><button class="mute" id="bMute">${save.mute?'🔇':'🔊'}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
     </div>
-    <div class="lside left2">
-      <button class="sbtn" id="bQuest">${ico('quest')}<span>퀘스트</span>${questDot()?'<i class="dot"></i>':''}</button>
-      <button class="sbtn" id="bEvent">${ico('gift')}<span>${E?E.n:'이벤트'}</span>${E&&save.evSeen!==dayKey()?'<i class="dot pink"></i>':''}</button>
-      <button class="sbtn" id="bAtt">${ico('gift')}<span>출석</span>${attReady()?'<i class="dot"></i>':''}</button>
-      <button class="sbtn" id="bSeason">${ico('trophy')}<span>시즌 ${seasonNo()}</span><small>${fmtDH(seasonLeft())}</small></button>
+    <nav class="lrail">
+      <button class="rbtn" id="bHero">${ico('hero')}<span>파티</span>${anyUpgrade()?'<i class="dot"></i>':''}</button>
+      <button class="rbtn" id="bWl">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}<span>지휘관</span></button>
+      <button class="rbtn" id="bAdv">${ico('map')}<span>도전</span>${bossLeft()>0||brawlState().w<BRAWL_MAX?'<i class="dot"></i>':''}</button>
+      <button class="rbtn" id="bShop">${ico('shop')}<span>상점</span>${!save.shop.free||dealsFresh()?'<i class="dot"></i>':''}</button>
+      <button class="rbtn" id="bQuest">${ico('quest')}<span>퀘스트</span>${questDot()?'<i class="dot"></i>':''}</button>
+    </nav>
+    <div class="lstrip">
+      <button class="lchip" id="bEvent">${ico('gift')}<span>${E?E.n:'이벤트'}</span>${E&&save.evSeen!==dayKey()?'<i class="dot pink"></i>':''}</button>
+      <button class="lchip" id="bAtt">${ico('gift')}<span>출석</span>${attReady()?'<i class="dot"></i>':''}</button>
+      <button class="lchip" id="bSeason">${ico('trophy')}<span>시즌 ${seasonNo()} · ${fmtDH(seasonLeft())}</span></button>
     </div>
-    <div class="lside right2">
-      <button class="sbtn" id="bIdle">${ico('crate')}<span id="idleAmt">${idleAmount()}</span><small>보급 창고</small></button>
-      <button class="sbtn" id="bExp">${ico('map')}<span>원정</span>${anyExpDone()?'<i class="dot"></i>':''}</button>
-    </div>
-    <div class="stage3">
+    <div class="dio">
+      <div class="dioground"></div><div class="diotitle">라인 파티</div>
       ${side1?`<div class="hero2 s1"><img src="assets/${lobbyArt(side1)}.webp?v=${ASSET_V}"></div>`:''}
       ${side2?`<div class="hero2 s2"><img src="assets/${lobbyArt(side2)}.webp?v=${ASSET_V}"></div>`:''}
       ${lead?`<div class="hero2 lead t${tierOf(lead)}"><img src="assets/${lobbyArt(lead)}.webp?v=${ASSET_V}"><div class="hplate" style="--tc:${RAR[tierOf(lead)].c}">${facIcon(V(lead).fac,'ci')}${V(lead).name}<small>Lv${save.owned[lead]?save.owned[lead].lv:1}</small></div></div>`:''}
     </div>
-    <div class="chestrow"><div class="chests2" id="chests">${chestSlotsHTML()}</div></div>
-    <div class="lnav">
-      <button class="nav3" id="bShop">${ico('shop')}<span>상점</span>${!save.shop.free||dealsFresh()?'<i class="dot"></i>':''}</button>
-      <button class="nav3" id="bHero">${ico('hero')}<span>파티</span>${anyUpgrade()?'<i class="dot"></i>':''}</button>
+    <aside class="lcol">
       <button class="fightb" id="bFight">${ico('battle','fi')}<span>전투</span><small>${L.n} 리그 아레나</small></button>
-      <button class="nav3" id="bAdv">${ico('map')}<span>도전</span>${bossLeft()>0||brawlState().w<BRAWL_MAX?'<i class="dot"></i>':''}</button>
-      <button class="nav3" id="bWl">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}<span>지휘관</span></button>
-    </div>
+      <div class="lchest"><div class="chests2" id="chests">${chestSlotsHTML()}</div></div>
+      <div class="lmini">
+        <button class="mbtn" id="bIdle">${ico('crate')}<span id="idleAmt">${idleAmount()}</span><small>보급 창고</small></button>
+        <button class="mbtn" id="bExp">${ico('map')}<span>원정</span><small>&nbsp;</small>${anyExpDone()?'<i class="dot"></i>':''}</button>
+      </div>
+    </aside>
     <div class="ver2">${VERSION} · ${save.stats.w}승 ${save.stats.l}패</div>
   </div>`;
   bind('#bFight',startArena);bind('#bAdv',showChallenge);bind('#bSeason',showSeason);bind('#bWl',()=>{wlView=save.warlord;showWarlords()});bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bExp',showExpeditions);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
@@ -2064,8 +2126,8 @@ function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.da
 const RULE_TABS=[
  {n:'전투',p:[['목표','적 지휘관 체력을 0으로 만들면 이겨요. '+MAX_ROUND+'턴이 지나면 체력 비율이 높은 쪽이 이겨요.'],['보드','양쪽 4줄 × 3열. 가운데에 가까운 열이 앞열이에요. 근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열, 지원과 건물은 어디든 놓을 수 있어요.'],['내 턴','덱 8장 중 손에 4장을 들어요. 카드 1장을 놓으면 내 유닛 전원이 공격하고 1장을 새로 뽑아요.'],['라인 막기','유닛은 자기 줄의 적만 때려요. 그 줄에 적이 없으면 적 지휘관을 바로 때려요. 내 줄이 비면 나도 맞아요.'],['합체 ◆','같은 영웅 카드가 다시 손에 오면 그 영웅 위에 겹쳐 놓아 합체할 수 있어요. 영웅마다 오르는 능력치와 합체 효과가 달라요 (최대 ◆3). 덱에는 같은 영웅을 1장만 넣을 수 있어요.'],['진영','성채(보호), 들숲(재생), 잿불(공격). 같은 진영이 2기, 4기 모이면 시너지가 켜져요.'],['건물','공격하지 않지만 줄을 막고 매 턴 효과를 내요. 독과 빙결에 걸리지 않아요.']]},
  {n:'지휘관',p:[['지휘관 스킬','지휘관마다 고유 스킬 3개를 1턴, 3턴, 6턴부터 순서대로 한 번씩 써요. 2번은 지휘관 Lv3, 3번은 Lv6에 열려요.'],['지휘관 일격','스킬을 다 쓰면 매 턴 1개씩 쌓여요. 늦게 쓸수록 1개당 피해가 커서 모아 뒀다 한 번에 써도 돼요.'],['상대 지휘관','상대도 자기 지휘관 스킬과 일격을 써요.'],['원정','전투에 안 쓰는 지휘관을 원정 보내 카드, 골드, 보석을 얻어요. 지휘관마다 특기가 달라요.']]},
- {n:'성장',p:[['레벨','같은 카드를 모으고 골드를 내면 레벨업 (최대 Lv8). 레벨마다 공격·체력이 기본 수치의 12%씩, 스킬 피해·회복도 조금씩 올라요.'],['진화','같은 버전 카드를 모아 상위 등급 버전으로 바꿔요. 청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 해요.'],['전설 각성','전설 버전 영웅이 처음 초월하면 전설 스킬이 한 단계 강해지고 전투에서 금빛으로 빛나요.'],['초월','황금 리그부터, Lv8 영웅을 초월시키면 Lv1로 돌아가는 대신 별이 하나 채워지고 공격·체력 +30%(기본 수치 기준)와 스킬 수치 +5를 영구로 받아요.'],['인연 맺기','은빛 리그부터. 다른 영웅 2명을 정해진 레벨까지 키우고 별가루를 쓰면, 그 영웅의 모든 버전이 영구로 강해져요 (최대 4번).']]},
- {n:'대전·운영',p:[['아레나','비슷한 트로피의 실제 유저 덱과 붙어요. 상대 덱은 AI가 조종해요. 상대가 없으면 AI 도전자와 붙어요.'],['방어 기록','다른 유저가 내 덱과 싸우면 기록이 남고, 방어에 성공하면 골드를 받아요.'],['계정','설정에서 구글 계정을 연동하면 자동으로 저장되고 다른 기기에서도 이어서 해요.'],['시즌','14일마다 시즌이 바뀌어요. 시즌 최고 리그에 따라 보상을 받고(황금 리그부터 영웅 카드, 다이아 리그부터 전설 카드를 골라 받아요), 700을 넘는 트로피는 절반이 줄어요. 전체 랭킹도 볼 수 있어요.'],['파티','지휘관마다 덱이 따로 저장돼요. 파티 화면 위에서 바꿔요.'],['친선전·모의전','친선전는 져도 트로피를 잃지 않는 대전 (하루 보상 5번). 모의전은 내 파티끼리 붙여 보는 모드예요.'],['주간 균열','매주 바뀌어요. 하늘 계단(층 오르기), 거신 토벌(피해 누적), 연승 결투장(체력이 이어지는 연전).'],['매일','일일 퀘스트, 일일 특가, 요일 이벤트, 오늘의 보스, 출석, 보급 창고.']]}
+ {n:'성장',p:[['레벨','같은 카드를 모으고 골드를 내면 레벨업 (최대 Lv8). 레벨마다 공격·체력이 기본 수치의 12%씩, 스킬 피해·회복도 조금씩 올라요.'],['진화','같은 버전 카드를 모아 상위 등급 버전으로 바꿔요. 청동 리그부터, 상위 버전을 상자에서 한 번은 얻어야 해요.'],['전설 각성','전설 버전 영웅이 처음 초월하면 전설 스킬이 한 단계 강해지고 전투에서 금빛으로 빛나요.'],['초월','황금 리그부터, Lv8 영웅을 초월시키면 Lv1로 돌아가는 대신 별이 하나 채워지고 공격·체력 +30%(기본 수치 기준)와 스킬 수치 +5를 영구로 받아요.'],['룬 각인','은빛 리그부터. 영웅마다 공격 룬과 체력 룬 홈이 있어요. 영웅 레벨 조건을 채우고 룬 가루와 골드로 공격 룬 I → 체력 룬 I → 공격 룬 II → 체력 룬 II 순서로 새기면, 그 영웅의 모든 버전이 영구로 강해져요.']]},
+ {n:'대전·운영',p:[['아레나','비슷한 트로피의 실제 유저 덱과 붙어요. 상대 덱은 AI가 조종해요. 상대가 없으면 AI 도전자와 붙어요.'],['방어 기록','다른 유저가 내 덱과 싸우면 기록이 남고, 방어에 성공하면 골드를 받아요.'],['계정','설정에서 구글 계정을 연동하면 자동으로 저장되고 다른 기기에서도 이어서 해요.'],['시즌','14일마다 시즌이 바뀌어요. 시즌 최고 리그에 따라 보상을 받고(황금 리그부터 영웅 카드, 다이아 리그부터 전설 카드를 골라 받아요), 700을 넘는 트로피는 절반이 줄어요. 전체 랭킹도 볼 수 있어요.'],['파티','지휘관마다 덱이 따로 저장돼요. 파티 화면 위에서 바꿔요.'],['오늘의 규칙전','매일 특별 규칙이 바뀌는 대전이에요. 져도 트로피를 잃지 않고, 하루 5번까지 보상을 받아요. 규칙: 거울전, 강철 성벽, 원거리의 날, 혼돈 덱, 큰 손.'],['주간 균열','매주 바뀌어요. 하늘 계단(층 오르기), 거신 토벌(피해 누적), 연승 결투장(체력이 이어지는 연전).'],['매일','일일 퀘스트, 일일 특가, 요일 이벤트, 오늘의 보스, 출석, 보급 창고.']]}
 ];
 RULE_TABS.splice(1,0,{n:'스킬',p:[['비행','근접 공격(비행 아님)에 맞지 않아요.'],['철갑·무적','철갑은 피해 1번 무시, 무적은 한 턴 동안 모든 피해 무시.'],['면역','독, 빙결, 출혈 같은 나쁜 효과에 걸리지 않아요.'],['회피·정확','회피는 원거리·마법 공격을 피해요. 정확이 있으면 회피와 현혹을 무시해요.'],['반격·가시','반격은 근접 공격을 되받아치고, 가시는 때린 적에게 피해를 줘요.'],['출혈·독소','출혈은 공격할 때마다 피해, 독소는 공격할 때마다 공격력이 줄어요.'],['침묵','스킬과 강화가 영원히 사라져요.'],['현혹','다음 공격이 빗나가요.'],['변신·변이','공성 기사는 감시탑으로 변신하고, 변이는 적을 개구리로 만들어요.'],['범위·관통','범위는 대상 주변, 관통은 같은 줄 적 전부를 때려요.'],['즉사','체력이 낮은 적을 바로 쓰러뜨려요.'],['저주 연결','연결된 적끼리 피해를 나눠 받아요.'],['파쇄','철갑과 무적을 깨뜨리고 피해를 더 줘요.'],['성장·과열','성장은 체력이, 과열은 공격력이 턴마다 올라요.'],['휘감기','덩굴 벽을 때린 근접 적은 다음 공격을 못 해요.'],['투석','투석기는 적 지휘관을 직접 때려요.']]});
 let ruleTab=0;
@@ -2300,7 +2362,7 @@ function plausibleDeck(o){const T=o.trophies|0,li=leagueIdx(T);const lvCap=Math.
   if(o.wl==='seraphine'&&li<1||o.wl==='maya'&&li<2)return false;if((o.wlLv|0)>Math.min(WL_MAX,4+li*2))return false;
   if(o.t&&Date.now()-o.t>30*864e5)return false;
   return o.deck.every(k=>{const [b,tr]=baseOfKey(k);if(!HEROES[b]||b==='skel')return false;const raw=(o.lvs[k]|0)||1,lv=raw%10||1,rb=Math.floor(raw/10)%10,sbv=Math.floor(raw/100);if(sbv>(li>=SB_LEAGUE?SB_MAX:0))return false;if(lv<1||lv>lvCap)return false;if(rb>Math.max(0,li-2)||rb>rbMax(k))return false;if(heroLeague(b)>li+1)return false;if(tr>HEROES[b].rar&&li<1)return false;return true})}
-/* ===================== v3.5 시즌 · 파티 · 친선전/모의전 · 주간 균열 · 인연 맺기 ===================== */
+/* ===================== v3.5 시즌 · 파티 · 규칙전 · 주간 균열 · 룬 각인 ===================== */
 // ---- 공통
 const DAY=864e5,SEASON_EPOCH=Date.UTC(2026,10,15,15),SEASON_LEN=14*DAY;
 function seasonNo(){return Math.floor((Date.now()-SEASON_EPOCH)/SEASON_LEN)+1}
@@ -2329,11 +2391,11 @@ function checkSeason(){const cur=seasonNo();if(!save.season){save.season={n:cur,
   if(save.season.n>=cur)return;const best=save.season.best|0,R=SEASON_REWARD(best),before=save.trophies;
   save.gold+=R.gold;save.gems+=R.gems;addDust(R.dust);if(save.trophies>700)save.trophies=700+Math.floor((save.trophies-700)/2);
   const old=save.season.n;const SP=SEASON_PICK(best);if(SP)queuePick(SP.t,SP.c,'시즌 '+old+' 보상');save.season={n:cur,best:leagueIdx(save.trophies)};persist();track('season_reward',{season:old,best});
-  setTimeout(()=>{const m=modal(`<div class="ribbon">시즌 ${old} 종료!</div><div class="rw" style="line-height:1.8">이번 시즌 최고 리그: <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b><br>${ico('coin','mi')} ${R.gold} · ${ico('gem','mi')} ${R.gems} · <span class="dusti">✦</span> 별가루 ${R.dust}<br>+ ${CHESTS[R.chest].n}${SP?'<br>+ <b style="color:#ffb84d">'+pickTxt(SP)+'</b>':''}<br><small style="opacity:.7">트로피 ${before} → ${save.trophies} · 시즌 ${cur} 시작!</small></div><div class="btns"><button class="btn" id="snGo">상자 열기</button></div>`);m.querySelector('#snGo').onclick=()=>{m.remove();openChestModal(R.chest,()=>showPick(showLobby))}},700)}
+  setTimeout(()=>{const m=modal(`<div class="ribbon">시즌 ${old} 종료!</div><div class="rw" style="line-height:1.8">이번 시즌 최고 리그: <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b><br>${ico('coin','mi')} ${R.gold} · ${ico('gem','mi')} ${R.gems} · <span class="dusti">✦</span> 룬 가루 ${R.dust}<br>+ ${CHESTS[R.chest].n}${SP?'<br>+ <b style="color:#ffb84d">'+pickTxt(SP)+'</b>':''}<br><small style="opacity:.7">트로피 ${before} → ${save.trophies} · 시즌 ${cur} 시작!</small></div><div class="btns"><button class="btn" id="snGo">상자 열기</button></div>`);m.querySelector('#snGo').onclick=()=>{m.remove();openChestModal(R.chest,()=>showPick(showLobby))}},700)}
 async function fbTopRank(){try{const r=await fbFetch(FB_BASE+':runQuery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'decks'}],orderBy:[{field:{fieldPath:'trophies'},direction:'DESCENDING'}],limit:30}})},5000);if(!r.ok)return null;const j=await r.json();return j.filter(x=>x.document).map(x=>{const f=x.document.fields||{};return {uid:x.document.name.split('/').pop(),name:fbDec(f.name),wl:fbDec(f.wl),tr:fbDec(f.trophies)}})}catch(e){return null}}
 function showSeason(){checkSeason();const best=save.season.best|0;
   const m=modal(`<div class="ribbon">시즌 ${seasonNo()}</div><div class="rw">남은 기간 <b>${fmtDH(seasonLeft())}</b> · 이번 시즌 최고 <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b></div>
-   <div class="sn2"><div class="snrw"><b>시즌 보상 (최고 리그 기준)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${L.n}</span><small>${R.gold}골드 · 보석 ${R.gems} · 별가루 ${R.dust} · ${CHESTS[R.chest].n}${SEASON_PICK(i)?' · <b style="color:#ffb84d">'+pickTxt(SEASON_PICK(i))+'</b>':''}</small></div>`}).join('')}<small style="opacity:.6">시즌이 끝나면 700 트로피를 넘는 만큼 절반이 줄어요</small></div>
+   <div class="sn2"><div class="snrw"><b>시즌 보상 (최고 리그 기준)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${L.n}</span><small>${R.gold}골드 · 보석 ${R.gems} · 룬 가루 ${R.dust} · ${CHESTS[R.chest].n}${SEASON_PICK(i)?' · <b style="color:#ffb84d">'+pickTxt(SEASON_PICK(i))+'</b>':''}</small></div>`}).join('')}<small style="opacity:.6">시즌이 끝나면 700 트로피를 넘는 만큼 절반이 줄어요</small></div>
    <div class="snrk"><b>전체 랭킹</b><div id="rkList" class="rklist">불러오는 중...</div></div></div><div class="btns"><button class="btn sm" data-close>닫기</button></div>`);
   m.querySelector('.box').classList.add('wide');
   fbTopRank().then(L=>{const el=m.querySelector('#rkList');if(!el)return;const me=fbStore().uid;if(!L||!L.length){el.innerHTML='<small style="opacity:.6">아직 랭킹이 없어요</small>';return}
@@ -2346,30 +2408,32 @@ function showChallenge(){(save.guide=save.guide||{}).adv=1;screen='challenge';en
   const cards=[
     {id:'adv',n:'모험',d:`스테이지 ${Math.min(save.cleared+1,STAGES.length)}/${STAGES.length}`,ic:'map',c:'#7fc8ff'},
     {id:'boss',n:'오늘의 보스',d:bossLeft()>0?`남은 도전 ${bossLeft()}`:'내일 다시',ic:'boss',c:'#ff8a7a',dot:bossLeft()>0},
-    {id:'brawl',n:'친선전',d:`져도 잃는 것 없음 · 보상 ${bw.w}/${BRAWL_MAX}`,ic:'battle',c:'#ffd667',dot:bw.w<BRAWL_MAX},
-    {id:'train',n:'모의전',d:'내 파티끼리 붙여 보기',ic:'hero',c:'#9dffb9'},
+    {id:'twist',n:'오늘의 규칙전',d:`오늘: <b style="color:#ffd667">${twistToday().n}</b> · 내일: ${twistOf(1).n}<br>${twistToday().d} · 보상 ${bw.w}/${BRAWL_MAX}`,ic:'battle',c:'#ffd667',dot:bw.w<BRAWL_MAX},
     {id:'dg',n:'주간 균열',d:`이번 주: ${M.n} · ${fmtDH(weekLeft())} 남음`,ic:'crate',c:'#c77dff',dot:true}
   ];
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">도전</span>${resBar()}</div>
   <div class="body"><div class="chgrid">${cards.map(c=>`<button class="chcard" data-ch="${c.id}" style="--cc:${c.c}">${ico(c.ic,'chico')}<b>${c.n}</b><small>${c.d}</small>${c.dot?'<i class="dot"></i>':''}</button>`).join('')}</div></div></div>`;
   bind('#bk',showLobby);
-  app.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{sfx('tick');const k=b.dataset.ch;if(k==='adv')showStages();else if(k==='boss')startDaily();else if(k==='brawl')startBrawl();else if(k==='train')showTraining();else showDungeon()})}
-// ---- 친선전
+  app.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{sfx('tick');const k=b.dataset.ch;if(k==='adv')showStages();else if(k==='boss')startDaily();else if(k==='twist')startBrawl();else showDungeon()})}
+// ---- 오늘의 규칙전 (v3.19, 옛 대전 모드 2개를 합침)
 const BRAWL_MAX=5;
 function brawlState(){const td=new Date().toDateString();if(!save.brawl||save.brawl.d!==td)save.brawl={d:td,w:0};return save.brawl}
-async function startBrawl(){ensureDeck();const li=leagueIdx(save.trophies);const W=WL();
-  const mm=document.createElement('div');mm.className='modal vsm';mm.innerHTML=`<div class="vsbox"><div class="vside me"><img src="assets/k_${W.art}.webp?v=${ASSET_V}"><b>${esc(myNick())}</b><small>친선전 · 져도 트로피 그대로</small></div><div class="vsx">VS</div><div class="vside en searching"><div class="vsq">?</div><b>상대 찾는 중...</b></div><div class="vstitle">친선전</div></div>`;app.appendChild(mm);
+async function startBrawl(){ensureDeck();const li=leagueIdx(save.trophies);const W=WL();const TW=twistToday();
+  if(TW.id==='mirror'){const d=save.deck.slice();const lv={},rb={},sb={};d.forEach(id=>{const o=save.owned[id]||{lv:1};lv[id]=o.lv;rb[id]=o.rb|0;sb[id]=sbOf(baseOf(id))});return startBattle({mode:'twist',twist:'mirror',eName:'거울 속 '+myNick(),eLook:'art:'+W.art,eWl:save.warlord,eWlLv:wlLv(save.warlord),eHp:wlHp()+li*2*DS,eDeck:d,eLvs:lv,eRbs:rb,eSbs:sb,noise:2,pHp:wlHp()+li*2*DS})}
+  const mm=document.createElement('div');mm.className='modal vsm';mm.innerHTML=`<div class="vsbox"><div class="vside me"><img src="assets/k_${W.art}.webp?v=${ASSET_V}"><b>${esc(myNick())}</b><small>오늘의 규칙전 · ${TW.n}</small></div><div class="vsx">VS</div><div class="vside en searching"><div class="vsq">?</div><b>상대 찾는 중...</b></div><div class="vstitle">오늘의 규칙전</div></div>`;app.appendChild(mm);
   const opp=await findOpponentT(3000);let c;const en=mm.querySelector('.vside.en');en.classList.remove('searching');
   if(opp){const OW=WARLORDS[opp.wl];const elv={},erb={},esb={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv[k]=raw%10||1;erb[k]=Math.floor(raw/10)%10;esb[k]=Math.floor(raw/100)});
     en.innerHTML=`<img src="assets/k_${OW.art}.webp?v=${ASSET_V}"><b>${esc(opp.name)}</b><small><span class="ubadge">유저 덱</span> ${OW.n}</small>`;
-    c={mode:'brawl',online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:wlHpAt(opp.wl,opp.wlLv)+leagueIdx(opp.trophies||0)*2*DS,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2*DS}}
-  else{const d=aiDeck(Math.min(3,Math.floor(li/2)));en.innerHTML=`<img src="assets/k_c_rival2.webp?v=${ASSET_V}"><b>친선전 상대</b><small>AI</small>`;c={mode:'brawl',eName:'친선전 상대',eLook:'art:c_rival2',eHp:(20+li*2)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())),noise:3,pHp:wlHp()+li*2*DS}}
-  mm.querySelector('.vstitle').textContent='친선전 상대 발견!';sfx('whoosh');setTimeout(()=>{mm.remove();startBattle(c)},1500)}
-// ---- 모의전
-function showTraining(){const ids=Object.keys(WARLORDS).filter(k=>wlUnlocked(k)&&squadOf(k).length===8);
-  const m=modal(`<div class="ribbon">모의전</div><div class="rw">내 파티와 붙일 상대 파티를 고르세요. 보상과 트로피 변화는 없어요.</div><div class="trlist">${ids.map(k=>{const W=WARLORDS[k];return `<button class="trsq" data-tr="${k}"><img src="assets/k_${W.art}.webp?v=${ASSET_V}"><b>${W.n}</b><small>${k===save.warlord?'지금 파티 (거울전)':'파티'}</small></button>`}).join('')}</div><div class="btns"><button class="btn sub sm" data-close>닫기</button></div>`);
-  m.querySelectorAll('[data-tr]').forEach(b=>b.onclick=()=>{const k=b.dataset.tr,W=WARLORDS[k];const d=squadOf(k).slice();const lv={},rb={},sb={};d.forEach(id=>{const o=save.owned[id]||{lv:1};lv[id]=o.lv;rb[id]=o.rb|0;sb[id]=sbOf(baseOf(id))});m.remove();
-    startBattle({mode:'train',eName:W.n+' 파티',eLook:'art:'+W.art,eWl:k,eWlLv:wlLv(k),eHp:wlHp(k),eDeck:d,eLvs:lv,eRbs:rb,eSbs:sb,noise:2,pHp:wlHp()})})}
+    c={mode:'twist',twist:TW.id,online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:wlHpAt(opp.wl,opp.wlLv)+leagueIdx(opp.trophies||0)*2*DS,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2*DS}}
+  else{const d=aiDeck(Math.min(3,Math.floor(li/2)));en.innerHTML=`<img src="assets/k_c_rival2.webp?v=${ASSET_V}"><b>규칙전 상대</b><small>AI</small>`;c={mode:'twist',twist:TW.id,eName:'규칙전 상대',eLook:'art:c_rival2',eHp:(20+li*2)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())),noise:3,pHp:wlHp()+li*2*DS}}
+  mm.querySelector('.vstitle').textContent='상대 발견! · '+TW.n;if(TW.id==='wall'){c.pHp=Math.round(c.pHp*1.5);c.eHp=Math.round(c.eHp*1.5)}if(TW.id==='chaos'){c.pDeck=chaosDeck()}sfx('whoosh');setTimeout(()=>{mm.remove();startBattle(c)},1500)}
+const TWISTS=[{id:'mirror',n:'거울전',d:'내 파티의 복제본과 싸워요'},{id:'wall',n:'강철 성벽',d:'양쪽 지휘관 체력 +50%'},{id:'ranged',n:'원거리의 날',d:'원거리·마법 영웅 공격 +25%'},{id:'chaos',n:'혼돈 덱',d:'내 영웅 중 무작위 8명으로 싸워요'},{id:'bighand',n:'큰 손',d:'양쪽 모두 손패 5장'}];
+function kstDay(off){return Math.floor((Date.now()+9*36e5)/DAY)+(off|0)}
+function twistOf(off){return TWISTS[((kstDay(off)%TWISTS.length)+TWISTS.length)%TWISTS.length]}
+function twistToday(){return twistOf(0)}
+function chaosDeck(){const seen={},pool=[];Object.keys(save.owned).forEach(id=>{const b=baseOf(id);if(HEROES[b]&&!HEROES[b].token&&b!=='skel'){if(!seen[b]||(save.owned[id].lv|0)>(save.owned[seen[b]].lv|0))seen[b]=id}});Object.values(seen).forEach(id=>pool.push(id));for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}const d=pool.slice(0,8);return d.length===8?d:save.deck.slice()}
+let TWIST=null,HANDMAX=4,BGEN=0;
+function showTraining(){showChallenge()}
 // ---- 주간 균열 (주마다 바뀜)
 const DG_MODES={tower:{n:'하늘 계단',d:'층을 하나씩 올라가요. 높이 오를수록 적이 강해지고 보상이 커져요.'},raid:{n:'거신 토벌',d:'체력이 아주 많은 거신에게 하루 3번 도전해 피해를 누적해요. 쓰러뜨리면 큰 보상!'},pit:{n:'연승 결투장',d:'지휘관 체력이 이어지는 연전이에요. 몇 연승까지 갈 수 있을까요? 하루 3판.'}};
 function weekLeft(){return SEASON_EPOCH+(weekNo()+1)*7*DAY-Date.now()}
@@ -2377,9 +2441,9 @@ function ensureDungeon(){const wk=weekNo();if(!save.dg||save.dg.wk!==wk){save.dg
 function raidMax(lv){return (90+lv*40)*DS}
 function showDungeon(){const D=ensureDungeon(),M=DG_MODES[D.mode];if(D.mode==='raid'&&!D.raidHp)D.raidHp=raidMax(D.raidLv);
   let body='';
-  if(D.mode==='tower')body=`<div class="dgbig">${D.floor}층</div><div class="rw">다음 보상: 골드 ${30+D.floor*6} · 별가루 ${3+Math.floor(D.floor/3)}${D.floor%5===0?' · 보석 5':''}${D.floor%10===0?' · <b style="color:#ffb84d">'+(D.floor>=20?'전설':'영웅')+' 카드 선택</b>':''}</div><div class="rw" style="font-size:12.5px;opacity:.75">10층: 영웅 카드 선택 · 20층부터 10층마다: 전설 카드 선택</div><div class="btns"><button class="btn" id="dgGo">${D.floor}층 도전</button></div>`;
-  if(D.mode==='raid')body=`<div class="dgboss"><img src="assets/k_c_boss.webp?v=${ASSET_V}"><div class="bar q" style="height:14px;width:260px"><i style="width:${D.raidHp/raidMax(D.raidLv)*100}%;background:linear-gradient(#ff7b7b,#c22)"></i></div><b>거신 Lv${D.raidLv} · ${D.raidHp}/${raidMax(D.raidLv)}</b></div><div class="rw">오늘 남은 도전 ${D.tries}/3 · 준 피해 1당 골드 4, 5당 별가루 1</div><div class="btns"><button class="btn" id="dgGo" ${D.tries>0?'':'disabled'}>거신에게 도전</button></div>`;
-  if(D.mode==='pit')body=`<div class="dgbig">${D.run?D.run.w+'연승 중':'최고 '+D.pitBest+'연승'}</div><div class="rw">${D.run?`지휘관 체력 ${D.run.hp} 남음 · 이길수록 상대가 강해져요`:`오늘 남은 도전 ${D.tries}/3 · 1승마다 골드 25, 별가루 2`}</div><div class="btns"><button class="btn" id="dgGo" ${D.run||D.tries>0?'':'disabled'}>${D.run?'다음 상대':'결투장 입장'}</button>${D.run?'<button class="btn sub" id="dgStop">여기서 그만</button>':''}</div>`;
+  if(D.mode==='tower')body=`<div class="dgbig">${D.floor}층</div><div class="rw">다음 보상: 골드 ${30+D.floor*6} · 룬 가루 ${3+Math.floor(D.floor/3)}${D.floor%5===0?' · 보석 5':''}${D.floor%10===0?' · <b style="color:#ffb84d">'+(D.floor>=20?'전설':'영웅')+' 카드 선택</b>':''}</div><div class="rw" style="font-size:12.5px;opacity:.75">10층: 영웅 카드 선택 · 20층부터 10층마다: 전설 카드 선택</div><div class="btns"><button class="btn" id="dgGo">${D.floor}층 도전</button></div>`;
+  if(D.mode==='raid')body=`<div class="dgboss"><img src="assets/k_c_boss.webp?v=${ASSET_V}"><div class="bar q" style="height:14px;width:260px"><i style="width:${D.raidHp/raidMax(D.raidLv)*100}%;background:linear-gradient(#ff7b7b,#c22)"></i></div><b>거신 Lv${D.raidLv} · ${D.raidHp}/${raidMax(D.raidLv)}</b></div><div class="rw">오늘 남은 도전 ${D.tries}/3 · 준 피해 1당 골드 4, 5당 룬 가루 1</div><div class="btns"><button class="btn" id="dgGo" ${D.tries>0?'':'disabled'}>거신에게 도전</button></div>`;
+  if(D.mode==='pit')body=`<div class="dgbig">${D.run?D.run.w+'연승 중':'최고 '+D.pitBest+'연승'}</div><div class="rw">${D.run?`지휘관 체력 ${D.run.hp} 남음 · 이길수록 상대가 강해져요`:`오늘 남은 도전 ${D.tries}/3 · 1승마다 골드 25, 룬 가루 2`}</div><div class="btns"><button class="btn" id="dgGo" ${D.run||D.tries>0?'':'disabled'}>${D.run?'다음 상대':'결투장 입장'}</button>${D.run?'<button class="btn sub" id="dgStop">여기서 그만</button>':''}</div>`;
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 도전</button><span class="h2">주간 균열</span>${resBar()}</div>
   <div class="body"><div class="dgwrap"><div class="dgtabs">${Object.entries(DG_MODES).map(([k,x])=>`<span class="${k===D.mode?'on':''}">${x.n}</span>`).join('')}<small>매주 바뀌어요 · ${fmtDH(weekLeft())} 남음</small></div>
   <div class="dgcard"><h3>${M.n}</h3><p>${M.d}</p>${body}</div></div></div></div>`;
@@ -2388,32 +2452,36 @@ function startDungeon(){ensureDeck();const D=ensureDungeon();const li=leagueIdx(
   if(D.mode==='tower'){const f=D.floor;const d=aiDeck(Math.min(3,Math.floor(f/7)),mulberry(D.wk*100+f));startBattle({mode:'tower',eName:'하늘 계단 '+f+'층',eLook:['goblin','beast','knightc','flame','ice','storm','grave','dragonl'][f%8],eHp:Math.round((14+f*1.6)*DS),eDeck:d,eLvs:lvMap(d,1+Math.floor(f/3)),noise:Math.max(1,10-f*.4),pHp:wlHp()})}
   if(D.mode==='raid'){if(D.tries<=0)return;D.tries--;persist();const lv=D.raidLv;const d=aiDeck(Math.min(3,1+Math.floor(lv/2)),mulberry(D.wk*7+lv),'ember');startBattle({mode:'raid',eName:'거신 Lv'+lv,eLook:'boss',bossSig:'boss',eHp:D.raidHp,eHpMax:raidMax(lv),eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+lv),noise:2,pHp:wlHp()+li*2*DS,raidStart:D.raidHp})}
   if(D.mode==='pit'){if(!D.run){if(D.tries<=0)return;D.tries--;D.run={w:0,hp:wlHp()+li*2*DS};persist()}const w=D.run.w;const d=aiDeck(Math.min(3,Math.floor((w+li)/3)));startBattle({mode:'pit',eName:'결투장 '+(w+1)+'번째 상대',eLook:['beast','goblin','grave','storm','flame'][w%5],eHp:(16+w*3)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+Math.floor(w/2)),noise:Math.max(1,8-w),pHp:D.run.hp,pHpMax:wlHp()+li*2*DS})}}
-const SPECIAL_MODES=['brawl','train','tower','raid','pit'];
+const SPECIAL_MODES=['brawl','train','twist','tower','raid','pit'];
 function specialEnd(win){const D=save.dg;let gold=0,gems=0,dust=0,txt='';
-  if(cfg.mode==='train')txt='<div style="font-size:13px;opacity:.75">모의전이라 보상과 트로피 변화가 없어요</div>';
-  if(cfg.mode==='brawl'){const b=brawlState();if(win&&b.w<BRAWL_MAX){b.w++;gold=30;dust=5;const id=giveCardsRandom(3);txt=`<div style="font-size:13px">친선전 보상 ${b.w}/${BRAWL_MAX}${id?' · '+V(id).name+' 카드 3장':''}</div>`}else if(win)txt='<div style="font-size:13px;opacity:.75">오늘 친선전 보상을 다 받았어요</div>';else txt='<div style="font-size:13px;opacity:.75">친선전는 져도 잃는 게 없어요</div>'}
+  if(cfg.mode==='train')txt='<div style="font-size:13px;opacity:.75">보상과 트로피 변화가 없어요</div>';
+  if(cfg.mode==='brawl'||cfg.mode==='twist'){const b=brawlState();if(win&&b.w<BRAWL_MAX){b.w++;gold=30;dust=5;const id=giveCardsRandom(3);txt=`<div style="font-size:13px">규칙전 보상 ${b.w}/${BRAWL_MAX}${id?' · '+V(id).name+' 카드 3장':''}</div>`}else if(win)txt='<div style="font-size:13px;opacity:.75">오늘 규칙전 보상을 다 받았어요</div>';else txt='<div style="font-size:13px;opacity:.75">규칙전은 져도 잃는 게 없어요</div>'}
   let txt2='';
   if(cfg.mode==='tower'){if(win){const f=D.floor;gold=30+f*6;dust=3+Math.floor(f/3);if(f%5===0)gems=5;if(f%10===0){queuePick(f>=20?3:2,1,'하늘 계단 '+f+'층 보상');txt2=`<div style="font-size:13px;color:#ffb84d">${f>=20?'전설':'영웅'} 카드 선택권 획득! 로비에서 골라요</div>`}D.floor++;txt=`<div style="font-size:14px;color:#ffd667">${f}층 돌파! 다음은 ${D.floor}층</div>`+txt2}}
-  if(cfg.mode==='raid'){const dmg=Math.max(0,cfg.raidStart-st.cmd.e.hp);D.raidHp=Math.max(0,D.raidHp-dmg);gold=Math.round(dmg/DS*4);dust=Math.floor(dmg/DS/5);txt=`<div style="font-size:14px">거신에게 <b style="color:#ff8a8a">${dmg}</b> 피해 · 남은 체력 ${D.raidHp}</div>`;if(D.raidHp<=0){gems=20;dust+=30;txt+=`<div style="font-size:15px;font-weight:900;color:#ffd667">거신 처치! 보석 20 · 별가루 +30 · 다음 거신 Lv${D.raidLv+1}</div>`;D.raidLv++;D.raidHp=raidMax(D.raidLv)}}
+  if(cfg.mode==='raid'){const dmg=Math.max(0,cfg.raidStart-st.cmd.e.hp);D.raidHp=Math.max(0,D.raidHp-dmg);gold=Math.round(dmg/DS*4);dust=Math.floor(dmg/DS/5);txt=`<div style="font-size:14px">거신에게 <b style="color:#ff8a8a">${dmg}</b> 피해 · 남은 체력 ${D.raidHp}</div>`;if(D.raidHp<=0){gems=20;dust+=30;txt+=`<div style="font-size:15px;font-weight:900;color:#ffd667">거신 처치! 보석 20 · 룬 가루 +30 · 다음 거신 Lv${D.raidLv+1}</div>`;D.raidLv++;D.raidHp=raidMax(D.raidLv)}}
   if(cfg.mode==='pit'){if(win&&D.run){D.run.w++;D.run.hp=Math.min(cfg.pHpMax||st.cmd.p.max,st.cmd.p.hp+3*DS);gold=25;dust=2;D.pitBest=Math.max(D.pitBest,D.run.w);txt=`<div style="font-size:14px;color:#ffd667">${D.run.w}연승! 지휘관 체력 ${D.run.hp} (+30 회복)</div>`}else if(D.run){txt=`<div style="font-size:14px">${D.run.w}연승으로 끝났어요 · 이번 주 최고 ${D.pitBest}연승</div>`;D.run=null}}
   persist();return {gold,gems,dust,txt}}
-function specialAgain(){if(cfg.mode==='brawl')return startBrawl();if(cfg.mode==='train')return showTraining();return showDungeon()}
-// ---- 인연 맺기
+function specialAgain(){if(cfg.mode==='brawl'||cfg.mode==='twist')return startBrawl();if(cfg.mode==='train')return showTraining();return showDungeon()}
+// ---- 룬 각인 (v3.19: 영웅마다 룬 홈 2개 · 공격 룬/체력 룬을 번갈아 새김 · save.sb = 새긴 단계 합계)
 const SB_MAX=4,SB_LEAGUE=2,SB_DUST=[15,30,50,80];
+const RUNE_STEPS=[{t:'공격 룬',r:'I',d:'공격 +12%'},{t:'체력 룬',r:'I',d:'체력 +20%'},{t:'공격 룬',r:'II',d:'공격 +12% (합계 +24%)'},{t:'체력 룬',r:'II',d:'체력 +20% (합계 +40%)'}];
 function sbOf(b){return (save.sb&&save.sb[b])|0}
-function sbPartners(b,k){const P=heroBases().filter(x=>x!==b&&HEROES[x].cls!=='building'&&heroLeague(x)<=Math.max(2,heroLeague(b)));let h=0;for(const ch of b)h=(h*31+ch.charCodeAt(0))>>>0;const a=P[(h+k*7)%P.length],c=P[(h+k*13+3)%P.length];return a===c?[a,P[(h+k*13+4)%P.length]]:[a,c]}
 function bestLv(b){let m=0;Object.keys(save.owned).forEach(id=>{if(baseOf(id)===b)m=Math.max(m,save.owned[id].lv)});return m}
-function sbReq(b){const k=sbOf(b)+1;if(k>SB_MAX)return null;return {k,lv:k+1,parts:sbPartners(b,k),dust:SB_DUST[k-1],gold:200*k}}
-function sbHTML(id){const b=baseOf(id);if(HEROES[b].token)return '';const n=sbOf(b),R=sbReq(b);
-  const gems=Array.from({length:SB_MAX},(_,i)=>`<i class="${i<n?'on':''}">◆</i>`).join('');
-  if(!R)return `<div class="sbbox"><b>인연 맺기</b> <span class="sbg">${gems}</span> <small>최대 인연 완료</small></div>`;
-  const ok=R.parts.every(p=>bestLv(p)>=R.lv),lockL=save.bestLeague<SB_LEAGUE;
-  return `<div class="sbbox"><b>인연 맺기</b> <span class="sbg">${gems}</span> <small>${n}/${SB_MAX} · 인연을 맺을 때마다 공격 +6%, 체력 +10% (모든 버전)</small>
-   <div class="sbreq">${R.parts.map(p=>{const have=bestLv(p);return `<div class="${have>=R.lv?'ok':''}"><div class="sbp">${portrait(vid(p,HEROES[p].rar))}</div><small>${HEROES[p].name} Lv${R.lv}${have>=R.lv?' ✓':' ('+(have||'-')+')'}</small></div>`}).join('')}
-   <button class="btn sm ${ok&&!lockL?'grn':'sub'}" id="dSb" ${ok&&!lockL&&(save.dust|0)>=R.dust&&save.gold>=R.gold?'':'disabled'}>인연 맺기 · <span class="dusti">✦</span>${R.dust} · <span class="coin" style="width:10px;height:10px"></span>${R.gold}</button></div>
+function runeAB(n){return {a:Math.ceil(n/2),h:Math.floor(n/2)}}
+function sbReq(b){const k=sbOf(b)+1;if(k>SB_MAX)return null;return {k,lv:k*2,dust:SB_DUST[k-1],gold:200*k,step:RUNE_STEPS[k-1]}}
+function sbHTML(id){const b=baseOf(id);if(HEROES[b].token)return '';const n=sbOf(b),R=sbReq(b),ab=runeAB(n);
+  const sock=(nm,cls,lvl)=>`<div class="rsock ${cls}${lvl?' on':''}"><i>${cls==='ra'?'⚔':'❤'}</i><b>${nm}</b><small>${lvl?(lvl===2?'II':'I')+' 단계':'비어 있음'}</small></div>`;
+  const head=`<div class="rsocks">${sock('공격 룬','ra',ab.a)}${sock('체력 룬','rh',ab.h)}</div>`;
+  if(!R)return `<div class="sbbox rune"><b>룬 각인</b> <small>모든 룬 새김 완료 · 공격 +24%, 체력 +40%</small>${head}</div>`;
+  const have=bestLv(b),ok=have>=R.lv,lockL=save.bestLeague<SB_LEAGUE;
+  return `<div class="sbbox rune"><b>룬 각인</b> <small>${n}/${SB_MAX} · 새긴 룬은 이 영웅의 모든 버전에 적용돼요</small>${head}
+   <div class="rnext">다음: <b>${R.step.t} ${R.step.r}</b> · ${R.step.d} · 조건: 이 영웅 Lv${R.lv} ${ok?'✓':'('+(have||'-')+')'}</div>
+   <button class="btn sm ${ok&&!lockL?'grn':'sub'}" id="dSb" ${ok&&!lockL&&(save.dust|0)>=R.dust&&save.gold>=R.gold?'':'disabled'}>룬 새기기 · <span class="dusti">✦</span>${R.dust} · <span class="coin" style="width:10px;height:10px"></span>${R.gold}</button>
    ${lockL?`<small style="opacity:.6">${LEAGUES[SB_LEAGUE].n} 리그부터 열려요</small>`:''}</div>`}
-function doSoulbind(id){const b=baseOf(id),R=sbReq(b);if(!R||save.bestLeague<SB_LEAGUE)return;if(!R.parts.every(p=>bestLv(p)>=R.lv))return toast('조건 영웅의 레벨이 부족해요');if((save.dust|0)<R.dust||save.gold<R.gold)return toast('별가루나 골드가 부족해요');
-  save.dust-=R.dust;save.gold-=R.gold;save.sb=save.sb||{};save.sb[b]=R.k;persist();sfx('win');track('soulbind',{b,k:R.k});toast(HEROES[b].name+' 인연 맺기 '+R.k+'단계!');document.querySelectorAll('.modal').forEach(x=>x.remove());heroDetail(id)}
+function doSoulbind(id){const b=baseOf(id),R=sbReq(b);if(!R||save.bestLeague<SB_LEAGUE)return;if(bestLv(b)<R.lv)return toast('영웅 레벨이 부족해요');if((save.dust|0)<R.dust||save.gold<R.gold)return toast('룬 가루나 골드가 부족해요');
+  save.dust-=R.dust;save.gold-=R.gold;save.sb=save.sb||{};save.sb[b]=R.k;persist();sfx('win');track('rune',{b,k:R.k});toast(HEROES[b].name+' · '+R.step.t+' '+R.step.r+' 새김!');document.querySelectorAll('.modal').forEach(x=>x.remove());heroDetail(id)}
+function runeMigrate(){if(save.runeMig)return;save.runeMig=1;const bound=Object.keys(save.sb||{}).filter(b=>(save.sb[b]|0)>0);persist();if(!bound.length)return;
+  const show=()=>{if(document.querySelector('.modal')||screen!=='lobby')return setTimeout(show,1500);modal(`<div class="ribbon">룬 각인으로 바뀌었어요</div><div class="rw" style="line-height:1.7">예전 '영웅 결속' 강화가 <b>룬 각인</b>으로 바뀌었어요.<br>강화해 둔 ${bound.length}명의 단계는 <b>그대로</b> 룬 단계로 옮겨졌어요. 잃은 건 없어요.<br><small style="opacity:.75">4단계 기준 공격 +24%, 체력 +40%는 예전과 같아요.</small></div><div class="btns"><button class="btn" data-close>확인</button></div>`)};setTimeout(show,900)}
 function playerSbs(){const o={};Object.keys(save.owned).forEach(id=>o[id]=sbOf(baseOf(id)));return o}
 /* ===================== v3.6 스킬 전부 · 영웅별 합체 · 덱 중복 금지 ===================== */
 function VU(u){const v=V(u.key);if(!u.sil)return v;return u._sv||(u._sv={...v,skill:'none',ex:null,sv:0,exd:''})}
@@ -2512,14 +2580,14 @@ function showWarlords(){
   const id=wlView,W=WARLORDS[id],un=wlUnlocked(id),cur=save.warlord===id,lv=wlLv(id);
   const sk=wskList(id).map((S,i)=>{const lock=lv<WSK_LV[i];return `<div class="wsk2 ${lock?'off':''}"><span class="wsi">${i+1}</span><div><b>${S.n}</b> <small>${WSK_TURN[i]}턴부터${lock?' · 🔒 Lv'+WSK_LV[i]:''}</small><p>${S.d}</p></div></div>`}).join('');
   const btn=cur?'<span class="wcur">사용 중</span>':(un&&expOf(id))?'<span class="wlk">원정 중</span>':un?`<button class="btn grn" data-pick="${id}">이 지휘관으로 출전</button>`:W.unlock.t==='gems'?`<button class="btn" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} 영입</button>`:`<span class="wlk">🔒 ${W.unlock.d}</span>`;
-  app.innerHTML=`<div class="screen wl2" style="--fc:${FAC[W.fac].c}"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">지휘관</span>${resBar()}</div>
+  app.innerHTML=`<div class="screen wl2 wl3" style="--fc:${FAC[W.fac].c}"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">지휘관</span>${resBar()}</div>
   <div class="wl2main">
     <div class="wl2art ${un?'':'lock'}"><div class="wl2glow"></div><img src="assets/k_${W.art}.webp?v=${ASSET_V}" alt=""></div>
     <div class="wl2info">
       <div class="wl2name">${W.n} <span class="wl2fac">${facIcon(W.fac,'ci')}${FAC[W.fac].n}</span></div>
       <div class="wl2stat"><span class="hrt">♥</span> 체력 <b>${wlHp(id)}</b> <span class="wl2lv">Lv ${lv}/${WL_MAX}</span>${un&&lv<WL_MAX?`<div class="bar q wl2xp"><i style="width:${wlXp(id)/wlNeed(lv)*100}%"></i></div>`:''}</div>
       <div class="wl2pas"><b>패시브</b> ${W.pas}</div>
-      <div class="wl2sk">${sk}<div class="wsk2 strk"><span class="wsi">⚔</span><div><b>지휘관 일격</b> <small>스킬을 다 쓰면</small><p>매 턴 1개씩 쌓이고, 늦게 쓸수록 1개당 피해가 커져요</p></div></div></div>
+      <div class="wl2sk"><div class="wl3h">스킬</div>${sk}<div class="wsk2 strk"><span class="wsi">⚔</span><div><b>지휘관 일격</b> <small>스킬을 다 쓰면</small><p>매 턴 1개씩 쌓이고, 늦게 쓸수록 1개당 피해가 커져요</p></div></div></div>
       <div class="wl2btn">${btn}</div>
     </div>
   </div>
@@ -2546,15 +2614,15 @@ function showHeroes(){
   const unkCard=x=>{if(x.startsWith('L:')){const b=x.slice(2);const L=LEAGUES.find(L=>L.un.includes(b));return `<div class="hc2 lock"><div class="hc2art" style="filter:brightness(0) opacity(.6)">${portrait(vid(b,HEROES[b].rar))}</div><div class="hc2nm">???</div><div class="hc2sub">${L?L.n+' 리그':''}</div></div>`}
     const t=tierOf(x);return `<div class="hc2 unk t${t}" data-id="${x}"><div class="hc2art" style="filter:brightness(.18) saturate(0)">${portrait(x)}</div><div class="hc2nm" style="color:${RAR[t].c}">${RAR[t].n}</div><div class="hc2sub">미발견</div></div>`};
   const fc=f=>save.deck.filter(id=>V(id).fac===f).length;
-  app.innerHTML=`<div class="screen hs2"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">파티</span>${resBar()}</div>
-  <div class="hs2top">
+  app.innerHTML=`<div class="screen hs2 ps3"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">파티</span>${resBar()}</div>
+  <div class="ps3l"><div class="ps3cap">출전 대형</div><div class="hs2top">
     <button class="hs2wl" id="hWl" style="--fc:${FAC[W.fac].c}"><img src="assets/k_${W.art}.webp?v=${ASSET_V}" alt=""><b>${W.n}</b><small>Lv${wlLv()} · 지휘관</small></button>
     <div class="hs2deck">${Array.from({length:8},(_,i)=>{const id=save.deck[i];if(!id)return '<div class="hs2slot empty">+</div>';const o=save.owned[id]||{lv:1};return `<div class="hs2slot t${tierOf(id)}" data-id="${id}">${portrait(id)}<span>${o.lv}</span></div>`}).join('')}</div>
     <div class="hs2side"><div class="hs2pw">${ico('bolt','pwi')}${deckPower()}<small>파티 전투력</small></div><div class="hs2syn">${FAC_KEYS.map(f=>`<span style="color:${FAC[f].c}">${facIcon(f,'ci')}${fc(f)}</span>`).join('')}</div><button class="btn sm" data-auto="">추천 덱</button></div>
   </div>
-  <div class="sqrow"><span>파티</span>${Object.keys(WARLORDS).filter(k=>wlUnlocked(k)).map(k=>{const K=WARLORDS[k];const busy=expOf(k);return `<button class="sqtab ${k===save.warlord?'on':''} ${busy?'busy':''}" data-sq="${k}" style="--fc:${FAC[K.fac].c}"><img src="assets/k_${K.art}.webp?v=${ASSET_V}">${K.n}${busy?' · 원정':''}</button>`}).join('')}<small>지휘관마다 파티가 따로 저장돼요</small></div>
-  <div class="hs2filter">${['all',...FAC_KEYS].map(f=>`<button class="fchip ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'전체':facIcon(f,'ci')}</button>`).join('')}<i class="fsep"></i>${['all',0,1,2,3].map(t=>`<button class="fchip ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'등급':RAR[t].n}</button>`).join('')}<i class="fsep"></i>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="fchip ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'유형':CLS[c].n}</button>`).join('')}<button class="fchip wide ${heroOwned?'':'on'}" id="fOwn">${heroOwned?'미발견도 보기':'보유만 보기'}</button></div>
-  <div class="hs2grid">${own.map(card).join('')}${unk.map(unkCard).join('')||''}${!own.length&&!unk.length?'<div class="hs2none">조건에 맞는 영웅이 없어요</div>':''}</div>
+  <div class="sqrow"><span>파티</span>${Object.keys(WARLORDS).filter(k=>wlUnlocked(k)).map(k=>{const K=WARLORDS[k];const busy=expOf(k);return `<button class="sqtab ${k===save.warlord?'on':''} ${busy?'busy':''}" data-sq="${k}" style="--fc:${FAC[K.fac].c}"><img src="assets/k_${K.art}.webp?v=${ASSET_V}">${K.n}${busy?' · 원정':''}</button>`}).join('')}<small>지휘관마다 파티가 따로 저장돼요</small></div></div>
+  <div class="ps3r"><div class="hs2filter">${['all',...FAC_KEYS].map(f=>`<button class="fchip ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'전체':facIcon(f,'ci')}</button>`).join('')}<i class="fsep"></i>${['all',0,1,2,3].map(t=>`<button class="fchip ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'등급':RAR[t].n}</button>`).join('')}<i class="fsep"></i>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="fchip ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'유형':CLS[c].n}</button>`).join('')}<button class="fchip wide ${heroOwned?'':'on'}" id="fOwn">${heroOwned?'미발견도 보기':'보유만 보기'}</button></div>
+  <div class="hs2grid">${own.map(card).join('')}${unk.map(unkCard).join('')||''}${!own.length&&!unk.length?'<div class="hs2none">조건에 맞는 영웅이 없어요</div>':''}</div></div>
   </div>`;
   if(save.bestLeague>=EVO_LEAGUE)tutTip('evo','<b>진화</b>같은 버전 카드를 모아 상위 등급 카드로 바꿀 수 있어요. 영웅을 눌러 진화 버튼을 확인하세요.');
   bind('#bk',showLobby);bind('#hWl',()=>{wlView=save.warlord;showWarlords()});
@@ -2620,7 +2688,7 @@ function showShop(){
     {id:'silver',t:'silver',n:'은 상자',d:'카드 16장 · 바로 열림',cost:60,cur:'gem'},
     {id:'gold',t:'gold',n:'황금 상자',d:'카드 36장 · 희귀 이상 확정',cost:150,cur:'gem'},
     {id:'coins',t:null,n:'골드 꾸러미',d:'골드 500',cost:30,cur:'gem'},
-    {id:'dust',t:null,n:'별가루 꾸러미',d:'별가루 40 (인연 맺기용)',cost:25,cur:'gem'},
+    {id:'dust',t:null,n:'룬 가루 꾸러미',d:'룬 가루 40 (룬 각인용)',cost:25,cur:'gem'},
     {id:'adgem',t:null,n:adW('광고 보고 보석','무료 보석'),d:'보석 5개 · 오늘 '+adLeft('gems')+'번 남음',cost:0,cur:'ad',dis:adLeft('gems')<=0}
   ].filter(it=>it.cur!=='ad'||adOn());
   const DL=ensureDeals();const msLeft=new Date(new Date().setHours(24,0,0,0))-Date.now();
@@ -2637,26 +2705,26 @@ function showShop(){
     if(it.cur==='free'){if(save.shop.free)return;save.shop.free=true;persist();openChestModal('wood',showShop);return}
     if(save.gems<it.cost)return;save.gems-=it.cost;persist();
     if(it.id==='coins'){save.gold+=500;persist();sfx('coin');toast('골드 500');showShop();return}
-    if(it.id==='dust'){addDust(40);persist();sfx('coin');toast('별가루 40');showShop();return}
+    if(it.id==='dust'){addDust(40);persist();sfx('coin');toast('룬 가루 40');showShop();return}
     openChestModal(it.t,showShop)});
 }
 
 /* ===================== 전투 진행 ===================== */
 let st=null,cfg=null,ui=null;
 function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',board:{p:emptyBoard(),e:emptyBoard()},cmd:{p:{hp:c.pHp||22*DS,max:c.pHpMax||c.pHp||22},e:{hp:c.eHp,max:c.eHpMax||c.eHp}},round:1,over:false,passive:c.passive||null,eTurns:0,kills:0}}
-async function startBattle(c){
+async function startBattle(c){const GEN=++BGEN;
   screen='battle';tryLandscape();track('battle_start',{mode:c.mode,stage:c.idx??-1});
-  try{await preloadBattle([...(save.deck||[]),...(c.eDeck||[]),'skel_0','frog_0','watchtower_1','archer_0','oakwood_2'])}catch(e){}
-  cfg=c;st=newState(c);BD=null;
+  try{await preloadBattle([...(c.pDeck||save.deck||[]),...(c.eDeck||[]),'skel_0','frog_0','watchtower_1','archer_0','oakwood_2'])}catch(e){}
+  cfg=c;st=newState(c);BD=null;TWIST=c.twist||null;HANDMAX=TWIST==='bighand'?5:4;
   if(!c.eWl){const art=(c.eLook||'').startsWith('art:')?c.eLook.slice(4):'';const hit=Object.keys(WARLORDS).find(k=>WARLORDS[k].art===art);
     if(hit)c.eWl=hit;else{const fc={};(c.eDeck||[]).forEach(k=>{const f=V(k).fac;fc[f]=(fc[f]||0)+1});const mf=Object.keys(fc).sort((x,y)=>fc[y]-fc[x])[0]||'bastion';const L=FAC_WL[mf]||FAC_WL.bastion;c.eWl=L[(c.idx||0)%L.length]}}
   if(!c.eWlLv)c.eWlLv=c.mode==='arena'?Math.min(WL_MAX,1+Math.round(leagueIdx(save.trophies)*1.5)):c.mode==='stage'?Math.min(WL_MAX,1+Math.floor((c.idx||0)*.6)):4;
   st.ws={p:{used:0,ch:0,doneR:99},e:{used:0,ch:0,doneR:99}};
   ui={auto:!!save.autoOn,hand:[],sel:-1,phase:'wait',reels:null,targeting:false,resolve:null,log:'',newUid:null,info:''};
   renderBattle();
-  const b0=c.mode==='daily'?'보스전 시작!':c.mode==='arena'?'아레나 전투!':'전투 시작!';banner(b0);bgmStart('battle');await sleep(900);
-  const pDeck=save.deck.slice(),pLvs=playerLvs();const pPile=makePile(pDeck);const eHand=[],ePile=makePile(c.eDeck);ui.hand=[];ui.pile=pPile;
-  while(!st.over){
+  const b0=c.mode==='daily'?'보스전 시작!':c.mode==='arena'?'아레나 전투!':c.mode==='twist'?'규칙전 · '+twistToday().n+'!':'전투 시작!';banner(b0);bgmStart('battle');await sleep(900);
+  const pDeck=(c.pDeck||save.deck).slice(),pLvs=playerLvs();const pPile=makePile(pDeck);const eHand=[],ePile=makePile(c.eDeck);ui.hand=[];ui.pile=pPile;
+  while(!st.over&&GEN===BGEN){
     ui.log='내 턴';if(st.round===1||st.round%5===0)turnBanner(st.round+' 라운드','rnd');else turnBanner('내 턴','me');await sleep(350);await doFx(startTurnEffects(st,'p'));if(st.over)break;
     if(wsTick('p'))toast('지휘관 일격 +1 (쌓인 '+wsOf('p').ch+'개)');
     {const added=refill(ui.hand,pPile,pLvs,playerRbs(),playerSbs());added.forEach(a=>a.fresh=1);ui.sel=ui.hand.length===1?0:-1;BD&&(BD.sig='');renderBattle();if(added.length)sfx('tick');await sleep(added.length?350:0);ui.hand.forEach(h=>delete h.fresh)}
@@ -2687,7 +2755,7 @@ async function startBattle(c){
     if(st.round>MAX_ROUND){st.over=true;st.timeout=true;break}
     renderBattle();
   }
-  await sleep(400);if(!st.timeout&&(st.cmd.e.hp<=0||st.cmd.p.hp<=0))await koFx(st.cmd.e.hp<=0?'e':'p');endBattle();
+  if(GEN!==BGEN)return;await sleep(400);if(!st.timeout&&(st.cmd.e.hp<=0||st.cmd.p.hp<=0))await koFx(st.cmd.e.hp<=0?'e':'p');endBattle();
 }
 async function spinReels(draw){
   ui.reels=true;ui.hand=[];ui.phase='spin';renderBattle();
@@ -2771,7 +2839,7 @@ function topBarHTML(){
   const myTurn=ui.log==='내 턴'||ui.phase==='choose';
   return `<div class="tname p"><span class="lgb" style="--lc:${LEAGUES[li].c}">${li+1}</span><b>${esc(myNick())}</b><small>${W.n} Lv${wlLv(st.wl)}</small></div>
   <div class="tturn"><div class="tt">턴 ${st.round}<small>/${MAX_ROUND}</small></div><div class="ts ${myTurn?'me':'en'}">${myTurn?'내 차례':'적 차례'}</div></div>
-  <div class="tname e"><b>${esc(cfg.eName.replace('AI 도전자 · ',''))}</b>${cfg.passiveName?`<small style="color:#ff8aa8">${cfg.passiveName}</small>`:`<small>${cfg.mode==='arena'?(cfg.online?'유저 덱 · '+((WARLORDS[cfg.eWl]||{}).n||'')+' Lv'+cfg.eWlLv:'AI 도전자'):cfg.mode==='daily'?'오늘의 보스':({brawl:'친선전',train:'모의전',tower:'하늘 계단',raid:'거신 토벌',pit:'연승 결투장'})[cfg.mode]||'모험'}</small>`}</div>`;
+  <div class="tname e"><b>${esc(cfg.eName.replace('AI 도전자 · ',''))}</b>${cfg.passiveName?`<small style="color:#ff8aa8">${cfg.passiveName}</small>`:`<small>${cfg.mode==='arena'?(cfg.online?'유저 덱 · '+((WARLORDS[cfg.eWl]||{}).n||'')+' Lv'+cfg.eWlLv:'AI 도전자'):cfg.mode==='daily'?'오늘의 보스':({brawl:'규칙전',twist:'규칙전 · '+(typeof TWIST==='string'?(TWISTS.find(t=>t.id===TWIST)||{}).n:''),train:'연습전',tower:'하늘 계단',raid:'거신 토벌',pit:'연승 결투장'})[cfg.mode]||'모험'}</small>`}</div>`;
 }
 
 function unitEl(u){
@@ -3414,7 +3482,7 @@ function endBattle(){setTimeout(cloudAuto,800);
   const m=modal(`${win?'<div class="rayclip"><div class="rays on"></div></div>':''}<div class="resban ${win?'win':'lose'}">${win?'승리!':'패배'}</div>${win&&cfg.mode==='stage'?`<div class="rstars">${[1,2,3].map(k=>`<span class="${k<=stars?'on':''}" style="animation-delay:${.25+k*.22}s">★</span>`).join('')}</div>`:''}
   <div style="font-size:13px;opacity:.75">${st.timeout?'라운드 제한 · 체력 비율로 판정':win?`남은 지휘관 체력 ${st.cmd.p.hp}/${st.cmd.p.max}`:''}</div>
   ${mvp?`<div class="mvp"><div class="mart t${tierOf(mvp.key)}">${portrait(mvp.key)}</div><div><div class="mtag">MVP</div><b style="color:${RAR[tierOf(mvp.key)].c}">${V(mvp.key).name}</b><div style="font-size:12.5px;opacity:.8">총 피해 ${mvp.d}</div></div></div>`:''}
-  <div class="rrows">${dT?`<div class="rrow">${ico('trophy','qi')}<span>트로피</span><b class="cnt" data-v="${dT}">0</b></div>`:''}<div class="rrow">${ico('coin','qi')}<span>골드</span><b class="cnt" data-v="${gold}">0</b></div><div class="rrow"><span style="font-size:16px">⚔</span><span>${WL().n} 경험치</span><b class="cnt" data-v="${wxp}">0</b></div>${gems?`<div class="rrow">${ico('gem','qi')}<span>보석</span><b class="cnt" data-v="${gems}">0</b></div>`:''}${dustG?`<div class="rrow"><span class="dusti" style="font-size:20px">✦</span><span>별가루</span><b class="cnt" data-v="${dustG}">0</b></div>`:''}</div>
+  <div class="rrows">${dT?`<div class="rrow">${ico('trophy','qi')}<span>트로피</span><b class="cnt" data-v="${dT}">0</b></div>`:''}<div class="rrow">${ico('coin','qi')}<span>골드</span><b class="cnt" data-v="${gold}">0</b></div><div class="rrow"><span style="font-size:16px">⚔</span><span>${WL().n} 경험치</span><b class="cnt" data-v="${wxp}">0</b></div>${gems?`<div class="rrow">${ico('gem','qi')}<span>보석</span><b class="cnt" data-v="${gems}">0</b></div>`:''}${dustG?`<div class="rrow"><span class="dusti" style="font-size:20px">✦</span><span>룬 가루</span><b class="cnt" data-v="${dustG}">0</b></div>`:''}</div>
   ${cfg.mode==='arena'?(()=>{const li2=leagueIdx(save.trophies),L2=LEAGUES[li2],N2=LEAGUES[li2+1];const p0=N2?Math.max(0,(trB-L2.t)/(N2.t-L2.t)):1,p1=N2?(save.trophies-L2.t)/(N2.t-L2.t):1;return `<div class="rleague"><span style="color:${L2.c}">${L2.n} 리그</span><div class="bar"><i class="tb" style="width:${Math.min(100,p0*100)}%" data-to="${Math.min(100,p1*100)}"></i></div><span>${save.trophies}${N2?' / '+N2.t:''}</span></div>`})():''}${extra}
   ${adOn()&&cfg.mode==='arena'&&win&&gold>0?`<button class="btn grn sm" id="rDbl" ${adLeft('gold')>0?'':'disabled'}>${adW('광고 보고 ','무료로 ')}골드 2배 +${gold} (${adLeft('gold')})</button>`:''}
   ${adOn()&&cfg.mode==='arena'&&!win&&dT<0?`<button class="btn grn sm" id="rProt" ${adLeft('trophy')>0?'':'disabled'}>${adW('광고 보고 ','무료로 ')}트로피 ${-dT} 돌려받기 (${adLeft('trophy')})</button>`:''}
