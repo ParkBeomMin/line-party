@@ -1216,7 +1216,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='ko';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.19 베타';
+const VERSION='v3.19.1 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -2182,6 +2182,9 @@ const NICK_BAN=['시발','씨발','병신','좆','개새','fuck','shit','섹스'
 function nickOk(n){n=(n||'').trim();if(n.length<1||n.length>10)return false;const l=n.toLowerCase();return !NICK_BAN.some(b=>l.includes(b))}
 /* ===================== 베타 테스터 보상 (플레이 비공개 테스트 앱) ===================== */
 const APP_BETA=true; // 정식 출시 버전에서 false 로 바꾸면 새로 시작하는 사람은 테스터가 아님 (이미 시작한 테스터는 계속 진행)
+const FB_FORM='https://docs.google.com/forms/d/e/1FAIpQLSc-PdektEWxmc5bZoA4NFHv9_blNanu3HRvebDuY1kLvTWEHA/viewform';
+function feedbackUrl(){const ua=navigator.userAgent;const m=ua.match(/Android [\d.]+;[^)]*/);const dev=(m?m[0].replace(/; wv/,'').trim():ua.slice(0,60));const info=VERSION+(save.beta?' · 테스터 '+Math.min(14,betaN())+'일':'')+' · '+dev;return FB_FORM+'?usp=pp_url&entry.1189017881='+encodeURIComponent('라인 파티 (Line Party)')+'&entry.1950440059='+encodeURIComponent(info)}
+function openFeedback(){track('feedback_open',{});const a=document.createElement('a');a.href=feedbackUrl();a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
 function betaN(){return save.beta?save.beta.days.length:0}
 function betaTick(){if(!inNativeApp())return null;if(!save.beta){if(!APP_BETA)return null;save.beta={days:[],got:{}}}const B=save.beta;B.got=B.got||{};const d=dayKey();if(!B.days.includes(d)){B.days.push(d);if(B.days.length>40)B.days=B.days.slice(-40)}const n=B.days.length,out=[];
   if(!B.got[1]){B.got[1]=1;save.gems+=300;out.push(1)}
@@ -2193,8 +2196,8 @@ function betaModal(got){if(screen!=='lobby')return;if(document.querySelector('.m
   const n=Math.min(14,betaN());const rows=[[1,'첫 실행','보석 300 + 황금 상자'],[7,'7일째','영웅 카드 선택권'],[14,'14일째','전설 카드 선택권 + 초기 테스터 칭호']];
   const m=modal(`<div class="ribbon">베타 테스터 보상</div><div class="rw">라인 파티 앱 테스트에 참여해 주셔서 고마워요!<br><small style="opacity:.75">앱을 켠 날짜가 쌓이면 보상을 받아요 · 지금 ${n}/14일</small></div>
    <div class="btlist">${rows.map(([d,a,b])=>`<div class="${save.beta.got[d]?'on':''} ${got.includes(d)?'now':''}"><b>${a}</b><span>${b}</span><i>${save.beta.got[d]?'✓':d+'일'}</i></div>`).join('')}</div>
-   <div class="btns"><button class="btn" id="btOk">${got.includes(1)?'황금 상자 열기':'받기'}</button></div>`);
-  sfx('fanfare');m.querySelector('#btOk').onclick=()=>{m.remove();if(got.includes(1))openChestModal('gold',showLobby);else showLobby()}}
+   <div class="btns"><button class="btn sub sm" id="btFb">의견 보내기</button><button class="btn" id="btOk">${got.includes(1)?'황금 상자 열기':'받기'}</button></div>`);
+  sfx('fanfare');m.querySelector('#btFb').onclick=openFeedback;m.querySelector('#btOk').onclick=()=>{m.remove();if(got.includes(1))openChestModal('gold',showLobby);else showLobby()}}
 function myNick(){if(!save.nick||!nickOk(save.nick)){save.nick='모험가'+(1000+rnd(9000));persist()}return save.nick}
 function validKey(k){try{const v=V(k);return !!(v&&v.name)}catch(e){return false}}
 let fbSyncing=false;
@@ -3159,6 +3162,7 @@ function showSettings(){
   <div class="setrow"><span>닉네임 <small style="opacity:.6">(대전 상대에게 보여요, 10자까지)</small></span><span style="display:flex;gap:6px"><input id="stNick" maxlength="10" value="${esc(myNick())}" style="width:120px;font-family:inherit;font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #ffffff44;background:#0006;color:#fff"><button class="btn sm grn" id="stNickSave">저장</button></span></div>
   ${inNativeApp()?`<div class="setrow"><span>알림 <small style="opacity:.6">(상자 열림, 원정 완료)</small></span><button class="btn sm ${save.notiOn?'grn':'sub'}" id="stNoti">${save.notiOn?'켜짐':'꺼짐'}</button></div>`:''}
   <div class="setrow"><span>Language <small style="opacity:.6">(\uC5B8\uC5B4)</small></span><button class="btn sm" id="stLang">${LANG==='ko'?'English':'\uD55C\uAD6D\uC5B4'}</button></div>
+  ${inNativeApp()?`<div class="setrow"><span>의견 보내기 <small style="opacity:.6">(버그, 불편한 점, 하고 싶은 말)</small></span><button class="btn sm grn" id="stFb">의견 보내기</button></div>`:''}
   <div class="setrow"><span>소리</span><button class="btn sm ${save.mute?'sub':'grn'}" id="stMute">${save.mute?'꺼짐':'켜짐'}</button></div>
   <div class="setrow col"><span>기기 이전 코드 <small style="opacity:.6">(구글 연동 없이 옮길 때 · 24시간 유효)</small></span>
    <div class="trrow"><b id="trCode" class="trcode">----·----</b><button class="btn sm" id="trMake">코드 만들기</button><button class="btn sm sub" id="trCopy" style="display:none">복사</button></div>
@@ -3178,6 +3182,7 @@ function showSettings(){
   m.querySelector('#stNickSave').onclick=()=>{const v=m.querySelector('#stNick').value.trim();if(!nickOk(v))return toast('1~10자, 바른 말로 정해 주세요');save.nick=v;persist();syncDeck();toast('닉네임을 바꿨어요')};
   m.querySelector('#stRig').onclick=()=>{save.noRig=!save.noRig;persist();m.remove();showSettings()};
   m.querySelector('#stMute').onclick=()=>{toggleMute();m.remove();showSettings()};
+  const fbB=m.querySelector('#stFb');if(fbB)fbB.onclick=openFeedback;
   m.querySelector('#trMake').onclick=async e=>{const bt=e.currentTarget;bt.disabled=true;bt.textContent='만드는 중...';try{const c=await makeTransfer();m.querySelector('#trCode').textContent=trFmt(c);m.querySelector('#trCopy').style.display='';bt.textContent='새로 만들기';toast('다른 기기 설정에서 이 코드를 입력하세요')}catch(err){toast('인터넷 연결을 확인해 주세요');bt.textContent='코드 만들기'}bt.disabled=false};
   m.querySelector('#trCopy').onclick=async()=>{const c=m.querySelector('#trCode').textContent;try{await navigator.clipboard.writeText(c)}catch(e){}toast('코드를 복사했어요: '+c)};
   m.querySelector('#trLoad').onclick=async()=>{const v=m.querySelector('#trIn').value;const c=trNorm(v);if(c.length===8){if(await redeemTransfer(c)){document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}return}try{const o=decodeSave(v);if(!confirm('지금 진행 상황을 이 코드로 덮어쓸까요?'))return;applySaveObj(o);toast('불러왔어요');document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}catch(e){toast('코드 8자리를 확인해 주세요')}};
