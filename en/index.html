@@ -1147,6 +1147,65 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 .btlist>div b{width:58px;color:#ffd667;font-weight:400}.btlist>div span{flex:1}.btlist>div i{font-style:normal;opacity:.6;font-size:12px}
 .btlist>div.on{background:#2fbf5a22;border-color:#2fbf5a66}.btlist>div.on i{color:#7dffa1;opacity:1}
 .btlist>div.now{box-shadow:0 0 0 2px #ffd667aa inset}
+.sbbox.rune .rsocks{display:flex;gap:8px;margin:6px 0}.rsock{flex:1;display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:10px;background:#0006;border:1px dashed #ffffff40;opacity:.65}.rsock.on{opacity:1;border-style:solid}.rsock.ra.on{border-color:#ff9f6b;box-shadow:0 0 8px #ff9f6b66}.rsock.rh.on{border-color:#7fe3a0;box-shadow:0 0 8px #7fe3a066}.rsock i{font-style:normal;font-size:16px}.rsock b{font-size:12.5px}.rsock small{margin-left:auto;font-size:11px;opacity:.8}.rnext{font-size:12.5px;margin:4px 0}
+
+/* v3.19 lobby4: 왼쪽 레일 + 가운데 무대 + 오른쪽 전투 열 */
+.lobby4 .ltop{height:54px;top:6px}
+.lrail{position:absolute;left:10px;top:70px;bottom:28px;width:76px;display:flex;flex-direction:column;gap:8px;z-index:3;padding:8px 6px;border-radius:22px;background:linear-gradient(#1d1738e6,#120e24e6);border:2px solid #ffd66740;box-shadow:0 6px 16px #0008}
+.rbtn{position:relative;flex:1;min-height:0;border-radius:16px;border:none;background:radial-gradient(circle at 50% 30%,#4a3f86,#241d48);box-shadow:inset 0 -3px 0 #0006,inset 0 1px 0 #fff3;color:#fff;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;padding:0}
+.rbtn .ic,.rbtn img.ico{width:30px;height:30px}.rbtn .pt{width:32px;height:32px;border-radius:50%;overflow:hidden;border:2px solid #ffd667}
+.rbtn span{font-size:12.5px;font-weight:900;text-shadow:0 1px 2px #000}
+.rbtn .dot{position:absolute;top:2px;right:2px}.rbtn:active{transform:translateY(2px)}
+.lstrip{position:absolute;left:100px;right:280px;top:72px;display:flex;gap:6px;z-index:3;justify-content:center}
+.lchip{position:relative;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px 0 6px;border-radius:16px;border:1.5px solid #ffd66766;background:#120e24d9;color:#fff;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap;max-width:200px;overflow:hidden}
+.lchip .ic,.lchip img.ico{width:22px;height:22px;flex:none}.lchip span{overflow:hidden;text-overflow:ellipsis}.lchip .dot{position:absolute;top:-3px;right:-3px}
+.dio{position:absolute;left:96px;right:270px;top:108px;bottom:26px;z-index:1;pointer-events:none}
+.dioground{position:absolute;left:8%;right:8%;bottom:10px;height:70px;border-radius:50%;background:radial-gradient(#ffe3a055,#3a2a1a88 55%,#0000 72%);box-shadow:0 0 40px #ffcf6b33}
+.diotitle{position:absolute;left:0;right:0;top:4px;text-align:center;font-size:26px;letter-spacing:2px;color:#fff3c4;text-shadow:0 2px 0 #5a2a00,0 0 12px #000;opacity:.9}
+.lobby4 .hero2.lead{left:50%;width:210px;height:230px;margin-left:-105px;bottom:34px}
+.lobby4 .hero2.s1,.lobby4 .hero2.s2{width:140px;height:160px;bottom:60px}
+.lobby4 .hero2.s1{left:4%}.lobby4 .hero2.s2{right:4%;left:auto}
+.lobby4 .hplate{bottom:-24px}
+.lcol{position:absolute;right:10px;top:70px;bottom:28px;width:252px;display:flex;flex-direction:column;gap:8px;z-index:3}
+.lcol .fightb{width:100%;height:96px;transform:none;margin:0}
+.lchest{flex:1;min-height:0}
+.lobby4 .chests2{grid-template-columns:1fr 1fr!important;grid-auto-rows:1fr;height:100%!important;gap:6px}
+.lobby4 .chests2 .slot{height:auto!important;min-height:0!important}
+.lobby4 .chests2 .slot .cico{width:46px!important;height:34px!important}
+.lmini{display:flex;gap:6px;height:58px;flex:none}
+.mbtn{position:relative;flex:1;border-radius:14px;border:2px solid #ffd66755;background:linear-gradient(#3b3168f2,#221b42f2);color:#fff;font-family:inherit;display:grid;grid-template-columns:34px 1fr;grid-template-rows:1fr 1fr;align-items:center;padding:2px 8px;cursor:pointer;text-align:left}
+.mbtn .ic,.mbtn img.ico{grid-row:1/3;width:30px;height:30px}.mbtn span{font-size:14px;font-weight:900;align-self:end}.mbtn small{font-size:11px;opacity:.75;align-self:start}.mbtn .dot{position:absolute;top:-4px;right:-4px}
+.lobby4 .ver2{position:absolute;left:100px;right:auto;bottom:6px;font-size:11px;opacity:.5}
+/* v3.19 ps3: 왼쪽 출전 대형 패널 + 오른쪽 수집함 */
+.ps3{flex-direction:row!important}
+.ps3l{flex:none;width:300px;display:flex;flex-direction:column;gap:6px;padding:6px 8px 8px 10px;background:linear-gradient(90deg,#241c46f0,#1a1430e6);border-right:2px solid #ffd66733;overflow:auto}
+.ps3cap{font-size:12px;font-weight:900;color:#ffd667;letter-spacing:1px}
+.ps3 .hs2top{flex-direction:column;align-items:stretch;padding:0;background:none;border:none;gap:6px}
+.ps3 .hs2wl{width:100%;height:58px;display:flex;align-items:center;gap:8px;text-align:left;padding:0 10px 0 64px}
+.ps3 .hs2wl img{left:6px;bottom:auto;top:-4px;height:74px;transform:none}
+.ps3 .hs2wl b{position:static;font-size:15px}.ps3 .hs2wl small{position:static;font-size:11.5px}
+.ps3 .hs2deck{grid-template-columns:repeat(4,1fr);gap:5px}
+.ps3 .hs2slot{height:92px}
+.ps3 .hs2side{flex-direction:row;justify-content:space-between;align-items:center}
+.ps3 .hs2syn{flex-direction:row;gap:8px}
+.ps3 .sqrow{padding:0;gap:4px}.ps3 .sqrow small{display:none}
+.ps3r{flex:1;min-width:0;display:flex;flex-direction:column}
+.ps3r .hs2filter{padding:6px 10px}.ps3r .hs2grid{grid-template-columns:repeat(auto-fill,minmax(98px,1fr));padding:4px 10px 16px}
+/* v3.19 wl3: 왼쪽 지휘관 목록 + 오른쪽 카드형 프로필 */
+.wl3{display:block!important}
+.wl3 .wl2list{position:absolute;left:10px;top:54px;bottom:10px;width:132px;flex-direction:column;justify-content:flex-start;gap:6px;padding:6px;overflow:auto;background:#0e0b1cd9;border-radius:16px;border:1.5px solid #ffd66733}
+.wl3 .wl2th{width:100%;height:64px;flex:none}.wl3 .wl2th img{left:auto;right:-6px;transform:none;height:140%}.wl3 .wl2th span{text-align:left;padding-left:8px;bottom:auto;top:50%;transform:translateY(-50%);background:none;font-size:13px}
+.wl3 .wl2th.on{transform:translateX(4px)}
+.wl3 .wl2main{position:absolute;left:154px;right:10px;top:54px;bottom:10px;display:grid;grid-template-columns:190px 1fr;grid-template-rows:auto auto auto 1fr auto;align-content:start;grid-template-rows:auto auto auto auto 1fr;grid-template-areas:"art name" "art stat" "art pas" "art ." "sk sk";gap:6px 14px;padding:12px 14px;border-radius:18px;border:2.5px solid var(--fc);background:linear-gradient(160deg,#2c2452f2,#141026f2);box-shadow:0 0 18px #0009,inset 0 0 30px #0006}
+.wl3 .wl2art{grid-area:art;width:190px;height:212px;border-radius:14px;overflow:hidden;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--fc) 45%,#000),#0d0a1a);border:2px solid #ffffff30;align-items:flex-start}
+.wl3 .wl2art img{height:300px;max-width:none;margin-top:-6px}
+.wl3 .wl2glow{display:none}
+.wl3 .wl2info{display:contents}
+.wl3 .wl2name{grid-area:name;font-size:26px}.wl3 .wl2stat{grid-area:stat}.wl3 .wl2pas{grid-area:pas;font-size:13px}
+.wl3 .wl2sk{grid-area:sk;display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:auto;min-height:0;align-content:start}
+.wl3h{grid-column:1/-1;font-size:12px;font-weight:900;color:#ffd667;letter-spacing:1px}
+.wl3 .wsk2 p{font-size:12.5px}
+.wl3 .wl2btn{position:absolute;right:16px;top:12px;padding:0}
 </style>
 </head>
 <body>
@@ -1157,7 +1216,7 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 const LANG='en';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.18.1 beta';
+const VERSION='v3.19 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -1575,16 +1634,17 @@ function toVid(b,t){if(HEROES[b].fixed)return vid(b,HEROES[b].rar);return vid(b,
 let UID=1;
 const emptyBoard=()=>Array.from({length:COLS},()=>Array(LANES).fill(null));
 function baseStats(id,lv,star,rb,sb){
-  const v=V(id);rb=rb|0;sb=sb|0;let a=v.atk?v.atk*(1+GR.lv*(lv-1)+GR.rb*rb+GR.sbA*sb):0,h=v.hp*(1+GR.lv*(lv-1)+GR.rb*rb+GR.sbH*sb);
+  const v=V(id);rb=rb|0;sb=sb|0;let a=v.atk?v.atk*(1+GR.lv*(lv-1)+GR.rb*rb+GR.rA*Math.ceil(sb/2)):0,h=v.hp*(1+GR.lv*(lv-1)+GR.rb*rb+GR.rH*Math.floor(sb/2));
   a=Math.round(a*DS);h=Math.round(h*DS);
   if(star>=2){const P=mergeProf(id);const ma=star>=3?1+(P.a-1)*2:P.a,mh=star>=3?1+(P.h-1)*2:P.h;a=Math.round(a*ma);h=Math.round(h*mh)}
   return {a,h};
 }
-const DS=10,GR={lv:.12,rb:.3,sbA:.06,sbH:.1};function sAmt(u){return Math.round(DS*(V(u.key).sv+(u.star-1)+(u.lv-1)/3+(u.rb|0)/2))}
+const DS=10,GR={lv:.12,rb:.3,rA:.12,rH:.2};function sAmt(u){return Math.round(DS*(V(u.key).sv+(u.star-1)+(u.lv-1)/3+(u.rb|0)/2))}
 function skillVal(u){return V(u.key).sv+(u.star-1)+Math.floor((u.lv-1)/3)+Math.floor((u.rb|0)/2)}
 function makeUnit(card,side){
   const b=baseStats(card.key,card.lv,card.star,card.rb,card.sb);const v=V(card.key);const aw=isAwake(card.key,card.lv,card.rb);
-  return {uid:UID++,key:card.key,lv:card.lv,star:card.star,rb:card.rb|0,sb:card.sb|0,aw,eva:v.skill==='evade'?v.sv:0,side,atk:b.a,hp:b.h,max:b.h,bonus:0,frozen:false,poison:0,armor:v.skill==='armor',charges:v.skill==='necro'?(v.ex==='legion'?(aw?7:5):3):0};
+  const tA=TWIST==='ranged'&&(v.cls==='ranged'||v.cls==='magic')?Math.round(b.a*1.25):b.a;
+  return {uid:UID++,key:card.key,lv:card.lv,star:card.star,rb:card.rb|0,sb:card.sb|0,aw,eva:v.skill==='evade'?v.sv:0,side,atk:tA,hp:b.h,max:b.h,bonus:0,frozen:false,poison:0,armor:v.skill==='armor',charges:v.skill==='necro'?(v.ex==='legion'?(aw?7:5):3):0};
 }
 const foeOf=s=>s==='p'?'e':'p';
 function eachUnit(st,side,fn){for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u)fn(u,r,l)}}
@@ -1800,7 +1860,7 @@ function drawHand(deck,lvs){
 }
 function colOk(id,r){const c=V(id).cls;if(c==='melee')return r<=1;if(c==='ranged'||c==='magic')return r>=1;return true}
 function makePile(deck){const p=deck.slice();for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}return p}
-function refill(hand,pile,lvs,rbs,sbs){const added=[];while(hand.length<4&&pile.length){const k=pile.shift();const c={key:k,star:1,lv:lvs[k]||1,rb:(rbs&&rbs[k])|0,sb:(sbs&&sbs[k])|0};hand.push(c);added.push(c)}return added}
+function refill(hand,pile,lvs,rbs,sbs){const added=[];while(hand.length<HANDMAX&&pile.length){const k=pile.shift();const c={key:k,star:1,lv:lvs[k]||1,rb:(rbs&&rbs[k])|0,sb:(sbs&&sbs[k])|0};hand.push(c);added.push(c)}return added}
 function validCells(st,side,card){
   const out=[];for(let r=0;r<COLS;r++)for(let l=0;l<LANES;l++){const u=st.board[side][r][l];if(u?(u.key===card.key&&u.star<3):colOk(card.key,r))out.push([r,l])}
   return out;
@@ -1988,43 +2048,45 @@ function showGuide(){document.querySelectorAll('.lguide').forEach(e=>e.remove())
   const ar=app.getBoundingClientRect(),r=el.getBoundingClientRect(),sc=ar.width/app.offsetWidth||1;const d=document.createElement('div');d.className='lguide';
   d.style.left=((r.left+r.width/2-ar.left)/sc)+'px';d.style.top=((r.top-ar.top)/sc)+'px';d.innerHTML=`<div class="gdbub">${G.txt}</div><div class="lgh">👇</div>`;app.appendChild(d);el.classList.add('lgpulse');
 }
-function showLobby(){setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
+function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
   screen='lobby';ensureDaily();tickChests();checkSeason();{const bt=betaTick();if(bt&&bt.length)setTimeout(()=>betaModal(bt),500)}if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
   const prog=N?(save.trophies-L.t)/(N.t-L.t):1;
   const E=todayEvent();
   const lead=save.deck[0],side1=save.deck[1],side2=save.deck[2];
-  app.innerHTML=`<div class="screen lobby2 lobby3">
+  app.innerHTML=`<div class="screen lobby2 lobby4">
     <div class="ltop">
       <div class="prof" id="bProf"><div class="ava">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}</div><div class="pinfo"><div class="pname">${WL().n} ${betaChip()||'<small style="opacity:.7">Change Commander ›</small>'}</div>
         <div class="lg"><span class="lgb" style="--lc:${L.c}">${li+1}</span><div class="lbar2"><div class="lbn">${L.n} League ${ico('trophy','mi')}${save.trophies}</div><div class="bar"><i style="width:${prog*100}%"></i></div></div></div></div></div>
-      <div class="logo2">Line Party</div>
       <div class="cur"><button class="mute" id="bRule" title="Rules">?</button><button class="mute" id="bSet">⚙</button><button class="mute" id="bMute">${save.mute?'🔇':'🔊'}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
     </div>
-    <div class="lside left2">
-      <button class="sbtn" id="bQuest">${ico('quest')}<span>Quests</span>${questDot()?'<i class="dot"></i>':''}</button>
-      <button class="sbtn" id="bEvent">${ico('gift')}<span>${E?E.n:'Event'}</span>${E&&save.evSeen!==dayKey()?'<i class="dot pink"></i>':''}</button>
-      <button class="sbtn" id="bAtt">${ico('gift')}<span>Check-in</span>${attReady()?'<i class="dot"></i>':''}</button>
-      <button class="sbtn" id="bSeason">${ico('trophy')}<span>Season ${seasonNo()}</span><small>${fmtDH(seasonLeft())}</small></button>
+    <nav class="lrail">
+      <button class="rbtn" id="bHero">${ico('hero')}<span>Party</span>${anyUpgrade()?'<i class="dot"></i>':''}</button>
+      <button class="rbtn" id="bWl">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}<span>Commander</span></button>
+      <button class="rbtn" id="bAdv">${ico('map')}<span>Challenge</span>${bossLeft()>0||brawlState().w<BRAWL_MAX?'<i class="dot"></i>':''}</button>
+      <button class="rbtn" id="bShop">${ico('shop')}<span>Shop</span>${!save.shop.free||dealsFresh()?'<i class="dot"></i>':''}</button>
+      <button class="rbtn" id="bQuest">${ico('quest')}<span>Quests</span>${questDot()?'<i class="dot"></i>':''}</button>
+    </nav>
+    <div class="lstrip">
+      <button class="lchip" id="bEvent">${ico('gift')}<span>${E?E.n:'Event'}</span>${E&&save.evSeen!==dayKey()?'<i class="dot pink"></i>':''}</button>
+      <button class="lchip" id="bAtt">${ico('gift')}<span>Check-in</span>${attReady()?'<i class="dot"></i>':''}</button>
+      <button class="lchip" id="bSeason">${ico('trophy')}<span>Season ${seasonNo()} · ${fmtDH(seasonLeft())}</span></button>
     </div>
-    <div class="lside right2">
-      <button class="sbtn" id="bIdle">${ico('crate')}<span id="idleAmt">${idleAmount()}</span><small>Supply Depot</small></button>
-      <button class="sbtn" id="bExp">${ico('map')}<span>Expedition</span>${anyExpDone()?'<i class="dot"></i>':''}</button>
-    </div>
-    <div class="stage3">
+    <div class="dio">
+      <div class="dioground"></div><div class="diotitle">Line Party</div>
       ${side1?`<div class="hero2 s1"><img src="../assets/${lobbyArt(side1)}.webp?v=${ASSET_V}"></div>`:''}
       ${side2?`<div class="hero2 s2"><img src="../assets/${lobbyArt(side2)}.webp?v=${ASSET_V}"></div>`:''}
       ${lead?`<div class="hero2 lead t${tierOf(lead)}"><img src="../assets/${lobbyArt(lead)}.webp?v=${ASSET_V}"><div class="hplate" style="--tc:${RAR[tierOf(lead)].c}">${facIcon(V(lead).fac,'ci')}${V(lead).name}<small>Lv${save.owned[lead]?save.owned[lead].lv:1}</small></div></div>`:''}
     </div>
-    <div class="chestrow"><div class="chests2" id="chests">${chestSlotsHTML()}</div></div>
-    <div class="lnav">
-      <button class="nav3" id="bShop">${ico('shop')}<span>Shop</span>${!save.shop.free||dealsFresh()?'<i class="dot"></i>':''}</button>
-      <button class="nav3" id="bHero">${ico('hero')}<span>Party</span>${anyUpgrade()?'<i class="dot"></i>':''}</button>
+    <aside class="lcol">
       <button class="fightb" id="bFight">${ico('battle','fi')}<span>Battle</span><small>${L.n} League Arena</small></button>
-      <button class="nav3" id="bAdv">${ico('map')}<span>Challenge</span>${bossLeft()>0||brawlState().w<BRAWL_MAX?'<i class="dot"></i>':''}</button>
-      <button class="nav3" id="bWl">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}<span>Commander</span></button>
-    </div>
+      <div class="lchest"><div class="chests2" id="chests">${chestSlotsHTML()}</div></div>
+      <div class="lmini">
+        <button class="mbtn" id="bIdle">${ico('crate')}<span id="idleAmt">${idleAmount()}</span><small>Supply Depot</small></button>
+        <button class="mbtn" id="bExp">${ico('map')}<span>Expedition</span><small>&nbsp;</small>${anyExpDone()?'<i class="dot"></i>':''}</button>
+      </div>
+    </aside>
     <div class="ver2">${VERSION} · ${save.stats.w}W ${save.stats.l}L</div>
   </div>`;
   bind('#bFight',startArena);bind('#bAdv',showChallenge);bind('#bSeason',showSeason);bind('#bWl',()=>{wlView=save.warlord;showWarlords()});bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bExp',showExpeditions);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
@@ -2064,8 +2126,8 @@ function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.da
 const RULE_TABS=[
  {n:'Battle',p:[['Goal','Reduce the enemy Commander’s HP to 0 to win. After '+MAX_ROUND+' turns, the higher HP % wins.'],['Board','Each side has 4 lanes × 3 columns. The column nearest the center is the front. Melee goes in the front two columns, Ranged and Magic in the back two, Support and Buildings anywhere.'],['Your Turn','Hold 4 cards from your 8-card Deck. Play 1 card and all your units attack, then draw 1.'],['Lane Block','Units only hit enemies in their own lane. With no enemy in the lane, they hit the enemy Commander. If your lane is empty, you get hit too.'],['Merge ◆','Play a duplicate hero card on that hero to Merge. Stat gains and Merge effects differ per hero (max ◆3). A Deck holds only 1 card per hero.'],['Factions','Bastion (Protect), Wildwood (Regen), Ember (ATK). Gather 2 or 4 units of one faction to activate synergy.'],['Building','They don’t attack but block lanes and give effects every turn. Immune to Poison and Freeze.']]},
  {n:'Commander',p:[['Commander Skills','Each Commander has 3 unique skills, used once each in order from turn 1, 3 and 6. Skill 2 unlocks at Commander Lv3, skill 3 at Lv6.'],['Commander Strike','After using all skills, you gain 1 Strike per turn. The later you use it, the more damage each deals, so you can save up and use them at once.'],['Enemy Commander','The enemy also uses Commander skills and Strikes.'],['Expedition','Send idle Commanders on Expeditions to earn cards, Gold, and Gems. Each Commander has different strengths.']]},
- {n:'Growth',p:[['Level','Collect copies and pay Gold to level up (max Lv8). Each level adds 12% of base ATK and HP, and skill damage and heal grow a bit too.'],['Evolve','Collect same-version cards to switch to a higher rarity version. Starts at Bronze League, and you must get the higher version from a chest once.'],['Legendary Awakening','When a Legendary hero first Transcends, its Legendary skill gets stronger and glows gold in battle.'],['Transcend','From Gold League. Transcending a Lv8 hero resets it to Lv1 but adds a star, permanent ATK and HP +30% (of base) and skill values +5.'],['Bond','From Silver League. Raise 2 other heroes to set levels and spend Stardust to permanently strengthen all versions of that hero (max 4 times).']]},
- {n:'Battles & More',p:[['Arena','Face real players’ Decks with similar Trophies. AI controls the opponent Deck. If none are found, you face an AI challenger.'],['Defense Log','When another player fights your Deck it is logged, and you earn Gold if you hold.'],['Account','Link a Google account in Settings to save automatically and continue on other devices.'],['Season','Seasons change every 14 days. Get rewards by your top League (pick an Epic card from Gold League, a Legendary card from Diamond League). Trophies over 700 are cut by half. Global ranking is also available.'],['Party','Each Commander has a separate Deck. Switch at the top of the Party screen.'],['Friendly Match · Sparring','A match where losing costs no Trophies (5 rewards per day). Sparring lets your own Parties fight each other.'],['Weekly Rift','Changes weekly. Sky Stairs (climb floors), Titan Hunt (total damage), Streak Arena (back-to-back fights with carried HP).'],['Daily','Daily Quests, Daily Deals, Weekday Event, Today’s Boss, Check-in, Supply Depot.']]}
+ {n:'Growth',p:[['Level','Collect copies and pay Gold to level up (max Lv8). Each level adds 12% of base ATK and HP, and skill damage and heal grow a bit too.'],['Evolve','Collect same-version cards to switch to a higher rarity version. Starts at Bronze League, and you must get the higher version from a chest once.'],['Legendary Awakening','When a Legendary hero first Transcends, its Legendary skill gets stronger and glows gold in battle.'],['Transcend','From Gold League. Transcending a Lv8 hero resets it to Lv1 but adds a star, permanent ATK and HP +30% (of base) and skill values +5.'],['Rune Engraving','From Silver League. Each hero has an Attack Rune and an HP Rune socket. Reach the hero level needed, then spend Rune Dust and Gold to engrave Attack Rune I → HP Rune I → Attack Rune II → HP Rune II. Every version of that hero gets permanently stronger.']]},
+ {n:'Battles & More',p:[['Arena','Face real players’ Decks with similar Trophies. AI controls the opponent Deck. If none are found, you face an AI challenger.'],['Defense Log','When another player fights your Deck it is logged, and you earn Gold if you hold.'],['Account','Link a Google account in Settings to save automatically and continue on other devices.'],['Season','Seasons change every 14 days. Get rewards by your top League (pick an Epic card from Gold League, a Legendary card from Diamond League). Trophies over 700 are cut by half. Global ranking is also available.'],['Party','Each Commander has a separate Deck. Switch at the top of the Party screen.'],['Daily Twist','Battles with a special rule that changes every day. You keep your Trophies even if you lose, and get rewards up to 5 times a day. Rules: Mirror Match, Iron Wall, Ranged Day, Chaos Deck, Big Hand.'],['Weekly Rift','Changes weekly. Sky Stairs (climb floors), Titan Hunt (total damage), Streak Arena (back-to-back fights with carried HP).'],['Daily','Daily Quests, Daily Deals, Weekday Event, Today’s Boss, Check-in, Supply Depot.']]}
 ];
 RULE_TABS.splice(1,0,{n:'Skills',p:[['Flying','Can’t be hit by Melee attacks (non-Flying).'],['Armor · Invincible','Armor ignores 1 hit of damage. Invincible ignores all damage for one turn.'],['Immune','Can’t get bad effects like Poison, Freeze, or Bleed.'],['Evade · Accurate','Evade dodges Ranged and Magic attacks. Accurate ignores Evade and Dazzle.'],['Counter · Thorns','Counter hits back at Melee attacks. Thorns damage the attacker.'],['Bleed · Toxin','Bleed deals damage on each attack. Toxin lowers ATK on each attack.'],['Silence','Skills and buffs vanish for good.'],['Dazzle','The next attack misses.'],['Transform · Polymorph','Siege Knight transforms into a Watchtower. Polymorph turns an enemy into a Frog.'],['Splash · Pierce','Splash hits around the target. Pierce hits every enemy in the lane.'],['Execute','Instantly defeats low-HP enemies.'],['Curse Link','Linked enemies share damage.'],['Shatter','Breaks Armor and Invincible and deals extra damage.'],['Growth · Overheat','Growth raises HP and Overheat raises ATK each turn.'],['Snare','Melee enemies that hit a Vine Wall can’t attack next time.'],['Bombard','The Catapult hits the enemy Commander directly.']]});
 let ruleTab=0;
@@ -2300,7 +2362,7 @@ function plausibleDeck(o){const T=o.trophies|0,li=leagueIdx(T);const lvCap=Math.
   if(o.wl==='seraphine'&&li<1||o.wl==='maya'&&li<2)return false;if((o.wlLv|0)>Math.min(WL_MAX,4+li*2))return false;
   if(o.t&&Date.now()-o.t>30*864e5)return false;
   return o.deck.every(k=>{const [b,tr]=baseOfKey(k);if(!HEROES[b]||b==='skel')return false;const raw=(o.lvs[k]|0)||1,lv=raw%10||1,rb=Math.floor(raw/10)%10,sbv=Math.floor(raw/100);if(sbv>(li>=SB_LEAGUE?SB_MAX:0))return false;if(lv<1||lv>lvCap)return false;if(rb>Math.max(0,li-2)||rb>rbMax(k))return false;if(heroLeague(b)>li+1)return false;if(tr>HEROES[b].rar&&li<1)return false;return true})}
-/* ===================== v3.5 시즌 · 파티 · 친선전/모의전 · 주간 균열 · 인연 맺기 ===================== */
+/* ===================== v3.5 시즌 · 파티 · 규칙전 · 주간 균열 · 룬 각인 ===================== */
 // ---- 공통
 const DAY=864e5,SEASON_EPOCH=Date.UTC(2026,10,15,15),SEASON_LEN=14*DAY;
 function seasonNo(){return Math.floor((Date.now()-SEASON_EPOCH)/SEASON_LEN)+1}
@@ -2329,11 +2391,11 @@ function checkSeason(){const cur=seasonNo();if(!save.season){save.season={n:cur,
   if(save.season.n>=cur)return;const best=save.season.best|0,R=SEASON_REWARD(best),before=save.trophies;
   save.gold+=R.gold;save.gems+=R.gems;addDust(R.dust);if(save.trophies>700)save.trophies=700+Math.floor((save.trophies-700)/2);
   const old=save.season.n;const SP=SEASON_PICK(best);if(SP)queuePick(SP.t,SP.c,'Season '+old+' Reward');save.season={n:cur,best:leagueIdx(save.trophies)};persist();track('season_reward',{season:old,best});
-  setTimeout(()=>{const m=modal(`<div class="ribbon">Season ${old} Over!</div><div class="rw" style="line-height:1.8">Best league this season: <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b><br>${ico('coin','mi')} ${R.gold} · ${ico('gem','mi')} ${R.gems} · <span class="dusti">✦</span> Stardust ${R.dust}<br>+ ${CHESTS[R.chest].n}${SP?'<br>+ <b style="color:#ffb84d">'+pickTxt(SP)+'</b>':''}<br><small style="opacity:.7">Trophies ${before} → ${save.trophies} · Season ${cur} starts!</small></div><div class="btns"><button class="btn" id="snGo">Open Chest</button></div>`);m.querySelector('#snGo').onclick=()=>{m.remove();openChestModal(R.chest,()=>showPick(showLobby))}},700)}
+  setTimeout(()=>{const m=modal(`<div class="ribbon">Season ${old} Over!</div><div class="rw" style="line-height:1.8">Best league this season: <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b><br>${ico('coin','mi')} ${R.gold} · ${ico('gem','mi')} ${R.gems} · <span class="dusti">✦</span> Rune Dust ${R.dust}<br>+ ${CHESTS[R.chest].n}${SP?'<br>+ <b style="color:#ffb84d">'+pickTxt(SP)+'</b>':''}<br><small style="opacity:.7">Trophies ${before} → ${save.trophies} · Season ${cur} starts!</small></div><div class="btns"><button class="btn" id="snGo">Open Chest</button></div>`);m.querySelector('#snGo').onclick=()=>{m.remove();openChestModal(R.chest,()=>showPick(showLobby))}},700)}
 async function fbTopRank(){try{const r=await fbFetch(FB_BASE+':runQuery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'decks'}],orderBy:[{field:{fieldPath:'trophies'},direction:'DESCENDING'}],limit:30}})},5000);if(!r.ok)return null;const j=await r.json();return j.filter(x=>x.document).map(x=>{const f=x.document.fields||{};return {uid:x.document.name.split('/').pop(),name:fbDec(f.name),wl:fbDec(f.wl),tr:fbDec(f.trophies)}})}catch(e){return null}}
 function showSeason(){checkSeason();const best=save.season.best|0;
   const m=modal(`<div class="ribbon">Season ${seasonNo()}</div><div class="rw">Time left <b>${fmtDH(seasonLeft())}</b> · Best this season: <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b></div>
-   <div class="sn2"><div class="snrw"><b>Season Rewards (by best league)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${L.n}</span><small>${R.gold} Gold · Gems ${R.gems} · Stardust ${R.dust} · ${CHESTS[R.chest].n}${SEASON_PICK(i)?' · <b style="color:#ffb84d">'+pickTxt(SEASON_PICK(i))+'</b>':''}</small></div>`}).join('')}<small style="opacity:.6">Trophies above 700 are halved when the season ends</small></div>
+   <div class="sn2"><div class="snrw"><b>Season Rewards (by best league)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${L.n}</span><small>${R.gold} Gold · Gems ${R.gems} · Rune Dust ${R.dust} · ${CHESTS[R.chest].n}${SEASON_PICK(i)?' · <b style="color:#ffb84d">'+pickTxt(SEASON_PICK(i))+'</b>':''}</small></div>`}).join('')}<small style="opacity:.6">Trophies above 700 are halved when the season ends</small></div>
    <div class="snrk"><b>Global Ranking</b><div id="rkList" class="rklist">Loading...</div></div></div><div class="btns"><button class="btn sm" data-close>Close</button></div>`);
   m.querySelector('.box').classList.add('wide');
   fbTopRank().then(L=>{const el=m.querySelector('#rkList');if(!el)return;const me=fbStore().uid;if(!L||!L.length){el.innerHTML='<small style="opacity:.6">No rankings yet</small>';return}
@@ -2346,30 +2408,32 @@ function showChallenge(){(save.guide=save.guide||{}).adv=1;screen='challenge';en
   const cards=[
     {id:'adv',n:'Adventure',d:`Stage ${Math.min(save.cleared+1,STAGES.length)}/${STAGES.length}`,ic:'map',c:'#7fc8ff'},
     {id:'boss',n:'Today’s Boss',d:bossLeft()>0?`Tries left ${bossLeft()}`:'Tomorrow',ic:'boss',c:'#ff8a7a',dot:bossLeft()>0},
-    {id:'brawl',n:'Friendly Match',d:`Lose freely · Reward ${bw.w}/${BRAWL_MAX}`,ic:'battle',c:'#ffd667',dot:bw.w<BRAWL_MAX},
-    {id:'train',n:'Sparring',d:'Match up your own parties',ic:'hero',c:'#9dffb9'},
+    {id:'twist',n:'Daily Twist',d:`Today: <b style="color:#ffd667">${twistToday().n}</b> · Tomorrow: ${twistOf(1).n}<br>${twistToday().d} · Rewards ${bw.w}/${BRAWL_MAX}`,ic:'battle',c:'#ffd667',dot:bw.w<BRAWL_MAX},
     {id:'dg',n:'Weekly Rift',d:`This week: ${M.n} · ${fmtDH(weekLeft())} left`,ic:'crate',c:'#c77dff',dot:true}
   ];
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← Lobby</button><span class="h2">Challenge</span>${resBar()}</div>
   <div class="body"><div class="chgrid">${cards.map(c=>`<button class="chcard" data-ch="${c.id}" style="--cc:${c.c}">${ico(c.ic,'chico')}<b>${c.n}</b><small>${c.d}</small>${c.dot?'<i class="dot"></i>':''}</button>`).join('')}</div></div></div>`;
   bind('#bk',showLobby);
-  app.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{sfx('tick');const k=b.dataset.ch;if(k==='adv')showStages();else if(k==='boss')startDaily();else if(k==='brawl')startBrawl();else if(k==='train')showTraining();else showDungeon()})}
-// ---- 친선전
+  app.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{sfx('tick');const k=b.dataset.ch;if(k==='adv')showStages();else if(k==='boss')startDaily();else if(k==='twist')startBrawl();else showDungeon()})}
+// ---- 오늘의 규칙전 (v3.19, 옛 대전 모드 2개를 합침)
 const BRAWL_MAX=5;
 function brawlState(){const td=new Date().toDateString();if(!save.brawl||save.brawl.d!==td)save.brawl={d:td,w:0};return save.brawl}
-async function startBrawl(){ensureDeck();const li=leagueIdx(save.trophies);const W=WL();
-  const mm=document.createElement('div');mm.className='modal vsm';mm.innerHTML=`<div class="vsbox"><div class="vside me"><img src="../assets/k_${W.art}.webp?v=${ASSET_V}"><b>${esc(myNick())}</b><small>Friendly Match · No trophy loss</small></div><div class="vsx">VS</div><div class="vside en searching"><div class="vsq">?</div><b>Finding opponent...</b></div><div class="vstitle">Friendly Match</div></div>`;app.appendChild(mm);
+async function startBrawl(){ensureDeck();const li=leagueIdx(save.trophies);const W=WL();const TW=twistToday();
+  if(TW.id==='mirror'){const d=save.deck.slice();const lv={},rb={},sb={};d.forEach(id=>{const o=save.owned[id]||{lv:1};lv[id]=o.lv;rb[id]=o.rb|0;sb[id]=sbOf(baseOf(id))});return startBattle({mode:'twist',twist:'mirror',eName:'Mirror '+myNick(),eLook:'art:'+W.art,eWl:save.warlord,eWlLv:wlLv(save.warlord),eHp:wlHp()+li*2*DS,eDeck:d,eLvs:lv,eRbs:rb,eSbs:sb,noise:2,pHp:wlHp()+li*2*DS})}
+  const mm=document.createElement('div');mm.className='modal vsm';mm.innerHTML=`<div class="vsbox"><div class="vside me"><img src="../assets/k_${W.art}.webp?v=${ASSET_V}"><b>${esc(myNick())}</b><small>Daily Twist · ${TW.n}</small></div><div class="vsx">VS</div><div class="vside en searching"><div class="vsq">?</div><b>Finding opponent...</b></div><div class="vstitle">Daily Twist</div></div>`;app.appendChild(mm);
   const opp=await findOpponentT(3000);let c;const en=mm.querySelector('.vside.en');en.classList.remove('searching');
   if(opp){const OW=WARLORDS[opp.wl];const elv={},erb={},esb={};opp.deck.forEach(k=>{const raw=(opp.lvs[k]|0)||1;elv[k]=raw%10||1;erb[k]=Math.floor(raw/10)%10;esb[k]=Math.floor(raw/100)});
     en.innerHTML=`<img src="../assets/k_${OW.art}.webp?v=${ASSET_V}"><b>${esc(opp.name)}</b><small><span class="ubadge">User Deck</span> ${OW.n}</small>`;
-    c={mode:'brawl',online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:wlHpAt(opp.wl,opp.wlLv)+leagueIdx(opp.trophies||0)*2*DS,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2*DS}}
-  else{const d=aiDeck(Math.min(3,Math.floor(li/2)));en.innerHTML=`<img src="../assets/k_c_rival2.webp?v=${ASSET_V}"><b>Friendly Match Opponent</b><small>AI</small>`;c={mode:'brawl',eName:'Friendly Match Opponent',eLook:'art:c_rival2',eHp:(20+li*2)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())),noise:3,pHp:wlHp()+li*2*DS}}
-  mm.querySelector('.vstitle').textContent='Opponent found!';sfx('whoosh');setTimeout(()=>{mm.remove();startBattle(c)},1500)}
-// ---- 모의전
-function showTraining(){const ids=Object.keys(WARLORDS).filter(k=>wlUnlocked(k)&&squadOf(k).length===8);
-  const m=modal(`<div class="ribbon">Sparring</div><div class="rw">Pick an opposing party to fight yours. No rewards or trophy changes.</div><div class="trlist">${ids.map(k=>{const W=WARLORDS[k];return `<button class="trsq" data-tr="${k}"><img src="../assets/k_${W.art}.webp?v=${ASSET_V}"><b>${W.n}</b><small>${k===save.warlord?'Current Party (Mirror)':'Party'}</small></button>`}).join('')}</div><div class="btns"><button class="btn sub sm" data-close>Close</button></div>`);
-  m.querySelectorAll('[data-tr]').forEach(b=>b.onclick=()=>{const k=b.dataset.tr,W=WARLORDS[k];const d=squadOf(k).slice();const lv={},rb={},sb={};d.forEach(id=>{const o=save.owned[id]||{lv:1};lv[id]=o.lv;rb[id]=o.rb|0;sb[id]=sbOf(baseOf(id))});m.remove();
-    startBattle({mode:'train',eName:W.n+' Party',eLook:'art:'+W.art,eWl:k,eWlLv:wlLv(k),eHp:wlHp(k),eDeck:d,eLvs:lv,eRbs:rb,eSbs:sb,noise:2,pHp:wlHp()})})}
+    c={mode:'twist',twist:TW.id,online:null,eName:opp.name,eLook:'art:'+OW.art,eWl:opp.wl,eWlLv:opp.wlLv|0||1,eHp:wlHpAt(opp.wl,opp.wlLv)+leagueIdx(opp.trophies||0)*2*DS,eDeck:opp.deck.slice(),eLvs:elv,eRbs:erb,eSbs:esb,noise:2,pHp:wlHp()+li*2*DS}}
+  else{const d=aiDeck(Math.min(3,Math.floor(li/2)));en.innerHTML=`<img src="../assets/k_c_rival2.webp?v=${ASSET_V}"><b>Twist Rival</b><small>AI</small>`;c={mode:'twist',twist:TW.id,eName:'Twist Rival',eLook:'art:c_rival2',eHp:(20+li*2)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())),noise:3,pHp:wlHp()+li*2*DS}}
+  mm.querySelector('.vstitle').textContent='Opponent found! · '+TW.n;if(TW.id==='wall'){c.pHp=Math.round(c.pHp*1.5);c.eHp=Math.round(c.eHp*1.5)}if(TW.id==='chaos'){c.pDeck=chaosDeck()}sfx('whoosh');setTimeout(()=>{mm.remove();startBattle(c)},1500)}
+const TWISTS=[{id:'mirror',n:'Mirror Match',d:'Fight a copy of your own Party'},{id:'wall',n:'Iron Wall',d:'Both Commanders HP +50%'},{id:'ranged',n:'Ranged Day',d:'Ranged & Magic heroes ATK +25%'},{id:'chaos',n:'Chaos Deck',d:'Fight with 8 random heroes you own'},{id:'bighand',n:'Big Hand',d:'Both sides hold 5 cards'}];
+function kstDay(off){return Math.floor((Date.now()+9*36e5)/DAY)+(off|0)}
+function twistOf(off){return TWISTS[((kstDay(off)%TWISTS.length)+TWISTS.length)%TWISTS.length]}
+function twistToday(){return twistOf(0)}
+function chaosDeck(){const seen={},pool=[];Object.keys(save.owned).forEach(id=>{const b=baseOf(id);if(HEROES[b]&&!HEROES[b].token&&b!=='skel'){if(!seen[b]||(save.owned[id].lv|0)>(save.owned[seen[b]].lv|0))seen[b]=id}});Object.values(seen).forEach(id=>pool.push(id));for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}const d=pool.slice(0,8);return d.length===8?d:save.deck.slice()}
+let TWIST=null,HANDMAX=4,BGEN=0;
+function showTraining(){showChallenge()}
 // ---- 주간 균열 (주마다 바뀜)
 const DG_MODES={tower:{n:'Sky Stairs',d:'Climb one floor at a time. Higher floors mean tougher foes and bigger rewards.'},raid:{n:'Titan Hunt',d:'Challenge a huge Titan 3 times a day to stack damage. Defeat it for big rewards!'},pit:{n:'Streak Arena',d:'Commander HP carries over between fights. How many wins in a row? 3 runs a day.'}};
 function weekLeft(){return SEASON_EPOCH+(weekNo()+1)*7*DAY-Date.now()}
@@ -2377,9 +2441,9 @@ function ensureDungeon(){const wk=weekNo();if(!save.dg||save.dg.wk!==wk){save.dg
 function raidMax(lv){return (90+lv*40)*DS}
 function showDungeon(){const D=ensureDungeon(),M=DG_MODES[D.mode];if(D.mode==='raid'&&!D.raidHp)D.raidHp=raidMax(D.raidLv);
   let body='';
-  if(D.mode==='tower')body=`<div class="dgbig">${D.floor}F</div><div class="rw">Next reward: Gold ${30+D.floor*6} · Stardust ${3+Math.floor(D.floor/3)}${D.floor%5===0?' · Gems 5':''}${D.floor%10===0?' · <b style="color:#ffb84d">'+(D.floor>=20?'Legendary':'Epic')+' Card Pick</b>':''}</div><div class="rw" style="font-size:12.5px;opacity:.75">F10: Epic card pick · From F20, every 10F: Legendary card pick</div><div class="btns"><button class="btn" id="dgGo">${D.floor}F Challenge</button></div>`;
-  if(D.mode==='raid')body=`<div class="dgboss"><img src="../assets/k_c_boss.webp?v=${ASSET_V}"><div class="bar q" style="height:14px;width:260px"><i style="width:${D.raidHp/raidMax(D.raidLv)*100}%;background:linear-gradient(#ff7b7b,#c22)"></i></div><b>Titan Lv${D.raidLv} · ${D.raidHp}/${raidMax(D.raidLv)}</b></div><div class="rw">Tries left today ${D.tries}/3 · 4 Gold per 1 dmg dealt, 1 Stardust per 5</div><div class="btns"><button class="btn" id="dgGo" ${D.tries>0?'':'disabled'}>Challenge Titan</button></div>`;
-  if(D.mode==='pit')body=`<div class="dgbig">${D.run?D.run.w+' win streak':'Best '+D.pitBest+' wins'}</div><div class="rw">${D.run?`Commander HP ${D.run.hp} left · Foes get stronger as you win`:`Tries left today ${D.tries}/3 · Each win: 25 Gold, 2 Stardust`}</div><div class="btns"><button class="btn" id="dgGo" ${D.run||D.tries>0?'':'disabled'}>${D.run?'Next Opponent':'Enter Arena'}</button>${D.run?'<button class="btn sub" id="dgStop">Stop Here</button>':''}</div>`;
+  if(D.mode==='tower')body=`<div class="dgbig">${D.floor}F</div><div class="rw">Next reward: Gold ${30+D.floor*6} · Rune Dust ${3+Math.floor(D.floor/3)}${D.floor%5===0?' · Gems 5':''}${D.floor%10===0?' · <b style="color:#ffb84d">'+(D.floor>=20?'Legendary':'Epic')+' Card Pick</b>':''}</div><div class="rw" style="font-size:12.5px;opacity:.75">F10: Epic card pick · From F20, every 10F: Legendary card pick</div><div class="btns"><button class="btn" id="dgGo">${D.floor}F Challenge</button></div>`;
+  if(D.mode==='raid')body=`<div class="dgboss"><img src="../assets/k_c_boss.webp?v=${ASSET_V}"><div class="bar q" style="height:14px;width:260px"><i style="width:${D.raidHp/raidMax(D.raidLv)*100}%;background:linear-gradient(#ff7b7b,#c22)"></i></div><b>Titan Lv${D.raidLv} · ${D.raidHp}/${raidMax(D.raidLv)}</b></div><div class="rw">Tries left today ${D.tries}/3 · 4 Gold per 1 dmg dealt, 1 Rune Dust per 5</div><div class="btns"><button class="btn" id="dgGo" ${D.tries>0?'':'disabled'}>Challenge Titan</button></div>`;
+  if(D.mode==='pit')body=`<div class="dgbig">${D.run?D.run.w+' win streak':'Best '+D.pitBest+' wins'}</div><div class="rw">${D.run?`Commander HP ${D.run.hp} left · Foes get stronger as you win`:`Tries left today ${D.tries}/3 · Each win: 25 Gold, 2 Rune Dust`}</div><div class="btns"><button class="btn" id="dgGo" ${D.run||D.tries>0?'':'disabled'}>${D.run?'Next Opponent':'Enter Arena'}</button>${D.run?'<button class="btn sub" id="dgStop">Stop Here</button>':''}</div>`;
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← Challenge</button><span class="h2">Weekly Rift</span>${resBar()}</div>
   <div class="body"><div class="dgwrap"><div class="dgtabs">${Object.entries(DG_MODES).map(([k,x])=>`<span class="${k===D.mode?'on':''}">${x.n}</span>`).join('')}<small>Changes weekly · ${fmtDH(weekLeft())} left</small></div>
   <div class="dgcard"><h3>${M.n}</h3><p>${M.d}</p>${body}</div></div></div></div>`;
@@ -2388,32 +2452,36 @@ function startDungeon(){ensureDeck();const D=ensureDungeon();const li=leagueIdx(
   if(D.mode==='tower'){const f=D.floor;const d=aiDeck(Math.min(3,Math.floor(f/7)),mulberry(D.wk*100+f));startBattle({mode:'tower',eName:'Sky Stairs '+f+'F',eLook:['goblin','beast','knightc','flame','ice','storm','grave','dragonl'][f%8],eHp:Math.round((14+f*1.6)*DS),eDeck:d,eLvs:lvMap(d,1+Math.floor(f/3)),noise:Math.max(1,10-f*.4),pHp:wlHp()})}
   if(D.mode==='raid'){if(D.tries<=0)return;D.tries--;persist();const lv=D.raidLv;const d=aiDeck(Math.min(3,1+Math.floor(lv/2)),mulberry(D.wk*7+lv),'ember');startBattle({mode:'raid',eName:'Titan Lv'+lv,eLook:'boss',bossSig:'boss',eHp:D.raidHp,eHpMax:raidMax(lv),eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+lv),noise:2,pHp:wlHp()+li*2*DS,raidStart:D.raidHp})}
   if(D.mode==='pit'){if(!D.run){if(D.tries<=0)return;D.tries--;D.run={w:0,hp:wlHp()+li*2*DS};persist()}const w=D.run.w;const d=aiDeck(Math.min(3,Math.floor((w+li)/3)));startBattle({mode:'pit',eName:'Streak Arena Foe #'+(w+1)+'',eLook:['beast','goblin','grave','storm','flame'][w%5],eHp:(16+w*3)*DS,eDeck:d,eLvs:lvMap(d,Math.round(avgLv())+Math.floor(w/2)),noise:Math.max(1,8-w),pHp:D.run.hp,pHpMax:wlHp()+li*2*DS})}}
-const SPECIAL_MODES=['brawl','train','tower','raid','pit'];
+const SPECIAL_MODES=['brawl','train','twist','tower','raid','pit'];
 function specialEnd(win){const D=save.dg;let gold=0,gems=0,dust=0,txt='';
-  if(cfg.mode==='train')txt='<div style="font-size:13px;opacity:.75">Sparring gives no rewards or trophy changes</div>';
-  if(cfg.mode==='brawl'){const b=brawlState();if(win&&b.w<BRAWL_MAX){b.w++;gold=30;dust=5;const id=giveCardsRandom(3);txt=`<div style="font-size:13px">Friendly Match reward ${b.w}/${BRAWL_MAX}${id?' · '+V(id).name+' card x3':''}</div>`}else if(win)txt='<div style="font-size:13px;opacity:.75">Today’s Friendly Match rewards all claimed</div>';else txt='<div style="font-size:13px;opacity:.75">You lose nothing in a Friendly Match</div>'}
+  if(cfg.mode==='train')txt='<div style="font-size:13px;opacity:.75">No rewards or Trophy changes</div>';
+  if(cfg.mode==='brawl'||cfg.mode==='twist'){const b=brawlState();if(win&&b.w<BRAWL_MAX){b.w++;gold=30;dust=5;const id=giveCardsRandom(3);txt=`<div style="font-size:13px">Twist reward ${b.w}/${BRAWL_MAX}${id?' · '+V(id).name+' card x3':''}</div>`}else if(win)txt='<div style="font-size:13px;opacity:.75">You got all Twist rewards for today</div>';else txt='<div style="font-size:13px;opacity:.75">Losing a Daily Twist costs nothing</div>'}
   let txt2='';
   if(cfg.mode==='tower'){if(win){const f=D.floor;gold=30+f*6;dust=3+Math.floor(f/3);if(f%5===0)gems=5;if(f%10===0){queuePick(f>=20?3:2,1,'Sky Stairs '+f+'F Reward');txt2=`<div style="font-size:13px;color:#ffb84d">${f>=20?'Legendary':'Epic'} card pick earned! Choose in the Lobby</div>`}D.floor++;txt=`<div style="font-size:14px;color:#ffd667">${f}F cleared! Next: ${D.floor}F</div>`+txt2}}
-  if(cfg.mode==='raid'){const dmg=Math.max(0,cfg.raidStart-st.cmd.e.hp);D.raidHp=Math.max(0,D.raidHp-dmg);gold=Math.round(dmg/DS*4);dust=Math.floor(dmg/DS/5);txt=`<div style="font-size:14px">Dealt <b style="color:#ff8a8a">${dmg}</b> damage · HP left ${D.raidHp}</div>`;if(D.raidHp<=0){gems=20;dust+=30;txt+=`<div style="font-size:15px;font-weight:900;color:#ffd667">Titan defeated! Gems 20 · Stardust +30 · Next Titan Lv${D.raidLv+1}</div>`;D.raidLv++;D.raidHp=raidMax(D.raidLv)}}
+  if(cfg.mode==='raid'){const dmg=Math.max(0,cfg.raidStart-st.cmd.e.hp);D.raidHp=Math.max(0,D.raidHp-dmg);gold=Math.round(dmg/DS*4);dust=Math.floor(dmg/DS/5);txt=`<div style="font-size:14px">Dealt <b style="color:#ff8a8a">${dmg}</b> damage · HP left ${D.raidHp}</div>`;if(D.raidHp<=0){gems=20;dust+=30;txt+=`<div style="font-size:15px;font-weight:900;color:#ffd667">Titan defeated! Gems 20 · Rune Dust +30 · Next Titan Lv${D.raidLv+1}</div>`;D.raidLv++;D.raidHp=raidMax(D.raidLv)}}
   if(cfg.mode==='pit'){if(win&&D.run){D.run.w++;D.run.hp=Math.min(cfg.pHpMax||st.cmd.p.max,st.cmd.p.hp+3*DS);gold=25;dust=2;D.pitBest=Math.max(D.pitBest,D.run.w);txt=`<div style="font-size:14px;color:#ffd667">${D.run.w} win streak! Commander HP ${D.run.hp} (+30 heal)</div>`}else if(D.run){txt=`<div style="font-size:14px">${D.run.w} win streak ended · Best this week: ${D.pitBest} wins</div>`;D.run=null}}
   persist();return {gold,gems,dust,txt}}
-function specialAgain(){if(cfg.mode==='brawl')return startBrawl();if(cfg.mode==='train')return showTraining();return showDungeon()}
-// ---- 인연 맺기
+function specialAgain(){if(cfg.mode==='brawl'||cfg.mode==='twist')return startBrawl();if(cfg.mode==='train')return showTraining();return showDungeon()}
+// ---- 룬 각인 (v3.19: 영웅마다 룬 홈 2개 · 공격 룬/체력 룬을 번갈아 새김 · save.sb = 새긴 단계 합계)
 const SB_MAX=4,SB_LEAGUE=2,SB_DUST=[15,30,50,80];
+const RUNE_STEPS=[{t:'Attack Rune',r:'I',d:'ATK +12%'},{t:'HP Rune',r:'I',d:'HP +20%'},{t:'Attack Rune',r:'II',d:'ATK +12% (total +24%)'},{t:'HP Rune',r:'II',d:'HP +20% (total +40%)'}];
 function sbOf(b){return (save.sb&&save.sb[b])|0}
-function sbPartners(b,k){const P=heroBases().filter(x=>x!==b&&HEROES[x].cls!=='building'&&heroLeague(x)<=Math.max(2,heroLeague(b)));let h=0;for(const ch of b)h=(h*31+ch.charCodeAt(0))>>>0;const a=P[(h+k*7)%P.length],c=P[(h+k*13+3)%P.length];return a===c?[a,P[(h+k*13+4)%P.length]]:[a,c]}
 function bestLv(b){let m=0;Object.keys(save.owned).forEach(id=>{if(baseOf(id)===b)m=Math.max(m,save.owned[id].lv)});return m}
-function sbReq(b){const k=sbOf(b)+1;if(k>SB_MAX)return null;return {k,lv:k+1,parts:sbPartners(b,k),dust:SB_DUST[k-1],gold:200*k}}
-function sbHTML(id){const b=baseOf(id);if(HEROES[b].token)return '';const n=sbOf(b),R=sbReq(b);
-  const gems=Array.from({length:SB_MAX},(_,i)=>`<i class="${i<n?'on':''}">◆</i>`).join('');
-  if(!R)return `<div class="sbbox"><b>Bond</b> <span class="sbg">${gems}</span> <small>Max Bond reached</small></div>`;
-  const ok=R.parts.every(p=>bestLv(p)>=R.lv),lockL=save.bestLeague<SB_LEAGUE;
-  return `<div class="sbbox"><b>Bond</b> <span class="sbg">${gems}</span> <small>${n}/${SB_MAX} · Each Bond gives ATK +6%, HP +10% (all versions)</small>
-   <div class="sbreq">${R.parts.map(p=>{const have=bestLv(p);return `<div class="${have>=R.lv?'ok':''}"><div class="sbp">${portrait(vid(p,HEROES[p].rar))}</div><small>${HEROES[p].name} Lv${R.lv}${have>=R.lv?' ✓':' ('+(have||'-')+')'}</small></div>`}).join('')}
-   <button class="btn sm ${ok&&!lockL?'grn':'sub'}" id="dSb" ${ok&&!lockL&&(save.dust|0)>=R.dust&&save.gold>=R.gold?'':'disabled'}>Bond · <span class="dusti">✦</span>${R.dust} · <span class="coin" style="width:10px;height:10px"></span>${R.gold}</button></div>
+function runeAB(n){return {a:Math.ceil(n/2),h:Math.floor(n/2)}}
+function sbReq(b){const k=sbOf(b)+1;if(k>SB_MAX)return null;return {k,lv:k*2,dust:SB_DUST[k-1],gold:200*k,step:RUNE_STEPS[k-1]}}
+function sbHTML(id){const b=baseOf(id);if(HEROES[b].token)return '';const n=sbOf(b),R=sbReq(b),ab=runeAB(n);
+  const sock=(nm,cls,lvl)=>`<div class="rsock ${cls}${lvl?' on':''}"><i>${cls==='ra'?'⚔':'❤'}</i><b>${nm}</b><small>${lvl?(lvl===2?'II':'I')+'':'Empty'}</small></div>`;
+  const head=`<div class="rsocks">${sock('Attack Rune','ra',ab.a)}${sock('HP Rune','rh',ab.h)}</div>`;
+  if(!R)return `<div class="sbbox rune"><b>Rune Engraving</b> <small>All runes engraved · ATK +24%, HP +40%</small>${head}</div>`;
+  const have=bestLv(b),ok=have>=R.lv,lockL=save.bestLeague<SB_LEAGUE;
+  return `<div class="sbbox rune"><b>Rune Engraving</b> <small>${n}/${SB_MAX} · Runes apply to every version of this hero</small>${head}
+   <div class="rnext">Next: <b>${R.step.t} ${R.step.r}</b> · ${R.step.d} · Needs this hero at Lv${R.lv} ${ok?'✓':'('+(have||'-')+')'}</div>
+   <button class="btn sm ${ok&&!lockL?'grn':'sub'}" id="dSb" ${ok&&!lockL&&(save.dust|0)>=R.dust&&save.gold>=R.gold?'':'disabled'}>Engrave · <span class="dusti">✦</span>${R.dust} · <span class="coin" style="width:10px;height:10px"></span>${R.gold}</button>
    ${lockL?`<small style="opacity:.6">${LEAGUES[SB_LEAGUE].n} League required</small>`:''}</div>`}
-function doSoulbind(id){const b=baseOf(id),R=sbReq(b);if(!R||save.bestLeague<SB_LEAGUE)return;if(!R.parts.every(p=>bestLv(p)>=R.lv))return toast('A required hero’s level is too low');if((save.dust|0)<R.dust||save.gold<R.gold)return toast('Not enough Stardust or Gold');
-  save.dust-=R.dust;save.gold-=R.gold;save.sb=save.sb||{};save.sb[b]=R.k;persist();sfx('win');track('soulbind',{b,k:R.k});toast(HEROES[b].name+' Bond Lv'+R.k+'!');document.querySelectorAll('.modal').forEach(x=>x.remove());heroDetail(id)}
+function doSoulbind(id){const b=baseOf(id),R=sbReq(b);if(!R||save.bestLeague<SB_LEAGUE)return;if(bestLv(b)<R.lv)return toast('Hero level is too low');if((save.dust|0)<R.dust||save.gold<R.gold)return toast('Not enough Rune Dust or Gold');
+  save.dust-=R.dust;save.gold-=R.gold;save.sb=save.sb||{};save.sb[b]=R.k;persist();sfx('win');track('rune',{b,k:R.k});toast(HEROES[b].name+' · '+R.step.t+' '+R.step.r+' engraved!');document.querySelectorAll('.modal').forEach(x=>x.remove());heroDetail(id)}
+function runeMigrate(){if(save.runeMig)return;save.runeMig=1;const bound=Object.keys(save.sb||{}).filter(b=>(save.sb[b]|0)>0);persist();if(!bound.length)return;
+  const show=()=>{if(document.querySelector('.modal')||screen!=='lobby')return setTimeout(show,1500);modal(`<div class="ribbon">Now Rune Engraving</div><div class="rw" style="line-height:1.7">The old 'Bond' upgrade is now <b>Rune Engraving</b>.<br>Progress for ${bound.length} heroes moved over <b>unchanged</b> into rune steps. Nothing was lost.<br><small style="opacity:.75">At step 4 it is still ATK +24% and HP +40%, same as before.</small></div><div class="btns"><button class="btn" data-close>OK</button></div>`)};setTimeout(show,900)}
 function playerSbs(){const o={};Object.keys(save.owned).forEach(id=>o[id]=sbOf(baseOf(id)));return o}
 /* ===================== v3.6 스킬 전부 · 영웅별 합체 · 덱 중복 금지 ===================== */
 function VU(u){const v=V(u.key);if(!u.sil)return v;return u._sv||(u._sv={...v,skill:'none',ex:null,sv:0,exd:''})}
@@ -2512,14 +2580,14 @@ function showWarlords(){
   const id=wlView,W=WARLORDS[id],un=wlUnlocked(id),cur=save.warlord===id,lv=wlLv(id);
   const sk=wskList(id).map((S,i)=>{const lock=lv<WSK_LV[i];return `<div class="wsk2 ${lock?'off':''}"><span class="wsi">${i+1}</span><div><b>${S.n}</b> <small>${WSK_TURN[i]} turn+${lock?' · 🔒 Lv'+WSK_LV[i]:''}</small><p>${S.d}</p></div></div>`}).join('');
   const btn=cur?'<span class="wcur">In use</span>':(un&&expOf(id))?'<span class="wlk">On Expedition</span>':un?`<button class="btn grn" data-pick="${id}">Deploy this Commander</button>`:W.unlock.t==='gems'?`<button class="btn" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} Recruit</button>`:`<span class="wlk">🔒 ${W.unlock.d}</span>`;
-  app.innerHTML=`<div class="screen wl2" style="--fc:${FAC[W.fac].c}"><div class="topbar"><button class="back" id="bk">← Lobby</button><span class="h2">Commander</span>${resBar()}</div>
+  app.innerHTML=`<div class="screen wl2 wl3" style="--fc:${FAC[W.fac].c}"><div class="topbar"><button class="back" id="bk">← Lobby</button><span class="h2">Commander</span>${resBar()}</div>
   <div class="wl2main">
     <div class="wl2art ${un?'':'lock'}"><div class="wl2glow"></div><img src="../assets/k_${W.art}.webp?v=${ASSET_V}" alt=""></div>
     <div class="wl2info">
       <div class="wl2name">${W.n} <span class="wl2fac">${facIcon(W.fac,'ci')}${FAC[W.fac].n}</span></div>
       <div class="wl2stat"><span class="hrt">♥</span> HP <b>${wlHp(id)}</b> <span class="wl2lv">Lv ${lv}/${WL_MAX}</span>${un&&lv<WL_MAX?`<div class="bar q wl2xp"><i style="width:${wlXp(id)/wlNeed(lv)*100}%"></i></div>`:''}</div>
       <div class="wl2pas"><b>Passive</b> ${W.pas}</div>
-      <div class="wl2sk">${sk}<div class="wsk2 strk"><span class="wsi">⚔</span><div><b>Commander Strike</b> <small>After all skills are used</small><p>Stacks 1 per turn; the later you use it, the more damage per stack</p></div></div></div>
+      <div class="wl2sk"><div class="wl3h">Skills</div>${sk}<div class="wsk2 strk"><span class="wsi">⚔</span><div><b>Commander Strike</b> <small>After all skills are used</small><p>Stacks 1 per turn; the later you use it, the more damage per stack</p></div></div></div>
       <div class="wl2btn">${btn}</div>
     </div>
   </div>
@@ -2546,15 +2614,15 @@ function showHeroes(){
   const unkCard=x=>{if(x.startsWith('L:')){const b=x.slice(2);const L=LEAGUES.find(L=>L.un.includes(b));return `<div class="hc2 lock"><div class="hc2art" style="filter:brightness(0) opacity(.6)">${portrait(vid(b,HEROES[b].rar))}</div><div class="hc2nm">???</div><div class="hc2sub">${L?L.n+' League':''}</div></div>`}
     const t=tierOf(x);return `<div class="hc2 unk t${t}" data-id="${x}"><div class="hc2art" style="filter:brightness(.18) saturate(0)">${portrait(x)}</div><div class="hc2nm" style="color:${RAR[t].c}">${RAR[t].n}</div><div class="hc2sub">Undiscovered</div></div>`};
   const fc=f=>save.deck.filter(id=>V(id).fac===f).length;
-  app.innerHTML=`<div class="screen hs2"><div class="topbar"><button class="back" id="bk">← Lobby</button><span class="h2">Party</span>${resBar()}</div>
-  <div class="hs2top">
+  app.innerHTML=`<div class="screen hs2 ps3"><div class="topbar"><button class="back" id="bk">← Lobby</button><span class="h2">Party</span>${resBar()}</div>
+  <div class="ps3l"><div class="ps3cap">Battle Formation</div><div class="hs2top">
     <button class="hs2wl" id="hWl" style="--fc:${FAC[W.fac].c}"><img src="../assets/k_${W.art}.webp?v=${ASSET_V}" alt=""><b>${W.n}</b><small>Lv${wlLv()} · Commander</small></button>
     <div class="hs2deck">${Array.from({length:8},(_,i)=>{const id=save.deck[i];if(!id)return '<div class="hs2slot empty">+</div>';const o=save.owned[id]||{lv:1};return `<div class="hs2slot t${tierOf(id)}" data-id="${id}">${portrait(id)}<span>${o.lv}</span></div>`}).join('')}</div>
     <div class="hs2side"><div class="hs2pw">${ico('bolt','pwi')}${deckPower()}<small>Party Power</small></div><div class="hs2syn">${FAC_KEYS.map(f=>`<span style="color:${FAC[f].c}">${facIcon(f,'ci')}${fc(f)}</span>`).join('')}</div><button class="btn sm" data-auto="">Auto Deck</button></div>
   </div>
-  <div class="sqrow"><span>Party</span>${Object.keys(WARLORDS).filter(k=>wlUnlocked(k)).map(k=>{const K=WARLORDS[k];const busy=expOf(k);return `<button class="sqtab ${k===save.warlord?'on':''} ${busy?'busy':''}" data-sq="${k}" style="--fc:${FAC[K.fac].c}"><img src="../assets/k_${K.art}.webp?v=${ASSET_V}">${K.n}${busy?' · Away':''}</button>`}).join('')}<small>Each Commander saves a separate party</small></div>
-  <div class="hs2filter">${['all',...FAC_KEYS].map(f=>`<button class="fchip ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'All':facIcon(f,'ci')}</button>`).join('')}<i class="fsep"></i>${['all',0,1,2,3].map(t=>`<button class="fchip ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'Rarity':RAR[t].n}</button>`).join('')}<i class="fsep"></i>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="fchip ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'Type':CLS[c].n}</button>`).join('')}<button class="fchip wide ${heroOwned?'':'on'}" id="fOwn">${heroOwned?'Undiscovered':'Owned Only'}</button></div>
-  <div class="hs2grid">${own.map(card).join('')}${unk.map(unkCard).join('')||''}${!own.length&&!unk.length?'<div class="hs2none">No heroes match</div>':''}</div>
+  <div class="sqrow"><span>Party</span>${Object.keys(WARLORDS).filter(k=>wlUnlocked(k)).map(k=>{const K=WARLORDS[k];const busy=expOf(k);return `<button class="sqtab ${k===save.warlord?'on':''} ${busy?'busy':''}" data-sq="${k}" style="--fc:${FAC[K.fac].c}"><img src="../assets/k_${K.art}.webp?v=${ASSET_V}">${K.n}${busy?' · Away':''}</button>`}).join('')}<small>Each Commander saves a separate party</small></div></div>
+  <div class="ps3r"><div class="hs2filter">${['all',...FAC_KEYS].map(f=>`<button class="fchip ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'All':facIcon(f,'ci')}</button>`).join('')}<i class="fsep"></i>${['all',0,1,2,3].map(t=>`<button class="fchip ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'Rarity':RAR[t].n}</button>`).join('')}<i class="fsep"></i>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="fchip ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'Type':CLS[c].n}</button>`).join('')}<button class="fchip wide ${heroOwned?'':'on'}" id="fOwn">${heroOwned?'Undiscovered':'Owned Only'}</button></div>
+  <div class="hs2grid">${own.map(card).join('')}${unk.map(unkCard).join('')||''}${!own.length&&!unk.length?'<div class="hs2none">No heroes match</div>':''}</div></div>
   </div>`;
   if(save.bestLeague>=EVO_LEAGUE)tutTip('evo','<b>Evolve</b> Combine same-version cards into a higher-rarity card. Tap a hero to see the Evolve button.');
   bind('#bk',showLobby);bind('#hWl',()=>{wlView=save.warlord;showWarlords()});
@@ -2620,7 +2688,7 @@ function showShop(){
     {id:'silver',t:'silver',n:'Silver Chest',d:'16 cards · Opens instantly',cost:60,cur:'gem'},
     {id:'gold',t:'gold',n:'Gold Chest',d:'36 cards · Rare or better guaranteed',cost:150,cur:'gem'},
     {id:'coins',t:null,n:'Gold Pack',d:'Gold 500',cost:30,cur:'gem'},
-    {id:'dust',t:null,n:'Stardust Pack',d:'Stardust 40 (for Bond)',cost:25,cur:'gem'},
+    {id:'dust',t:null,n:'Rune Dust Pack',d:'Rune Dust 40 (for Rune Engraving)',cost:25,cur:'gem'},
     {id:'adgem',t:null,n:adW('Watch Ad for Gems','Free Gems'),d:'Gems x5 · Today '+adLeft('gems')+' left',cost:0,cur:'ad',dis:adLeft('gems')<=0}
   ].filter(it=>it.cur!=='ad'||adOn());
   const DL=ensureDeals();const msLeft=new Date(new Date().setHours(24,0,0,0))-Date.now();
@@ -2637,26 +2705,26 @@ function showShop(){
     if(it.cur==='free'){if(save.shop.free)return;save.shop.free=true;persist();openChestModal('wood',showShop);return}
     if(save.gems<it.cost)return;save.gems-=it.cost;persist();
     if(it.id==='coins'){save.gold+=500;persist();sfx('coin');toast('Gold 500');showShop();return}
-    if(it.id==='dust'){addDust(40);persist();sfx('coin');toast('Stardust 40');showShop();return}
+    if(it.id==='dust'){addDust(40);persist();sfx('coin');toast('Rune Dust 40');showShop();return}
     openChestModal(it.t,showShop)});
 }
 
 /* ===================== 전투 진행 ===================== */
 let st=null,cfg=null,ui=null;
 function newState(c){return {bossSig:c.bossSig||null,wl:save.warlord||'asten',board:{p:emptyBoard(),e:emptyBoard()},cmd:{p:{hp:c.pHp||22*DS,max:c.pHpMax||c.pHp||22},e:{hp:c.eHp,max:c.eHpMax||c.eHp}},round:1,over:false,passive:c.passive||null,eTurns:0,kills:0}}
-async function startBattle(c){
+async function startBattle(c){const GEN=++BGEN;
   screen='battle';tryLandscape();track('battle_start',{mode:c.mode,stage:c.idx??-1});
-  try{await preloadBattle([...(save.deck||[]),...(c.eDeck||[]),'skel_0','frog_0','watchtower_1','archer_0','oakwood_2'])}catch(e){}
-  cfg=c;st=newState(c);BD=null;
+  try{await preloadBattle([...(c.pDeck||save.deck||[]),...(c.eDeck||[]),'skel_0','frog_0','watchtower_1','archer_0','oakwood_2'])}catch(e){}
+  cfg=c;st=newState(c);BD=null;TWIST=c.twist||null;HANDMAX=TWIST==='bighand'?5:4;
   if(!c.eWl){const art=(c.eLook||'').startsWith('art:')?c.eLook.slice(4):'';const hit=Object.keys(WARLORDS).find(k=>WARLORDS[k].art===art);
     if(hit)c.eWl=hit;else{const fc={};(c.eDeck||[]).forEach(k=>{const f=V(k).fac;fc[f]=(fc[f]||0)+1});const mf=Object.keys(fc).sort((x,y)=>fc[y]-fc[x])[0]||'bastion';const L=FAC_WL[mf]||FAC_WL.bastion;c.eWl=L[(c.idx||0)%L.length]}}
   if(!c.eWlLv)c.eWlLv=c.mode==='arena'?Math.min(WL_MAX,1+Math.round(leagueIdx(save.trophies)*1.5)):c.mode==='stage'?Math.min(WL_MAX,1+Math.floor((c.idx||0)*.6)):4;
   st.ws={p:{used:0,ch:0,doneR:99},e:{used:0,ch:0,doneR:99}};
   ui={auto:!!save.autoOn,hand:[],sel:-1,phase:'wait',reels:null,targeting:false,resolve:null,log:'',newUid:null,info:''};
   renderBattle();
-  const b0=c.mode==='daily'?'Boss Battle Start!':c.mode==='arena'?'Arena Battle!':'Battle Start!';banner(b0);bgmStart('battle');await sleep(900);
-  const pDeck=save.deck.slice(),pLvs=playerLvs();const pPile=makePile(pDeck);const eHand=[],ePile=makePile(c.eDeck);ui.hand=[];ui.pile=pPile;
-  while(!st.over){
+  const b0=c.mode==='daily'?'Boss Battle Start!':c.mode==='arena'?'Arena Battle!':c.mode==='twist'?'Twist · '+twistToday().n+'!':'Battle Start!';banner(b0);bgmStart('battle');await sleep(900);
+  const pDeck=(c.pDeck||save.deck).slice(),pLvs=playerLvs();const pPile=makePile(pDeck);const eHand=[],ePile=makePile(c.eDeck);ui.hand=[];ui.pile=pPile;
+  while(!st.over&&GEN===BGEN){
     ui.log='Your Turn';if(st.round===1||st.round%5===0)turnBanner(st.round+' Round','rnd');else turnBanner('Your Turn','me');await sleep(350);await doFx(startTurnEffects(st,'p'));if(st.over)break;
     if(wsTick('p'))toast('Commander Strike +1 (stacked '+wsOf('p').ch+')');
     {const added=refill(ui.hand,pPile,pLvs,playerRbs(),playerSbs());added.forEach(a=>a.fresh=1);ui.sel=ui.hand.length===1?0:-1;BD&&(BD.sig='');renderBattle();if(added.length)sfx('tick');await sleep(added.length?350:0);ui.hand.forEach(h=>delete h.fresh)}
@@ -2687,7 +2755,7 @@ async function startBattle(c){
     if(st.round>MAX_ROUND){st.over=true;st.timeout=true;break}
     renderBattle();
   }
-  await sleep(400);if(!st.timeout&&(st.cmd.e.hp<=0||st.cmd.p.hp<=0))await koFx(st.cmd.e.hp<=0?'e':'p');endBattle();
+  if(GEN!==BGEN)return;await sleep(400);if(!st.timeout&&(st.cmd.e.hp<=0||st.cmd.p.hp<=0))await koFx(st.cmd.e.hp<=0?'e':'p');endBattle();
 }
 async function spinReels(draw){
   ui.reels=true;ui.hand=[];ui.phase='spin';renderBattle();
@@ -2771,7 +2839,7 @@ function topBarHTML(){
   const myTurn=ui.log==='Your Turn'||ui.phase==='choose';
   return `<div class="tname p"><span class="lgb" style="--lc:${LEAGUES[li].c}">${li+1}</span><b>${esc(myNick())}</b><small>${W.n} Lv${wlLv(st.wl)}</small></div>
   <div class="tturn"><div class="tt">Turn ${st.round}<small>/${MAX_ROUND}</small></div><div class="ts ${myTurn?'me':'en'}">${myTurn?'Your turn':'Enemy turn'}</div></div>
-  <div class="tname e"><b>${esc(cfg.eName.replace('AI Challenger · ',''))}</b>${cfg.passiveName?`<small style="color:#ff8aa8">${cfg.passiveName}</small>`:`<small>${cfg.mode==='arena'?(cfg.online?'Player Deck · '+((WARLORDS[cfg.eWl]||{}).n||'')+' Lv'+cfg.eWlLv:'AI Challenger'):cfg.mode==='daily'?'Today’s Boss':({brawl:'Friendly Match',train:'Sparring',tower:'Sky Stairs',raid:'Titan Hunt',pit:'Streak Arena'})[cfg.mode]||'Adventure'}</small>`}</div>`;
+  <div class="tname e"><b>${esc(cfg.eName.replace('AI Challenger · ',''))}</b>${cfg.passiveName?`<small style="color:#ff8aa8">${cfg.passiveName}</small>`:`<small>${cfg.mode==='arena'?(cfg.online?'Player Deck · '+((WARLORDS[cfg.eWl]||{}).n||'')+' Lv'+cfg.eWlLv:'AI Challenger'):cfg.mode==='daily'?'Today’s Boss':({brawl:'Daily Twist',twist:'Twist · '+(typeof TWIST==='string'?(TWISTS.find(t=>t.id===TWIST)||{}).n:''),train:'Practice',tower:'Sky Stairs',raid:'Titan Hunt',pit:'Streak Arena'})[cfg.mode]||'Adventure'}</small>`}</div>`;
 }
 
 function unitEl(u){
@@ -3414,7 +3482,7 @@ function endBattle(){setTimeout(cloudAuto,800);
   const m=modal(`${win?'<div class="rayclip"><div class="rays on"></div></div>':''}<div class="resban ${win?'win':'lose'}">${win?'Victory!':'Defeat'}</div>${win&&cfg.mode==='stage'?`<div class="rstars">${[1,2,3].map(k=>`<span class="${k<=stars?'on':''}" style="animation-delay:${.25+k*.22}s">★</span>`).join('')}</div>`:''}
   <div style="font-size:13px;opacity:.75">${st.timeout?'Round limit · decided by HP ratio':win?`Commander HP left ${st.cmd.p.hp}/${st.cmd.p.max}`:''}</div>
   ${mvp?`<div class="mvp"><div class="mart t${tierOf(mvp.key)}">${portrait(mvp.key)}</div><div><div class="mtag">MVP</div><b style="color:${RAR[tierOf(mvp.key)].c}">${V(mvp.key).name}</b><div style="font-size:12.5px;opacity:.8">Total damage ${mvp.d}</div></div></div>`:''}
-  <div class="rrows">${dT?`<div class="rrow">${ico('trophy','qi')}<span>Trophies</span><b class="cnt" data-v="${dT}">0</b></div>`:''}<div class="rrow">${ico('coin','qi')}<span>Gold</span><b class="cnt" data-v="${gold}">0</b></div><div class="rrow"><span style="font-size:16px">⚔</span><span>${WL().n} XP</span><b class="cnt" data-v="${wxp}">0</b></div>${gems?`<div class="rrow">${ico('gem','qi')}<span>Gems</span><b class="cnt" data-v="${gems}">0</b></div>`:''}${dustG?`<div class="rrow"><span class="dusti" style="font-size:20px">✦</span><span>Stardust</span><b class="cnt" data-v="${dustG}">0</b></div>`:''}</div>
+  <div class="rrows">${dT?`<div class="rrow">${ico('trophy','qi')}<span>Trophies</span><b class="cnt" data-v="${dT}">0</b></div>`:''}<div class="rrow">${ico('coin','qi')}<span>Gold</span><b class="cnt" data-v="${gold}">0</b></div><div class="rrow"><span style="font-size:16px">⚔</span><span>${WL().n} XP</span><b class="cnt" data-v="${wxp}">0</b></div>${gems?`<div class="rrow">${ico('gem','qi')}<span>Gems</span><b class="cnt" data-v="${gems}">0</b></div>`:''}${dustG?`<div class="rrow"><span class="dusti" style="font-size:20px">✦</span><span>Rune Dust</span><b class="cnt" data-v="${dustG}">0</b></div>`:''}</div>
   ${cfg.mode==='arena'?(()=>{const li2=leagueIdx(save.trophies),L2=LEAGUES[li2],N2=LEAGUES[li2+1];const p0=N2?Math.max(0,(trB-L2.t)/(N2.t-L2.t)):1,p1=N2?(save.trophies-L2.t)/(N2.t-L2.t):1;return `<div class="rleague"><span style="color:${L2.c}">${L2.n} League</span><div class="bar"><i class="tb" style="width:${Math.min(100,p0*100)}%" data-to="${Math.min(100,p1*100)}"></i></div><span>${save.trophies}${N2?' / '+N2.t:''}</span></div>`})():''}${extra}
   ${adOn()&&cfg.mode==='arena'&&win&&gold>0?`<button class="btn grn sm" id="rDbl" ${adLeft('gold')>0?'':'disabled'}>${adW('Watch ad: ','Free: ')}Double Gold +${gold} (${adLeft('gold')})</button>`:''}
   ${adOn()&&cfg.mode==='arena'&&!win&&dT<0?`<button class="btn grn sm" id="rProt" ${adLeft('trophy')>0?'':'disabled'}>${adW('Watch ad: ','Free: ')}Trophies ${-dT} refund (${adLeft('trophy')})</button>`:''}
