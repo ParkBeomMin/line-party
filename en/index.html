@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#14111f">
 <meta name="screen-orientation" content="landscape">
-<title>Line Party</title>
+<title>Hero Lanes</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1210,13 +1210,13 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 </head>
 <body>
 <div id="wrap"><div id="app"></div></div>
-<div id="rotate"><div class="ph"></div><div>Please rotate to landscape</div><div style="font-size:13px;opacity:.6">Line Party is a landscape game</div></div>
+<div id="rotate"><div class="ph"></div><div>Please rotate to landscape</div><div style="font-size:13px;opacity:.6">Hero Lanes is a landscape game</div></div>
 <script>
 'use strict';
 const LANG='en';
 (function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
 function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.19.1 beta';
+const VERSION='v3.20 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -2074,7 +2074,7 @@ function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syn
       <button class="lchip" id="bSeason">${ico('trophy')}<span>Season ${seasonNo()} · ${fmtDH(seasonLeft())}</span></button>
     </div>
     <div class="dio">
-      <div class="dioground"></div><div class="diotitle">Line Party</div>
+      <div class="dioground"></div><div class="diotitle">Hero Lanes</div>
       ${side1?`<div class="hero2 s1"><img src="../assets/${lobbyArt(side1)}.webp?v=${ASSET_V}"></div>`:''}
       ${side2?`<div class="hero2 s2"><img src="../assets/${lobbyArt(side2)}.webp?v=${ASSET_V}"></div>`:''}
       ${lead?`<div class="hero2 lead t${tierOf(lead)}"><img src="../assets/${lobbyArt(lead)}.webp?v=${ASSET_V}"><div class="hplate" style="--tc:${RAR[tierOf(lead)].c}">${facIcon(V(lead).fac,'ci')}${V(lead).name}<small>Lv${save.owned[lead]?save.owned[lead].lv:1}</small></div></div>`:''}
@@ -2183,7 +2183,7 @@ function nickOk(n){n=(n||'').trim();if(n.length<1||n.length>10)return false;cons
 /* ===================== 베타 테스터 보상 (플레이 비공개 테스트 앱) ===================== */
 const APP_BETA=true; // 정식 출시 버전에서 false 로 바꾸면 새로 시작하는 사람은 테스터가 아님 (이미 시작한 테스터는 계속 진행)
 const FB_FORM='https://docs.google.com/forms/d/e/1FAIpQLSc-PdektEWxmc5bZoA4NFHv9_blNanu3HRvebDuY1kLvTWEHA/viewform';
-function feedbackUrl(){const ua=navigator.userAgent;const m=ua.match(/Android [\d.]+;[^)]*/);const dev=(m?m[0].replace(/; wv/,'').trim():ua.slice(0,60));const info=VERSION+(save.beta?' · Tester '+Math.min(14,betaN())+'d':'')+' · '+dev;return FB_FORM+'?usp=pp_url&entry.1189017881='+encodeURIComponent('라인 파티 (Line Party)')+'&entry.1950440059='+encodeURIComponent(info)}
+function feedbackUrl(){const ua=navigator.userAgent;const m=ua.match(/Android [\d.]+;[^)]*/);const dev=(m?m[0].replace(/; wv/,'').trim():ua.slice(0,60));const info=VERSION+(save.beta?' · Tester '+Math.min(14,betaN())+'d':'')+' · '+dev;return FB_FORM+'?usp=pp_url&entry.1189017881='+encodeURIComponent('히어로 레인 (Hero Lanes)')+'&entry.1950440059='+encodeURIComponent(info)}
 function openFeedback(){track('feedback_open',{});const a=document.createElement('a');a.href=feedbackUrl();a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
 function betaN(){return save.beta?save.beta.days.length:0}
 function betaTick(){if(!inNativeApp())return null;if(!save.beta){if(!APP_BETA)return null;save.beta={days:[],got:{}}}const B=save.beta;B.got=B.got||{};const d=dayKey();if(!B.days.includes(d)){B.days.push(d);if(B.days.length>40)B.days=B.days.slice(-40)}const n=B.days.length,out=[];
@@ -2194,7 +2194,7 @@ function betaTick(){if(!inNativeApp())return null;if(!save.beta){if(!APP_BETA)re
 function betaChip(){if(!save.beta)return '';return save.beta.title?'<span class="btchip t">Early Tester</span>':'<span class="btchip">β Tester '+Math.min(14,betaN())+'/14 days</span>'}
 function betaModal(got){if(screen!=='lobby')return;if(document.querySelector('.modal'))return void setTimeout(()=>betaModal(got),800);
   const n=Math.min(14,betaN());const rows=[[1,'First launch','300 Gems + Gold Chest'],[7,'Day 7','Epic card pick'],[14,'Day 14','Legendary card pick + Early Tester title']];
-  const m=modal(`<div class="ribbon">Beta Tester Rewards</div><div class="rw">Thanks for testing the Line Party app!<br><small style="opacity:.75">Rewards unlock as you open the app on more days · Now ${n}/14 days</small></div>
+  const m=modal(`<div class="ribbon">Beta Tester Rewards</div><div class="rw">Thanks for testing the Hero Lanes app!<br><small style="opacity:.75">Rewards unlock as you open the app on more days · Now ${n}/14 days</small></div>
    <div class="btlist">${rows.map(([d,a,b])=>`<div class="${save.beta.got[d]?'on':''} ${got.includes(d)?'now':''}"><b>${a}</b><span>${b}</span><i>${save.beta.got[d]?'✓':d+'d'}</i></div>`).join('')}</div>
    <div class="btns"><button class="btn sub sm" id="btFb">Send Feedback</button><button class="btn" id="btOk">${got.includes(1)?'Open Gold Chest':'Claim'}</button></div>`);
   sfx('fanfare');m.querySelector('#btFb').onclick=openFeedback;m.querySelector('#btOk').onclick=()=>{m.remove();if(got.includes(1))openChestModal('gold',showLobby);else showLobby()}}
@@ -2280,8 +2280,8 @@ function linkNudge(){if(isLinked())return;const td=new Date().toDateString();if(
 function notiPlan(){const out=[],now=Date.now();
   const un=save.chests.filter(c=>c&&c.st==='unlocking').sort((a,b)=>a.readyAt-b.readyAt);let last=un.length?un[un.length-1].readyAt:now;let first=un.length?un[0].readyAt:0;
   const locked=save.chests.filter(c=>c&&c.st==='locked');locked.forEach(c=>{last+=chestSec(c.t)*1000;if(!first)first=last});
-  if(first>now+60000)out.push({id:101,at:first,title:'Line Party',body:'A chest is open! Tap to get your cards.'});
-  if(locked.length&&last>first+60000)out.push({id:102,at:last,title:'Line Party',body:'All chests are ready. Open them to free up slots!'});
+  if(first>now+60000)out.push({id:101,at:first,title:'Hero Lanes',body:'A chest is open! Tap to get your cards.'});
+  if(locked.length&&last>first+60000)out.push({id:102,at:last,title:'Hero Lanes',body:'All chests are ready. Open them to free up slots!'});
   Object.entries(save.exp||{}).slice(0,6).forEach(([k,e],i)=>{if(e&&e.end>now+60000)out.push({id:110+i,at:e.end,title:'Expedition Done',body:(WARLORDS[k]?WARLORDS[k].n:'Commander')+'’s expedition team is back. Claim your rewards!'})});
   return out}
 function notiLN(){return inNativeApp()?(window.Capacitor.Plugins||{}).LocalNotifications:null}
@@ -2294,7 +2294,7 @@ function notiAsk(){if(!notiLN()||save.notiAsked||screen!=='lobby'||document.quer
   m.querySelector('#ntY').onclick=async()=>{m.remove();const ok=await notiEnable();toast(ok?'Notifications on':'Notifications are off. You can turn them on in Settings')};m.querySelector('#ntN').onclick=()=>{m.remove()}}
 function nativeSetup(){if(!inNativeApp())return;const P=window.Capacitor.Plugins||{};document.documentElement.classList.add('native');
   try{P.StatusBar&&P.StatusBar.hide()}catch(e){}
-  try{P.App&&P.App.addListener('backButton',()=>{if(APPAD.inAd)return;const ms=[...document.querySelectorAll('.modal')];if(ms.length){const t=ms[ms.length-1];const c=t.querySelector('[data-close],#pmOk,[data-done]');if(c)c.click();else t.remove();return}if(screen==='battle'){toast('Use the Give Up button to leave during battle');return}if(screen!=='lobby'){showLobby();return}if(confirm('Quit Line Party?'))P.App.exitApp()})}catch(e){}
+  try{P.App&&P.App.addListener('backButton',()=>{if(APPAD.inAd)return;const ms=[...document.querySelectorAll('.modal')];if(ms.length){const t=ms[ms.length-1];const c=t.querySelector('[data-close],#pmOk,[data-done]');if(c)c.click();else t.remove();return}if(screen==='battle'){toast('Use the Give Up button to leave during battle');return}if(screen!=='lobby'){showLobby();return}if(confirm('Quit Hero Lanes?'))P.App.exitApp()})}catch(e){}
   try{P.App&&P.App.addListener('appStateChange',st2=>{if(st2.isActive){try{P.StatusBar&&P.StatusBar.hide()}catch(e){}notiClear();try{if(screen==='lobby'){tickChests();const c=document.getElementById('chests');if(c){c.innerHTML=chestSlotsHTML();bindChests()}}}catch(e){}}else{try{persist()}catch(e){}notiSync()}})}catch(e){}}
 /* ===================== 기기 이전 코드 (8자리, 24시간) ===================== */
 const TR_AB='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -2332,7 +2332,7 @@ function appCta(where,force){const md=appMode();if(!md)return false;const td=new
     :isDesktop()?`<div class="rw">Scan with your phone camera to open</div><img class="qrimg" src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&margin=6&data=${encodeURIComponent(link)}" alt="QR">`
     :`<div class="btns"><a class="btn grn" id="ctaGo" href="${link}" target="_blank" rel="noopener">${tester?'Join as Tester':'Continue in App'}</a></div>`;
   const m=modal(`<div class="ribbon">${tester?'App Tester Wanted':'Play Easier in the App'}</div><div class="rw" style="line-height:1.75;text-align:left">
-    ${tester?'We’re looking for testers to try the Line Party Android app first.<br>':''}· Open chests <b style="color:#7dffa1">faster</b><br>· Double win gold, gems and other <b style="color:#7dffa1">app bonuses</b><br>· Alerts when chests and expeditions are ready<br>· Continue your progress with a Google account<br>· Smoother fullscreen play${tester?'<br>· At launch: <b style="color:#ffd667">Early Tester Reward</b>':''}</div>
+    ${tester?'We’re looking for testers to try the Hero Lanes Android app first.<br>':''}· Open chests <b style="color:#7dffa1">faster</b><br>· Double win gold, gems and other <b style="color:#7dffa1">app bonuses</b><br>· Alerts when chests and expeditions are ready<br>· Continue your progress with a Google account<br>· Smoother fullscreen play${tester?'<br>· At launch: <b style="color:#ffd667">Early Tester Reward</b>':''}</div>
     ${body}<div class="btns"><button class="btn sub sm" data-close>Later</button></div>`);
   const go=m.querySelector('#ctaGo');if(go)go.onclick=()=>{track('app_cta_click',{where,mode:md});setTimeout(()=>m.remove(),300)};return true}
 function appNudge(){if(!appMode())return;const td=new Date().toDateString();if(!isLinked()&&save.nudgeDay!==td&&((save.trophies|0)>=150||(save.cleared|0)>=3))return;
@@ -3187,9 +3187,9 @@ function showSettings(){
   m.querySelector('#trCopy').onclick=async()=>{const c=m.querySelector('#trCode').textContent;try{await navigator.clipboard.writeText(c)}catch(e){}toast('Code copied: '+c)};
   m.querySelector('#trLoad').onclick=async()=>{const v=m.querySelector('#trIn').value;const c=trNorm(v);if(c.length===8){if(await redeemTransfer(c)){document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}return}try{const o=decodeSave(v);if(!confirm('Overwrite current progress with this code?'))return;applySaveObj(o);toast('Loaded');document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}catch(e){toast('Check the 8-digit code')}};
   m.querySelector('#trOff').onclick=e=>{e.preventDefault();showBackupCode()};
-  bind('#stNoti',async()=>{if(!save.notiOn){const ok=await notiEnable();if(!ok)toast('Please allow Line Party notifications in your phone settings')}else{save.notiOn=false;persist();notiClear()}m.remove();showSettings()});
+  bind('#stNoti',async()=>{if(!save.notiOn){const ok=await notiEnable();if(!ok)toast('Please allow Hero Lanes notifications in your phone settings')}else{save.notiOn=false;persist();notiClear()}m.remove();showSettings()});
   bind('#stLang',()=>setLang(LANG==='ko'?'en':'ko'));
-  bind('#stDel',async()=>{if(!confirm('Delete all Line Party data on the server and this device? This can’t be undone.'))return;if(!confirm('Really delete? All heroes, resources, and Trophies will be gone.'))return;toast('Deleting...');const ok=await deleteMyData();alert(ok?'Data deleted. Returning to the start screen.':'Some server data couldn’t be deleted. Device data is cleared. Request the rest by email in the Privacy Policy.');location.reload()});
+  bind('#stDel',async()=>{if(!confirm('Delete all Hero Lanes data on the server and this device? This cannot be undone.'))return;if(!confirm('Really delete? All heroes, resources, and Trophies will be gone.'))return;toast('Deleting...');const ok=await deleteMyData();alert(ok?'Data deleted. Returning to the start screen.':'Some server data couldn’t be deleted. Device data is cleared. Request the rest by email in the Privacy Policy.');location.reload()});
   m.querySelector('#stReset').onclick=()=>{if(!confirm('All progress will be erased. Start over?'))return;save=defaultSave();save.tut={};persist();m.remove();showLobby()};
 }
 /* --- 분석 이벤트 (GA4) --- */
@@ -3547,7 +3547,7 @@ function preloadRest(){if(window.__restPre)return;window.__restPre=1;const A=n=>
 function preloadBattle(ids){const A=n=>"../assets/"+n+".webp?v="+ASSET_V;const L=[...new Set(ids)].map(id=>A('s_'+id));L.push("../assets/bg_field2.webp?v=16");
   return Promise.race([Promise.all(L.map(src=>new Promise(r=>{const im=new Image();im.onload=im.onerror=r;im.src=src}))),new Promise(r=>setTimeout(r,2500))])}
 (function boot(){
-  const L=document.createElement('div');L.id='loader';L.innerHTML='<div class="llogo">Line Party</div><div class="lbar3"><i id="lprog"></i></div><div class="ltip" id="ltip">Waking the heroes...</div>';app.appendChild(L);
+  const L=document.createElement('div');L.id='loader';L.innerHTML='<div class="llogo">Hero Lanes</div><div class="lbar3"><i id="lprog"></i></div><div class="ltip" id="ltip">Waking the heroes...</div>';app.appendChild(L);
   const tips=['Place on the same hero to Merge a ★!','No enemy in a lane? Hit the Commander directly','2 or 4 of a faction unlocks synergy','Buildings don’t attack but block lanes','Melee: front 2 columns, Ranged: back 2'];document.getElementById('ltip').textContent='TIP · '+tips[Math.floor(Math.random()*tips.length)];
   const imgs=window.__imgs||[];let done=0,fin=false;const total=imgs.length||1;
   const finish=()=>{if(fin)return;fin=true;document.getElementById('lprog').style.width='100%';setTimeout(()=>{L.classList.add('out');setTimeout(()=>L.remove(),400)},200);ensureDaily();showLobby();app.appendChild(L);setTimeout(preloadRest,1500);if(isLinked())setTimeout(()=>cloudReconcile(false),600)};
