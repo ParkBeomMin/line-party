@@ -1209,6 +1209,198 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 #app.bleed{border-radius:0}
 #app.bleed>.screen{border-left:var(--sab) solid transparent;border-right:var(--sab) solid transparent;background-origin:border-box!important}
 #app.bleed>.screen::before{left:calc(-1*var(--sab))!important;right:calc(-1*var(--sab))!important}
+/* v3.23 출석 */
+.modal.attfs{display:block;background:#0b1730;z-index:61}
+.attbg{position:absolute;inset:0;background:linear-gradient(100deg,#0b1a3acc 0%,#14306acc 40%,#1c4a9a99 100%),url(../assets/bg_lobby.webp?v=9) center/cover;filter:saturate(1.1)}
+.attwl{position:absolute;left:-10px;bottom:-6px;height:500px;max-width:38%;object-fit:contain;object-position:left bottom;filter:drop-shadow(0 6px 14px #000a);pointer-events:none}
+.attbk{position:absolute;left:12px;top:10px;z-index:3}
+.atttop{position:absolute;left:var(--attl,360px);right:150px;top:8px;text-align:center}
+.attsub{font-size:14px;color:#ffe9a8;text-shadow:0 2px 0 #0008}
+.atttl{font-size:40px;font-weight:900;line-height:1.05;color:#ffe27a;text-shadow:0 3px 0 #8a4a00,0 6px 12px #0009;letter-spacing:1px}
+.attcd{position:absolute;right:14px;top:12px;background:#00000080;border:1.5px solid #ffffff33;border-radius:14px;padding:5px 12px;font-size:13px;color:#cfe2ff}
+.attcd b{color:#ffe27a;margin-left:4px}
+.attgrid3{position:absolute;left:var(--attl,360px);right:14px;top:84px;bottom:10px;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:150px;gap:10px;overflow-y:auto;padding:6px 6px 14px;scrollbar-width:none}
+.attgrid3::-webkit-scrollbar{display:none}
+.ac{position:relative;border-radius:12px;background:linear-gradient(#2a5596,#1a3a70);border:2px solid #5d8fd6;box-shadow:0 4px 0 #0c2147,inset 0 2px 0 #ffffff26;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:6px 4px 8px;overflow:hidden}
+.ac .acd{font-size:13px;font-weight:800;color:#bcd4ff}
+.ac .aci{flex:1;display:flex;align-items:center;justify-content:center}
+.ac .aci .ai2{width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 3px 3px #0007)}
+.ac .aci .cico{width:70px;height:54px}
+.adust{font-size:46px;color:#c79bff;text-shadow:0 0 14px #c79bff,0 3px 0 #3a1a6a}
+.apick{width:52px;height:66px;border-radius:8px;border:3px solid #c77dff;background:linear-gradient(#3a1a6a,#140a2a);display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px #c77dff88}
+.apick.t3{border-color:#ffc04d;background:linear-gradient(#6a4200,#2a1600);box-shadow:0 0 16px #ffc04daa}
+.apick span{font-size:34px;font-weight:900;color:#fff;text-shadow:0 2px 0 #0008}
+.ac .acv{font-size:15px;font-weight:900;color:#fff;text-shadow:0 2px 0 #0009;white-space:nowrap}
+.ac.sp{background:linear-gradient(#b8452a,#7a1e14);border-color:#ff9a6a;box-shadow:0 4px 0 #3a0a06,inset 0 2px 0 #ffffff30}
+.ac.sp .acd{color:#ffe0c8}
+.ac.done .aci,.ac.done .acv{opacity:.55}
+.ack2{position:absolute;left:0;right:0;top:34%;text-align:center;font-size:56px;font-weight:900;color:#9dff3a;text-shadow:0 3px 0 #2a6a00,0 0 10px #000a;transform:rotate(-6deg)}
+.ac.today{border-color:#ffe27a;box-shadow:0 0 0 3px #ffe27a,0 0 22px #ffd667cc;animation:acp 1.2s ease-in-out infinite;cursor:pointer}
+.ac.today .acd{color:#ffe27a}
+@keyframes acp{50%{transform:translateY(-3px)}}
+.acget{position:absolute;left:8px;right:8px;bottom:6px;border-radius:9px;background:linear-gradient(#7dff6a,#2fae2a);color:#08300a;font-weight:900;font-size:13px;text-align:center;padding:2px 0}
+.ac.today .acv{margin-bottom:22px}
+/* v3.23 아레나 대기 */
+.arena2{background:url(../assets/bg_arena.webp?v=1) center/cover}
+.arena2:before{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 42%,#0000 40%,#0006 100%),linear-gradient(#0005,#0000 20%,#0000 70%,#0009);pointer-events:none}
+.arena2>*{position:absolute}
+.arside{left:14px;top:56px;display:flex;gap:8px;z-index:2}
+.aricon{position:relative;width:66px;height:64px;border-radius:14px;background:#0b1a3acc;border:2px solid #ffffff40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:800;font-size:12.5px}
+.aricon .ico{width:32px;height:32px}
+.arcrest{left:50%;top:44px;width:330px;margin-left:-165px;height:222px;z-index:1;pointer-events:none}
+.arcrest img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 16px #0008)}
+.argem{position:absolute;left:50%;top:46.8%;width:31%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffffffaa,var(--lc) 45%,#000a 100%);mix-blend-mode:multiply;opacity:.95}
+.arno{position:absolute;left:0;right:0;top:46.8%;transform:translateY(-55%);text-align:center;font-size:60px;font-weight:900;color:#fff;text-shadow:0 3px 0 #0009,0 0 14px #000a}
+.arln{position:absolute;left:0;right:0;top:79%;text-align:center;font-size:17px;font-weight:900;color:#5a2e00;text-shadow:0 1px 0 #ffe9a8}
+.artro{left:50%;top:268px;width:260px;margin-left:-130px;text-align:center;font-weight:900;font-size:17px;background:#0b1a3add;border:2px solid #ffc54766;border-radius:14px;padding:3px 12px 8px;z-index:1}
+.artro span{opacity:.7;font-size:14px}
+.artro .bar{height:7px;margin-top:3px}
+.arpw{left:50%;top:328px;width:200px;margin-left:-100px;text-align:center;font-size:19px;font-weight:900;z-index:1;text-shadow:0 2px 0 #000a}
+.arpw small{font-size:11.5px;opacity:.75;margin-left:5px}
+.arfight{left:50%;top:360px;width:290px;margin-left:-145px;height:66px;border-radius:16px;background:linear-gradient(#ffe27a,#f0a52a);border:3px solid #fff3c4;box-shadow:0 5px 0 #8a4a00,0 0 26px #ffc54799;color:#4a2400;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;z-index:2;animation:acp 1.6s ease-in-out infinite}
+.arfight .fi{position:static;margin:0;width:44px;height:44px}
+.arped{bottom:118px;width:180px;height:120px;border-radius:16px;background:linear-gradient(#16305ccc,#0b1a3aee);border:2px solid #ffffff3a;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:6px;z-index:1}
+.arped.l{left:calc(14px + var(--bx,0px) * .2)}
+.arped.r{right:calc(14px + var(--bx,0px) * .2)}
+.arped .arpi{flex:1;display:flex;align-items:center;justify-content:center}
+.arped .arpi .cico{width:92px;height:70px;filter:drop-shadow(0 4px 8px #000a)}
+.arped .arpi .ico{width:58px;height:58px}
+.arped b{font-size:15px;color:#ffe9a8}
+.arped small{font-size:12px;opacity:.85}
+.arped .dot{position:absolute;right:8px;top:8px}
+.archest{left:14px;right:14px;bottom:10px;height:98px;z-index:1}
+.archest .chests2{height:98px!important}
+.archest .chests2 .slot{height:98px!important;background:#0b1a3ae6}
+/* v3.23 파티 */
+.sq4{background:radial-gradient(120% 90% at 50% 0%,#2b5aa0 0%,#163566 45%,#0d1d3d 100%)}
+.sq4top{height:46px;gap:10px}
+.sq4tabs{flex:1;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;padding:0 4px}
+.sq4tabs::-webkit-scrollbar{display:none}
+.sq4tab{flex:none;display:flex;align-items:center;gap:5px;height:34px;padding:0 10px 0 4px;border-radius:10px;background:#0006;border:2px solid #ffffff22;font-size:13px;font-weight:800;color:#cfe0ff}
+.sq4tab img{width:28px;height:28px;border-radius:50%;object-fit:cover;object-position:top;background:#0008}
+.sq4tab.on{background:linear-gradient(#3a6ac0,#244a8c);border-color:#ffe27a;color:#fff}
+.sq4tab.busy{opacity:.55}
+.sq4band{position:absolute;top:50px;left:12px;right:12px;height:146px;display:flex;gap:10px;padding:6px;border-radius:14px;background:#0a1630aa;border:2px solid #ffffff1a}
+.sq4deck{flex:1;display:grid;grid-template-columns:repeat(8,1fr);gap:6px;min-width:0}
+.c4{position:relative;border-radius:10px;overflow:hidden;border:3px solid var(--tc,#666);background:#15122c;cursor:pointer;box-shadow:0 3px 6px #0008;touch-action:pan-x;user-select:none;-webkit-user-select:none}
+.c4 .c4art{position:absolute;inset:0}
+.c4 .c4art .pt{width:100%;height:100%}
+.c4fac{position:absolute;right:3px;top:22px;width:17px;height:17px;filter:drop-shadow(0 1px 1px #000)}
+.c4a,.c4h{position:absolute;top:2px;min-width:26px;height:19px;padding:0 4px;border-radius:9px;font-size:12.5px;font-weight:900;line-height:19px;text-align:center;color:#fff;text-shadow:0 1px 0 #000}
+.c4a{left:2px;background:linear-gradient(#ffb04d,#d06a10)}
+.c4h{right:2px;background:linear-gradient(#ff6a7a,#c01a3a)}
+.c4pw{position:absolute;left:0;right:0;bottom:31px;text-align:center;font-size:14px;font-weight:900;color:#fff;text-shadow:0 2px 0 #000,0 0 6px #000}
+.c4lv{position:absolute;left:2px;bottom:15px;width:22px;height:22px;border-radius:50%;background:#1f5fbf;border:2px solid #9cc8ff;font-size:12px;font-weight:900;line-height:18px;text-align:center;color:#fff;z-index:1}
+.c4nm{position:absolute;left:0;right:0;bottom:15px;padding:0 3px 0 24px;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;background:linear-gradient(#0000,#000c);line-height:16px}
+.c4bar{position:absolute;left:0;right:0;bottom:0;height:15px;background:#000c}
+.c4bar i{position:absolute;left:0;top:0;bottom:0;background:#3a8aff}
+.c4bar.ok i{background:#4fd14a}
+.c4bar b{position:relative;display:block;text-align:center;font-size:10.5px;line-height:15px;color:#fff;text-shadow:0 1px 0 #000}
+.c4up{position:absolute;left:50%;top:22px;transform:translateX(-50%);background:#e0453a;color:#fff;border-radius:7px;font-size:10.5px;font-weight:900;padding:0 5px;line-height:16px}
+.c4aw{position:absolute;left:2px;top:22px;background:#2a9a8a;color:#fff;border-radius:6px;font-size:10px;font-weight:900;padding:0 4px;line-height:15px}
+.c4sub{position:absolute;left:0;right:0;bottom:4px;text-align:center;font-size:11px;opacity:.75}
+.c4.lock .c4nm,.c4.unk .c4nm{bottom:18px;padding:0}
+.dk4{height:100%}
+.dk4.empty{border-radius:10px;border:2px dashed #ffffff44;display:flex;align-items:center;justify-content:center;font-size:30px;color:#ffffff55}
+.dk4.hov{outline:3px solid #ffe27a;outline-offset:1px;filter:brightness(1.25)}
+.sq4.dragging .dk4{animation:dkp .8s ease-in-out infinite}
+@keyframes dkp{50%{transform:translateY(-3px)}}
+.dk4.swapme{animation:dkp .8s ease-in-out infinite;outline:3px solid #7dffa1}
+.sq4wl{position:relative;width:150px;flex:none;border-radius:12px;overflow:hidden;border:2px solid var(--fc);background:radial-gradient(circle at 50% 30%,#3a4a8a,#141a3a);text-align:left}
+.sq4wl img{position:absolute;right:-18px;bottom:-6px;height:150px;object-fit:contain}
+.sq4wl b{position:absolute;left:8px;top:6px;font-size:16px;color:#ffe27a;text-shadow:0 2px 0 #000;z-index:1}
+.sq4wl small{position:absolute;left:8px;top:28px;font-size:12px;font-weight:800;z-index:1;text-shadow:0 1px 0 #000}
+.sq4wl em{position:absolute;left:8px;bottom:6px;font-style:normal;font-size:11px;background:#000a;border-radius:6px;padding:1px 6px;z-index:1}
+.sq4mid{position:absolute;top:200px;left:14px;right:14px;height:30px;display:flex;align-items:center;gap:12px}
+.sq4pw{font-size:16px;font-weight:900}.sq4pw small{font-size:11px;opacity:.7;margin-left:4px}
+.sq4syn{display:flex;gap:8px;font-weight:900;font-size:13px}
+.sq4hint{margin-left:auto;font-size:12px;opacity:.7}
+.sq4low{position:absolute;top:234px;bottom:46px;left:12px;right:12px;display:flex;gap:8px}
+.sq4grid{flex:1;min-width:0;display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,1fr);grid-auto-columns:96px;gap:7px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 4px;scrollbar-width:thin}
+.sq4grid .c4.in{filter:saturate(.45) brightness(.7)}
+.sq4grid .c4.in:after{content:"✔";position:absolute;left:0;right:0;top:30%;text-align:center;font-size:40px;font-weight:900;color:#fff;text-shadow:0 2px 0 #0009}
+.sq4rail{width:64px;flex:none;display:flex;flex-direction:column;gap:6px}
+.sq4rail button{flex:1;max-height:90px;border-radius:12px;background:#0006;border:2px solid #ffffff22;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:800;color:#cfe0ff}
+.sq4rail button .ico{width:30px;height:30px}
+.sq4rail button.on{background:linear-gradient(#3a6ac0,#244a8c);border-color:#ffe27a;color:#fff}
+.sq4filter{position:absolute;left:12px;right:12px;bottom:6px;height:36px;display:flex;align-items:center;gap:5px;overflow-x:auto;scrollbar-width:none}
+.sq4filter::-webkit-scrollbar{display:none}
+.sq4filter .fchip{flex:none}
+.c4ghost{position:absolute;z-index:80;pointer-events:none;transform:scale(1.08) rotate(-3deg);box-shadow:0 10px 24px #000c;opacity:.95}
+.c4src{opacity:.35}
+.sq4swap{position:absolute;left:50%;top:200px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:#0b1a3af2;border:2px solid #7dffa1;border-radius:14px;padding:4px 10px 4px 4px;z-index:5;font-size:13px}
+.sq4swap .pt{width:30px;height:30px;border-radius:8px}
+.sq4swap span{color:#7dffa1;font-weight:800}
+/* v3.23 영웅 상세 */
+.modal.hdfs{background:#0b0916}
+.modal.hdfs>.box{position:absolute;inset:0;width:auto;max-height:none;border:0;border-radius:0;padding:0;display:block;text-align:left;background:none;overflow:hidden}
+.hd5{position:absolute;inset:0;display:flex}
+.hd5l{position:relative;width:46%;flex:none;background:radial-gradient(90% 70% at 50% 62%,color-mix(in srgb,var(--fc) 30%,#0000),#0000 70%),url(../assets/bg_field2.webp?v=16) center 40%/cover;overflow:hidden}
+.hd5l:before{content:"";position:absolute;inset:0;background:linear-gradient(#0007,#0000 30%,#0000 62%,#000c)}
+.hd5bk{position:absolute;left:10px;top:8px;z-index:3}
+.hd5fac{position:absolute;left:12px;top:52px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:1px;background:#0009;border:2px solid var(--fc);border-radius:12px;padding:5px 8px}
+.hd5fac .ci{width:30px;height:30px}
+.hd5fac b{font-size:13px;color:var(--fc)}.hd5fac small{font-size:11px;opacity:.8}
+.hd5ttl{position:absolute;left:0;right:0;top:8px;text-align:center;z-index:2;display:flex;flex-direction:column;align-items:center}
+.hd5ttl span{font-size:13px;font-weight:900}
+.hd5ttl b{font-size:25px;font-weight:900;color:#fff;text-shadow:0 3px 0 #000a;line-height:1.1}
+.hd5ttl small{font-size:11.5px;color:#7dffa1;font-weight:800}
+.hd5stage{position:absolute;left:0;right:0;top:74px;bottom:84px;display:flex;align-items:flex-end;justify-content:center}
+.hd5ring{position:absolute;left:50%;bottom:-6px;width:260px;height:56px;margin-left:-130px;border-radius:50%;border:4px solid var(--tc);box-shadow:0 0 22px var(--tc),inset 0 0 18px var(--tc);opacity:.85}
+.hd5art{position:relative;max-height:100%;max-width:92%;object-fit:contain;filter:drop-shadow(0 8px 10px #000a)}
+.hd5stat{position:absolute;left:0;right:0;bottom:30px;display:flex;align-items:center;justify-content:center;gap:10px;z-index:2}
+.hd5stat .a,.hd5stat .h{font-size:28px;font-weight:900;color:#fff;text-shadow:0 3px 0 #000a;min-width:64px;text-align:center;border-radius:14px;padding:0 8px}
+.hd5stat .a{background:linear-gradient(#ffb04dcc,#c0600acc)}
+.hd5stat .h{background:linear-gradient(#ff6a7acc,#b01a3acc)}
+.hd5stat .p{font-size:20px;font-weight:900;background:#000b;border-radius:14px;padding:3px 14px;border:2px solid #ffffff33}
+.hd5rb{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:17px;z-index:2}
+.hd5dk{position:absolute;right:10px;top:52px;z-index:3}
+.hd5r{flex:1;min-width:0;position:relative;background:linear-gradient(160deg,color-mix(in srgb,var(--fc) 45%,#0c1a10) 0%,color-mix(in srgb,var(--fc) 22%,#0a0f0c) 100%);padding:12px 84px 12px 16px;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
+.hd5lv{display:flex;align-items:center;justify-content:center;gap:14px;background:#0006;border-radius:20px;padding:3px}
+.hd5lv b{font-size:20px;color:#ffe27a}.hd5lv small{font-size:11px;opacity:.7;color:#fff}
+.hd5ar{width:34px;height:30px;border-radius:10px;background:#ffffff1a;font-size:22px;font-weight:900;color:#ffe27a}
+.hd5ar:disabled{opacity:.3}
+.hd5st{display:flex;justify-content:center;gap:24px;font-size:21px;font-weight:900}
+.hd5st .a{color:#ffc07a}.hd5st .h{color:#ff8a9a}.hd5st i{font-style:normal;color:#9dff3a;font-size:15px}
+.hd5rows{display:flex;flex-direction:column;gap:6px}
+.hd5row{display:flex;gap:10px;align-items:center;background:#0005;border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.45}
+.hd5row>i{width:10px;height:10px;flex:none;border-radius:50%;background:var(--fc);box-shadow:0 0 6px var(--fc)}
+.hd5row.lg>i{background:#ffd667}.hd5row.aw>i{background:#7dffd8}.hd5row.mg>i{background:#c79bff}.hd5row.fc>i{background:#fff}
+.hd5up{margin-top:auto;display:flex;align-items:center;gap:10px;padding-top:4px}
+.hd5lvc{width:34px;height:34px;flex:none;border-radius:50%;background:#1f8a2a;border:2px solid #9dff8a;font-weight:900;text-align:center;line-height:30px;font-size:15px}
+.hd5bar{flex:1;position:relative;height:22px;border-radius:11px;background:#000a;overflow:hidden;border:2px solid #ffffff22}
+.hd5bar i{position:absolute;left:0;top:0;bottom:0;background:#3a8aff}.hd5bar.ok i{background:#4fd14a}
+.hd5bar b{position:relative;display:block;text-align:center;font-size:12.5px;line-height:18px}
+.hd5ub{min-width:150px;display:flex;flex-direction:column;align-items:center;line-height:1.1;padding:6px 14px}
+.hd5ub small{font-size:12px}
+.hd5tabs{position:absolute;right:8px;top:10px;bottom:10px;width:66px;display:flex;flex-direction:column;gap:6px}
+.hd5tabs button{position:relative;height:62px;border-radius:12px;background:#0006;border:2px solid #ffffff22;font-size:12.5px;font-weight:800;color:#d8ffe0}
+.hd5tabs button.on{background:#ffffff26;border-color:#ffe27a;color:#fff}
+.hd5tabs button:disabled{opacity:.35}
+.hd5tabs .dot{position:absolute;right:4px;top:4px}
+.hd5h{font-size:20px;font-weight:900;color:#ffe27a}
+.hd5p{font-size:13px;line-height:1.55;opacity:.9}
+.hd5msg{font-size:15px;line-height:1.7;text-align:center;margin-top:30px}
+.hd5r .evoline{justify-content:flex-start;flex-wrap:wrap}
+.hd5r .btn.sm{align-self:flex-start}
+.c4lv.up{background:#2fae2a;border-color:#b6ff8a}
+.c4lv.up:after{content:"▲";position:absolute;left:50%;top:-11px;transform:translateX(-50%);font-size:10px;color:#9dff3a;text-shadow:0 1px 0 #000}
+.c4up{left:auto!important;right:2px;top:42px!important;transform:none!important;background:#8a3ad0!important}
+.sq4grid::-webkit-scrollbar{height:6px}.sq4grid::-webkit-scrollbar-thumb{background:#ffffff40;border-radius:3px}.sq4grid::-webkit-scrollbar-track{background:#0000}
+.sq4grid{scrollbar-color:#ffffff40 #0000}
+.arpw{background:#0b1a3add;border-radius:14px;padding:2px 10px;border:2px solid #ffffff22;width:auto!important;margin-left:0!important;transform:translateX(-50%);white-space:nowrap}
+.arln{font-size:18px}
+.hd5r .evoline .evo{display:flex;flex-direction:column;align-items:center;gap:2px}
+.hd5r .evoline .evo>div:last-child{white-space:nowrap;font-size:12px}
+.aricon{width:auto!important;min-width:66px;padding:0 8px}
+.sq4rail button span{text-align:center;line-height:1.15}
+#app.bleed>.modal{border-left:var(--sab) solid transparent;border-right:var(--sab) solid transparent}
+#app.bleed>.modal.attfs .attbg{left:calc(-1*var(--sab));right:calc(-1*var(--sab))}
+#app.bleed>.modal.hdfs .hd5l{margin-left:calc(-1*var(--sab));padding-left:var(--sab);width:calc(46% + var(--sab))}
+#app.bleed>.modal.hdfs .hd5l>.hd5bk{left:calc(10px + var(--sab))}#app.bleed>.modal.hdfs .hd5l>.hd5fac{left:calc(12px + var(--sab))}
+#app.bleed>.modal.hdfs .hd5r{margin-right:calc(-1*var(--sab));padding-right:calc(84px + var(--sab))}
+#app.bleed>.modal.hdfs>.box{overflow:visible}
+.c4aw{max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1220,7 +1412,7 @@ const LANG='ja';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.22.2 ベータ';
+const VERSION='v3.23 ベータ';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2027,18 +2219,28 @@ function showQuests(){
 }
 const ATT=[{t:'gold',v:100,n:'ゴールド 100'},{t:'gems',v:5,n:'ジェム 5'},{t:'chest',v:'wood',n:'木の宝箱'},{t:'gold',v:200,n:'ゴールド 200'},{t:'gems',v:10,n:'ジェム 10'},{t:'chest',v:'silver',n:'銀の宝箱'},{t:'chest',v:'gold',n:'金の宝箱'}];
 function attReady(){save.att=save.att||{day:0,last:0};return save.att.last!==dayKey()}
+/* ---- 출석 보상 30일 (v3.23) ---- */
+const ATT2=(()=>{const g=[200,300,400,500,600,800],gm=[5,10,10,15,15,20],du=[20,30,40,50,60,80],ch=['wood','silver','silver','gold','gold','gold'],sp=[{t:'chest',v:'gold'},{t:'pick',v:2,c:3},{t:'chest',v:'epic'},{t:'pick',v:2,c:5},{t:'chest',v:'epic'},{t:'pick',v:3,c:2}];const o=[];for(let r=0;r<6;r++)o.push({t:'gold',v:g[r]},{t:'gems',v:gm[r]},{t:'dust',v:du[r]},{t:'chest',v:ch[r]},Object.assign({sp:1},sp[r]));return o})();
+function attLabel(a){return a.t==='chest'?CHESTS[a.v].n:a.t==='pick'?(a.v===3?'レジェンド':'エピック')+' ×'+a.c:String(a.v)}
+function attIcon(a){return a.t==='gold'?ico('coin','ai2'):a.t==='gems'?ico('gem','ai2'):a.t==='dust'?'<span class="adust">✦</span>':a.t==='chest'?chestSVG(a.v):`<div class="apick t${a.v}"><span>?</span></div>`}
 function showAttendance(onDone){
-  save.att=save.att||{day:0,last:0};const ready=attReady();const cur=save.att.day%7;
-  const m=modal(`<div class="ribbon">7日出席報酬</div><div style="font-size:12.5px;opacity:.7;margin-top:-4px">1日1回受け取れます。7日目は金の宝箱！</div>
-  <div class="attgrid">${ATT.map((a,i)=>{const done=i<cur||(!ready&&i===cur-1)||(!ready&&cur===0&&save.att.last&&i===6);const today=ready&&i===cur;
-    const icon=a.t==='gold'?ico('coin','ai'):a.t==='gems'?ico('gem','ai'):chestSVG(a.v);
-    return `<div class="att ${done?'done':''} ${today?'today':''}"><div class="ad">${i+1}日</div><div class="aico">${icon}</div><div class="an">${a.n}</div>${done?'<div class="ack">✓</div>':''}</div>`}).join('')}</div>
-  <div class="btns">${ready?'<button class="btn grn" id="attGo">今日の報酬を受け取る</button>':'<button class="btn sub" disabled>また明日来てね</button>'}<button class="btn sub sm" data-close>閉じる</button></div>`,onDone);
-  m.querySelector('.box').classList.add('wide');
-  const g=m.querySelector('#attGo');if(g)g.onclick=()=>{const a=ATT[cur];save.att.last=dayKey();save.att.day=(cur+1)%7;persist();track('attendance',{day:cur+1});
-    if(a.t==='gold'){save.gold+=a.v;persist();sfx('coin');m.remove();toast(a.n+' 受け取り済み');onDone&&onDone()}
-    else if(a.t==='gems'){save.gems+=a.v;persist();sfx('coin');m.remove();toast(a.n+' 受け取り済み');onDone&&onDone()}
-    else{m.remove();openChestModal(a.v,onDone||showLobby)}};
+  save.att=save.att||{day:0,last:0};const ready=attReady();const cur=(save.att.day|0)%30;const claimedN=(!ready&&cur===0&&save.att.last)?30:cur;const W=WL();
+  document.querySelectorAll('.attfs').forEach(x=>x.remove());
+  const m=document.createElement('div');m.className='modal attfs';
+  const cells=ATT2.map((a,i)=>{const done=i<claimedN,today=ready&&i===cur;return `<div class="ac ${a.sp?'sp':''} ${done?'done':''} ${today?'today':''}" ${today?'id="attGo"':''}><div class="acd">${today?'今日':LANG==='en'?'Day '+(i+1):(i+1)+'日目'}</div><div class="aci">${attIcon(a)}</div><div class="acv">${attLabel(a)}</div>${done?'<div class="ack2">✔</div>':''}${today?'<div class="acget">受け取る！</div>':''}</div>`}).join('');
+  m.innerHTML=`<div class="attbg"></div><img class="attwl" src="../assets/k_${W.art}.webp?v=${ASSET_V}" alt="" draggable="false"><button class="back attbk" data-close>← ロビー</button><div class="atttop"><div class="attsub">毎日ログインして報酬をもらおう！</div><div class="atttl">ログイン報酬</div></div><div class="attcd">${ready?'<b>今日の報酬を受け取れます</b>':'次の報酬まで <b id="attCd"></b>'}</div><div class="attgrid3">${cells}</div>`;
+  app.appendChild(m);
+  let tm=0;const close=()=>{clearInterval(tm);m.remove();onDone&&onDone()};
+  m.querySelector('[data-close]').onclick=()=>{sfx('tick');close()};
+  const cd=()=>{const e=m.querySelector('#attCd');if(!e)return;const n=new Date(),mid=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);e.textContent=fmtT((mid-n)/1000)};cd();tm=setInterval(()=>{if(!m.isConnected)return clearInterval(tm);cd()},1000);
+  const gr=m.querySelector('.attgrid3');const row=Math.floor((ready?cur:Math.max(0,claimedN-1))/5);requestAnimationFrame(()=>{const c=gr.children[row*5];if(c)gr.scrollTop=Math.max(0,c.offsetTop-6)});
+  const g=m.querySelector('#attGo');if(g)g.onclick=()=>{const a=ATT2[cur];save.att.last=dayKey();save.att.day=(cur+1)%30;persist();track('attendance',{day:cur+1});clearInterval(tm);m.remove();
+    const after=()=>showAttendance(onDone);
+    if(a.t==='gold'){save.gold+=a.v;persist();sfx('coin');toast('ゴールド +'+a.v);after()}
+    else if(a.t==='gems'){save.gems+=a.v;persist();sfx('coin');toast('ジェム +'+a.v);after()}
+    else if(a.t==='dust'){save.dust=(save.dust|0)+a.v;persist();sfx('coin');toast('ルーンの粉 +'+a.v);after()}
+    else if(a.t==='chest'){openChestModal(a.v,after)}
+    else{queuePick(a.v,a.c,'出席 '+(cur+1)+'日目');showPick(after)}};
 }
 function showEventInfo(){
   const E=todayEvent();if(save.evSeen!==dayKey()){save.evSeen=dayKey();persist();const d=document.querySelector('#bEvent .dot');if(d)d.remove()}const days=['日','月','火','水','木','金','土'];
@@ -2100,7 +2302,7 @@ function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syn
     </aside>
     <div class="ver2">${VERSION} · ${save.stats.w}勝 ${save.stats.l}敗</div>
   </div>`;
-  bind('#bFight',startArena);bind('#bAdv',showChallenge);bind('#bSeason',showSeason);bind('#bWl',()=>{wlView=save.warlord;showWarlords()});bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bExp',showExpeditions);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
+  bind('#bFight',()=>{const n=(save.stats.w|0)+(save.stats.l|0);if(n<3)startArena();else showArena()});bind('#bAdv',showChallenge);bind('#bSeason',showSeason);bind('#bWl',()=>{wlView=save.warlord;showWarlords()});bind('#bBoss',startDaily);bind('#bHero',showHeroes);bind('#bShop',showShop);bind('#bRule',showRules);bind('#bProf',showWarlords);bind('#bExp',showExpeditions);bind('#bAtt',()=>showAttendance(showLobby));bind('#bQuest',showQuests);bind('#bEvent',showEventInfo);bind('#bMute',()=>{toggleMute();showLobby()});bind('#bSet',showSettings);
   app.querySelectorAll('[data-shop]').forEach(b=>b.onclick=()=>{sfx('tick');showShop()});
   bind('#bIdle',()=>{const a=idleAmount();if(a<1)return toast(`毎分 ${idleRate().toFixed(1)}ゴールドずつ貯まります (最大8時間)`);save.gold+=a;save.idle.last=Date.now();persist();sfx('coin');toast(`補給 ${a}ゴールドを受け取りました`);showLobby()});
   bindChests();
@@ -2120,18 +2322,36 @@ function chestSlotsHTML(){
   }).join('');
 }
 function bindChests(){
-  app.querySelectorAll('[data-adc]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const i=+b.dataset.adc;showRewardAd('chest','宝箱を開ける時間を短縮します',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=adCut(cc);tickChests();persist()}toast('時間短縮！');if(screen==='lobby')showLobby()})});
+  app.querySelectorAll('[data-adc]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const i=+b.dataset.adc;showRewardAd('chest','宝箱を開ける時間を短縮します',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=adCut(cc);tickChests();persist()}toast('時間短縮！');if(screen==='lobby'||screen==='arena')chestBack()})});
   app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{
     sfx('tick');const i=+b.dataset.c,c=save.chests[i];if(!c)return;
-    if(c.st==='ready'){save.chests[i]=null;(save.guide=save.guide||{}).chest=1;persist();openChestModal(c.t,showLobby);return}
-    if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t,c)*1000;persist();showLobby();return}
+    if(c.st==='ready'){save.chests[i]=null;(save.guide=save.guide||{}).chest=1;persist();openChestModal(c.t,chestBack);return}
+    if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t,c)*1000;persist();chestBack();return}
     const cost=gemCost(c);
     const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'残り時間 '+fmtT((c.readyAt-Date.now())/1000):'別の宝箱を開けています'}<br>ジェム ${cost}個で今すぐ開けられます</div>${appMode()?`<a href="#" class="apphint" id="cApp">📱 アプリなら宝箱をもっと早く開けられます ›</a>`:''}
     <div class="btns"><button class="btn" id="cNow" ${save.gems<cost?'disabled':''}><span class="gem"></span> ${cost} すぐ開ける</button>${adOn()&&c.st==='unlocking'?`<button class="btn grn" id="cAd" ${adLeft('chest')>0?'':'disabled'}>${adW('広告を見て ','無料で ')+fmtS(adCut(c)/1000)+' 短縮'} (${adLeft('chest')})</button>`:''}<button class="btn sub" data-close>閉じる</button></div>`);
     const cap=m.querySelector('#cApp');if(cap)cap.onclick=e=>{e.preventDefault();m.remove();appCta('chest',true)};
-    const ca=m.querySelector('#cAd');if(ca)ca.onclick=()=>{m.remove();showRewardAd('chest','宝箱を開ける時間を短縮します',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=adCut(cc);tickChests();persist()}toast('時間短縮！');showLobby()})};
-    m.querySelector('#cNow').onclick=()=>{if(save.gems<cost)return;save.gems-=cost;save.chests[i]=null;persist();m.remove();openChestModal(c.t,showLobby)};
+    const ca=m.querySelector('#cAd');if(ca)ca.onclick=()=>{m.remove();showRewardAd('chest','宝箱を開ける時間を短縮します',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=adCut(cc);tickChests();persist()}toast('時間短縮！');chestBack()})};
+    m.querySelector('#cNow').onclick=()=>{if(save.gems<cost)return;save.gems-=cost;save.chests[i]=null;persist();m.remove();openChestModal(c.t,chestBack)};
   });
+}
+/* ---- 아레나 대기 화면 (v3.23) ---- */
+let arenaTimer=null;
+function chestBack(){if(screen==='arena')showArena();else showLobby()}
+function showArena(){screen='arena';ensureDeck();tickChests();checkSeason();if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
+  const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];const best=Math.max(save.season.best|0,li);const R=SEASON_REWARD(best);const bw=brawlState();
+  app.innerHTML=`<div class="screen arena2"><div class="topbar"><button class="back" id="bk">← ロビー</button><span class="h2">アリーナ</span>${resBar()}</div>
+  <div class="arside"><button class="aricon" id="arParty">${ico('hero')}<span>パーティ</span>${anyUpgrade()?'<i class="dot"></i>':''}</button><button class="aricon" id="arRank">${ico('trophy')}<span>ランキング</span></button></div>
+  <div class="arcrest" style="--lc:${L.c}"><img src="../assets/u_crest.webp?v=${ASSET_V}" alt="" draggable="false"><i class="argem"></i><b class="arno">${li+1}</b><span class="arln">${L.n} リーグ</span></div>
+  <div class="artro">${ico('trophy','mi')}<b>${save.trophies}</b>${N?`<span> / ${N.t}</span>`:''}<div class="bar"><i style="width:${N?Math.min(100,(save.trophies-L.t)/(N.t-L.t)*100):100}%"></i></div></div>
+  <div class="arpw">${ico('bolt','pwi')}<b>${deckPower()}</b><small>パーティ戦闘力</small></div>
+  <button class="arfight" id="arGo">${ico('battle','fi')}<span>バトル</span></button>
+  <button class="arped l" id="arSeason"><div class="arpi">${chestSVG(R.chest)}</div><b>シーズン報酬</b><small>${fmtDH(seasonLeft())} 後</small></button>
+  <button class="arped r" id="arBrawl"><div class="arpi">${ico('battle')}</div><b>今日のルール戦</b><small>${twistToday().n} · ${bw.w}/${BRAWL_MAX}</small>${bw.w<BRAWL_MAX?'<i class="dot"></i>':''}</button>
+  <div class="archest"><div class="chests2" id="chests">${chestSlotsHTML()}</div></div></div>`;
+  bind('#bk',showLobby);bind('#arGo',startArena);bind('#arParty',showHeroes);bind('#arRank',showSeason);bind('#arSeason',showSeason);bind('#arBrawl',startBrawl);
+  bindChests();clearInterval(arenaTimer);
+  arenaTimer=setInterval(()=>{if(screen!=='arena'){clearInterval(arenaTimer);return}tickChests();const c=document.getElementById('chests');if(c&&!document.querySelector('.modal')){c.innerHTML=chestSlotsHTML();bindChests()}},1000);
 }
 function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.daily.wins)}
 const RULE_TABS=[
@@ -2612,6 +2832,13 @@ function showWarlords(){
   app.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{sfx('merge');setWarlord(b.dataset.pick);track('warlord_pick',{id:save.warlord});toast(WARLORDS[save.warlord].n+' 出撃！');showWarlords()});
   app.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const k=b.dataset.buy,K=WARLORDS[k];if(save.gems<K.unlock.v)return;save.gems-=K.unlock.v;save.wl=save.wl||{};save.wl[k]=true;setWarlord(k);sfx('win');toast(K.n+' 加入！');showWarlords()});
 }
+let swapPick=null;
+function c4card(id,cls,extra){const v=V(id),o=save.owned[id],t=tierOf(id);const st=baseStats(id,o.lv,1,o.rb|0,sbOf(baseOf(id)));const atk=!(v.cls==='support'||v.cls==='building');const max=o.lv>=MAX_LV,need=max?1:lvNeed(id),up=canLevel(id),evo=evoInfo(id).ok;
+  return `<div class="c4 t${t} ${cls||''}" data-id="${id}" ${extra||''} style="--tc:${RAR[t].c}"><div class="c4art">${portrait(id)}</div>${facIcon(v.fac,'c4fac')}<span class="c4a">${atk?st.a:'-'}</span><span class="c4h">${st.h}</span><span class="c4pw">${heroPower(id,o)}</span><span class="c4lv ${up?'up':''}">${o.lv}</span>${isAwake(id,o.lv,o.rb)?'<span class="c4aw">覚醒</span>':''}${evo?'<span class="c4up">進化</span>':''}<div class="c4nm">${v.name}</div><div class="c4bar ${up?'ok':''}"><i style="width:${max?100:Math.min(100,o.cards/need*100)}%"></i><b>${max?'MAX':o.cards+'/'+need}</b></div></div>`}
+function deckPut(id,slot,fromSlot){const d=save.deck.slice();while(d.length<8)d.push(null);
+  if(fromSlot!=null){const a=+fromSlot;if(a===slot)return showHeroes();[d[a],d[slot]]=[d[slot],d[a]]}
+  else{const cur=d.indexOf(id);if(cur>=0){[d[cur],d[slot]]=[d[slot],d[cur]]}else{const sb=d.find(x=>x&&x!==id&&baseOf(x)===baseOf(id));if(sb){const j=d.indexOf(sb);if(j===slot)d[slot]=id;else{d[j]=d[slot];d[slot]=id}}else d[slot]=id}}
+  save.deck=d.filter(Boolean);persist();sfx('place');showHeroes()}
 function showHeroes(){
   screen='heroes';ensureDeck();
   const ub=unlockedBases();const W=WARLORDS[save.warlord]||WARLORDS.asten;
@@ -2621,32 +2848,46 @@ function showHeroes(){
     versionsOf(b).filter(id=>heroTier==='all'||tierOf(id)===+heroTier).forEach(id=>{if(save.owned[id])own.push(id);else if(!heroOwned&&ub.includes(b))unk.push(id)});
     if(!heroOwned&&!ub.includes(b))unk.push('L:'+b);
   });
-  own.sort((a,b)=>(save.deck.includes(b)?1:0)-(save.deck.includes(a)?1:0)||tierOf(b)-tierOf(a)||save.owned[b].lv-save.owned[a].lv);
-  const card=id=>{const v=V(id),o=save.owned[id],t=tierOf(id);const inD=save.deck.filter(x=>x===id).length;const max=o.lv>=MAX_LV;const need=max?1:lvNeed(id);const up=canLevel(id),ev=evoInfo(id).ok;
-    return `<div class="hc2 t${t} ${inD?'indeck':''}" data-id="${id}"><div class="hc2art">${portrait(id)}</div>${facIcon(v.fac,'hc2fac')}<span class="hc2lv">${o.lv}</span><span class="hc2pw">${ico('bolt','pwi')}${heroPower(id,o)}</span>${isAwake(id,o.lv,o.rb)?'<span class="hc2aw">覚醒</span>':''}${inD?`<span class="hc2dk">デッキ${inD>1?'×'+inD:''}</span>`:''}${up||ev?`<span class="hc2up">${ev?'進化':'強化'}</span>`:''}
-      <div class="hc2nm">${v.name}</div><div class="hc2rb">${rbStars(id,o.rb)}</div><div class="hc2bar ${up?'ok':''}"><i style="width:${max?100:Math.min(100,o.cards/need*100)}%"></i><b>${max?'MAX':o.cards+'/'+need}</b></div></div>`};
-  const unkCard=x=>{if(x.startsWith('L:')){const b=x.slice(2);const L=LEAGUES.find(L=>L.un.includes(b));return `<div class="hc2 lock"><div class="hc2art" style="filter:brightness(0) opacity(.6)">${portrait(vid(b,HEROES[b].rar))}</div><div class="hc2nm">???</div><div class="hc2sub">${L?L.n+' リーグ':''}</div></div>`}
-    const t=tierOf(x);return `<div class="hc2 unk t${t}" data-id="${x}"><div class="hc2art" style="filter:brightness(.18) saturate(0)">${portrait(x)}</div><div class="hc2nm" style="color:${RAR[t].c}">${RAR[t].n}</div><div class="hc2sub">未発見</div></div>`};
+  own.sort((a,b)=>(save.deck.includes(b)?1:0)-(save.deck.includes(a)?1:0)||(save.deck.includes(a)?save.deck.indexOf(a)-save.deck.indexOf(b):0)||tierOf(b)-tierOf(a)||save.owned[b].lv-save.owned[a].lv);
+  const unkCard=x=>{if(x.startsWith('L:')){const b=x.slice(2);const L=LEAGUES.find(L=>L.un.includes(b));return `<div class="c4 lock"><div class="c4art" style="filter:brightness(0) opacity(.6)">${portrait(vid(b,HEROES[b].rar))}</div><div class="c4nm">???</div><div class="c4sub">${L?L.n+' リーグ':''}</div></div>`}
+    const t=tierOf(x);return `<div class="c4 unk t${t}" data-ux="${x}" style="--tc:${RAR[t].c}"><div class="c4art" style="filter:brightness(.18) saturate(0)">${portrait(x)}</div><div class="c4nm" style="color:${RAR[t].c}">${RAR[t].n}</div><div class="c4sub">未発見</div></div>`};
   const fc=f=>save.deck.filter(id=>V(id).fac===f).length;
-  app.innerHTML=`<div class="screen hs2 ps3"><div class="topbar"><button class="back" id="bk">← ロビー</button><span class="h2">パーティ</span>${resBar()}</div>
-  <div class="ps3l"><div class="ps3cap">出撃陣形</div><div class="hs2top">
-    <button class="hs2wl" id="hWl" style="--fc:${FAC[W.fac].c}"><img src="../assets/k_${W.art}.webp?v=${ASSET_V}" alt=""><b>${W.n}</b><small>Lv${wlLv()} · 指揮官</small></button>
-    <div class="hs2deck">${Array.from({length:8},(_,i)=>{const id=save.deck[i];if(!id)return '<div class="hs2slot empty">+</div>';const o=save.owned[id]||{lv:1};return `<div class="hs2slot t${tierOf(id)}" data-id="${id}">${portrait(id)}<span>${o.lv}</span></div>`}).join('')}</div>
-    <div class="hs2side"><div class="hs2pw">${ico('bolt','pwi')}${deckPower()}<small>パーティ戦闘力</small></div><div class="hs2syn">${FAC_KEYS.map(f=>`<span style="color:${FAC[f].c}">${facIcon(f,'ci')}${fc(f)}</span>`).join('')}</div><button class="btn sm" data-auto="">おすすめ</button></div>
-  </div>
-  <div class="sqrow"><span>パーティ</span>${Object.keys(WARLORDS).filter(k=>wlUnlocked(k)).map(k=>{const K=WARLORDS[k];const busy=expOf(k);return `<button class="sqtab ${k===save.warlord?'on':''} ${busy?'busy':''}" data-sq="${k}" style="--fc:${FAC[K.fac].c}"><img src="../assets/k_${K.art}.webp?v=${ASSET_V}">${K.n}${busy?' · 遠征':''}</button>`}).join('')}<small>指揮官ごとにパーティーが別々に保存されます</small></div></div>
-  <div class="ps3r"><div class="hs2filter">${['all',...FAC_KEYS].map(f=>`<button class="fchip ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'全体':facIcon(f,'ci')}</button>`).join('')}<i class="fsep"></i>${['all',0,1,2,3].map(t=>`<button class="fchip ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'ランク':RAR[t].n}</button>`).join('')}<i class="fsep"></i>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="fchip ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'タイプ':CLS[c].n}</button>`).join('')}<button class="fchip wide ${heroOwned?'':'on'}" id="fOwn">${heroOwned?'未発見も表示':'所持のみ表示'}</button></div>
-  <div class="hs2grid">${own.map(card).join('')}${unk.map(unkCard).join('')||''}${!own.length&&!unk.length?'<div class="hs2none">条件に合うヒーローがいません</div>':''}</div></div>
+  const deck=Array.from({length:8},(_,i)=>{const id=save.deck[i];if(!id||!save.owned[id])return `<div class="dk4 empty" data-slot="${i}">+</div>`;return c4card(id,'dk4'+(swapPick?' swapme':''),`data-slot="${i}"`)}).join('');
+  app.innerHTML=`<div class="screen sq4"><div class="topbar sq4top"><button class="back" id="bk">← ロビー</button><div class="sq4tabs">${Object.keys(WARLORDS).filter(k=>wlUnlocked(k)).map(k=>{const K=WARLORDS[k];const busy=expOf(k);return `<button class="sq4tab ${k===save.warlord?'on':''} ${busy?'busy':''}" data-sq="${k}" style="--fc:${FAC[K.fac].c}"><img src="../assets/k_${K.art}.webp?v=${ASSET_V}" alt="">${K.n}${busy?' · 遠征':''}</button>`}).join('')}</div>${resBar()}</div>
+  <div class="sq4band"><div class="sq4deck">${deck}</div>
+    <button class="sq4wl" id="hWl" style="--fc:${FAC[W.fac].c}"><img src="../assets/k_${W.art}.webp?v=${ASSET_V}" alt=""><b>${W.n}</b><small>Lv${wlLv()} · <span class="hrt">♥</span>${wlHp()}</small><em>指揮官</em></button></div>
+  <div class="sq4mid"><span class="sq4pw">${ico('bolt','pwi')}<b>${deckPower()}</b><small>パーティ戦闘力</small></span><span class="sq4syn">${FAC_KEYS.map(f=>`<span style="color:${FAC[f].c}">${facIcon(f,'ci')}${fc(f)}</span>`).join('')}</span><button class="btn sm" data-auto="">おすすめ</button><span class="sq4hint">${swapPick?'':'カードを上のデッキへドラッグで入れ替え · タップで詳細'}</span></div>
+  <div class="sq4low"><div class="sq4grid" id="sqGrid">${own.map(id=>c4card(id,save.deck.includes(id)?'in':'')).join('')}${unk.map(unkCard).join('')}${!own.length&&!unk.length?'<div class="hs2none">条件に合うヒーローがいません</div>':''}</div>
+    <nav class="sq4rail"><button class="on">${ico('hero')}<span>ヒーロー</span></button><button id="hWl2">${ico('trophy')}<span>指揮官</span></button></nav></div>
+  <div class="sq4filter">${['all',...FAC_KEYS].map(f=>`<button class="fchip ${heroFilter===f?'on':''}" data-f="${f}" ${f!=='all'?`style="--fc:${FAC[f].c}"`:''}>${f==='all'?'全体':facIcon(f,'ci')}</button>`).join('')}<i class="fsep"></i>${['all',0,1,2,3].map(t=>`<button class="fchip ${String(heroTier)===String(t)?'on':''}" data-tier="${t}" ${t!=='all'?`style="--fc:${RAR[t].c};color:${RAR[t].c}"`:''}>${t==='all'?'ランク':RAR[t].n}</button>`).join('')}<i class="fsep"></i>${['all','melee','ranged','magic','support','building'].map(c=>`<button class="fchip ${heroCls===c?'on':''}" data-cls="${c}">${c==='all'?'タイプ':CLS[c].n}</button>`).join('')}<button class="fchip wide ${heroOwned?'':'on'}" id="fOwn">${heroOwned?'未発見も表示':'所持のみ表示'}</button></div>
+  ${swapPick&&save.owned[swapPick]?`<div class="sq4swap">${portrait(swapPick)}<b>${V(swapPick).name}</b><span>入れ替えるデッキのカードをタップ</span><button class="btn sm sub" id="swX">キャンセル</button></div>`:''}
   </div>`;
   if(save.bestLeague>=EVO_LEAGUE)tutTip('evo','<b>進化</b>同じバージョンのカードを集めて上位ランクのカードに変えられます。ヒーローをタップして進化ボタンを確認しましょう。');
-  bind('#bk',showLobby);bind('#hWl',()=>{wlView=save.warlord;showWarlords()});
+  bind('#bk',()=>{swapPick=null;showLobby()});bind('#hWl',()=>{wlView=save.warlord;showWarlords()});bind('#hWl2',()=>{wlView=save.warlord;showWarlords()});bind('#swX',()=>{swapPick=null;showHeroes()});
   app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{sfx('tick');heroFilter=b.dataset.f;showHeroes()});
   app.querySelectorAll('[data-tier]').forEach(b=>b.onclick=()=>{sfx('tick');heroTier=b.dataset.tier;showHeroes()});
   app.querySelectorAll('[data-cls]').forEach(b=>b.onclick=()=>{sfx('tick');heroCls=b.dataset.cls;showHeroes()});
   bind('#fOwn',()=>{heroOwned=!heroOwned;showHeroes()});
   app.querySelectorAll('[data-sq]').forEach(b=>b.onclick=()=>{const k=b.dataset.sq;if(k===save.warlord)return;if(expOf(k))return toast('遠征中の指揮官です');sfx('merge');setWarlord(k);toast(WARLORDS[k].n+' パーティーに変更しました');showHeroes()});
   app.querySelectorAll('[data-auto]').forEach(b=>b.onclick=()=>{const d=autoDeck(null);save.deck=d;persist();sfx('merge');toast('デッキを自動で組みました');showHeroes()});
-  app.querySelectorAll('[data-id]').forEach(h=>h.onclick=()=>{sfx('tick');heroDetail(h.dataset.id)});
+  app.querySelectorAll('[data-ux]').forEach(h=>h.onclick=()=>{sfx('tick');heroDetail(h.dataset.ux)});
+  app.querySelectorAll('.dk4.empty').forEach(e=>e.onclick=()=>{if(swapPick){const p=swapPick;swapPick=null;deckPut(p,+e.dataset.slot,null)}else toast('下のカードをドラッグしてください')});
+  const gr=app.querySelector('#sqGrid');if(gr)gr.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){gr.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+  sqDrag();
+}
+function sqDrag(){const root=app.querySelector('.sq4');
+  root.querySelectorAll('.c4[data-id]').forEach(el=>{el.onpointerdown=e=>{if(e.button>0)return;const id=el.dataset.id;const fromSlot=el.dataset.slot!=null?+el.dataset.slot:null;const sx=e.clientX,sy=e.clientY;let drag=null;const sc=+app.dataset.s||1;
+    const dropAt=ev=>{const h=document.elementFromPoint(ev.clientX,ev.clientY);return h&&h.closest?h.closest('.dk4[data-slot]'):null};
+    const cleanup=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',cc)};
+    const mv=ev=>{const dx=ev.clientX-sx,dy=ev.clientY-sy;
+      if(!drag){if(Math.hypot(dx,dy)<9)return;if(fromSlot==null&&ev.pointerType!=='mouse'&&Math.abs(dy)<Math.abs(dx)){cleanup();return}
+        drag=el.cloneNode(true);drag.classList.add('c4ghost');drag.style.width=el.offsetWidth+'px';drag.style.height=el.offsetHeight+'px';app.appendChild(drag);el.classList.add('c4src');root.classList.add('dragging')}
+      const ar=app.getBoundingClientRect();drag.style.left=((ev.clientX-ar.left)/sc-drag.offsetWidth/2)+'px';drag.style.top=((ev.clientY-ar.top)/sc-drag.offsetHeight/2)+'px';
+      root.querySelectorAll('.dk4.hov').forEach(x=>x.classList.remove('hov'));const tg=dropAt(ev);if(tg)tg.classList.add('hov');if(ev.cancelable)ev.preventDefault()};
+    const up=ev=>{cleanup();if(!drag){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<9){if(swapPick&&fromSlot!=null){const p=swapPick;swapPick=null;return deckPut(p,fromSlot,null)}sfx('tick');heroDetail(id)}return}
+      drag.remove();const tg=dropAt(ev);if(tg)deckPut(id,+tg.dataset.slot,fromSlot);else showHeroes()};
+    const cc=()=>{cleanup();if(drag){drag.remove();showHeroes()}};
+    addEventListener('pointermove',mv,{passive:false});addEventListener('pointerup',up);addEventListener('pointercancel',cc)}});
 }
 function lvPreview(id,o){const v=V(id),sb=sbOf(baseOf(id)),rb=o.rb|0,atk=!(v.cls==='support'||v.cls==='building');
   const cur=baseStats(id,o.lv,1,rb,sb);let top='';
@@ -2655,34 +2896,45 @@ function lvPreview(id,o){const v=V(id),sb=sbOf(baseOf(id)),rb=o.rb|0,atk=!(v.cls
   const tb=Array.from({length:MAX_LV},(_,i)=>{const s2=baseStats(id,i+1,1,rb,sb);return `<div class="${i+1===o.lv?'cur':''}${i+1<o.lv?' past':''}"><small>Lv${i+1}</small>${atk?`<span class="a">${s2.a}</span>`:''}<span class="h">${s2.h}</span></div>`}).join('');
   return top+`<div class="lvtbl">${tb}</div>`}
 function lvUpFx(v,lv,da,dh){const d=document.createElement('div');d.className='lvupfx';d.innerHTML=`<div class="lvr"></div><div class="lvt">LEVEL UP</div><div class="lvn">${v.name} <b>Lv${lv}</b></div><div class="lvs">${v.cls==='support'||v.cls==='building'?'':`<span class="a">攻撃 +${da}</span>`}<span class="h">HP +${dh}</span></div>`;app.appendChild(d);setTimeout(()=>d.remove(),1600)}
-function heroDetail(id){
-  const v=V(id),o=save.owned[id],t=tierOf(id),b=baseOf(id);
+let hdTab='info',hdLv=null,hdId=null;
+function heroDetail(id,tab){
+  if(hdId!==id){hdId=id;hdLv=null}if(tab)hdTab=tab;
+  const v=V(id),o=save.owned[id],t=tierOf(id),b=baseOf(id);const atk=!(v.cls==='support'||v.cls==='building');
   const line=versionsOf(b).map(x=>{const ow=save.owned[x];return `<div class="evo ${x===id?'cur':''} t${tierOf(x)}" data-go="${x}"><div class="art" ${ow?'':'style="filter:brightness(.15) saturate(0)"'}>${portrait(x)}</div><div style="color:${RAR[tierOf(x)].c}">${RAR[tierOf(x)].n}</div></div>`}).join('<span class="arr">›</span>');
-  let body='';
-  if(!o){body=`<div class="rw">まだ発見していないバージョンです。<br>宝箱から1枚以上入手すると進化対象として解放されます。</div>`}
-  else{
-    const st0=baseStats(id,o.lv,1,o.rb,sbOf(b));const max=o.lv>=MAX_LV;const need=max?0:lvNeed(id);const g=max?0:lvGold(id);
-    const ei=evoInfo(id);const inD=save.deck.filter(x=>x===id).length;
-    body=`<div class="dstat"><span class="a">${v.cls==='support'||v.cls==='building'?'-':st0.a}</span> 攻撃 &nbsp; <span class="h">${st0.h}</span> HP &nbsp; Lv ${o.lv}/${MAX_LV} &nbsp; カード ${o.cards}枚</div>${lvPreview(id,o)}<div style="font-size:13px;margin:-2px 0 4px">超越 ${rbStars(id,o.rb)} <small style="opacity:.7">${o.rb|0}/${rbMax(id)}${o.lv>=MAX_LV&&(o.rb|0)<rbMax(id)?' · 今超越すると星が1つ埋まります':''}</small></div>
-    <div class="dsk"><b>${v.desc}</b>${t===3&&v.exd?`<br><span style="color:#ffd667">レジェンドスキル · ${v.exd}</span>`:v.exd?`<br><span style="opacity:.55">レジェンドになると · ${v.exd}</span>`:''}${EX[b]&&!HEROES[b].token?`<br><span style="color:${isAwake(id,o.lv,o.rb)?'#7dffd8':'#ffffff80'}">覚醒${isAwake(id,o.lv,o.rb)?' 完了':' (レジェンド版の超越1段階で解放)'} · ${AWD[EX[b].id]||''}</span>`:''}<br><span style="opacity:.6;font-size:12.5px">超越 ${o.rb|0}/${rbMax(id)} · Lv${MAX_LV}で超越するとLv1に戻り、星 +1、攻撃・HP +30%${save.bestLeague<RB_LEAGUE?' ('+LEAGUES[RB_LEAGUE].n+' リーグから)':''}</span></div>
-    <div class="mgline">${v.cls==='building'?'':mergeTxt(id)}</div>${sbHTML(id)}<div class="dbtns">
-      <button class="btn sm ${canLevel(id)?'grn':'sub'}" id="dUp" ${!max&&canLevel(id)&&save.gold>=g?'':'disabled'}>${max?'最大レベル':`レベルアップ · カード ${need} · <span class="coin" style="width:10px;height:10px"></span>${g}`}</button>
-      ${ei.max?'':`<button class="btn sm ${ei.ok?'':'sub'}" id="dEvo" ${ei.ok?'':'disabled'}>進化 · カード ${ei.E.need}枚 → ${V(ei.nx).name} ${ei.E.get}枚 · <span class="coin" style="width:10px;height:10px"></span>${ei.E.gold}</button>`}
-      ${(o.lv>=MAX_LV&&(o.rb|0)<rbMax(id))?`<button class="btn sm ${save.bestLeague>=RB_LEAGUE?'grn':'sub'}" id="dRb" ${save.bestLeague>=RB_LEAGUE&&save.gold>=rbGold(id,o)?'':'disabled'}>超越 ${ROM[(o.rb|0)+1]} · <span class="coin" style="width:10px;height:10px"></span>${rbGold(id,o)}</button>`:''}
-      ${!inD?`<button class="btn sm sub" id="dDeck">${sameBaseInDeck(id)?'デッキの '+V(sameBaseInDeck(id)).name+' と入れ替え':'デッキに入れる'}</button>`:''}
-      ${inD?'<button class="btn sm sub" id="dOut">デッキから外す</button>':''}
-    </div>${ei.max?'':`<div style="font-size:12.5px;opacity:.7">${ei.ok?'進化できます！':ei.why}</div>`}`;
-  }
-  const m=modal(`<div class="dwrap"><div class="dart t${t}">${portrait(id)}</div><div class="dinfo"><div class="dname">${v.name}</div><div style="font-weight:800;font-size:13px;display:flex;align-items:center;gap:6px"><span style="color:${RAR[t].c}">${RAR[t].n}</span> · ${facIcon(v.fac,'ci')}<span style="color:${FAC[v.fac].c}">${FAC[v.fac].n}</span> · ${CLS[v.cls].n}</div><div style="font-size:12.5px;opacity:.7">${FAC[v.fac].d} · ${FAC[v.fac].s2.replace('2体以上: ','2体: ')} / ${FAC[v.fac].s4.replace('4体以上: ','4体: ')}</div>${body}</div></div>
-  <div class="evoline">${line}</div><div class="btns"><button class="btn sub sm" data-close>閉じる</button></div>`,showHeroes);
-  m.querySelector('.box').classList.add('wide');
+  const inD=o?save.deck.filter(x=>x===id).length:0;
+  let st0=null,ei=null,right='',dots={};
+  if(o){st0=baseStats(id,o.lv,1,o.rb,sbOf(b));ei=evoInfo(id);const R=sbReq(b);
+    dots={info:canLevel(id)&&save.gold>=lvGold(id)&&o.lv<MAX_LV,evo:ei.ok,rb:o.lv>=MAX_LV&&(o.rb|0)<rbMax(id)&&save.bestLeague>=RB_LEAGUE,rune:!!(R&&save.bestLeague>=SB_LEAGUE&&bestLv(b)>=R.lv&&(save.dust|0)>=R.dust&&save.gold>=R.gold)}}
+  if(!o){right=`<div class="hd5msg">まだ発見していないバージョンです。<br>宝箱から1枚以上入手すると進化対象として解放されます。</div><div class="evoline">${line}</div>`}
+  else if(hdTab==='info'){const L=hdLv==null?o.lv:hdLv;const s1=baseStats(id,L,1,o.rb,sbOf(b)),s2=L<MAX_LV?baseStats(id,L+1,1,o.rb,sbOf(b)):null;const max=o.lv>=MAX_LV;const need=max?0:lvNeed(id);const g=max?0:lvGold(id);
+    const rows=[[`<b>${v.desc}</b>`,'sk'],t===3&&v.exd?[`<span style="color:#ffd667">レジェンドスキル · ${v.exd}</span>`,'lg']:v.exd?[`<span style="opacity:.6">レジェンドになると · ${v.exd}</span>`,'lg off']:null,EX[b]&&!HEROES[b].token?[`<span style="color:${isAwake(id,o.lv,o.rb)?'#7dffd8':'#ffffff90'}">覚醒${isAwake(id,o.lv,o.rb)?' 完了':' (レジェンド版の超越1段階で解放)'} · ${AWD[EX[b].id]||''}</span>`,'aw']:null,v.cls==='building'?null:[mergeTxt(id),'mg'],[`${FAC[v.fac].n} · ${FAC[v.fac].s2.replace('2体以上: ','2体: ')} / ${FAC[v.fac].s4.replace('4体以上: ','4体: ')}`,'fc']].filter(Boolean);
+    right=`<div class="hd5lv"><button class="hd5ar" id="lvP" ${L<=1?'disabled':''}>‹</button><b>レベル ${L}${L===o.lv?'':' <small>(プレビュー)</small>'}</b><button class="hd5ar" id="lvN" ${L>=MAX_LV?'disabled':''}>›</button></div>
+      <div class="hd5st">${atk?`<span class="a">⚔ ${s1.a}${s2?` <i>»</i> ${s2.a}`:''}</span>`:''}<span class="h">♥ ${s1.h}${s2?` <i>»</i> ${s2.h}`:''}</span></div>
+      <div class="hd5rows">${rows.map(r=>`<div class="hd5row ${r[1]}"><i></i><div>${r[0]}</div></div>`).join('')}</div>
+      <div class="hd5up"><span class="hd5lvc">${o.lv}</span><div class="hd5bar ${canLevel(id)?'ok':''}"><i style="width:${max?100:Math.min(100,o.cards/need*100)}%"></i><b>${max?'MAX':o.cards+' / '+need}</b></div>
+      <button class="btn ${canLevel(id)?'grn':'sub'} hd5ub" id="dUp" ${!max&&canLevel(id)&&save.gold>=g?'':'disabled'}>${max?'最大レベル':`レベルアップ<small><span class="coin" style="width:11px;height:11px"></span>${g}</small>`}</button></div>`}
+  else if(hdTab==='evo'){right=`<div class="hd5h">進化</div><div class="hd5p">同じバージョンのカードを集めて上位等級のバージョンに変えます。</div><div class="evoline">${line}</div>${ei.max?'<div class="hd5p">最高等級です</div>':`<button class="btn sm ${ei.ok?'':'sub'}" id="dEvo" ${ei.ok?'':'disabled'}>進化 · カード ${ei.E.need}枚 → ${V(ei.nx).name} ${ei.E.get}枚 · <span class="coin" style="width:10px;height:10px"></span>${ei.E.gold}</button><div class="hd5p">${ei.ok?'進化できます！':ei.why}</div>`}`}
+  else if(hdTab==='rb'){right=`<div class="hd5h">超越 ${rbStars(id,o.rb)} <small>${o.rb|0}/${rbMax(id)}</small></div><div class="hd5p">Lv${MAX_LV}で超越するとLv1に戻り、星+1、攻撃・HP+30%とスキル数値+5を永久に得ます。${save.bestLeague<RB_LEAGUE?'<br>'+LEAGUES[RB_LEAGUE].n+' リーグから解放されます':''}</div>${lvPreview(id,o)}${(o.lv>=MAX_LV&&(o.rb|0)<rbMax(id))?`<button class="btn sm ${save.bestLeague>=RB_LEAGUE?'grn':'sub'}" id="dRb" ${save.bestLeague>=RB_LEAGUE&&save.gold>=rbGold(id,o)?'':'disabled'}>超越 ${ROM[(o.rb|0)+1]} · <span class="coin" style="width:10px;height:10px"></span>${rbGold(id,o)}</button>`:(o.rb|0)>=rbMax(id)?'<div class="hd5p">超越をすべて完了しました</div>':`<div class="hd5p">Lv${MAX_LV}になると超越できます (現在Lv${o.lv})</div>`}`}
+  else{right=`<div class="hd5h">ルーン刻印</div>${sbHTML(id)||'<div class="hd5p">このカードにはルーンを刻めません</div>'}`}
+  const tabs=[['info','情報'],['evo','進化'],['rb','超越'],['rune','ルーン刻印']];
+  const m=modal(`<div class="hd5" style="--fc:${FAC[v.fac].c};--tc:${RAR[t].c}">
+    <div class="hd5l"><button class="back hd5bk" data-close>← パーティ</button><div class="hd5fac">${facIcon(v.fac,'ci')}<b>${FAC[v.fac].n}</b><small>${CLS[v.cls].n}</small></div>
+      <div class="hd5ttl"><span style="color:${RAR[t].c}">◆ ${RAR[t].n}</span><b>${v.name}</b>${inD?'<small>デッキにいます</small>':''}</div>
+      <div class="hd5stage"><div class="hd5ring"></div><img class="hd5art" src="../assets/${lobbyArt(id)}.webp?v=${ASSET_V}" alt="" draggable="false" ${o?'':'style="filter:brightness(0) opacity(.55)"'} onerror="this.style.display='none'"></div>
+      ${o?`<div class="hd5stat">${atk?`<span class="a">${st0.a}</span>`:''}<span class="p">${ico('bolt','pwi')}${heroPower(id,o)}</span><span class="h">${st0.h}</span></div><div class="hd5rb">${rbStars(id,o.rb)}</div>`:''}
+      ${o?`<div class="hd5dk">${!inD?`<button class="btn sm" id="dDeck">${sameBaseInDeck(id)?V(sameBaseInDeck(id)).name+' と入れ替え':'デッキに入れる'}</button>`:'<button class="btn sm sub" id="dOut">デッキから外す</button>'}</div>`:''}</div>
+    <div class="hd5r">${right}</div>
+    <nav class="hd5tabs">${tabs.map(([k,n])=>`<button class="${hdTab===k?'on':''}" data-tab="${k}" ${o?'':'disabled'}>${n}${dots[k]?'<i class="dot"></i>':''}</button>`).join('')}</nav></div>`,showHeroes);
+  m.classList.add('hdfs');
   m.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>{m.remove();heroDetail(e.dataset.go)});
-  const up=m.querySelector('#dUp');if(up)up.onclick=()=>{if(!canLevel(id)||save.gold<lvGold(id))return;(save.guide=save.guide||{}).up=1;save.gold-=lvGold(id);o.cards-=lvNeed(id);const sbB=sbOf(baseOf(id)),pre=baseStats(id,o.lv,1,o.rb,sbB);o.lv++;persist();qp('upgrade');sfx('levelup');m.remove();const post=baseStats(id,o.lv,1,o.rb,sbB);heroDetail(id);lvUpFx(v,o.lv,post.a-pre.a,post.h-pre.h)};
+  m.querySelectorAll('[data-tab]').forEach(e=>e.onclick=()=>{sfx('tick');m.remove();heroDetail(id,e.dataset.tab)});
+  const lp=m.querySelector('#lvP'),ln=m.querySelector('#lvN');if(lp)lp.onclick=()=>{hdLv=Math.max(1,(hdLv==null?o.lv:hdLv)-1);m.remove();heroDetail(id)};if(ln)ln.onclick=()=>{hdLv=Math.min(MAX_LV,(hdLv==null?o.lv:hdLv)+1);m.remove();heroDetail(id)};
+  const up=m.querySelector('#dUp');if(up)up.onclick=()=>{if(!canLevel(id)||save.gold<lvGold(id))return;(save.guide=save.guide||{}).up=1;save.gold-=lvGold(id);o.cards-=lvNeed(id);const sbB=sbOf(baseOf(id)),pre=baseStats(id,o.lv,1,o.rb,sbB);o.lv++;hdLv=null;persist();qp('upgrade');sfx('levelup');m.remove();const post=baseStats(id,o.lv,1,o.rb,sbB);heroDetail(id);lvUpFx(v,o.lv,post.a-pre.a,post.h-pre.h)};
   const evb=m.querySelector('#dEvo');if(evb)evb.onclick=()=>{const r=doEvolve(id);if(!r)return;sfx('win');m.remove();evolveFx(id,r.nx,r.E.get)};
   const rbBtn=m.querySelector('#dRb');if(rbBtn)rbBtn.onclick=()=>doReborn(id,m);
   const sbBtn=m.querySelector('#dSb');if(sbBtn)sbBtn.onclick=()=>doSoulbind(id);
-  const dd=m.querySelector('#dDeck');if(dd)dd.onclick=()=>{const sb2=sameBaseInDeck(id);if(sb2)save.deck[save.deck.indexOf(sb2)]=id;else if(save.deck.length<8)save.deck.push(id);else{toast('デッキがいっぱいです。先に1つ外してください');return}persist();sfx('place');m.remove();heroDetail(id)};
-  const dO=m.querySelector('#dOut');if(dO)dO.onclick=()=>{save.deck.splice(save.deck.lastIndexOf(id),1);persist();sfx('tick');m.remove();heroDetail(id)};
+  const dd=m.querySelector('#dDeck');if(dd)dd.onclick=()=>{const sb2=sameBaseInDeck(id);if(sb2)save.deck[save.deck.indexOf(sb2)]=id;else if(save.deck.length<8)save.deck.push(id);else{swapPick=id;m.remove();showHeroes();return}persist();sfx('place');m.remove();heroDetail(id)};
+  const dO=m.querySelector('#dOut');if(dO)dO.onclick=()=>{if(save.deck.length<=1)return;save.deck.splice(save.deck.lastIndexOf(id),1);persist();sfx('tick');m.remove();heroDetail(id)};
 }
 function evolveFx(from,to,n){sfx('evolve');
   const m=modal(`<h3 style="color:${RAR[tierOf(to)].c}">進化成功！</h3><div class="evofx"><div class="art t${tierOf(from)}">${portrait(from)}</div><span class="arr">›</span><div class="art t${tierOf(to)} glowin">${portrait(to)}</div></div>
