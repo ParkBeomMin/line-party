@@ -1206,6 +1206,9 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 .wl3h{grid-column:1/-1;font-size:12px;font-weight:900;color:#ffd667;letter-spacing:1px}
 .wl3 .wsk2 p{font-size:12.5px}
 .wl3 .wl2btn{position:absolute;right:16px;top:12px;padding:0}
+#app.bleed{border-radius:0}
+#app.bleed>.screen{border-left:var(--sab) solid transparent;border-right:var(--sab) solid transparent;background-origin:border-box!important}
+#app.bleed>.screen::before{left:calc(-1*var(--sab))!important;right:calc(-1*var(--sab))!important}
 </style>
 </head>
 <body>
@@ -1217,11 +1220,11 @@ const LANG='ja';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.22.1 ベータ';
+const VERSION='v3.22.2 ベータ';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
-function fit(){const sa=safeIn();const sx=Math.max(sa.l,sa.r),sy=Math.max(sa.t,sa.b);const px=sx>0?sx+6:0,py=sy>0?sy+2:0;const iw=Math.max(200,innerWidth-2*px),ih=Math.max(150,innerHeight-2*py);const W=Math.round(Math.min(1280,Math.max(960,540*iw/Math.max(1,ih))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(iw/W,ih/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
+function fit(){const sa=safeIn();const sx=Math.max(sa.l,sa.r),sy=Math.max(sa.t,sa.b);const px=sx>0?sx+6:0,py=sy>0?sy+2:0;const iw=Math.max(200,innerWidth-2*px),ih=Math.max(150,innerHeight-2*py);const W=Math.round(Math.min(1280,Math.max(960,540*iw/Math.max(1,ih))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(iw/W,ih/540);const bs=px>0?Math.min(160,(innerWidth/s-W)/2):0;app.style.width=(W+2*Math.max(0,bs))+'px';app.style.setProperty('--sab',Math.max(0,bs)+'px');app.classList.toggle('bleed',bs>0);app.style.transform=`scale(${s})`;app.dataset.s=s}
 function fitSoon(){fit();setTimeout(fit,350);setTimeout(fit,1200)}
 addEventListener('resize',fitSoon);addEventListener('orientationchange',fitSoon);try{new MutationObserver(fit).observe(document.documentElement,{attributes:true,attributeFilter:['style']})}catch(e){}fit();setTimeout(fit,800);
 function tryLandscape(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}
