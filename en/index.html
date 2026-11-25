@@ -1214,9 +1214,10 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 <script>
 'use strict';
 const LANG='en';
-(function(){try{const p=localStorage.getItem('lineparty_lang');const want=p||(/^ko/i.test(navigator.language||'ko')?'ko':'en');if(want!==LANG)location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search+location.hash)}catch(e){}})();
-function setLang(l){try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace((LANG==='ko'?'en/index.html':'../index.html')+location.search)}
-const VERSION='v3.21 beta';
+function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
+(function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
+function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
+const VERSION='v3.22 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function fit(){const W=Math.round(Math.min(1280,Math.max(960,540*innerWidth/Math.max(1,innerHeight))));app.style.width=W+'px';app.style.setProperty('--bx',((W-960)/2)+'px');const s=Math.min(innerWidth/W,innerHeight/540);app.style.transform=`scale(${s})`;app.dataset.s=s}
@@ -3166,7 +3167,7 @@ function showSettings(){
   ${save.def?`<div class="setrow"><span>Defense Log <small style="opacity:.7">Results of your deck vs other players</small></span><b>${save.def.w}W ${save.def.l}L</b></div>`:''}
   <div class="setrow"><span>Nickname <small style="opacity:.6">(Shown to opponents, max 10 chars)</small></span><span style="display:flex;gap:6px"><input id="stNick" maxlength="10" value="${esc(myNick())}" style="width:120px;font-family:inherit;font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #ffffff44;background:#0006;color:#fff"><button class="btn sm grn" id="stNickSave">Save</button></span></div>
   ${inNativeApp()?`<div class="setrow"><span>Alerts <small style="opacity:.6">(Chest ready, Expedition done)</small></span><button class="btn sm ${save.notiOn?'grn':'sub'}" id="stNoti">${save.notiOn?'On':'Off'}</button></div>`:''}
-  <div class="setrow"><span>Language <small style="opacity:.6">(\uC5B8\uC5B4)</small></span><button class="btn sm" id="stLang">${LANG==='ko'?'English':'\uD55C\uAD6D\uC5B4'}</button></div>
+  <div class="setrow"><span>Language <small style="opacity:.6">(\uC5B8\uC5B4)</small></span><span style="display:flex;gap:6px">${[['ko','\uD55C\uAD6D\uC5B4'],['en','English'],['ja','\u65E5\u672C\u8A9E']].map(([l,n])=>`<button class="btn sm ${l===LANG?'':'sub'}" data-lang="${l}">${n}</button>`).join('')}</span></div>
   ${inNativeApp()?`<div class="setrow"><span>Send Feedback <small style="opacity:.6">(bugs, problems, anything)</small></span><button class="btn sm grn" id="stFb">Send Feedback</button></div>`:''}
   <div class="setrow"><span>Sound</span><button class="btn sm ${save.mute?'sub':'grn'}" id="stMute">${save.mute?'Off':'On'}</button></div>
   <div class="setrow col"><span>Transfer Code <small style="opacity:.6">(To move without Google link · valid 24h)</small></span>
@@ -3193,7 +3194,7 @@ function showSettings(){
   m.querySelector('#trLoad').onclick=async()=>{const v=m.querySelector('#trIn').value;const c=trNorm(v);if(c.length===8){if(await redeemTransfer(c)){document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}return}try{const o=decodeSave(v);if(!confirm('Overwrite current progress with this code?'))return;applySaveObj(o);toast('Loaded');document.querySelectorAll('.modal').forEach(x=>x.remove());showLobby()}catch(e){toast('Check the 8-digit code')}};
   m.querySelector('#trOff').onclick=e=>{e.preventDefault();showBackupCode()};
   bind('#stNoti',async()=>{if(!save.notiOn){const ok=await notiEnable();if(!ok)toast('Please allow Hero Lanes notifications in your phone settings')}else{save.notiOn=false;persist();notiClear()}m.remove();showSettings()});
-  bind('#stLang',()=>setLang(LANG==='ko'?'en':'ko'));
+  m.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
   bind('#stDel',async()=>{if(!confirm('Delete all Hero Lanes data on the server and this device? This cannot be undone.'))return;if(!confirm('Really delete? All heroes, resources, and Trophies will be gone.'))return;toast('Deleting...');const ok=await deleteMyData();alert(ok?'Data deleted. Returning to the start screen.':'Some server data couldn’t be deleted. Device data is cleared. Request the rest by email in the Privacy Policy.');location.reload()});
   m.querySelector('#stReset').onclick=()=>{if(!confirm('All progress will be erased. Start over?'))return;save=defaultSave();save.tut={};persist();m.remove();showLobby()};
 }
