@@ -1401,6 +1401,31 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 #app.bleed>.modal.hdfs .hd5r{margin-right:calc(-1*var(--sab));padding-right:calc(84px + var(--sab))}
 #app.bleed>.modal.hdfs>.box{overflow:visible}
 .c4aw{max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 출석 레인 */
+.attbg.B{background:linear-gradient(#0b173099,#0b1730cc),url(assets/bg_map.webp?v=10) center/cover}
+.atttop.B{left:0;right:0}
+.trail{position:absolute;left:40px;right:40px;top:88px;bottom:14px}
+.trail svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.road{fill:none;stroke:#3a2a14;stroke-width:5.2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-width:34px}
+.roadc{fill:none;stroke:#c8a872;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-width:26px;stroke-dasharray:2 0}
+.roadd{fill:none;stroke:#ffe27a;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-width:8px;opacity:.9}
+.nd{position:absolute;width:76px;margin-left:-38px;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center}
+.ndb{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#5a4a7a,#231a3a);border:3px solid #e8d3a0;box-shadow:0 4px 0 #2a1a08,0 0 0 3px #0006;display:flex;align-items:center;justify-content:center}
+.ndb .ai2{width:40px;height:40px;object-fit:contain}.ndb .cico{width:48px;height:38px}.ndb .adust{font-size:32px}.ndb .apick{width:34px;height:44px;border-width:2px}.ndb .apick span{font-size:22px}
+.ndv{margin-top:2px;font-size:11.5px;font-weight:900;color:#fff;text-shadow:0 1px 0 #000,0 0 4px #000;white-space:nowrap}
+.ndd{position:absolute;top:-14px;font-size:11px;font-weight:800;background:#000a;border-radius:8px;padding:0 6px;color:#e8d3a0}
+.nd.sp .ndb{width:78px;height:78px;border-radius:16px;transform:rotate(45deg);background:radial-gradient(circle,color-mix(in srgb,var(--sc) 70%,#fff 10%),color-mix(in srgb,var(--sc) 55%,#000));border-color:#fff3c4;box-shadow:0 0 18px var(--sc),0 4px 0 #0008}
+.nd.sp .ndb>*{transform:rotate(-45deg)}
+.nd.done .ndb{filter:grayscale(.6) brightness(.7)}
+.nd.today .ndb{border-color:#ffe27a;box-shadow:0 0 0 4px #ffe27a,0 0 24px #ffd667;animation:acp 1.2s ease-in-out infinite}
+.nd.today .ndd{background:#ffe27a;color:#4a2400}
+.flag{position:absolute;left:52px;top:-18px;width:4px;height:44px;background:#e8d3a0;border-radius:2px}
+.flag i{position:absolute;left:4px;top:0;width:26px;height:18px;background:var(--fc);clip-path:polygon(0 0,100% 0,72% 50%,100% 100%,0 100%);box-shadow:0 0 6px var(--fc)}
+.nd.sp .ndv{margin-top:12px}
+.nd.today .ndv{color:#ffe27a}
+.nd.today .ndd:after{content:" ▼"}
+.attB .ndd{white-space:nowrap}
+.trail .nd{cursor:default}.trail .nd.today{cursor:pointer;z-index:2}
 </style>
 </head>
 <body>
@@ -1412,7 +1437,7 @@ const LANG='ko';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.23 베타';
+const VERSION='v3.24 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2224,16 +2249,19 @@ const ATT2=(()=>{const g=[200,300,400,500,600,800],gm=[5,10,10,15,15,20],du=[20,
 function attLabel(a){return a.t==='chest'?CHESTS[a.v].n:a.t==='pick'?(a.v===3?'전설':'영웅')+' ×'+a.c:String(a.v)}
 function attIcon(a){return a.t==='gold'?ico('coin','ai2'):a.t==='gems'?ico('gem','ai2'):a.t==='dust'?'<span class="adust">✦</span>':a.t==='chest'?chestSVG(a.v):`<div class="apick t${a.v}"><span>?</span></div>`}
 function showAttendance(onDone){
-  save.att=save.att||{day:0,last:0};const ready=attReady();const cur=(save.att.day|0)%30;const claimedN=(!ready&&cur===0&&save.att.last)?30:cur;const W=WL();
+  save.att=save.att||{day:0,last:0};const ready=attReady();const cur=(save.att.day|0)%30;const claimedN=(!ready&&cur===0&&save.att.last)?30:cur;const W=WL();const myC=FAC[W.fac].c;
   document.querySelectorAll('.attfs').forEach(x=>x.remove());
-  const m=document.createElement('div');m.className='modal attfs';
-  const cells=ATT2.map((a,i)=>{const done=i<claimedN,today=ready&&i===cur;return `<div class="ac ${a.sp?'sp':''} ${done?'done':''} ${today?'today':''}" ${today?'id="attGo"':''}><div class="acd">${today?'오늘':LANG==='en'?'Day '+(i+1):(i+1)+'일째'}</div><div class="aci">${attIcon(a)}</div><div class="acv">${attLabel(a)}</div>${done?'<div class="ack2">✔</div>':''}${today?'<div class="acget">받기!</div>':''}</div>`}).join('');
-  m.innerHTML=`<div class="attbg"></div><img class="attwl" src="assets/k_${W.art}.webp?v=${ASSET_V}" alt="" draggable="false"><button class="back attbk" data-close>← 로비</button><div class="atttop"><div class="attsub">매일 접속하고 보상을 받으세요!</div><div class="atttl">출석 보상</div></div><div class="attcd">${ready?'<b>오늘 보상을 받을 수 있어요</b>':'다음 보상까지 <b id="attCd"></b>'}</div><div class="attgrid3">${cells}</div>`;
+  const m=document.createElement('div');m.className='modal attfs attB';
+  const pos=i=>{const r=Math.floor(i/10),k=i%10,c=r%2?9-k:k;return {x:6+c*9.8,y:[24,54,84][r]}};
+  const pts=ATT2.map((a,i)=>pos(i));const pth=n=>pts.slice(0,n).map((p,i)=>(i?'L':'M')+p.x+' '+p.y).join(' ');
+  const nodes=ATT2.map((a,i)=>{const p=pos(i),done=i<claimedN,today=ready&&i===cur;const fc=a.sp?FAC[FAC_KEYS[Math.floor(i/5)%3]].c:'';
+    return `<div class="nd ${a.sp?'sp':''} ${done?'done':''} ${today?'today':''}" style="left:${p.x}%;top:${p.y}%;${a.sp?'--sc:'+fc:''}" ${today?'id="attGo"':''}><div class="ndb">${attIcon(a)}</div><div class="ndv">${attLabel(a)}</div><div class="ndd">${today?'오늘':LANG==='en'?'Day '+(i+1):(i+1)+'일째'}</div>${done?`<div class="flag" style="--fc:${myC}"><i></i></div>`:''}</div>`}).join('');
+  m.innerHTML=`<div class="attbg B"></div><button class="back attbk" data-close>← 로비</button><div class="atttop B"><div class="attsub">매일 한 칸씩, 레인을 따라 깃발을 꽂아요</div><div class="atttl">출석 레인</div></div><div class="attcd">${ready?'<b>오늘 보상을 받을 수 있어요</b>':'다음 보상까지 <b id="attCd"></b>'}</div>
+   <div class="trail"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="${pth(30)}" class="road"/><path d="${pth(30)}" class="roadc"/>${claimedN+(ready?1:0)>1?`<path d="${pth(claimedN+(ready?1:0))}" class="roadd"/>`:''}</svg>${nodes}</div>`;
   app.appendChild(m);
   let tm=0;const close=()=>{clearInterval(tm);m.remove();onDone&&onDone()};
   m.querySelector('[data-close]').onclick=()=>{sfx('tick');close()};
   const cd=()=>{const e=m.querySelector('#attCd');if(!e)return;const n=new Date(),mid=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);e.textContent=fmtT((mid-n)/1000)};cd();tm=setInterval(()=>{if(!m.isConnected)return clearInterval(tm);cd()},1000);
-  const gr=m.querySelector('.attgrid3');const row=Math.floor((ready?cur:Math.max(0,claimedN-1))/5);requestAnimationFrame(()=>{const c=gr.children[row*5];if(c)gr.scrollTop=Math.max(0,c.offsetTop-6)});
   const g=m.querySelector('#attGo');if(g)g.onclick=()=>{const a=ATT2[cur];save.att.last=dayKey();save.att.day=(cur+1)%30;persist();track('attendance',{day:cur+1});clearInterval(tm);m.remove();
     const after=()=>showAttendance(onDone);
     if(a.t==='gold'){save.gold+=a.v;persist();sfx('coin');toast('골드 +'+a.v);after()}
