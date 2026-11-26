@@ -1488,7 +1488,7 @@ const LANG='ja';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.27 ベータ';
+const VERSION='v3.28 ベータ';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2443,6 +2443,11 @@ async function checkAppUpdate(){if(updDone||!inNativeApp())return;
     m.querySelector('#upGo').onclick=async()=>{m.remove();track('app_update',{v:info.availableVersionCode||''});
       try{if(info.immediateUpdateAllowed){const r=await P.performImmediateUpdate();if(r&&r.code===0)return}await P.openAppStore()}catch(e){try{await P.openAppStore()}catch(e2){}}};
   }catch(e){updDone=true}}
+/* v3.28 유닛 설명창이 지휘관 스킬 버튼과 겹치지 않게 */
+function fitTip2(){try{const t=BD.bot&&BD.bot.querySelector('.tip2');if(!t)return;const bs=BD.bot.querySelector('.bside'),pc=BD.bot.querySelector('.pilec');if(!bs)return;const sc=+app.dataset.s||1;const br=BD.bot.getBoundingClientRect(),r=bs.getBoundingClientRect();
+  t.style.right=((br.right-r.left)/sc+10)+'px';t.style.bottom='10px';t.style.width='';
+  const tr=t.getBoundingClientRect(),pr=pc?pc.getBoundingClientRect():null;
+  if(pr&&tr.left<pr.right+6){const room=(r.left-pr.right)/sc-20;if(room>=190){t.style.width=room+'px'}else{t.style.right='12px';t.style.bottom=((br.bottom-r.top)/sc+10)+'px'}}}catch(e){}}
 function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.daily.wins)}
 const RULE_TABS=[
  {n:'バトル',p:[['目標','敵指揮官のHPを0にすれば勝ちです。 '+MAX_ROUND+'ターン経過後はHP割合が高い方の勝ちです。'],['ボード','両陣営4レーン × 3列。中央に近い列が前列です。近接は前側の2列、遠距離・魔法は後ろ側の2列、支援と建物はどこにでも置けます。'],['自分のターン','デッキ8枚のうち手札は4枚。カードを1枚置くと味方ユニット全員が攻撃し、1枚引き直します。'],['レーン封鎖','ユニットは自分のレーンの敵だけを攻撃します。そのレーンに敵がいなければ敵指揮官を直接攻撃します。自分のレーンが空だと自分も攻撃されます。'],['合体 ◆','同じヒーローのカードが再び手札に来たら、そのヒーローに重ねて合体できます。ヒーローごとに上がる能力値と合体効果が違います (最大 ◆3)。デッキには同じヒーローを1枚だけ入れられます。'],['陣営','城塞(防護)、森林(再生)、残り火(攻撃)。同じ陣営が2体、4体集まるとシナジーが発動します。'],['建物','攻撃はしませんがレーンを塞ぎ、毎ターン効果を発揮します。毒と凍結にかかりません。']]},
@@ -3265,6 +3270,7 @@ function renderBattle(){
     BD.bot.innerHTML=`${descTxt?`<div class="tip2">${descTxt}</div>`:''}<div class="hand">${handArea}</div><div class="pilec" title="残りデッキ"><div class="pileb"></div><div class="pileb"></div><div class="pileb"><b>${(ui.pile||[]).length}</b></div><small>デッキ</small></div>
      <div class="bside"><div class="wskrow">${wskButtons()}</div>
      ${noValid?'<button class="btn sm sub" id="bPass">パス</button>':''}</div>`;
+    fitTip2();
     BD.bot.querySelectorAll('.card').forEach(c=>c.onpointerdown=e=>cardDrag(e,c));
     BD.bot.querySelectorAll('.card').forEach(c=>c.onclick=()=>{if(c._noClick||ui.phase!=='choose')return;ui.targeting=false;const i=+c.dataset.hi;ui.sel=ui.sel===i?-1:i;sfx('tick');renderBattle();if(ui.sel>=0&&save.tut&&save.tut.pick!==2){save.tut.pick=1;tutTip('place','<b>黄色いマスに置く</b>カードをドラッグして置くか、タップして選んでからマスをタップします。近接は前の2列、遠距離・魔法は後ろの2列に置けます。')}});
     BD.bot.querySelectorAll('[data-wsk]').forEach(b=>b.onclick=()=>{const i=+b.dataset.wsk,S=wskAt(i),stt=wskState(i);if(stt!=='ready'||ui.phase!=='choose'){ui.info=`<b style="color:#ffd667">${i===3?'':'スキル '+(i+1)+' · '}${S.n}</b><br>${S.d}<br><span style="opacity:.7">${stt==='used'?'今回は使用済み':stt==='lock'?'指揮官Lv'+WSK_LV[i]+'で解放':stt==='queue'?'前のスキルを先に使う必要があります':stt==='wait'?(i===3?'次の自分のターンに1個溜まります':wskTurn(i)+'ターンから使えます'):'自分の番に使えます'}${i===3?'<br>溜まった一撃 '+wsOf('p').ch+'個 · 今使うと1個あたり '+strikeDmg()+' ダメージ':''}</span>`;renderBattle();return}
