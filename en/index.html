@@ -1466,6 +1466,17 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 .aCme .aCwl{bottom:96px;height:270px}
 .aCrival .aCwl{bottom:60px;height:270px}
 .aCq{z-index:3;right:auto!important;left:50%;bottom:auto!important;top:42%;transform:translate(-30%,-50%);font-size:96px!important;color:#ffd0d0!important}
+/* v3.27 아이콘 정리 */
+.coin,.gem{display:inline-block!important;width:1.2em!important;height:1.2em!important;transform:none!important;border-radius:0!important;vertical-align:-.25em!important;background:url(../assets/i_coin.webp?v=1) center/contain no-repeat!important;box-shadow:none!important;flex:none}
+.gem{background-image:url(../assets/i_gem.webp?v=1)!important}
+.dusti{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.25em;background:url(../assets/i_dust.webp?v=1) center/contain no-repeat;color:transparent!important;text-shadow:none!important;overflow:hidden;line-height:1;font-size:inherit}
+.uic{width:1.15em;height:1.15em;vertical-align:-.18em;display:inline-block}
+.mute .uic{width:20px;height:20px;vertical-align:middle}
+.lki{color:#ffd667}
+.wl2th em .lki{width:14px;height:14px}
+.apphint .uic,#abGo .uic{color:#7dffa1}
+*{scrollbar-width:thin;scrollbar-color:#ffffff38 transparent}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#ffffff38;border-radius:3px}::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:transparent}
 </style>
 </head>
 <body>
@@ -1477,7 +1488,7 @@ const LANG='en';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.26 beta';
+const VERSION='v3.27 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2267,6 +2278,7 @@ function resBar(){return `<div class="cur"><span class="cpill"><span class="dust
 
 /* ===================== 로비 ===================== */
 let screen='lobby',lobbyTimer=null;
+const UI_SVG={gear:'<svg class="uic" viewBox="0 0 24 24"><path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.6 7.6 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.5 1 2-3.5zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>',snd:'<svg class="uic" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',mute:'<svg class="uic" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',phone:'<svg class="uic" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="18" r="1.3" fill="currentColor"/></svg>',lock:'<svg class="uic lki" viewBox="0 0 24 24"><path d="M7.5 10V7.5a4.5 4.5 0 0 1 9 0V10" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="4.5" y="10" width="15" height="11" rx="2.5" fill="currentColor"/></svg>'};
 function ico(n,cls){return `<img class="${cls||'ico'}" src="../assets/i_${n}.webp?v=${ASSET_V}" alt="" draggable="false">`}
 function questDot(){ensureDaily();return save.quests.list.some(q=>!q.claimed&&q.prog>=QUEST_POOL.find(x=>x.id===q.id).goal)||(!save.quests.bonus&&save.quests.list.every(q=>q.claimed))}
 function showQuests(){
@@ -2287,7 +2299,7 @@ function attReady(){save.att=save.att||{day:0,last:0};return save.att.last!==day
 /* ---- 출석 보상 30일 (v3.23) ---- */
 const ATT2=(()=>{const g=[200,300,400,500,600,800],gm=[5,10,10,15,15,20],du=[20,30,40,50,60,80],ch=['wood','silver','silver','gold','gold','gold'],sp=[{t:'chest',v:'gold'},{t:'pick',v:2,c:3},{t:'chest',v:'epic'},{t:'pick',v:2,c:5},{t:'chest',v:'epic'},{t:'pick',v:3,c:2}];const o=[];for(let r=0;r<6;r++)o.push({t:'gold',v:g[r]},{t:'gems',v:gm[r]},{t:'dust',v:du[r]},{t:'chest',v:ch[r]},Object.assign({sp:1},sp[r]));return o})();
 function attLabel(a){return a.t==='chest'?CHESTS[a.v].n:a.t==='pick'?(a.v===3?'Legendary':'Epic')+' ×'+a.c:String(a.v)}
-function attIcon(a){return a.t==='gold'?ico('coin','ai2'):a.t==='gems'?ico('gem','ai2'):a.t==='dust'?'<span class="adust">✦</span>':a.t==='chest'?chestSVG(a.v):`<div class="apick t${a.v}"><span>?</span></div>`}
+function attIcon(a){return a.t==='gold'?ico('coin','ai2'):a.t==='gems'?ico('gem','ai2'):a.t==='dust'?ico('dust','ai2'):a.t==='chest'?chestSVG(a.v):`<div class="apick t${a.v}"><span>?</span></div>`}
 function showAttendance(onDone){
   save.att=save.att||{day:0,last:0};const ready=attReady();const cur=(save.att.day|0)%30;const claimedN=(!ready&&cur===0&&save.att.last)?30:cur;const W=WL();const myC=FAC[W.fac].c;
   document.querySelectorAll('.attfs').forEach(x=>x.remove());
@@ -2340,7 +2352,7 @@ function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syn
     <div class="ltop">
       <div class="prof" id="bProf"><div class="ava">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}</div><div class="pinfo"><div class="pname">${WL().n} ${betaChip()||'<small style="opacity:.7">Change Commander ›</small>'}</div>
         <div class="lg"><span class="lgb" style="--lc:${L.c}">${li+1}</span><div class="lbar2"><div class="lbn">${L.n} League ${ico('trophy','mi')}${save.trophies}</div><div class="bar"><i style="width:${prog*100}%"></i></div></div></div></div></div>
-      <div class="cur"><button class="mute" id="bRule" title="Rules">?</button><button class="mute" id="bSet">⚙</button><button class="mute" id="bMute">${save.mute?'🔇':'🔊'}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
+      <div class="cur"><button class="mute" id="bRule" title="Rules">?</button><button class="mute" id="bSet">${UI_SVG.gear}</button><button class="mute" id="bMute">${save.mute?UI_SVG.mute:UI_SVG.snd}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
     </div>
     <nav class="lrail">
       <button class="rbtn" id="bHero">${ico('hero')}<span>Party</span>${anyUpgrade()?'<i class="dot"></i>':''}</button>
@@ -2396,7 +2408,7 @@ function bindChests(){
     if(c.st==='ready'){save.chests[i]=null;(save.guide=save.guide||{}).chest=1;persist();openChestModal(c.t,chestBack);return}
     if(c.st==='locked'&&!unlockingNow()){c.st='unlocking';c.readyAt=Date.now()+chestSec(c.t,c)*1000;persist();chestBack();return}
     const cost=gemCost(c);
-    const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'Time left '+fmtT((c.readyAt-Date.now())/1000):'Another chest is opening'}<br>Gems ${cost} opens it now</div>${appMode()?`<a href="#" class="apphint" id="cApp">📱 Open chests faster in the app ›</a>`:''}
+    const m=modal(`<h3>${CHESTS[c.t].n}</h3><div class="chestbig" style="animation:none">${chestSVG(c.t)}</div><div class="rw">${c.st==='unlocking'?'Time left '+fmtT((c.readyAt-Date.now())/1000):'Another chest is opening'}<br>Gems ${cost} opens it now</div>${appMode()?`<a href="#" class="apphint" id="cApp">${UI_SVG.phone} Open chests faster in the app ›</a>`:''}
     <div class="btns"><button class="btn" id="cNow" ${save.gems<cost?'disabled':''}><span class="gem"></span> ${cost} Open Now</button>${adOn()&&c.st==='unlocking'?`<button class="btn grn" id="cAd" ${adLeft('chest')>0?'':'disabled'}>${adW('Watch ad: ','Free: ')+fmtS(adCut(c)/1000)+' faster'} (${adLeft('chest')})</button>`:''}<button class="btn sub" data-close>Close</button></div>`);
     const cap=m.querySelector('#cApp');if(cap)cap.onclick=e=>{e.preventDefault();m.remove();appCta('chest',true)};
     const ca=m.querySelector('#cAd');if(ca)ca.onclick=()=>{m.remove();showRewardAd('chest','Cut the chest unlock time',()=>{const cc=save.chests[i];if(cc&&cc.st==='unlocking'){cc.readyAt-=adCut(cc);tickChests();persist()}toast('Time cut!');chestBack()})};
@@ -2647,7 +2659,7 @@ function appCta(where,force){const md=appMode();if(!md)return false;const td=new
 function appNudge(){if(!appMode())return;const td=new Date().toDateString();if(!isLinked()&&save.nudgeDay!==td&&((save.trophies|0)>=150||(save.cleared|0)>=3))return;
   const wins=((save.stats||{}).wins|0);if(wins<3&&(save.bestLeague|0)<1)return;setTimeout(()=>{if(screen==='lobby')appCta('lobby')},2600)}
 function appBar(){if(!appMode()||!isAndroid()||screen!=='lobby')return;if((save.barHide|0)>Date.now())return;if(app.querySelector('.appbar'))return;
-  const b=document.createElement('div');b.className='appbar';b.innerHTML=`<a href="${appLink('bar')}" target="_blank" rel="noopener" id="abGo">📱 ${appMode()==='tester'?'App testers wanted · Open chests faster':'Open chests faster in the app'}</a><button id="abX">✕</button>`;app.appendChild(b);
+  const b=document.createElement('div');b.className='appbar';b.innerHTML=`<a href="${appLink('bar')}" target="_blank" rel="noopener" id="abGo">${UI_SVG.phone} ${appMode()==='tester'?'App testers wanted · Open chests faster':'Open chests faster in the app'}</a><button id="abX">✕</button>`;app.appendChild(b);
   b.querySelector('#abGo').onclick=()=>track('app_cta_click',{where:'bar',mode:appMode()});b.querySelector('#abX').onclick=()=>{save.barHide=Date.now()+3*864e5;persist();b.remove()}}
 /* ===================== 방어 기록 ===================== */
 async function defLog(uid,defWon){try{const a=await fbAuth();if(!uid||uid===a.uid)return;const id=[...crypto.getRandomValues(new Uint8Array(15))].map(x=>TR_AB[x%32]).join('');
@@ -2890,8 +2902,8 @@ let wlView=null;
 function showWarlords(){
   screen='warlords';const ids=Object.keys(WARLORDS);if(!wlView||!WARLORDS[wlView])wlView=save.warlord||'asten';
   const id=wlView,W=WARLORDS[id],un=wlUnlocked(id),cur=save.warlord===id,lv=wlLv(id);
-  const sk=wskList(id).map((S,i)=>{const lock=lv<WSK_LV[i];return `<div class="wsk2 ${lock?'off':''}"><span class="wsi">${i+1}</span><div><b>${S.n}</b> <small>${WSK_TURN[i]} turn+${lock?' · 🔒 Lv'+WSK_LV[i]:''}</small><p>${S.d}</p></div></div>`}).join('');
-  const btn=cur?'<span class="wcur">In use</span>':(un&&expOf(id))?'<span class="wlk">On Expedition</span>':un?`<button class="btn grn" data-pick="${id}">Deploy this Commander</button>`:W.unlock.t==='gems'?`<button class="btn" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} Recruit</button>`:`<span class="wlk">🔒 ${W.unlock.d}</span>`;
+  const sk=wskList(id).map((S,i)=>{const lock=lv<WSK_LV[i];return `<div class="wsk2 ${lock?'off':''}"><span class="wsi">${i+1}</span><div><b>${S.n}</b> <small>${WSK_TURN[i]} turn+${lock?' · '+UI_SVG.lock+' Lv'+WSK_LV[i]:''}</small><p>${S.d}</p></div></div>`}).join('');
+  const btn=cur?'<span class="wcur">In use</span>':(un&&expOf(id))?'<span class="wlk">On Expedition</span>':un?`<button class="btn grn" data-pick="${id}">Deploy this Commander</button>`:W.unlock.t==='gems'?`<button class="btn" data-buy="${id}" ${save.gems<W.unlock.v?'disabled':''}>${ico('gem','mi')} ${W.unlock.v} Recruit</button>`:`<span class="wlk">${UI_SVG.lock} ${W.unlock.d}</span>`;
   app.innerHTML=`<div class="screen wl2 wl3" style="--fc:${FAC[W.fac].c}"><div class="topbar"><button class="back" id="bk">← Lobby</button><span class="h2">Commander</span>${resBar()}</div>
   <div class="wl2main">
     <div class="wl2art ${un?'':'lock'}"><div class="wl2glow"></div><img src="../assets/k_${W.art}.webp?v=${ASSET_V}" alt=""></div>
@@ -2903,7 +2915,7 @@ function showWarlords(){
       <div class="wl2btn">${btn}</div>
     </div>
   </div>
-  <div class="wl2list">${ids.map(k=>{const K=WARLORDS[k],u2=wlUnlocked(k);return `<button class="wl2th ${k===id?'on':''} ${u2?'':'lock'} ${save.warlord===k?'cur':''}" data-view="${k}" style="--fc:${FAC[K.fac].c}"><img src="../assets/k_${K.art}.webp?v=${ASSET_V}" alt=""><span>${K.n}</span>${save.warlord===k?'<i>Active</i>':u2?`<em>Lv${wlLv(k)}</em>`:'<em>🔒</em>'}</button>`}).join('')}</div>
+  <div class="wl2list">${ids.map(k=>{const K=WARLORDS[k],u2=wlUnlocked(k);return `<button class="wl2th ${k===id?'on':''} ${u2?'':'lock'} ${save.warlord===k?'cur':''}" data-view="${k}" style="--fc:${FAC[K.fac].c}"><img src="../assets/k_${K.art}.webp?v=${ASSET_V}" alt=""><span>${K.n}</span>${save.warlord===k?'<i>Active</i>':u2?`<em>Lv${wlLv(k)}</em>`:'<em>'+UI_SVG.lock+'</em>'}</button>`}).join('')}</div>
   </div>`;
   bind('#bk',showLobby);
   app.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{sfx('tick');wlView=b.dataset.view;showWarlords()});
