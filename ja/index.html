@@ -1479,6 +1479,15 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#ffffff38;border-radius:3px}::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:transparent}
 .deal .dart2{cursor:pointer;position:relative}
 .deal .dart2 .dinfo{position:absolute;left:4px;top:4px;width:20px;height:20px;border-radius:50%;background:#000b;border:1.5px solid #ffffff88;font-style:normal;font-weight:900;font-size:12px;line-height:17px;text-align:center;color:#fff;z-index:2}
+/* v3.30 리그 문장 */
+.lgi{width:34px;height:34px;object-fit:contain;flex:none;filter:drop-shadow(0 2px 2px #0008)}
+.lgi.sm{width:24px;height:24px;vertical-align:middle;margin-right:2px}
+.lgi.xs{width:20px;height:20px;vertical-align:-5px;margin-right:4px}
+.pmbadge2{display:flex;justify-content:center;margin:-10px 0 -6px}
+.pmimg{width:112px;height:112px;object-fit:contain;filter:drop-shadow(0 6px 14px #000a);animation:pmpop .6s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes pmpop{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
+.aCcrest{width:82px!important;height:78px!important}
+.aclg{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 8px #000a)}
 </style>
 </head>
 <body>
@@ -1490,7 +1499,7 @@ const LANG='ja';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.29 ベータ';
+const VERSION='v3.30 ベータ';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2203,7 +2212,7 @@ function nextCycleChest(){const t=CHEST_CYCLE[save.cycle%CHEST_CYCLE.length];sav
 function unlockingNow(){return save.chests.some(c=>c&&c.st==='unlocking'&&c.readyAt>Date.now())}
 function showPromo(then){const P=save.promo;if(!P){then&&then();return}save.promo=null;persist();
   if(then)showLobby();const L=LEAGUES[P.li]||LEAGUES[0];
-  const m=modal(`<div class="rayclip"><div class="rays on"></div></div><div class="promo"><div class="pmbadge" style="--lc:${L.c}"><span>${P.li+1}</span></div><div class="pmtit" style="color:${L.c}">${L.n} リーグ昇格！</div>
+  const m=modal(`<div class="rayclip"><div class="rays on"></div></div><div class="promo"><div class="pmbadge2">${lgImg(P.li,"pmimg")}</div><div class="pmtit" style="color:${L.c}">${L.n} リーグ昇格！</div>
     <div class="rrow" style="justify-content:center">${ico('gem','qi')}<span>昇格報酬</span><b>+${P.gems}</b></div>
     ${(P.un||[]).length?`<div class="pmsub">新ヒーロー加入</div><div class="pmun">${P.un.map(k=>`<div class="pmh t${tierOf(k)}"><div class="pmart">${portrait(k)}</div><b>${V(k).name}</b></div>`).join('')}</div>`:''}
     ${P.evo?'<div class="pmsub" style="color:#7dffa1">進化が解放されました！ パーティー画面で確認してください</div>':''}</div>
@@ -2281,6 +2290,7 @@ function resBar(){return `<div class="cur"><span class="cpill"><span class="dust
 /* ===================== 로비 ===================== */
 let screen='lobby',lobbyTimer=null;
 const UI_SVG={gear:'<svg class="uic" viewBox="0 0 24 24"><path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.6 7.6 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.5 1 2-3.5zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>',snd:'<svg class="uic" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',mute:'<svg class="uic" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',phone:'<svg class="uic" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="18" r="1.3" fill="currentColor"/></svg>',lock:'<svg class="uic lki" viewBox="0 0 24 24"><path d="M7.5 10V7.5a4.5 4.5 0 0 1 9 0V10" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="4.5" y="10" width="15" height="11" rx="2.5" fill="currentColor"/></svg>'};
+function lgImg(i,cls){return `<img class="${cls||'lgi'}" src="../assets/lg_${Math.max(0,Math.min(7,i|0))}.webp?v=1" alt="" draggable="false">`}
 function ico(n,cls){return `<img class="${cls||'ico'}" src="../assets/i_${n}.webp?v=${ASSET_V}" alt="" draggable="false">`}
 function questDot(){ensureDaily();return save.quests.list.some(q=>!q.claimed&&q.prog>=QUEST_POOL.find(x=>x.id===q.id).goal)||(!save.quests.bonus&&save.quests.list.every(q=>q.claimed))}
 function showQuests(){
@@ -2353,7 +2363,7 @@ function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syn
   app.innerHTML=`<div class="screen lobby2 lobby4">
     <div class="ltop">
       <div class="prof" id="bProf"><div class="ava">${wlArt(save.warlord in WARLORDS?save.warlord:'asten')}</div><div class="pinfo"><div class="pname">${WL().n} ${betaChip()||'<small style="opacity:.7">指揮官変更 ›</small>'}</div>
-        <div class="lg"><span class="lgb" style="--lc:${L.c}">${li+1}</span><div class="lbar2"><div class="lbn">${L.n} リーグ ${ico('trophy','mi')}${save.trophies}</div><div class="bar"><i style="width:${prog*100}%"></i></div></div></div></div></div>
+        <div class="lg">${lgImg(li,"lgi")}<div class="lbar2"><div class="lbn">${L.n} リーグ ${ico('trophy','mi')}${save.trophies}</div><div class="bar"><i style="width:${prog*100}%"></i></div></div></div></div></div>
       <div class="cur"><button class="mute" id="bRule" title="ルール">?</button><button class="mute" id="bSet">${UI_SVG.gear}</button><button class="mute" id="bMute">${save.mute?UI_SVG.mute:UI_SVG.snd}</button><span class="cpill">${ico('coin','ci2')}<b>${save.gold}</b><button class="plus" data-shop>+</button></span><span class="cpill">${ico('gem','ci2')}<b>${save.gems}</b><button class="plus" data-shop>+</button></span></div>
     </div>
     <nav class="lrail">
@@ -2424,7 +2434,7 @@ function showArena(){if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');screen='are
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];const best=Math.max(save.season.best|0,li);const R=SEASON_REWARD(best);const bw=brawlState();const W=WL();
   const others=Object.keys(WARLORDS).filter(k=>k!==save.warlord);const rv=WARLORDS[others[(dayKey()+save.trophies)%others.length]];
   app.innerHTML=`<div class="screen arenaC"><div class="topbar"><button class="back" id="bk">← ロビー</button><span class="h2">アリーナ</span>${resBar()}</div>
-  <div class="aCleague" style="--lc:${L.c}"><div class="aCcrest"><img src="../assets/u_crest.webp?v=${ASSET_V}" alt=""><i class="argem"></i><b class="arno">${li+1}</b></div><div class="aCli"><b>${L.n} リーグ</b><div class="aCtr">${ico('trophy','mi')}${save.trophies}${N?` / ${N.t}`:''}</div><div class="bar"><i style="width:${N?Math.min(100,(save.trophies-L.t)/(N.t-L.t)*100):100}%"></i></div>${N?`<small>次: <span style="color:${N.c}">${N.n} リーグ</span></small>`:''}</div></div>
+  <div class="aCleague" style="--lc:${L.c}"><div class="aCcrest">${lgImg(li,"aclg")}</div><div class="aCli"><b>${L.n} リーグ</b><div class="aCtr">${ico('trophy','mi')}${save.trophies}${N?` / ${N.t}`:''}</div><div class="bar"><i style="width:${N?Math.min(100,(save.trophies-L.t)/(N.t-L.t)*100):100}%"></i></div>${N?`<small>次: <span style="color:${N.c}">${N.n} リーグ</span></small>`:''}</div></div>
   <div class="aCme" style="--fc:${FAC[W.fac].c}"><img class="aCwl" src="../assets/k_${W.art}.webp?v=${ASSET_V}" alt=""><div class="aCname">${W.n} <small>Lv${wlLv()}</small></div><div class="aCdeck">${save.deck.slice(0,8).map(id=>`<div class="aCd t${tierOf(id)}">${portrait(id)}</div>`).join('')}</div><div class="aCpw">${ico('bolt','pwi')}<b>${deckPower()}</b><small>パーティ戦闘力</small><button class="aCedit" id="arParty">パーティ編集</button></div></div>
   <div class="aCrival"><img class="aCwl" src="../assets/k_${rv.art}.webp?v=${ASSET_V}" alt=""><div class="aCname">次の相手</div><small class="aCrs">近いトロフィーの実プレイヤーデッキ</small></div>
   <div class="aCvs">VS</div>
@@ -2726,7 +2736,7 @@ function checkSeason(){const cur=seasonNo();if(!save.season){save.season={n:cur,
 async function fbTopRank(){try{const r=await fbFetch(FB_BASE+':runQuery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'decks'}],orderBy:[{field:{fieldPath:'trophies'},direction:'DESCENDING'}],limit:30}})},5000);if(!r.ok)return null;const j=await r.json();return j.filter(x=>x.document).map(x=>{const f=x.document.fields||{};return {uid:x.document.name.split('/').pop(),name:fbDec(f.name),wl:fbDec(f.wl),tr:fbDec(f.trophies)}})}catch(e){return null}}
 function showSeason(){checkSeason();const best=save.season.best|0;
   const m=modal(`<div class="ribbon">シーズン ${seasonNo()}</div><div class="rw">残り期間 <b>${fmtDH(seasonLeft())}</b> · 今シーズン最高 <b style="color:${LEAGUES[best].c}">${LEAGUES[best].n}</b></div>
-   <div class="sn2"><div class="snrw"><b>シーズン報酬 (最高リーグ基準)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${L.n}</span><small>${R.gold}ゴールド · ジェム ${R.gems} · ルーンの粉 ${R.dust} · ${CHESTS[R.chest].n}${SEASON_PICK(i)?' · <b style="color:#ffb84d">'+pickTxt(SEASON_PICK(i))+'</b>':''}</small></div>`}).join('')}<small style="opacity:.6">シーズン終了時、700トロフィーを超えた分が半分になります</small></div>
+   <div class="sn2"><div class="snrw"><b>シーズン報酬 (最高リーグ基準)</b>${LEAGUES.map((L,i)=>{const R=SEASON_REWARD(i);return `<div class="${i===best?'on':''}"><span style="color:${L.c}">${lgImg(i,"lgi xs")}${L.n}</span><small>${R.gold}ゴールド · ジェム ${R.gems} · ルーンの粉 ${R.dust} · ${CHESTS[R.chest].n}${SEASON_PICK(i)?' · <b style="color:#ffb84d">'+pickTxt(SEASON_PICK(i))+'</b>':''}</small></div>`}).join('')}<small style="opacity:.6">シーズン終了時、700トロフィーを超えた分が半分になります</small></div>
    <div class="snrk"><b>全体ランキング</b><div id="rkList" class="rklist">読み込み中...</div></div></div><div class="btns"><button class="btn sm" data-close>閉じる</button></div>`);
   m.querySelector('.box').classList.add('wide');
   fbTopRank().then(L=>{const el=m.querySelector('#rkList');if(!el)return;const me=fbStore().uid;if(!L||!L.length){el.innerHTML='<small style="opacity:.6">まだランキングがありません</small>';return}
@@ -3201,7 +3211,7 @@ function autoPlay(){setTimeout(()=>{if(!ui.auto||ui.phase!=='choose'||!ui.resolv
 function topBarHTML(){
   const W=WARLORDS[st.wl]||WARLORDS.asten;const li=leagueIdx(save.trophies);
   const myTurn=ui.log==='自分のターン'||ui.phase==='choose';
-  return `<div class="tname p"><span class="lgb" style="--lc:${LEAGUES[li].c}">${li+1}</span><b>${esc(myNick())}</b><small>${W.n} Lv${wlLv(st.wl)}</small></div>
+  return `<div class="tname p">${lgImg(li,"lgi sm")}<b>${esc(myNick())}</b><small>${W.n} Lv${wlLv(st.wl)}</small></div>
   <div class="tturn"><div class="tt">ターン ${st.round}<small>/${MAX_ROUND}</small></div><div class="ts ${myTurn?'me':'en'}">${myTurn?'自分の番':'敵の番'}</div></div>
   <div class="tname e"><b>${esc(cfg.eName.replace('AIチャレンジャー · ',''))}</b>${cfg.passiveName?`<small style="color:#ff8aa8">${cfg.passiveName}</small>`:`<small>${cfg.mode==='arena'?(cfg.online?'ユーザーデッキ · '+((WARLORDS[cfg.eWl]||{}).n||'')+' Lv'+cfg.eWlLv:'AIチャレンジャー'):cfg.mode==='daily'?'今日のボス':({brawl:'ルール戦',twist:'ルール戦 · '+(typeof TWIST==='string'?(TWISTS.find(t=>t.id===TWIST)||{}).n:''),train:'練習戦',tower:'天空の階段',raid:'巨神討伐',pit:'連勝闘技場'})[cfg.mode]||'冒険'}</small>`}</div>`;
 }
