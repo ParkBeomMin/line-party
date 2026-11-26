@@ -1477,7 +1477,7 @@ const LANG='ko';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.25 베타';
+const VERSION='v3.26 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2330,7 +2330,7 @@ function showGuide(){document.querySelectorAll('.lguide').forEach(e=>e.remove())
   d.style.left=((r.left+r.width/2-ar.left)/sc)+'px';d.style.top=((r.top-ar.top)/sc)+'px';d.innerHTML=`<div class="gdbub">${G.txt}</div><div class="lgh">👇</div>`;app.appendChild(d);el.classList.add('lgpulse');
 }
 function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
-  screen='lobby';ensureDaily();tickChests();checkSeason();{const bt=betaTick();if(bt&&bt.length)setTimeout(()=>betaModal(bt),500)}if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
+  screen='lobby';ensureDaily();tickChests();checkSeason();{const bt=betaTick();if(bt&&bt.length)setTimeout(()=>betaModal(bt),500)}if(inNativeApp()){setTimeout(notiAsk,1800);setTimeout(checkAppUpdate,2600)}if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
   const prog=N?(save.trophies-L.t)/(N.t-L.t):1;
@@ -2420,6 +2420,17 @@ function showArena(){if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');screen='are
   bind('#bk',showLobby);bind('#arGo',startArena);bind('#arParty',showHeroes);bind('#arRank',showSeason);bind('#arSeason',showSeason);bind('#arBrawl',startBrawl);bindChests();clearInterval(arenaTimer);
   arenaTimer=setInterval(()=>{if(screen!=='arena'){clearInterval(arenaTimer);return}tickChests();const cc=document.getElementById('chests');if(cc&&!document.querySelector('.modal')){cc.innerHTML=chestSlotsHTML();bindChests()}},1000);
 }
+/* ---- 앱 업데이트 알림 (v3.26, Play 인앱 업데이트) ---- */
+let updDone=false,updTry=0;
+async function checkAppUpdate(){if(updDone||!inNativeApp())return;
+  try{const P=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.AppUpdate;if(!P){updDone=true;return}
+    const info=await P.getAppUpdateInfo();if(!info||info.updateAvailability!==2){updDone=true;return}
+    if(screen!=='lobby'||document.querySelector('.modal')){if(++updTry<6)setTimeout(checkAppUpdate,8000);return}
+    updDone=true;track('app_update_seen',{v:info.availableVersionCode||''});
+    const m=modal(`<div class="ribbon">새 버전이 있어요</div><div class="rw">더 좋아진 히어로 레인으로 업데이트할까요?<br><small style="opacity:.7">진행 상황은 그대로 이어져요</small></div><div class="btns"><button class="btn grn" id="upGo">업데이트</button><button class="btn sub" data-close>나중에</button></div>`);
+    m.querySelector('#upGo').onclick=async()=>{m.remove();track('app_update',{v:info.availableVersionCode||''});
+      try{if(info.immediateUpdateAllowed){const r=await P.performImmediateUpdate();if(r&&r.code===0)return}await P.openAppStore()}catch(e){try{await P.openAppStore()}catch(e2){}}};
+  }catch(e){updDone=true}}
 function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.daily.wins)}
 const RULE_TABS=[
  {n:'전투',p:[['목표','적 지휘관 체력을 0으로 만들면 이겨요. '+MAX_ROUND+'턴이 지나면 체력 비율이 높은 쪽이 이겨요.'],['보드','양쪽 4줄 × 3열. 가운데에 가까운 열이 앞열이에요. 근접은 앞쪽 두 열, 원거리·마법은 뒤쪽 두 열, 지원과 건물은 어디든 놓을 수 있어요.'],['내 턴','덱 8장 중 손에 4장을 들어요. 카드 1장을 놓으면 내 유닛 전원이 공격하고 1장을 새로 뽑아요.'],['라인 막기','유닛은 자기 줄의 적만 때려요. 그 줄에 적이 없으면 적 지휘관을 바로 때려요. 내 줄이 비면 나도 맞아요.'],['합체 ◆','같은 영웅 카드가 다시 손에 오면 그 영웅 위에 겹쳐 놓아 합체할 수 있어요. 영웅마다 오르는 능력치와 합체 효과가 달라요 (최대 ◆3). 덱에는 같은 영웅을 1장만 넣을 수 있어요.'],['진영','성채(보호), 들숲(재생), 잿불(공격). 같은 진영이 2기, 4기 모이면 시너지가 켜져요.'],['건물','공격하지 않지만 줄을 막고 매 턴 효과를 내요. 독과 빙결에 걸리지 않아요.']]},
