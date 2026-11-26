@@ -1488,7 +1488,7 @@ const LANG='en';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.27 beta';
+const VERSION='v3.28 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2443,6 +2443,11 @@ async function checkAppUpdate(){if(updDone||!inNativeApp())return;
     m.querySelector('#upGo').onclick=async()=>{m.remove();track('app_update',{v:info.availableVersionCode||''});
       try{if(info.immediateUpdateAllowed){const r=await P.performImmediateUpdate();if(r&&r.code===0)return}await P.openAppStore()}catch(e){try{await P.openAppStore()}catch(e2){}}};
   }catch(e){updDone=true}}
+/* v3.28 유닛 설명창이 지휘관 스킬 버튼과 겹치지 않게 */
+function fitTip2(){try{const t=BD.bot&&BD.bot.querySelector('.tip2');if(!t)return;const bs=BD.bot.querySelector('.bside'),pc=BD.bot.querySelector('.pilec');if(!bs)return;const sc=+app.dataset.s||1;const br=BD.bot.getBoundingClientRect(),r=bs.getBoundingClientRect();
+  t.style.right=((br.right-r.left)/sc+10)+'px';t.style.bottom='10px';t.style.width='';
+  const tr=t.getBoundingClientRect(),pr=pc?pc.getBoundingClientRect():null;
+  if(pr&&tr.left<pr.right+6){const room=(r.left-pr.right)/sc-20;if(room>=190){t.style.width=room+'px'}else{t.style.right='12px';t.style.bottom=((br.bottom-r.top)/sc+10)+'px'}}}catch(e){}}
 function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.daily.wins)}
 const RULE_TABS=[
  {n:'Battle',p:[['Goal','Reduce the enemy Commander’s HP to 0 to win. After '+MAX_ROUND+' turns, the higher HP % wins.'],['Board','Each side has 4 lanes × 3 columns. The column nearest the center is the front. Melee goes in the front two columns, Ranged and Magic in the back two, Support and Buildings anywhere.'],['Your Turn','Hold 4 cards from your 8-card Deck. Play 1 card and all your units attack, then draw 1.'],['Lane Block','Units only hit enemies in their own lane. With no enemy in the lane, they hit the enemy Commander. If your lane is empty, you get hit too.'],['Merge ◆','Play a duplicate hero card on that hero to Merge. Stat gains and Merge effects differ per hero (max ◆3). A Deck holds only 1 card per hero.'],['Factions','Bastion (Protect), Wildwood (Regen), Ember (ATK). Gather 2 or 4 units of one faction to activate synergy.'],['Building','They don’t attack but block lanes and give effects every turn. Immune to Poison and Freeze.']]},
@@ -3265,6 +3270,7 @@ function renderBattle(){
     BD.bot.innerHTML=`${descTxt?`<div class="tip2">${descTxt}</div>`:''}<div class="hand">${handArea}</div><div class="pilec" title="Cards left"><div class="pileb"></div><div class="pileb"></div><div class="pileb"><b>${(ui.pile||[]).length}</b></div><small>Deck</small></div>
      <div class="bside"><div class="wskrow">${wskButtons()}</div>
      ${noValid?'<button class="btn sm sub" id="bPass">Pass</button>':''}</div>`;
+    fitTip2();
     BD.bot.querySelectorAll('.card').forEach(c=>c.onpointerdown=e=>cardDrag(e,c));
     BD.bot.querySelectorAll('.card').forEach(c=>c.onclick=()=>{if(c._noClick||ui.phase!=='choose')return;ui.targeting=false;const i=+c.dataset.hi;ui.sel=ui.sel===i?-1:i;sfx('tick');renderBattle();if(ui.sel>=0&&save.tut&&save.tut.pick!==2){save.tut.pick=1;tutTip('place','<b>Place on a Yellow Tile</b>Drag a card onto a tile, or tap it and then tap a tile. Melee goes in the front 2 columns, Ranged/Magic in the back 2.')}});
     BD.bot.querySelectorAll('[data-wsk]').forEach(b=>b.onclick=()=>{const i=+b.dataset.wsk,S=wskAt(i),stt=wskState(i);if(stt!=='ready'||ui.phase!=='choose'){ui.info=`<b style="color:#ffd667">${i===3?'':'Skill '+(i+1)+' · '}${S.n}</b><br>${S.d}<br><span style="opacity:.7">${stt==='used'?'Already used this battle':stt==='lock'?'Commander Lv'+WSK_LV[i]+' unlocks it':stt==='queue'?'Use the previous skill first':stt==='wait'?(i===3?'Stacks 1 on your next turn':wskTurn(i)+' turn onward'):'Usable on your turn'}${i===3?'<br>Stacked Strikes '+wsOf('p').ch+' · Use now for each '+strikeDmg()+' dmg':''}</span>`;renderBattle();return}
