@@ -1477,7 +1477,7 @@ const LANG='en';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.25 beta';
+const VERSION='v3.26 beta';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2330,7 +2330,7 @@ function showGuide(){document.querySelectorAll('.lguide').forEach(e=>e.remove())
   d.style.left=((r.left+r.width/2-ar.left)/sc)+'px';d.style.top=((r.top-ar.top)/sc)+'px';d.innerHTML=`<div class="gdbub">${G.txt}</div><div class="lgh">👇</div>`;app.appendChild(d);el.classList.add('lgpulse');
 }
 function showLobby(){runeMigrate();setTimeout(showGuide,700);setTimeout(()=>{syncDeck();cloudAuto();defCheck();appBar()},1200);linkNudge();appNudge();
-  screen='lobby';ensureDaily();tickChests();checkSeason();{const bt=betaTick();if(bt&&bt.length)setTimeout(()=>betaModal(bt),500)}if(inNativeApp())setTimeout(notiAsk,1800);if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
+  screen='lobby';ensureDaily();tickChests();checkSeason();{const bt=betaTick();if(bt&&bt.length)setTimeout(()=>betaModal(bt),500)}if(inNativeApp()){setTimeout(notiAsk,1800);setTimeout(checkAppUpdate,2600)}if((save.picks||[]).length)setTimeout(()=>{if(screen==='lobby'&&!document.querySelector('.modal'))showPick(null)},900);if(save.promo&&!document.querySelector('.promobox'))setTimeout(()=>{if(screen==='lobby'&&save.promo)showPromo(null)},400);
   if(attReady()&&!window.__attShown){window.__attShown=1;setTimeout(()=>{if(screen==='lobby'&&!app.querySelector('.modal'))showAttendance(showLobby)},600)}if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
   const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];
   const prog=N?(save.trophies-L.t)/(N.t-L.t):1;
@@ -2420,6 +2420,17 @@ function showArena(){if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');screen='are
   bind('#bk',showLobby);bind('#arGo',startArena);bind('#arParty',showHeroes);bind('#arRank',showSeason);bind('#arSeason',showSeason);bind('#arBrawl',startBrawl);bindChests();clearInterval(arenaTimer);
   arenaTimer=setInterval(()=>{if(screen!=='arena'){clearInterval(arenaTimer);return}tickChests();const cc=document.getElementById('chests');if(cc&&!document.querySelector('.modal')){cc.innerHTML=chestSlotsHTML();bindChests()}},1000);
 }
+/* ---- 앱 업데이트 알림 (v3.26, Play 인앱 업데이트) ---- */
+let updDone=false,updTry=0;
+async function checkAppUpdate(){if(updDone||!inNativeApp())return;
+  try{const P=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.AppUpdate;if(!P){updDone=true;return}
+    const info=await P.getAppUpdateInfo();if(!info||info.updateAvailability!==2){updDone=true;return}
+    if(screen!=='lobby'||document.querySelector('.modal')){if(++updTry<6)setTimeout(checkAppUpdate,8000);return}
+    updDone=true;track('app_update_seen',{v:info.availableVersionCode||''});
+    const m=modal(`<div class="ribbon">A new version is available</div><div class="rw">Update to the latest Hero Lanes?<br><small style="opacity:.7">Your progress carries over</small></div><div class="btns"><button class="btn grn" id="upGo">Update</button><button class="btn sub" data-close>Later</button></div>`);
+    m.querySelector('#upGo').onclick=async()=>{m.remove();track('app_update',{v:info.availableVersionCode||''});
+      try{if(info.immediateUpdateAllowed){const r=await P.performImmediateUpdate();if(r&&r.code===0)return}await P.openAppStore()}catch(e){try{await P.openAppStore()}catch(e2){}}};
+  }catch(e){updDone=true}}
 function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.daily.wins)}
 const RULE_TABS=[
  {n:'Battle',p:[['Goal','Reduce the enemy Commander’s HP to 0 to win. After '+MAX_ROUND+' turns, the higher HP % wins.'],['Board','Each side has 4 lanes × 3 columns. The column nearest the center is the front. Melee goes in the front two columns, Ranged and Magic in the back two, Support and Buildings anywhere.'],['Your Turn','Hold 4 cards from your 8-card Deck. Play 1 card and all your units attack, then draw 1.'],['Lane Block','Units only hit enemies in their own lane. With no enemy in the lane, they hit the enemy Commander. If your lane is empty, you get hit too.'],['Merge ◆','Play a duplicate hero card on that hero to Merge. Stat gains and Merge effects differ per hero (max ◆3). A Deck holds only 1 card per hero.'],['Factions','Bastion (Protect), Wildwood (Regen), Ember (ATK). Gather 2 or 4 units of one faction to activate synergy.'],['Building','They don’t attack but block lanes and give effects every turn. Immune to Poison and Freeze.']]},
