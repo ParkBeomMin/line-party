@@ -1477,6 +1477,8 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 .apphint .uic,#abGo .uic{color:#7dffa1}
 *{scrollbar-width:thin;scrollbar-color:#ffffff38 transparent}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#ffffff38;border-radius:3px}::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:transparent}
+.deal .dart2{cursor:pointer;position:relative}
+.deal .dart2 .dinfo{position:absolute;left:4px;top:4px;width:20px;height:20px;border-radius:50%;background:#000b;border:1.5px solid #ffffff88;font-style:normal;font-weight:900;font-size:12px;line-height:17px;text-align:center;color:#fff;z-index:2}
 </style>
 </head>
 <body>
@@ -1488,7 +1490,7 @@ const LANG='ko';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.28 베타';
+const VERSION='v3.29 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2935,7 +2937,7 @@ function deckPut(id,slot,fromSlot){const d=save.deck.slice();while(d.length<8)d.
   else{const cur=d.indexOf(id);if(cur>=0){[d[cur],d[slot]]=[d[slot],d[cur]]}else{const sb=d.find(x=>x&&x!==id&&baseOf(x)===baseOf(id));if(sb){const j=d.indexOf(sb);if(j===slot)d[slot]=id;else{d[j]=d[slot];d[slot]=id}}else d[slot]=id}}
   save.deck=d.filter(Boolean);persist();sfx('place');showHeroes()}
 function showHeroes(){
-  screen='heroes';ensureDeck();
+  screen='heroes';hdBack=null;ensureDeck();
   const ub=unlockedBases();const W=WARLORDS[save.warlord]||WARLORDS.asten;
   const fOk=b=>(heroFilter==='all'||HEROES[b].fac===heroFilter)&&(heroCls==='all'||HEROES[b].cls===heroCls);
   const own=[],unk=[];
@@ -2991,7 +2993,7 @@ function lvPreview(id,o){const v=V(id),sb=sbOf(baseOf(id)),rb=o.rb|0,atk=!(v.cls
   const tb=Array.from({length:MAX_LV},(_,i)=>{const s2=baseStats(id,i+1,1,rb,sb);return `<div class="${i+1===o.lv?'cur':''}${i+1<o.lv?' past':''}"><small>Lv${i+1}</small>${atk?`<span class="a">${s2.a}</span>`:''}<span class="h">${s2.h}</span></div>`}).join('');
   return top+`<div class="lvtbl">${tb}</div>`}
 function lvUpFx(v,lv,da,dh){const d=document.createElement('div');d.className='lvupfx';d.innerHTML=`<div class="lvr"></div><div class="lvt">LEVEL UP</div><div class="lvn">${v.name} <b>Lv${lv}</b></div><div class="lvs">${v.cls==='support'||v.cls==='building'?'':`<span class="a">공격 +${da}</span>`}<span class="h">체력 +${dh}</span></div>`;app.appendChild(d);setTimeout(()=>d.remove(),1600)}
-let hdTab='info',hdLv=null,hdId=null;
+let hdTab='info',hdLv=null,hdId=null,hdBack=null;
 function heroDetail(id,tab){
   if(hdId!==id){hdId=id;hdLv=null}if(tab)hdTab=tab;
   const v=V(id),o=save.owned[id],t=tierOf(id),b=baseOf(id);const atk=!(v.cls==='support'||v.cls==='building');
@@ -3013,13 +3015,13 @@ function heroDetail(id,tab){
   else{right=`<div class="hd5h">룬 각인</div>${sbHTML(id)||'<div class="hd5p">이 카드는 룬을 새길 수 없어요</div>'}`}
   const tabs=[['info','정보'],['evo','진화'],['rb','초월'],['rune','룬 각인']];
   const m=modal(`<div class="hd5" style="--fc:${FAC[v.fac].c};--tc:${RAR[t].c}">
-    <div class="hd5l"><button class="back hd5bk" data-close>← 파티</button><div class="hd5fac">${facIcon(v.fac,'ci')}<b>${FAC[v.fac].n}</b><small>${CLS[v.cls].n}</small></div>
+    <div class="hd5l"><button class="back hd5bk" data-close>${hdBack===showShop?'← 상점':'← 파티'}</button><div class="hd5fac">${facIcon(v.fac,'ci')}<b>${FAC[v.fac].n}</b><small>${CLS[v.cls].n}</small></div>
       <div class="hd5ttl"><span style="color:${RAR[t].c}">◆ ${RAR[t].n}</span><b>${v.name}</b>${inD?'<small>덱에 있음</small>':''}</div>
       <div class="hd5stage"><div class="hd5ring"></div><img class="hd5art" src="assets/${lobbyArt(id)}.webp?v=${ASSET_V}" alt="" draggable="false" ${o?'':'style="filter:brightness(0) opacity(.55)"'} onerror="this.style.display='none'"></div>
       ${o?`<div class="hd5stat">${atk?`<span class="a">${st0.a}</span>`:''}<span class="p">${ico('bolt','pwi')}${heroPower(id,o)}</span><span class="h">${st0.h}</span></div><div class="hd5rb">${rbStars(id,o.rb)}</div>`:''}
       ${o?`<div class="hd5dk">${!inD?`<button class="btn sm" id="dDeck">${sameBaseInDeck(id)?V(sameBaseInDeck(id)).name+' 대신 넣기':'덱에 넣기'}</button>`:'<button class="btn sm sub" id="dOut">덱에서 빼기</button>'}</div>`:''}</div>
     <div class="hd5r">${right}</div>
-    <nav class="hd5tabs">${tabs.map(([k,n])=>`<button class="${hdTab===k?'on':''}" data-tab="${k}" ${o?'':'disabled'}>${n}${dots[k]?'<i class="dot"></i>':''}</button>`).join('')}</nav></div>`,showHeroes);
+    <nav class="hd5tabs">${tabs.map(([k,n])=>`<button class="${hdTab===k?'on':''}" data-tab="${k}" ${o?'':'disabled'}>${n}${dots[k]?'<i class="dot"></i>':''}</button>`).join('')}</nav></div>`,()=>{const f=hdBack||showHeroes;hdBack=null;f()});
   m.classList.add('hdfs');
   m.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>{m.remove();heroDetail(e.dataset.go)});
   m.querySelectorAll('[data-tab]').forEach(e=>e.onclick=()=>{sfx('tick');m.remove();heroDetail(id,e.dataset.tab)});
@@ -3028,7 +3030,7 @@ function heroDetail(id,tab){
   const evb=m.querySelector('#dEvo');if(evb)evb.onclick=()=>{const r=doEvolve(id);if(!r)return;sfx('win');m.remove();evolveFx(id,r.nx,r.E.get)};
   const rbBtn=m.querySelector('#dRb');if(rbBtn)rbBtn.onclick=()=>doReborn(id,m);
   const sbBtn=m.querySelector('#dSb');if(sbBtn)sbBtn.onclick=()=>doSoulbind(id);
-  const dd=m.querySelector('#dDeck');if(dd)dd.onclick=()=>{const sb2=sameBaseInDeck(id);if(sb2)save.deck[save.deck.indexOf(sb2)]=id;else if(save.deck.length<8)save.deck.push(id);else{swapPick=id;m.remove();showHeroes();return}persist();sfx('place');m.remove();heroDetail(id)};
+  const dd=m.querySelector('#dDeck');if(dd)dd.onclick=()=>{const sb2=sameBaseInDeck(id);if(sb2)save.deck[save.deck.indexOf(sb2)]=id;else if(save.deck.length<8)save.deck.push(id);else{swapPick=id;hdBack=null;m.remove();showHeroes();return}persist();sfx('place');m.remove();heroDetail(id)};
   const dO=m.querySelector('#dOut');if(dO)dO.onclick=()=>{if(save.deck.length<=1)return;save.deck.splice(save.deck.lastIndexOf(id),1);persist();sfx('tick');m.remove();heroDetail(id)};
 }
 function evolveFx(from,to,n){sfx('evolve');
@@ -3055,11 +3057,12 @@ function showShop(){
   const DL=ensureDeals();const msLeft=new Date(new Date().setHours(24,0,0,0))-Date.now();
   app.innerHTML=`<div class="screen"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">상점</span>${resBar()}</div>
   <div class="body"><div class="shead"><b>일일 특가</b><small>새 특가까지 ${Math.floor(msLeft/3600000)}시간 ${Math.floor(msLeft%3600000/60000)}분</small></div>
-  <div class="dealgrid">${DL.items.map((x,i)=>{const v=V(x.id),t=tierOf(x.id);return `<div class="deal t${t} ${x.b?'sold':''}"><div class="dart2">${portrait(x.id)}<span class="dn">×${x.n}</span></div><div class="dnm">${v.name}</div><div class="dtier" style="color:${RAR[t].c}">${RAR[t].n} 카드</div><button class="btn sm ${x.b?'sub':''}" data-deal="${i}" ${x.b||(x.cur==='gold'?save.gold<x.cost:save.gems<x.cost)?'disabled':''}>${x.b?'구매 완료':(x.cur==='gold'?'<span class="coin" style="width:12px;height:12px"></span>':'<span class="gem"></span>')+' '+x.cost}</button></div>`}).join('')}</div>
+  <div class="dealgrid">${DL.items.map((x,i)=>{const v=V(x.id),t=tierOf(x.id);return `<div class="deal t${t} ${x.b?'sold':''}"><div class="dart2" data-dinfo="${x.id}" title="상세 보기"><i class="dinfo">i</i>${portrait(x.id)}<span class="dn">×${x.n}</span></div><div class="dnm">${v.name}</div><div class="dtier" style="color:${RAR[t].c}">${RAR[t].n} 카드</div><button class="btn sm ${x.b?'sub':''}" data-deal="${i}" ${x.b||(x.cur==='gold'?save.gold<x.cost:save.gems<x.cost)?'disabled':''}>${x.b?'구매 완료':(x.cur==='gold'?'<span class="coin" style="width:12px;height:12px"></span>':'<span class="gem"></span>')+' '+x.cost}</button></div>`}).join('')}</div>
   <div class="shead"><b>상자 · 재화</b> <a href="#" class="oddsl" onclick="event.preventDefault();showOdds()">확률 보기 · 전설 확정까지 ${pityLeft()}개</a></div><div class="shopgrid">${items.map(it=>`<div class="shopitem">${it.t?chestSVG(it.t):it.id==='dust'?'<div style="height:76px;display:flex;align-items:center;font-size:54px" class="dusti">✦</div>':`<div style="height:76px;display:flex;align-items:center">${ico(it.cur==='ad'?'gem':'coin','shico')}</div>`}<div class="nm">${it.n}</div><div class="ds">${it.d}</div>
   <button class="btn sm ${it.cur==='free'||it.cur==='ad'?'grn':''}" data-buy="${it.id}" ${it.dis||(it.cur==='gem'&&save.gems<it.cost)?'disabled':''}>${it.cur==='free'?(it.dis?'내일 다시':'무료 받기'):it.cur==='ad'?(it.dis?'내일 다시':adW('광고 보기','무료 받기')):`<span class="gem"></span> ${it.cost}`}</button></div>`).join('')}</div>
   <div style="font-size:12.5px;opacity:.55;margin-top:14px;text-align:center">보석은 퀘스트, 상자, 리그 승급으로 얻어요. 실제 결제는 없어요.</div></div></div>`;
   bind('#bk',showLobby);
+  app.querySelectorAll('[data-dinfo]').forEach(e=>e.onclick=()=>{sfx('tick');hdBack=showShop;heroDetail(e.dataset.dinfo,'info')});
   app.querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{const x=DL.items[+b.dataset.deal];if(!x||x.b)return;if(x.cur==='gold'){if(save.gold<x.cost)return;save.gold-=x.cost}else{if(save.gems<x.cost)return;save.gems-=x.cost}x.b=true;save.owned[x.id]=save.owned[x.id]||{lv:1,cards:0};save.owned[x.id].cards+=x.n;persist();sfx('coin');track('deal_buy',{id:x.id});toast(V(x.id).name+' 카드 '+x.n+'장!');showShop()});
   app.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=items.find(x=>x.id===b.dataset.buy);
     if(it.cur==='ad'){showRewardAd('gems','보석 5개를 드려요',()=>{save.gems+=5;persist();toast('보석 5개!');showShop()});return}
