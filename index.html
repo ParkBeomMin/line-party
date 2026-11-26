@@ -1426,6 +1426,46 @@ html[lang=en] .hc2aw{font-size:8.5px;padding:1px 3px}html[lang=en] .hc2dk{font-s
 .nd.today .ndd:after{content:" ▼"}
 .attB .ndd{white-space:nowrap}
 .trail .nd{cursor:default}.trail .nd.today{cursor:pointer;z-index:2}
+.aBtile{height:60px;border-radius:12px;background:#0b1a3ad9;border:2px solid #ffffff40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:12px;font-weight:800}
+.aBtile .ico{width:28px;height:28px}
+.aBtile.wide{grid-column:span 2;flex-direction:row;justify-content:flex-start;gap:8px;padding:0 8px;height:58px;text-align:left}
+.aBtile.wide .cico{width:52px;height:40px}.aBtile.wide .ico{width:36px;height:36px}
+.aBtile.wide span{display:flex;flex-direction:column;font-size:13.5px;color:#ffe9a8}.aBtile.wide small{font-size:11px;color:#fff;opacity:.85;font-weight:700}
+.arenaC{background:url(assets/bg_arena.webp?v=1) center/cover}
+.arenaC:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0b1a3acc 0%,#0000 32%,#0000 68%,#3a0a0acc 100%),linear-gradient(#0006,#0000 25%,#0000 60%,#000b);pointer-events:none}
+.arenaC>*{position:absolute}
+.aCleague{left:50%;top:48px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:#0b1a3ae0;border:2px solid #ffc54766;border-radius:16px;padding:4px 16px 4px 4px;z-index:2}
+.aCcrest{position:relative;width:110px;height:74px}
+.aCcrest img{width:100%;height:100%;object-fit:contain}
+.aCcrest .arno{font-size:24px}
+.aCli{display:flex;flex-direction:column;min-width:170px}
+.aCli b{font-size:18px;color:#ffe27a}.aCtr{font-size:14px;font-weight:900}.aCli .bar{height:6px;margin:2px 0}.aCli small{font-size:11px;opacity:.8}
+.aCme{left:14px;top:56px;bottom:112px;width:330px}
+.aCrival{right:14px;top:56px;bottom:112px;width:300px;text-align:center}
+.aCwl{position:absolute;bottom:52px;height:300px;object-fit:contain;filter:drop-shadow(0 8px 12px #000a)}
+.aCme .aCwl{left:-10px}
+.aCrival .aCwl{right:0;transform:scaleX(-1);filter:brightness(0) drop-shadow(0 0 14px #ff5a5a88);opacity:.85}
+.aCq{position:absolute;right:110px;bottom:180px;font-size:80px;font-weight:900;color:#ff8a8a;text-shadow:0 0 20px #ff3a3a,0 4px 0 #000}
+.aCname{position:absolute;bottom:26px;font-size:20px;font-weight:900;color:#fff;text-shadow:0 2px 0 #000}
+.aCme .aCname{left:8px}.aCrival .aCname{right:16px}.aCname small{font-size:13px;color:#ffe27a}
+.aCrs{position:absolute;right:16px;bottom:8px;font-size:12px;opacity:.85}
+.aCdeck{position:absolute;left:170px;top:20px;display:grid;grid-template-columns:repeat(2,52px);gap:5px}
+.aCd{width:52px;height:52px;border-radius:9px;overflow:hidden;border:2px solid var(--tc,#888)}
+.aCd.t0{--tc:#c9d0da}.aCd.t1{--tc:#5fb0ff}.aCd.t2{--tc:#c77dff}.aCd.t3{--tc:#ffc04d}
+.aCd .pt{width:100%;height:100%}
+.aCpw{position:absolute;left:8px;bottom:-2px;display:flex;align-items:center;gap:6px;font-size:17px;font-weight:900}
+.aCpw small{font-size:11px;opacity:.75}
+.aCedit{margin-left:6px;font-size:12px;font-weight:800;background:#ffffff1f;border:1.5px solid #ffffff55;border-radius:10px;padding:3px 9px}
+.aCvs{left:50%;top:196px;transform:translateX(-50%);font-size:80px;font-weight:900;font-style:italic;color:#ffe27a;text-shadow:0 5px 0 #8a4a00,0 0 30px #ffb84daa;z-index:2}
+.aCfight{left:50%;top:310px;width:250px;margin-left:-125px;height:78px;border-radius:18px;background:linear-gradient(#ffe27a,#f0a52a);border:3px solid #fff3c4;box-shadow:0 5px 0 #8a4a00,0 0 26px #ffc54799;color:#4a2400;font-size:30px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;z-index:2;animation:acp 1.6s ease-in-out infinite}
+.aCfight .fi{position:static;margin:0;width:50px;height:50px}
+.aCside{right:14px;top:56px;width:190px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.aCside .aBtile{height:50px}
+.aCdeck{left:8px!important;top:auto!important;bottom:52px;grid-template-columns:repeat(8,38px)!important;gap:4px!important;z-index:2}
+.aCd{width:38px!important;height:38px!important;border-radius:7px!important}
+.aCme .aCwl{bottom:96px;height:270px}
+.aCrival .aCwl{bottom:60px;height:270px}
+.aCq{z-index:3;right:auto!important;left:50%;bottom:auto!important;top:42%;transform:translate(-30%,-50%);font-size:96px!important;color:#ffd0d0!important}
 </style>
 </head>
 <body>
@@ -1437,7 +1477,7 @@ const LANG='ko';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.24 베타';
+const VERSION='v3.25 베타';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2366,20 +2406,19 @@ function bindChests(){
 /* ---- 아레나 대기 화면 (v3.23) ---- */
 let arenaTimer=null;
 function chestBack(){if(screen==='arena')showArena();else showLobby()}
-function showArena(){screen='arena';ensureDeck();tickChests();checkSeason();if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');
-  const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];const best=Math.max(save.season.best|0,li);const R=SEASON_REWARD(best);const bw=brawlState();
-  app.innerHTML=`<div class="screen arena2"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">아레나</span>${resBar()}</div>
-  <div class="arside"><button class="aricon" id="arParty">${ico('hero')}<span>파티</span>${anyUpgrade()?'<i class="dot"></i>':''}</button><button class="aricon" id="arRank">${ico('trophy')}<span>순위</span></button></div>
-  <div class="arcrest" style="--lc:${L.c}"><img src="assets/u_crest.webp?v=${ASSET_V}" alt="" draggable="false"><i class="argem"></i><b class="arno">${li+1}</b><span class="arln">${L.n} 리그</span></div>
-  <div class="artro">${ico('trophy','mi')}<b>${save.trophies}</b>${N?`<span> / ${N.t}</span>`:''}<div class="bar"><i style="width:${N?Math.min(100,(save.trophies-L.t)/(N.t-L.t)*100):100}%"></i></div></div>
-  <div class="arpw">${ico('bolt','pwi')}<b>${deckPower()}</b><small>파티 전투력</small></div>
-  <button class="arfight" id="arGo">${ico('battle','fi')}<span>전투</span></button>
-  <button class="arped l" id="arSeason"><div class="arpi">${chestSVG(R.chest)}</div><b>시즌 보상</b><small>${fmtDH(seasonLeft())} 후</small></button>
-  <button class="arped r" id="arBrawl"><div class="arpi">${ico('battle')}</div><b>오늘의 규칙전</b><small>${twistToday().n} · ${bw.w}/${BRAWL_MAX}</small>${bw.w<BRAWL_MAX?'<i class="dot"></i>':''}</button>
+function showArena(){if(BGM.on&&BGM.mode!=='lobby')bgmStart('lobby');screen='arena';ensureDeck();tickChests();checkSeason();
+  const li=leagueIdx(save.trophies),L=LEAGUES[li],N=LEAGUES[li+1];const best=Math.max(save.season.best|0,li);const R=SEASON_REWARD(best);const bw=brawlState();const W=WL();
+  const others=Object.keys(WARLORDS).filter(k=>k!==save.warlord);const rv=WARLORDS[others[(dayKey()+save.trophies)%others.length]];
+  app.innerHTML=`<div class="screen arenaC"><div class="topbar"><button class="back" id="bk">← 로비</button><span class="h2">아레나</span>${resBar()}</div>
+  <div class="aCleague" style="--lc:${L.c}"><div class="aCcrest"><img src="assets/u_crest.webp?v=${ASSET_V}" alt=""><i class="argem"></i><b class="arno">${li+1}</b></div><div class="aCli"><b>${L.n} 리그</b><div class="aCtr">${ico('trophy','mi')}${save.trophies}${N?` / ${N.t}`:''}</div><div class="bar"><i style="width:${N?Math.min(100,(save.trophies-L.t)/(N.t-L.t)*100):100}%"></i></div>${N?`<small>다음: <span style="color:${N.c}">${N.n} 리그</span></small>`:''}</div></div>
+  <div class="aCme" style="--fc:${FAC[W.fac].c}"><img class="aCwl" src="assets/k_${W.art}.webp?v=${ASSET_V}" alt=""><div class="aCname">${W.n} <small>Lv${wlLv()}</small></div><div class="aCdeck">${save.deck.slice(0,8).map(id=>`<div class="aCd t${tierOf(id)}">${portrait(id)}</div>`).join('')}</div><div class="aCpw">${ico('bolt','pwi')}<b>${deckPower()}</b><small>파티 전투력</small><button class="aCedit" id="arParty">파티 편집</button></div></div>
+  <div class="aCrival"><img class="aCwl" src="assets/k_${rv.art}.webp?v=${ASSET_V}" alt=""><div class="aCname">다음 상대</div><small class="aCrs">비슷한 트로피의 실제 유저 덱</small></div>
+  <div class="aCvs">VS</div>
+  <button class="aCfight" id="arGo">${ico('battle','fi')}<span>전투</span></button>
+  <div class="aCside"><button class="aBtile wide" id="arSeason">${chestSVG(R.chest)}<span>시즌 보상<small>${fmtDH(seasonLeft())} 후</small></span></button><button class="aBtile wide" id="arBrawl">${ico('battle')}<span>오늘의 규칙전<small>${twistToday().n} · ${bw.w}/${BRAWL_MAX}</small></span></button><button class="aBtile wide" id="arRank">${ico('trophy')}<span>순위<small>전체 랭킹</small></span></button></div>
   <div class="archest"><div class="chests2" id="chests">${chestSlotsHTML()}</div></div></div>`;
-  bind('#bk',showLobby);bind('#arGo',startArena);bind('#arParty',showHeroes);bind('#arRank',showSeason);bind('#arSeason',showSeason);bind('#arBrawl',startBrawl);
-  bindChests();clearInterval(arenaTimer);
-  arenaTimer=setInterval(()=>{if(screen!=='arena'){clearInterval(arenaTimer);return}tickChests();const c=document.getElementById('chests');if(c&&!document.querySelector('.modal')){c.innerHTML=chestSlotsHTML();bindChests()}},1000);
+  bind('#bk',showLobby);bind('#arGo',startArena);bind('#arParty',showHeroes);bind('#arRank',showSeason);bind('#arSeason',showSeason);bind('#arBrawl',startBrawl);bindChests();clearInterval(arenaTimer);
+  arenaTimer=setInterval(()=>{if(screen!=='arena'){clearInterval(arenaTimer);return}tickChests();const cc=document.getElementById('chests');if(cc&&!document.querySelector('.modal')){cc.innerHTML=chestSlotsHTML();bindChests()}},1000);
 }
 function bossLeft(){ensureDaily();return Math.max(0,(ev('bossrush')?3:1)-save.daily.wins)}
 const RULE_TABS=[
