@@ -1499,7 +1499,7 @@ const LANG='ja';
 function langUrl(l){const base=LANG==='ko'?'':'../';return l==='ko'?base+'index.html':base+l+'/index.html'}
 (function(){try{const p=localStorage.getItem('lineparty_lang');const nl=navigator.language||'ko';const want=p||(/^ko/i.test(nl)?'ko':/^ja/i.test(nl)?'ja':'en');if(want!==LANG)location.replace(langUrl(want)+location.search+location.hash)}catch(e){}})();
 function setLang(l){if(l===LANG)return;try{localStorage.setItem('lineparty_lang',l)}catch(e){}try{persist()}catch(e){}location.replace(langUrl(l)+location.search)}
-const VERSION='v3.30 ベータ';
+const VERSION='v3.31 ベータ';
 /* ===================== 화면 스케일 ===================== */
 const app=document.getElementById('app');
 function safeIn(){const o={l:0,r:0,t:0,b:0};try{const cs=getComputedStyle(document.documentElement);const pv=n=>parseFloat(cs.getPropertyValue('--safe-area-inset-'+n))||0;let p=document.getElementById('saProbe');if(!p&&document.body){p=document.createElement('div');p.id='saProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';document.body.appendChild(p)}const ps=p?getComputedStyle(p):null;const e=n=>ps?parseFloat(ps['padding'+n])||0:0;o.l=Math.max(pv('left'),e('Left'));o.r=Math.max(pv('right'),e('Right'));o.t=Math.max(pv('top'),e('Top'));o.b=Math.max(pv('bottom'),e('Bottom'))}catch(err){}return o}
@@ -2613,7 +2613,7 @@ function cloudAuto(){if(!isLinked()||cloudBusy)return;if(localStorage.getItem('l
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&isLinked()&&localStorage.getItem('lineparty_cloudsig')!==String(save._ts||0)){cloudLast=0;cloudPut()}});
 function linkNudge(){if(isLinked())return;const td=new Date().toDateString();if(save.nudgeDay===td)return;if(!((save.trophies|0)>=150||(save.cleared|0)>=3))return;
   setTimeout(()=>{if(screen!=='lobby'||document.querySelector('.modal'))return;save.nudgeDay=td;persist();track('link_nudge',{});
-    const m=modal(`<div class="ribbon">進行状況を守ろう</div><div class="rw" style="line-height:1.7">今の進行状況はこのブラウザにだけ保存されています。<br>ブラウザのデータが消えると失われる場合があります。<br><b style="color:#ffd667">Googleアカウントと連携</b>すると自動で保存され、<br>他の端末や今後出るアプリでも続きから遊べます。</div><div class="btns"><button class="btn grn" id="nzGo">Google連携</button><button class="btn sub" data-close>あとで</button></div>`);
+    const m=modal(`<div class="ribbon">進行状況を守ろう</div><div class="rw" style="line-height:1.7">${inNativeApp()?'現在の進行はこのスマホにだけ保存されています。<br>アプリを削除したり機種変更すると消えることがあります。<br><b style="color:#ffd667">Googleアカウントと連携</b>すると自動で保存され、<br>別のスマホやWebでも続きから遊べます。':'今の進行状況はこのブラウザにだけ保存されています。<br>ブラウザのデータが消えると失われる場合があります。<br><b style="color:#ffd667">Googleアカウントと連携</b>すると自動で保存され、<br>他の端末やアプリでも続きから遊べます。'}</div><div class="btns"><button class="btn grn" id="nzGo">Google連携</button><button class="btn sub" data-close>あとで</button></div>`);
     m.querySelector('#nzGo').onclick=async()=>{m.remove();await googleLogin()}},2500)}
 function notiPlan(){const out=[],now=Date.now();
   const un=save.chests.filter(c=>c&&c.st==='unlocking').sort((a,b)=>a.readyAt-b.readyAt);let last=un.length?un[un.length-1].readyAt:now;let first=un.length?un[0].readyAt:0;
